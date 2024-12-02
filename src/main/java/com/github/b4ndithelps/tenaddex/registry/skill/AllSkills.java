@@ -5,6 +5,7 @@ import com.github.b4ndithelps.tenaddex.TensuraAddonExample;
 import com.github.b4ndithelps.tenaddex.ability.skill.common.ExampleCommonSkill;
 import com.github.b4ndithelps.tenaddex.ability.skill.extra.ExampleExtraSkill;
 import com.github.b4ndithelps.tenaddex.ability.skill.ultimate.ExampleUltimateSkill;
+import com.github.b4ndithelps.tenaddex.ability.skill.unique.ExampleUniqueSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -47,7 +48,8 @@ public class AllSkills {
     //   =================
     //   | Unique Skills |
     //   =================
-
+    public static final RegistryObject<ExampleUniqueSkill> EXAMPLE_UNIQUE =
+            skillRegistry.register("example_unique", ExampleUniqueSkill::new);
     //   =====================
     //   | Resistance Skills |
     //   =====================
