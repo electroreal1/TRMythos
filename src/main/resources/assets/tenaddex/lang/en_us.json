@@ -3,5 +3,9 @@
   "tenaddex.skill.example_ultimate.description": "This is a description for the ultimate skill. Edit this description using the en_us.json file.",
 
   "tenaddex.skill.example_common": "Example Common",
-  "tenaddex.skill.example_common.description": "This is a description for the common skill. Edit this description using the en_us.json file."
+  "tenaddex.skill.example_common.description": "This is a description for the common skill. Edit this description using the en_us.json file.",
+
+  "tenaddex.skill.example_extra": "Example Extra",
+  "tenaddex.skill.example_extra.description": "This is a description for the extra skill. Edit this description using the en_us.json file."
+
 }
