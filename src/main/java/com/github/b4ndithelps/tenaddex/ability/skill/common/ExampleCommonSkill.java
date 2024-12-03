@@ -1,5 +1,6 @@
 package com.github.b4ndithelps.tenaddex.ability.skill.common;
 
+import com.github.b4ndithelps.tenaddex.TensuraAddonExample;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.skill.Skill;
@@ -8,6 +9,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.effect.MobEffect;
@@ -28,6 +30,14 @@ import net.minecraftforge.common.extensions.IForgeMobEffect;
  *
  */
 public class ExampleCommonSkill extends Skill {
+
+    /**
+     * This is where you define the path to the actual icon image.
+     * @return
+     */
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation(TensuraAddonExample.MODID, "textures/skill/common/example_common.png");
+    }
 
     // Here are some easy to change parameters to configure for the skill
     private final double skillCastCost = 100.0;     // How many magicules it costs to cast

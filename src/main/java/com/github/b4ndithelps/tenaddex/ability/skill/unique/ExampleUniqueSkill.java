@@ -1,5 +1,6 @@
 package com.github.b4ndithelps.tenaddex.ability.skill.unique;
 
+import com.github.b4ndithelps.tenaddex.TensuraAddonExample;
 import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.tensura.ability.SkillHelper;
@@ -10,6 +11,7 @@ import com.github.manasmods.tensura.entity.magic.skill.WaterBladeProjectile;
 import com.github.manasmods.tensura.registry.skill.CommonSkills;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -32,6 +34,14 @@ public class ExampleUniqueSkill extends Skill {
     // Here are some easy to change parameters to configure for the skill
     private final double learnCost = 4.0;              // When learning the skill, how hard is it. (Higher = harder). Default is 2.0
     private final int numModes = 2;                    // The number of skill modes there are.
+
+    /**
+     * This is where you define the path to the actual icon image.
+     * @return
+     */
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation(TensuraAddonExample.MODID, "textures/skill/unique/example_unique.png");
+    }
 
     public ExampleUniqueSkill() {
         // Pass in the type of the skill here.

@@ -1,5 +1,6 @@
 package com.github.b4ndithelps.tenaddex.ability.skill.ultimate;
 
+import com.github.b4ndithelps.tenaddex.TensuraAddonExample;
 import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.tensura.ability.SkillHelper;
@@ -7,6 +8,7 @@ import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.entity.magic.skill.WaterBladeProjectile;
 import com.github.manasmods.tensura.registry.skill.CommonSkills;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -26,6 +28,14 @@ public class ExampleUltimateSkill extends Skill {
     private final double skillCastCost = 100.0;     // How many magicules it costs to cast
     private final double epUnlockCost = 100000.0;   // EP Level required for unlocking the skill
     private final double learnCost = 4.0;           // When learning the skill, how hard is it. (Higher = harder). Default is 2.0
+
+    /**
+     * This is where you define the path to the actual icon image.
+     * @return
+     */
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation(TensuraAddonExample.MODID, "textures/skill/ultimate/example_ultimate.png");
+    }
 
     public ExampleUltimateSkill() {
         // Pass in the type of the skill here.

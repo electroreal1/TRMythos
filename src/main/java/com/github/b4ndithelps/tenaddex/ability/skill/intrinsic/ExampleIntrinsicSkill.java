@@ -1,5 +1,6 @@
 package com.github.b4ndithelps.tenaddex.ability.skill.intrinsic;
 
+import com.github.b4ndithelps.tenaddex.TensuraAddonExample;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.skill.Skill;
@@ -7,6 +8,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -33,6 +35,14 @@ public class ExampleIntrinsicSkill extends Skill {
     public ExampleIntrinsicSkill() {
         // Pass in the type of the skill here.
         super(SkillType.INTRINSIC);
+    }
+
+    /**
+     * This is where you define the path to the actual icon image.
+     * @return
+     */
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation(TensuraAddonExample.MODID, "textures/skill/intrinsic/example_intrinsic.png");
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.github.b4ndithelps.tenaddex.ability.skill.extra;
 
+import com.github.b4ndithelps.tenaddex.TensuraAddonExample;
 import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.tensura.ability.SkillHelper;
@@ -11,6 +12,7 @@ import com.github.manasmods.tensura.registry.skill.CommonSkills;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffect;
@@ -27,6 +29,14 @@ import net.minecraft.world.phys.AABB;
  * That is all it does.
  */
 public class ExampleExtraSkill extends Skill {
+
+    /**
+     * This is where you define the path to the actual icon image.
+     * @return
+     */
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation(TensuraAddonExample.MODID, "textures/skill/extra/example_extra.png");
+    }
 
     // Here are some easy to change parameters to configure for the skill
     private final double skillCastCost = 10.0;     // How many magicules it costs to cast
