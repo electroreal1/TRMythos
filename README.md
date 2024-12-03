@@ -18,11 +18,16 @@ This not only serves as an easily downloadable template to speed up the gradle s
 ## Installation [Todo - Add more detail]
 This project should be easy to install and set up. All gradle configuration has been done, so simply open the project in Intellij, and build it.
 
-To get started, you will need to modify the gradle.properties to change the mod_id and mod_name.
+**You will need to download the latest versions of both Tensura: Reincarnated and ManasCore, and place them inside**
+```.\TensuraAddonExample\lib```
+
+Once the build completes, I recommend testing that the client runs using the 'runClient' task. If it does, you can move to modifying the gradle.properties to change the mod_id and mod_name.
 
 Then, update the project structure to your unique namespace, as well as renaming files away from the default "Example" and "tenaddex"
 
-More detailed explanations coming soon.
+<br>
+
+_More detailed explanations coming soon._
 
 
 # Credits
