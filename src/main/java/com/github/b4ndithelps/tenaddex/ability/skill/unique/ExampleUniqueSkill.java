@@ -30,8 +30,8 @@ import net.minecraft.world.phys.AABB;
 public class ExampleUniqueSkill extends Skill {
 
     // Here are some easy to change parameters to configure for the skill
-    private double learnCost = 4.0;              // When learning the skill, how hard is it. (Higher = harder). Default is 2.0
-    private int numModes = 2;                    // The number of skill modes there are.
+    private final double learnCost = 4.0;              // When learning the skill, how hard is it. (Higher = harder). Default is 2.0
+    private final int numModes = 2;                    // The number of skill modes there are.
 
     public ExampleUniqueSkill() {
         // Pass in the type of the skill here.

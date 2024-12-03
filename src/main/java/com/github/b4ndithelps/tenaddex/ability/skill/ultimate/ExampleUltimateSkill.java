@@ -23,9 +23,9 @@ import net.minecraft.world.phys.AABB;
 public class ExampleUltimateSkill extends Skill {
 
     // Here are some easy to change parameters to configure for the skill
-    private double skillCastCost = 100.0;     // How many magicules it costs to cast
-    private double epUnlockCost = 100000.0;   // EP Level required for unlocking the skill
-    private double learnCost = 4.0;           // When learning the skill, how hard is it. (Higher = harder). Default is 2.0
+    private final double skillCastCost = 100.0;     // How many magicules it costs to cast
+    private final double epUnlockCost = 100000.0;   // EP Level required for unlocking the skill
+    private final double learnCost = 4.0;           // When learning the skill, how hard is it. (Higher = harder). Default is 2.0
 
     public ExampleUltimateSkill() {
         // Pass in the type of the skill here.
