@@ -4,6 +4,7 @@ package com.github.b4ndithelps.tenaddex.registry.skill;
 import com.github.b4ndithelps.tenaddex.TensuraAddonExample;
 import com.github.b4ndithelps.tenaddex.ability.skill.common.ExampleCommonSkill;
 import com.github.b4ndithelps.tenaddex.ability.skill.extra.ExampleExtraSkill;
+import com.github.b4ndithelps.tenaddex.ability.skill.intrinsic.ExampleIntrinsicSkill;
 import com.github.b4ndithelps.tenaddex.ability.skill.ultimate.ExampleUltimateSkill;
 import com.github.b4ndithelps.tenaddex.ability.skill.unique.ExampleUniqueSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkill;
@@ -38,7 +39,8 @@ public class AllSkills {
     //   ====================
     //   | Intrinsic Skills |
     //   ====================
-
+    public static final RegistryObject<ExampleIntrinsicSkill> EXAMPLE_INTRINSIC =
+            skillRegistry.register("example_intrinsic", ExampleIntrinsicSkill::new);
     //   ================
     //   | Extra Skills |
     //   ================

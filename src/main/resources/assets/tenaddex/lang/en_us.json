@@ -10,8 +10,9 @@
 
   "tenaddex.skill.example_unique": "Example Unique",
   "tenaddex.skill.example_unique.description": "This is a description for the unique skill. Edit this description using the en_us.json file.",
-
   "tenaddesx.skill.mode.example_unique.boom": "Boom",
-  "tenaddesx.skill.mode.example_unique.big_boom": "Bigger Boom"
+  "tenaddesx.skill.mode.example_unique.big_boom": "Bigger Boom",
 
+  "tenaddex.skill.example_intrinsic": "Example Intrinsic",
+  "tenaddex.skill.example_intrinsic.description": "This is a description for the intrinsic skill. Edit this description using the en_us.json file."
 }
