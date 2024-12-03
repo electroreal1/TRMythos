@@ -2,7 +2,11 @@ package com.github.b4ndithelps.tenaddex.registry.skill;
 
 
 import com.github.b4ndithelps.tenaddex.TensuraAddonExample;
+import com.github.b4ndithelps.tenaddex.ability.skill.common.ExampleCommonSkill;
+import com.github.b4ndithelps.tenaddex.ability.skill.extra.ExampleExtraSkill;
+import com.github.b4ndithelps.tenaddex.ability.skill.intrinsic.ExampleIntrinsicSkill;
 import com.github.b4ndithelps.tenaddex.ability.skill.ultimate.ExampleUltimateSkill;
+import com.github.b4ndithelps.tenaddex.ability.skill.unique.ExampleUniqueSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -30,22 +34,31 @@ public class AllSkills {
     //   =================
     //   | Common Skills |
     //   =================
+    public static final RegistryObject<ExampleCommonSkill> EXAMPLE_COMMON =
+            skillRegistry.register("example_common", ExampleCommonSkill::new);
 
     //   ====================
     //   | Intrinsic Skills |
     //   ====================
+    public static final RegistryObject<ExampleIntrinsicSkill> EXAMPLE_INTRINSIC =
+            skillRegistry.register("example_intrinsic", ExampleIntrinsicSkill::new);
 
     //   ================
     //   | Extra Skills |
     //   ================
+    public static final RegistryObject<ExampleExtraSkill> EXAMPLE_EXTRA =
+            skillRegistry.register("example_extra", ExampleExtraSkill::new);
 
     //   =================
     //   | Unique Skills |
     //   =================
+    public static final RegistryObject<ExampleUniqueSkill> EXAMPLE_UNIQUE =
+            skillRegistry.register("example_unique", ExampleUniqueSkill::new);
 
     //   =====================
     //   | Resistance Skills |
     //   =====================
+
 
     //   ===================
     //   | Ultimate Skills |
