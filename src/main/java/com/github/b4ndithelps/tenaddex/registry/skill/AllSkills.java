@@ -36,11 +36,13 @@ public class AllSkills {
     //   =================
     public static final RegistryObject<ExampleCommonSkill> EXAMPLE_COMMON =
             skillRegistry.register("example_common", ExampleCommonSkill::new);
+
     //   ====================
     //   | Intrinsic Skills |
     //   ====================
     public static final RegistryObject<ExampleIntrinsicSkill> EXAMPLE_INTRINSIC =
             skillRegistry.register("example_intrinsic", ExampleIntrinsicSkill::new);
+
     //   ================
     //   | Extra Skills |
     //   ================
@@ -52,9 +54,11 @@ public class AllSkills {
     //   =================
     public static final RegistryObject<ExampleUniqueSkill> EXAMPLE_UNIQUE =
             skillRegistry.register("example_unique", ExampleUniqueSkill::new);
+
     //   =====================
     //   | Resistance Skills |
     //   =====================
+
 
     //   ===================
     //   | Ultimate Skills |
