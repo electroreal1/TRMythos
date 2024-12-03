@@ -29,6 +29,47 @@ Then, update the project structure to your unique namespace, as well as renaming
 
 _More detailed explanations coming soon._
 
+## Example Skills
+Right now, the following skills have been added in this mod.
+
+### Example Common
+This skill adds in a toggleable effect for an absorption effect.
+
+Explains:
+- Toggleable Skills
+- Kill Based Unlock Requirements
+
+### Example Extra
+This adds in a held skill, that when held increases your speed. When mastered, becomes toggleable
+
+Explains:
+- Held Skills
+- Mastery Based Toggle Skills
+
+### Example Intrinsic
+This adds in a passive skill, that simply adds a permanent speed modifier to the player.
+Right now, the code says it is intrinsic to Humans, but currently that doesn't work (not my fault)
+
+_see HumanRaceMixin.java for adding skills to existing races_
+
+Explains:
+- Permanent Effects
+- Movement Modifiers
+
+### Example Ultimate
+This adds a cool ultimate skill. Unlocked by mastering Water Blade, and having 100,000 EP. Shoots waterblades at all mobs in a radius.
+
+Explains:
+- Skill Unlock Requirements
+- Projectile Usage
+
+### Example Unique
+This adds an explosion Unique skill, that has multiple modes.
+
+Explains:
+- Handling Skill Modes
+- Explosions
+
 
 # Credits
 Memoires - Provided an example base addon code that was used to create this repo <br>
