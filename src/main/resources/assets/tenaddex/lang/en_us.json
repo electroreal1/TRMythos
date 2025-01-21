@@ -17,5 +17,5 @@
   "tenaddex.skill.example_intrinsic.description": "This is a description for the intrinsic skill. Edit this description using the en_us.json file.",
 
   "tenaddex.race.example_race": "Example Race",
-  "tenaddex.race.example_race.description": "This is a fully custom race that you can change and control to your liking!"
+  "tenaddex.race.example_race.notes": "This is a fully custom race that you can change and control to your liking!"
 }
