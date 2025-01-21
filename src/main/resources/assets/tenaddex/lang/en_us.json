@@ -14,5 +14,8 @@
   "tenaddesx.skill.mode.example_unique.big_boom": "Bigger Boom",
 
   "tenaddex.skill.example_intrinsic": "Example Intrinsic",
-  "tenaddex.skill.example_intrinsic.description": "This is a description for the intrinsic skill. Edit this description using the en_us.json file."
+  "tenaddex.skill.example_intrinsic.description": "This is a description for the intrinsic skill. Edit this description using the en_us.json file.",
+
+  "tenaddex.race.example_race": "Example Race",
+  "tenaddex.race.example_race.description": "This is a fully custom race that you can change and control to your liking!"
 }
