@@ -10,7 +10,7 @@ This not only serves as an easily downloadable template to speed up the gradle s
 * Extra Skills
 * Unique Skills
 * Ultimate Skills
-* Races [Todo]
+* Races
 * Gamerules [Todo]
 * Config Files [Todo]
 
@@ -69,6 +69,9 @@ This adds an explosion Unique skill, that has multiple modes.
 Explains:
 - Handling Skill Modes
 - Explosions
+
+## Example Race
+Currently added a single race to show the basics. Currently the example does not add in the evolution lines, that may come later.
 
 
 # Credits
