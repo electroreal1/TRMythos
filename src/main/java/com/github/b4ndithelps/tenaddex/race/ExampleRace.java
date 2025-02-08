@@ -12,8 +12,12 @@ import net.minecraft.world.entity.player.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This is a class that shows a short example of creating a custom race. For more information, check out the existing Race files in the mod.
+ */
 public class ExampleRace extends Race {
 
+    // Here are listed all the main characteristics of the race for easy changing
     private double baseHealth = 12.0;
     private double baseAttackDamage = 1.0;
     private double baseAttackSpeed = 3.0;
@@ -87,6 +91,12 @@ public class ExampleRace extends Race {
         return Pair.of(startingMagiculeMin, startingMagiculeMax);
     }
 
+    /**
+     * This method adds the intrinsic skills, from either the addon or the main mod to the class.
+     * To add more, simply add to the list with .add()
+     * @param player
+     * @return
+     */
     @Override
     public List<TensuraSkill> getIntrinsicSkills(Player player) {
         List<TensuraSkill> list = new ArrayList<>();
@@ -107,6 +117,4 @@ public class ExampleRace extends Race {
     public boolean isDivine() {
         return false;
     }
-
-
 }

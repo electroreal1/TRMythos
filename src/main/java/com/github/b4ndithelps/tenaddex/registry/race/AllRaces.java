@@ -12,8 +12,13 @@ import net.minecraftforge.registries.RegisterEvent;
 @Mod.EventBusSubscriber(modid = TensuraAddonExample.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class AllRaces {
 
+    // Define the Race that you want to add here
     public static final ResourceLocation EXAMPLE_RACE = new ResourceLocation(TensuraAddonExample.MODID, "example_race");
 
+    /**
+     * Make sure that you register the race, otherwise it will not show up correctly in the selection menu
+     * @param event
+     */
     @SubscribeEvent
     public static void register(RegisterEvent event) {
         event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
