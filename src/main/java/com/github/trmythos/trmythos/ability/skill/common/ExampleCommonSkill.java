@@ -1,10 +1,9 @@
-package com.github.b4ndithelps.tenaddex.ability.skill.common;
+package com.github.trmythos.trmythos.ability.skill.common;
 
-import com.github.b4ndithelps.tenaddex.TensuraAddonExample;
+import com.github.trmythos.trmythos.TensuraAddonExample;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.skill.Skill;
-import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -12,14 +11,11 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.common.extensions.IForgeMobEffect;
 
 
 /**

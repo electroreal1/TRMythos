@@ -1,6 +1,6 @@
-package com.github.b4ndithelps.tenaddex.ability.skill.ultimate;
+package com.github.trmythos.trmythos.ability.skill.ultimate;
 
-import com.github.b4ndithelps.tenaddex.TensuraAddonExample;
+import com.github.trmythos.trmythos.TensuraAddonExample;
 import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.tensura.ability.SkillHelper;

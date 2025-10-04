@@ -1,12 +1,12 @@
-package com.github.b4ndithelps.tenaddex.registry.skill;
+package com.github.trmythos.trmythos.registry.skill;
 
 
-import com.github.b4ndithelps.tenaddex.TensuraAddonExample;
-import com.github.b4ndithelps.tenaddex.ability.skill.common.ExampleCommonSkill;
-import com.github.b4ndithelps.tenaddex.ability.skill.extra.ExampleExtraSkill;
-import com.github.b4ndithelps.tenaddex.ability.skill.intrinsic.ExampleIntrinsicSkill;
-import com.github.b4ndithelps.tenaddex.ability.skill.ultimate.ExampleUltimateSkill;
-import com.github.b4ndithelps.tenaddex.ability.skill.unique.ExampleUniqueSkill;
+import com.github.trmythos.trmythos.TensuraAddonExample;
+import com.github.trmythos.trmythos.ability.skill.common.ExampleCommonSkill;
+import com.github.trmythos.trmythos.ability.skill.extra.ExampleExtraSkill;
+import com.github.trmythos.trmythos.ability.skill.intrinsic.ExampleIntrinsicSkill;
+import com.github.trmythos.trmythos.ability.skill.ultimate.ExampleUltimateSkill;
+import com.github.trmythos.trmythos.ability.skill.unique.ExampleUniqueSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import net.minecraftforge.eventbus.api.IEventBus;

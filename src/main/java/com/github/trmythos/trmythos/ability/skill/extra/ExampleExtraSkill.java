@@ -1,27 +1,19 @@
-package com.github.b4ndithelps.tenaddex.ability.skill.extra;
+package com.github.trmythos.trmythos.ability.skill.extra;
 
-import com.github.b4ndithelps.tenaddex.TensuraAddonExample;
-import com.github.manasmods.manascore.api.skills.ManasSkill;
+import com.github.trmythos.trmythos.TensuraAddonExample;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.tensura.ability.SkillHelper;
-import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.skill.Skill;
-import com.github.manasmods.tensura.entity.magic.skill.WaterBladeProjectile;
-import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
-import com.github.manasmods.tensura.registry.skill.CommonSkills;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.AABB;
 
 
 /**

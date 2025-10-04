@@ -1,7 +1,6 @@
-package com.github.b4ndithelps.tenaddex;
+package com.github.trmythos.trmythos;
 
-import com.github.b4ndithelps.tenaddex.registry.race.AllRaces;
-import com.github.b4ndithelps.tenaddex.registry.skill.AllSkills;
+import com.github.trmythos.trmythos.registry.skill.AllSkills;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;

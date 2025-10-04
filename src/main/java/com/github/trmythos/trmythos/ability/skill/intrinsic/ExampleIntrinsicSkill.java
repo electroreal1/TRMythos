@@ -1,25 +1,17 @@
-package com.github.b4ndithelps.tenaddex.ability.skill.intrinsic;
+package com.github.trmythos.trmythos.ability.skill.intrinsic;
 
-import com.github.b4ndithelps.tenaddex.TensuraAddonExample;
+import com.github.trmythos.trmythos.TensuraAddonExample;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
-import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.skill.Skill;
-import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.common.ForgeMod;
 
 import java.util.UUID;
 

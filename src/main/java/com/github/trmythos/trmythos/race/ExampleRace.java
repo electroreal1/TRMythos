@@ -1,7 +1,6 @@
-package com.github.b4ndithelps.tenaddex.race;
+package com.github.trmythos.trmythos.race;
 
-import com.github.b4ndithelps.tenaddex.ability.skill.intrinsic.ExampleIntrinsicSkill;
-import com.github.b4ndithelps.tenaddex.registry.skill.AllSkills;
+import com.github.trmythos.trmythos.registry.skill.AllSkills;
 import com.github.manasmods.tensura.ability.TensuraSkill;
 import com.github.manasmods.tensura.race.Race;
 import com.github.manasmods.tensura.registry.skill.IntrinsicSkills;

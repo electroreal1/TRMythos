@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "com.github.b4ndithelps.tenaddex.mixin",
+  "package": "com.github.trmythos.trmythos.mixin",
   "compatibilityLevel": "JAVA_8",
   "refmap": "tenaddex.refmap.json",
   "mixins": [
