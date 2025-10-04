@@ -1,0 +1,31 @@
+{
+  "trmythos.skill.example_ultimate": "Example Ultimate",
+  "trmythos.skill.example_ultimate.description": "This is a description for the ultimate skill. Edit this description using the en_us.json file.",
+
+  "trmythos.skill.example_common": "Example Common",
+  "trmythos.skill.example_common.description": "This is a description for the common skill. Edit this description using the en_us.json file.",
+
+  "trmythos.skill.example_extra": "Example Extra",
+  "trmythos.skill.example_extra.description": "This is a description for the extra skill. Edit this description using the en_us.json file.",
+
+  "trmythos.skill.example_unique": "Example Unique",
+  "trmythos.skill.example_unique.description": "This is a description for the unique skill. Edit this description using the en_us.json file.",
+  "trmythos.skill.mode.example_unique.boom": "Boom",
+  "trmythos.skill.mode.example_unique.big_boom": "Bigger Boom",
+
+  "trmythos.skill.example_intrinsic": "Example Intrinsic",
+  "trmythos.skill.example_intrinsic.description": "This is a description for the intrinsic skill. Edit this description using the en_us.json file.",
+
+  "trmythos.race.serpent": "Serpent",
+
+  "trmythos.race.lesser_serpent": "Lesser Serpent",
+  "trmythos.race.lesser_serpent.notes": "You emerge in the world as a lowly, fragile serpent. Your scales provide some protection, but not enough to stave off most, if not all that inhabits this land. \n You know you can be so much more, so will you wallow in the dirt forever, or live up to your potential?",
+
+  "trmythos.race.greater_serpent": "Greater Serpent",
+
+  "trmythos.race.son_of_loki": "Son of Loki",
+
+  "trmythos.race.midgardian_spirit": "Midgardian Spirit",
+
+  "trmythos.race.jormungandr": "Jörmungandr"
+}

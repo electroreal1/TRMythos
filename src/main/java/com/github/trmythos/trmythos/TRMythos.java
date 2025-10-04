@@ -1,5 +1,6 @@
 package com.github.trmythos.trmythos;
 
+import com.github.trmythos.trmythos.registry.race.AllRaces;
 import com.github.trmythos.trmythos.registry.skill.AllSkills;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
@@ -15,15 +16,15 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 
 // The value here should match an entry in the META-INF/mods.toml file
-@Mod(TensuraAddonExample.MODID)
-public class TensuraAddonExample {
+@Mod("trmythos")
+public class TRMythos {
 
     // Define mod id in a common place for everything to reference
-    public static final String MODID = "tenaddex";
+    public static final String MODID = "trmythos";
     // Directly reference a slf4j logger
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public TensuraAddonExample() {
+    public TRMythos() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(this::commonSetup);
 
@@ -31,7 +32,7 @@ public class TensuraAddonExample {
         AllSkills.register(modEventBus);
 
         MinecraftForge.EVENT_BUS.register(this);
-        LOGGER.info("Tensura Example Addon has been loaded!");
+        LOGGER.info("Tensura Mythos has been loaded successfully!");
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {

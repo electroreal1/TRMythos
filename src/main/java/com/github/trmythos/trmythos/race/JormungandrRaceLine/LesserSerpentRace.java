@@ -1,5 +1,10 @@
-package com.github.trmythos.trmythos.race;
+package com.github.trmythos.trmythos.race.JormungandrRaceLine;
 
+import com.github.manasmods.tensura.registry.race.TensuraRaces;
+import com.github.manasmods.tensura.registry.skill.CommonSkills;
+import com.github.manasmods.tensura.registry.skill.ExtraSkills;
+import com.github.trmythos.trmythos.TRMythos;
+import com.github.trmythos.trmythos.registry.race.AllRaces;
 import com.github.trmythos.trmythos.registry.skill.AllSkills;
 import com.github.manasmods.tensura.ability.TensuraSkill;
 import com.github.manasmods.tensura.race.Race;
@@ -7,32 +12,35 @@ import com.github.manasmods.tensura.registry.skill.IntrinsicSkills;
 import com.github.manasmods.tensura.util.JumpPowerHelper;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.registries.IForgeRegistry;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * This is a class that shows a short example of creating a custom race. For more information, check out the existing Race files in the mod.
  */
-public class ExampleRace extends Race {
+public class LesserSerpentRace extends Race {
 
     // Here are listed all the main characteristics of the race for easy changing
-    private double baseHealth = 12.0;
+    private double baseHealth = 10.0;
+   private double baseSpiritualHealth = 50;
     private double baseAttackDamage = 1.0;
     private double baseAttackSpeed = 3.0;
     private double knockbackResistance = 0.0;
     private double jumpHeight = 1.0;
     private double movementSpeed = 0.1;
-    private double sprintSpeed = 0.15;
-    private double auraMin = 800.0;
-    private double auraMax = 1211.0;
-    private double startingMagiculeMin = 80.0;
-    private double startingMagiculeMax = 120.0;
+    private double sprintSpeed = 0.12;
+    private double auraMin = 300.0;
+    private double auraMax = 500.0;
+    private double startingMagiculeMin = 500.0;
+    private double startingMagiculeMax = 700.0;
 
-    private float playerSize = 2.0f;
+    private float playerSize = 0.75f;
 
 
-    public ExampleRace() {
+    public LesserSerpentRace() {
         // Here is where the difficulty for each of the
         super(Difficulty.INTERMEDIATE);
     }
@@ -40,6 +48,10 @@ public class ExampleRace extends Race {
     @Override
     public double getBaseHealth() {
         return baseHealth;
+    }
+
+    public double getBaseSpiritualHealth() {
+        return  baseSpiritualHealth;
     }
 
     @Override
@@ -96,17 +108,36 @@ public class ExampleRace extends Race {
      * @param player
      * @return
      */
+
+    public List<Race> getNextEvolutions(Player player) {
+        List<Race> list = new ArrayList<>();
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(AllRaces.SERPENT_RACE));
+        return list;
+    }
+    public @Nullable Race getDefaultEvolution(Player player) {
+        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(AllRaces.SERPENT_RACE));
+    }
+
+    public @Nullable Race getAwakeningEvolution(Player player) {
+        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(AllRaces.SERPENT_RACE));
+    }
+
+    public @Nullable Race getHarvestFestivalEvolution(Player player) {
+        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(AllRaces.SERPENT_RACE));
+    }
+
     @Override
     public List<TensuraSkill> getIntrinsicSkills(Player player) {
         List<TensuraSkill> list = new ArrayList<>();
-        list.add(AllSkills.EXAMPLE_INTRINSIC.get());
-        list.add(IntrinsicSkills.BODY_ARMOR.get());
+        list.add(IntrinsicSkills.SCALE_ARMOR.get());
+        list.add(ExtraSkills.SENSE_HEAT_SOURCE.get());
+        list.add(CommonSkills.POISON.get());
 
         return list;
     }
 
     public boolean isMajin() {
-        return false;
+        return true;
     }
 
     public boolean isSpiritual() {

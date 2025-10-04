@@ -3,7 +3,7 @@
   "minVersion": "0.8",
   "package": "com.github.trmythos.trmythos.mixin",
   "compatibilityLevel": "JAVA_8",
-  "refmap": "tenaddex.refmap.json",
+  "refmap": "trmythos.refmap.json",
   "mixins": [
     "HumanRaceMixin"
   ],

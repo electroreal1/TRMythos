@@ -1,4 +1,4 @@
-package com.github.trmythos.trmythos.mixin;
+ package com.github.trmythos.trmythos.mixin;
 
 import com.github.manasmods.tensura.race.human.HumanRace;
 import org.spongepowered.asm.mixin.Mixin;

@@ -1,6 +1,6 @@
 package com.github.trmythos.trmythos.ability.skill.intrinsic;
 
-import com.github.trmythos.trmythos.TensuraAddonExample;
+import com.github.trmythos.trmythos.TRMythos;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import net.minecraft.nbt.CompoundTag;
@@ -34,7 +34,7 @@ public class ExampleIntrinsicSkill extends Skill {
      * @return
      */
     public ResourceLocation getSkillIcon() {
-        return new ResourceLocation(TensuraAddonExample.MODID, "textures/skill/intrinsic/example_intrinsic.png");
+        return new ResourceLocation(TRMythos.MODID, "textures/skill/intrinsic/example_intrinsic.png");
     }
 
     /**

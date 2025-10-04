@@ -1,6 +1,6 @@
 package com.github.trmythos.trmythos.ability.skill.unique;
 
-import com.github.trmythos.trmythos.TensuraAddonExample;
+import com.github.trmythos.trmythos.TRMythos;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
@@ -30,7 +30,7 @@ public class ExampleUniqueSkill extends Skill {
      * @return
      */
     public ResourceLocation getSkillIcon() {
-        return new ResourceLocation(TensuraAddonExample.MODID, "textures/skill/unique/example_unique.png");
+        return new ResourceLocation(TRMythos.MODID, "textures/skill/unique/example_unique.png");
     }
 
     public ExampleUniqueSkill() {

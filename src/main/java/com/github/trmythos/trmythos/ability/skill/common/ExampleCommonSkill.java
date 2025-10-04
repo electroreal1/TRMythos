@@ -1,6 +1,6 @@
 package com.github.trmythos.trmythos.ability.skill.common;
 
-import com.github.trmythos.trmythos.TensuraAddonExample;
+import com.github.trmythos.trmythos.TRMythos;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.skill.Skill;
@@ -32,7 +32,7 @@ public class ExampleCommonSkill extends Skill {
      * @return
      */
     public ResourceLocation getSkillIcon() {
-        return new ResourceLocation(TensuraAddonExample.MODID, "textures/skill/common/example_common.png");
+        return new ResourceLocation(TRMythos.MODID, "textures/skill/common/example_common.png");
     }
 
     // Here are some easy to change parameters to configure for the skill

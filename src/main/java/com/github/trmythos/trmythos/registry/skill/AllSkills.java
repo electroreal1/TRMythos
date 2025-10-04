@@ -1,7 +1,7 @@
 package com.github.trmythos.trmythos.registry.skill;
 
 
-import com.github.trmythos.trmythos.TensuraAddonExample;
+import com.github.trmythos.trmythos.TRMythos;
 import com.github.trmythos.trmythos.ability.skill.common.ExampleCommonSkill;
 import com.github.trmythos.trmythos.ability.skill.extra.ExampleExtraSkill;
 import com.github.trmythos.trmythos.ability.skill.intrinsic.ExampleIntrinsicSkill;
@@ -23,7 +23,7 @@ import net.minecraftforge.registries.RegistryObject;
 public class AllSkills {
 
     // Here is that deferred register I was talking about. You don't need to change it at all
-    public static DeferredRegister<ManasSkill> skillRegistry = DeferredRegister.create(SkillAPI.getSkillRegistryKey(), TensuraAddonExample.MODID);
+    public static DeferredRegister<ManasSkill> skillRegistry = DeferredRegister.create(SkillAPI.getSkillRegistryKey(), TRMythos.MODID);
 
     public static void register(IEventBus modEventBus) {
         skillRegistry.register(modEventBus);
