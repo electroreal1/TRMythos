@@ -77,6 +77,23 @@ public class SerpentRace extends Race {
         return Pair.of(startingMagiculeMin, startingMagiculeMax);
     }
 
+    @Override
+    public double getAuraEvolutionReward() {
+        return AuraEvolutionReward();
+    }
+    @Override
+    public double getManaEvolutionReward() {
+        return ManaEvolutionReward();
+    }
+
+    private double AuraEvolutionReward() {
+        return 7000;
+    }
+
+    private double ManaEvolutionReward() {
+        return 3000;
+    }
+
     public SerpentRace() {
         super(Difficulty.INTERMEDIATE);
     }

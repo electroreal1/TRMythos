@@ -1,11 +1,23 @@
 package com.github.trmythos.trmythos.race.JormungandrRaceLine;
 
+import com.github.manasmods.manascore.api.skills.ManasSkill;
+import com.github.manasmods.manascore.api.skills.SkillAPI;
+import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
 import com.github.manasmods.tensura.ability.TensuraSkill;
+import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
+import com.github.manasmods.tensura.capability.race.ITensuraPlayerCapability;
+import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.race.Race;
+import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
+import com.github.trmythos.trmythos.registry.race.TRMythosRaces;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.registries.IForgeRegistry;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,6 +88,22 @@ public class JormungandrRace extends Race {
         // The range of values that the Max Magicules could be. So between 80 and 120
         return Pair.of(startingMagiculeMin, startingMagiculeMax);
     }
+    @Override
+    public double getAuraEvolutionReward() {
+        return AuraEvolutionReward();
+    }
+    @Override
+    public double getManaEvolutionReward() {
+        return ManaEvolutionReward();
+    }
+
+    private double AuraEvolutionReward() {
+        return 1400000;
+    }
+
+    private double ManaEvolutionReward() {
+        return 600000;
+    }
 
     @Override
     public List<TensuraSkill> getIntrinsicSkills(Player player) {
@@ -86,10 +114,33 @@ public class JormungandrRace extends Race {
         list.add(ExtraSkills.MAJESTY.get());
         return list;
     }
+    public double getEvolutionPercentage(Player player) {
+        double minimalEP = this.getMinBaseAura() + this.getMinBaseMagicule();
+
+        // Base EP contribution, capped at 50
+        double percentage = TensuraPlayerCapability.getBaseEP(player) * 50 / minimalEP;
+        percentage = Math.min(percentage, 50.0);
+
+        // True Demon Lord / Hero bonus adds 50
+        if (TensuraPlayerCapability.isTrueDemonLord(player) || TensuraPlayerCapability.isTrueHero(player)) {
+            percentage += 50.0;
+        }
+
+        // Final cap at 100
+        return Math.min(percentage, 100.0);
+    }
+
+    public List<Component> getRequirementsForRendering(Player player) {
+        List<Component> list = new ArrayList();
+        list.add(Component.translatable("tensura.evolution_menu.ep_requirement"));
+        list.add(Component.translatable("tensura.evolution_menu.awaken_requirement", new Object[]{Component.translatable("tensura.attribute.true_demon_lord.name").withStyle(ChatFormatting.DARK_PURPLE), Component.translatable("tensura.attribute.true_hero.name").withStyle(ChatFormatting.GOLD)}));
+        return list;
+    }
 
     public boolean isMajin() {
         return true;
     }
+
     public boolean isSpiritual() {
         return false;
     }
@@ -97,6 +148,7 @@ public class JormungandrRace extends Race {
     public boolean isDivine() {
         return true;
     }
-
 }
+
+
 

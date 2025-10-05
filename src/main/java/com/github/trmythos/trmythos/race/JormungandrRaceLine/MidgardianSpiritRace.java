@@ -1,6 +1,9 @@
 package com.github.trmythos.trmythos.race.JormungandrRaceLine;
 
+import com.github.manasmods.manascore.api.skills.SkillAPI;
+import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
 import com.github.manasmods.tensura.ability.TensuraSkill;
+import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.race.Race;
 import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
@@ -79,6 +82,22 @@ public class MidgardianSpiritRace extends Race {
     public Pair<Double, Double> getBaseMagiculeRange() {
         // The range of values that the Max Magicules could be. So between 80 and 120
         return Pair.of(startingMagiculeMin, startingMagiculeMax);
+    }
+    @Override
+    public double getAuraEvolutionReward() {
+        return AuraEvolutionReward();
+    }
+    @Override
+    public double getManaEvolutionReward() {
+        return ManaEvolutionReward();
+    }
+
+    private double AuraEvolutionReward() {
+        return 300000;
+    }
+
+    private double ManaEvolutionReward() {
+        return 700000;
     }
 
     @Override

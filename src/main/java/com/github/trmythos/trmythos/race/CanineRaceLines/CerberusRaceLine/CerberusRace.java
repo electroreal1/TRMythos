@@ -117,7 +117,6 @@ public class CerberusRace extends Race {
     public List<Component> getRequirementsForRendering(Player player) {
         List<Component> list = new ArrayList();
         list.add(Component.translatable("tensura.evolution_menu.ep_requirement"));
-        list.add(Component.translatable("trmythos.flame_domination.acquired"));
         return list;
     }
 

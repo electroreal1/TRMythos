@@ -81,6 +81,22 @@ public class SonOfLokiRace extends Race {
             // The range of values that the Max Magicules could be. So between 80 and 120
             return Pair.of(startingMagiculeMin, startingMagiculeMax);
         }
+        @Override
+        public double getAuraEvolutionReward() {
+            return AuraEvolutionReward();
+        }
+        @Override
+        public double getManaEvolutionReward() {
+            return ManaEvolutionReward();
+        }
+
+        private double AuraEvolutionReward() {
+            return 300000;
+        }
+
+        private double ManaEvolutionReward() {
+            return 400000;
+        }
 
         @Override
         public List<TensuraSkill> getIntrinsicSkills(Player player) {

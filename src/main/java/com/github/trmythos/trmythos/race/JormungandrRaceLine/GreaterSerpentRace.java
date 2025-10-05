@@ -97,6 +97,22 @@ public class GreaterSerpentRace extends Race {
         list.add(ResistanceSkills.PHYSICAL_ATTACK_RESISTANCE.get());
         return list;
     }
+    @Override
+    public double getAuraEvolutionReward() {
+        return AuraEvolutionReward();
+    }
+    @Override
+    public double getManaEvolutionReward() {
+        return ManaEvolutionReward();
+    }
+
+    private double AuraEvolutionReward() {
+        return 30000;
+    }
+
+    private double ManaEvolutionReward() {
+        return 70000;
+    }
 
     public List<Race> getNextEvolutions(Player player) {
         List<Race> list = new ArrayList<>();
