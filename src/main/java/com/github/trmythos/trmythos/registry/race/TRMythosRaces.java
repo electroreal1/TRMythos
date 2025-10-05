@@ -8,6 +8,8 @@ import com.github.trmythos.trmythos.race.CanineRaceLines.CerberusRaceLine.HellHo
 import com.github.trmythos.trmythos.race.CanineRaceLines.FenrirRaceLine.DreadBeastRace;
 import com.github.trmythos.trmythos.race.CanineRaceLines.FenrirRaceLine.FenrisWolfRace;
 import com.github.trmythos.trmythos.race.JormungandrRaceLine.*;
+import com.github.trmythos.trmythos.race.ValkyrieRaceLine.MaidenRace;
+import com.github.trmythos.trmythos.race.ValkyrieRaceLine.SoulCourierRace;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -33,6 +35,11 @@ public class TRMythosRaces {
     public static final ResourceLocation FENRIS_WOLF_RACE = new ResourceLocation(TRMythos.MODID, "fenris_wolf");
     public static final ResourceLocation HELL_HOUND_RACE = new ResourceLocation(TRMythos.MODID, "hell_hound");
     public static final ResourceLocation CERBERUS_RACE = new ResourceLocation(TRMythos.MODID, "cerberus");
+
+    // Valkyrie Races
+    public static final ResourceLocation MAIDEN_RACE = new ResourceLocation(TRMythos.MODID, "maiden");
+    public static final ResourceLocation SOUL_COURIER_RACE = new ResourceLocation(TRMythos.MODID, "soul_courier");
+    public static final ResourceLocation VALKYRIE_RACE = new ResourceLocation(TRMythos.MODID, "maiden");
 
     /**
      * Make sure that you register the race, otherwise it will not show up correctly in the selection menu
@@ -76,6 +83,17 @@ public class TRMythosRaces {
         event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
             helper.register("cerberus", new CerberusRace());
         });
+
+        // Valkyrie Races
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("maiden", new MaidenRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("soul_courier", new SoulCourierRace());
+        });
+      //  event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+      //      helper.register("valkyrie", new ValkyrieRace());
+    //    });
 
     }
 
