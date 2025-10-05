@@ -30,7 +30,7 @@ public class ExampleUniqueSkill extends Skill {
      * @return
      */
     public ResourceLocation getSkillIcon() {
-        return new ResourceLocation(TRMythos.MODID, "textures/skill/unique/example_unique.png");
+        return new ResourceLocation(TRMythos.MOD_ID, "textures/skill/unique/example_unique.png");
     }
 
     public ExampleUniqueSkill() {

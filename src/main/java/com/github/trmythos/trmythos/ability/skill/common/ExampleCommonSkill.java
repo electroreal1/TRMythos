@@ -32,7 +32,7 @@ public class ExampleCommonSkill extends Skill {
      * @return
      */
     public ResourceLocation getSkillIcon() {
-        return new ResourceLocation(TRMythos.MODID, "textures/skill/common/example_common.png");
+        return new ResourceLocation(TRMythos.MOD_ID, "textures/skill/common/example_common.png");
     }
 
     // Here are some easy to change parameters to configure for the skill

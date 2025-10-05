@@ -34,7 +34,7 @@ public class ExampleUltimateSkill extends Skill {
      * @return
      */
     public ResourceLocation getSkillIcon() {
-        return new ResourceLocation(TRMythos.MODID, "textures/skill/ultimate/example_ultimate.png");
+        return new ResourceLocation(TRMythos.MOD_ID, "textures/skill/ultimate/example_ultimate.png");
     }
 
     public ExampleUltimateSkill() {

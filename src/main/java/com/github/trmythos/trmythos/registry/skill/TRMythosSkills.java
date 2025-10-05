@@ -23,7 +23,7 @@ import net.minecraftforge.registries.RegistryObject;
 public class TRMythosSkills {
 
     // Here is that deferred register I was talking about. You don't need to change it at all
-    public static DeferredRegister<ManasSkill> skillRegistry = DeferredRegister.create(SkillAPI.getSkillRegistryKey(), TRMythos.MODID);
+    public static DeferredRegister<ManasSkill> skillRegistry = DeferredRegister.create(SkillAPI.getSkillRegistryKey(), TRMythos.MOD_ID);
 
     public static void register(IEventBus modEventBus) {
         skillRegistry.register(modEventBus);

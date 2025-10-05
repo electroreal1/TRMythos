@@ -27,7 +27,7 @@ public class ExampleExtraSkill extends Skill {
      * @return
      */
     public ResourceLocation getSkillIcon() {
-        return new ResourceLocation(TRMythos.MODID, "textures/skill/extra/example_extra.png");
+        return new ResourceLocation(TRMythos.MOD_ID, "textures/skill/extra/example_extra.png");
     }
 
     // Here are some easy to change parameters to configure for the skill

@@ -1,6 +1,11 @@
 package com.github.trmythos.trmythos.race.JormungandrRaceLine;
 
+import com.github.manasmods.manascore.api.skills.ManasSkill;
+import com.github.manasmods.manascore.api.skills.SkillAPI;
+import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
 import com.github.manasmods.tensura.ability.TensuraSkill;
+import com.github.manasmods.tensura.capability.race.ITensuraPlayerCapability;
+import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.race.Race;
 import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.manasmods.tensura.registry.skill.CommonSkills;
@@ -16,8 +21,17 @@ import java.util.List;
 
 public class SerpentRace extends Race {
 
+    private double auraMin = 5000.0;
+    private double auraMax = 5000.0;
+    private double startingMagiculeMin = 5000.0;
+    private double startingMagiculeMax = 5000.0;
+
     public SerpentRace(Difficulty difficulty) {
         super(difficulty);
+    }
+
+    public SerpentRace() {
+        super(Difficulty.INTERMEDIATE);
     }
 
     @Override
@@ -60,20 +74,13 @@ public class SerpentRace extends Race {
         return 0.2;
     }
 
-    private double auraMin = 5000.0;
-    private double auraMax = 5000.0;
-    private double startingMagiculeMin = 5000.0;
-    private double startingMagiculeMax = 5000.0;
-
     @Override
     public Pair<Double, Double> getBaseAuraRange() {
-        // The range of values that the Aura Range could be. So between 800 and 1211
         return Pair.of(auraMin, auraMax);
     }
 
     @Override
     public Pair<Double, Double> getBaseMagiculeRange() {
-        // The range of values that the Max Magicules could be. So between 80 and 120
         return Pair.of(startingMagiculeMin, startingMagiculeMax);
     }
 
@@ -81,6 +88,7 @@ public class SerpentRace extends Race {
     public double getAuraEvolutionReward() {
         return AuraEvolutionReward();
     }
+
     @Override
     public double getManaEvolutionReward() {
         return ManaEvolutionReward();
@@ -94,47 +102,92 @@ public class SerpentRace extends Race {
         return 3000;
     }
 
-    public SerpentRace() {
-        super(Difficulty.INTERMEDIATE);
-    }
-
     @Override
     public List<TensuraSkill> getIntrinsicSkills(Player player) {
         List<TensuraSkill> list = new ArrayList<>();
-        list.add(CommonSkills.CORROSION.get());
-        list.add(CommonSkills.SELF_REGENERATION.get());
-        list.add(IntrinsicSkills.DRAGON_EAR.get());
-        list.add(IntrinsicSkills.DRAGON_EYE.get());
+        SkillStorage storage = SkillAPI.getSkillsFrom(player);
         list.add(IntrinsicSkills.DRAGON_SKIN.get());
+        list.add(CommonSkills.SELF_REGENERATION.get());
+        List<TensuraSkill> serpentSkills = List.of(
+                (TensuraSkill) CommonSkills.PARALYSIS.get(),
+                CommonSkills.CORROSION.get(),
+                CommonSkills.POISON.get()
+        );
+
+        List<TensuraSkill> lesserSerpentSkills = List.of(
+                (TensuraSkill) IntrinsicSkills.DRAGON_EAR.get(),
+                IntrinsicSkills.DRAGON_EYE.get()
+        );
+
+        // Filter out skills the player already has
+        List<TensuraSkill> availableSerpentSkills = serpentSkills.stream()
+                .filter(skill -> !storage.getSkill((ManasSkill) skill).isPresent())
+                .toList();
+
+        List<TensuraSkill> availableLesserSerpentSkills = lesserSerpentSkills.stream()
+                .filter(skill -> !storage.getSkill((ManasSkill) skill).isPresent())
+                .toList();
+
+        // Pick one random skill from each list (if any are left)
+        TensuraSkill randomSerpentSkill = null;
+        if (!availableSerpentSkills.isEmpty()) {
+            randomSerpentSkill = availableSerpentSkills.get(
+                    player.getRandom().nextInt(availableSerpentSkills.size())
+            );
+        }
+
+        TensuraSkill randomLesserSerpentSkill = null;
+        if (!availableLesserSerpentSkills.isEmpty()) {
+            randomLesserSerpentSkill = availableLesserSerpentSkills.get(
+                    player.getRandom().nextInt(availableLesserSerpentSkills.size())
+            );
+        }
+
+        // Add guaranteed / chosen skills to the returned list
+        if (randomSerpentSkill != null) list.add(randomSerpentSkill);
+        if (randomLesserSerpentSkill != null) list.add(randomLesserSerpentSkill);
+
+        // You can add other intrinsic skills here if desired
         return list;
     }
 
+    @Override
     public List<Race> getNextEvolutions(Player player) {
         List<Race> list = new ArrayList<>();
         list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TRMythosRaces.GREATER_SERPENT_RACE));
         return list;
     }
-    public @Nullable Race getDefaultEvolution(Player player) {
-        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TRMythosRaces.GREATER_SERPENT_RACE));
+
+    @Override
+    @Nullable
+    public Race getDefaultEvolution(Player player) {
+        return (Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TRMythosRaces.GREATER_SERPENT_RACE);
     }
 
-    public @Nullable Race getAwakeningEvolution(Player player) {
-        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TRMythosRaces.GREATER_SERPENT_RACE));
+    @Override
+    @Nullable
+    public Race getAwakeningEvolution(Player player) {
+        return (Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TRMythosRaces.GREATER_SERPENT_RACE);
     }
 
-    public @Nullable Race getHarvestFestivalEvolution(Player player) {
-        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TRMythosRaces.GREATER_SERPENT_RACE));
+    @Override
+    @Nullable
+    public Race getHarvestFestivalEvolution(Player player) {
+        return (Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TRMythosRaces.GREATER_SERPENT_RACE);
     }
 
+    @Override
     public boolean isMajin() {
         return true;
     }
+
+    @Override
     public boolean isSpiritual() {
         return false;
     }
 
+    @Override
     public boolean isDivine() {
         return false;
     }
-
 }

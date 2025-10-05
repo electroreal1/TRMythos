@@ -34,7 +34,7 @@ public class ExampleIntrinsicSkill extends Skill {
      * @return
      */
     public ResourceLocation getSkillIcon() {
-        return new ResourceLocation(TRMythos.MODID, "textures/skill/intrinsic/example_intrinsic.png");
+        return new ResourceLocation(TRMythos.MOD_ID, "textures/skill/intrinsic/example_intrinsic.png");
     }
 
     /**

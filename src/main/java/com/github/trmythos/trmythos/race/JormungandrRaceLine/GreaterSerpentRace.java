@@ -1,5 +1,8 @@
 package com.github.trmythos.trmythos.race.JormungandrRaceLine;
 
+import com.github.manasmods.manascore.api.skills.ManasSkill;
+import com.github.manasmods.manascore.api.skills.SkillAPI;
+import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
 import com.github.manasmods.tensura.ability.TensuraSkill;
 import com.github.manasmods.tensura.race.Race;
 import com.github.manasmods.tensura.registry.race.TensuraRaces;
@@ -91,10 +94,29 @@ public class GreaterSerpentRace extends Race {
     @Override
     public List<TensuraSkill> getIntrinsicSkills(Player player) {
         List<TensuraSkill> list = new ArrayList<>();
-        list.add(CommonSkills.PARALYSIS.get());
-        list.add(ExtraSkills.SNAKE_EYE.get());
+        SkillStorage storage = SkillAPI.getSkillsFrom(player);
         list.add(IntrinsicSkills.DRAGON_MODE.get());
+        list.add(ExtraSkills.SNAKE_EYE.get());
         list.add(ResistanceSkills.PHYSICAL_ATTACK_RESISTANCE.get());
+        List<TensuraSkill> serpentSkills = List.of(
+                (TensuraSkill) CommonSkills.PARALYSIS.get(),
+                CommonSkills.CORROSION.get(),
+                CommonSkills.POISON.get()
+        );
+        // Filter out skills the player already has
+        List<TensuraSkill> availableSerpentSkills = serpentSkills.stream()
+                .filter(skill -> !storage.getSkill((ManasSkill) skill).isPresent())
+                .toList();
+        // Pick one random skill from each list (if any are left)
+        TensuraSkill randomSerpentSkill = null;
+        if (!availableSerpentSkills.isEmpty()) {
+            randomSerpentSkill = availableSerpentSkills.get(
+                    player.getRandom().nextInt(availableSerpentSkills.size())
+            );
+        }
+        // Add guaranteed / chosen skills to the returned list
+        if (randomSerpentSkill != null) list.add(randomSerpentSkill);
+        // You can add other intrinsic skills here if desired
         return list;
     }
     @Override

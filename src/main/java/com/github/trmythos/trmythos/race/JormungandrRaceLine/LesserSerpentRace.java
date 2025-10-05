@@ -127,9 +127,17 @@ public class LesserSerpentRace extends Race {
     @Override
     public List<TensuraSkill> getIntrinsicSkills(Player player) {
         List<TensuraSkill> list = new ArrayList<>();
+        List<TensuraSkill> LesserSerpentSkills = List.of(
+                (TensuraSkill) CommonSkills.PARALYSIS.get(),
+                CommonSkills.CORROSION.get(),
+                CommonSkills.POISON.get()
+        );
+        TensuraSkill randomLesserSerpentSkill = LesserSerpentSkills.get(
+                player.getRandom().nextInt(LesserSerpentSkills.size())
+        );
         list.add(IntrinsicSkills.SCALE_ARMOR.get());
         list.add(ExtraSkills.SENSE_HEAT_SOURCE.get());
-        list.add(CommonSkills.POISON.get());
+
 
         return list;
     }
