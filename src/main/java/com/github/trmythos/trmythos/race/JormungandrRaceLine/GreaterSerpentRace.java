@@ -1,18 +1,16 @@
 package com.github.trmythos.trmythos.race.JormungandrRaceLine;
 
 import com.github.manasmods.tensura.ability.TensuraSkill;
-import com.github.manasmods.tensura.ability.skill.resist.ResistSkill;
 import com.github.manasmods.tensura.race.Race;
 import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.manasmods.tensura.registry.skill.CommonSkills;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.manasmods.tensura.registry.skill.IntrinsicSkills;
 import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
-import com.github.trmythos.trmythos.registry.race.AllRaces;
+import com.github.trmythos.trmythos.registry.race.TRMythosRaces;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.registries.IForgeRegistry;
-import org.apache.commons.compress.archivers.dump.DumpArchiveConstants;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -102,20 +100,20 @@ public class GreaterSerpentRace extends Race {
 
     public List<Race> getNextEvolutions(Player player) {
         List<Race> list = new ArrayList<>();
-        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(AllRaces.SON_OF_LOKI_RACE));
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TRMythosRaces.SON_OF_LOKI_RACE));
         list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DRAGONEWT.getId()));
         return list;
     }
     public @Nullable Race getDefaultEvolution(Player player) {
-        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(AllRaces.SON_OF_LOKI_RACE));
+        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TRMythosRaces.SON_OF_LOKI_RACE));
     }
 
     public @Nullable Race getAwakeningEvolution(Player player) {
-        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(AllRaces.SON_OF_LOKI_RACE));
+        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TRMythosRaces.SON_OF_LOKI_RACE));
     }
 
     public @Nullable Race getHarvestFestivalEvolution(Player player) {
-        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(AllRaces.SON_OF_LOKI_RACE));
+        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TRMythosRaces.SON_OF_LOKI_RACE));
     }
 
     public boolean isMajin() {

@@ -1,15 +1,13 @@
 package com.github.trmythos.trmythos.race.JormungandrRaceLine;
 
+import com.github.manasmods.tensura.ability.TensuraSkill;
+import com.github.manasmods.tensura.race.Race;
 import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.manasmods.tensura.registry.skill.CommonSkills;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
-import com.github.trmythos.trmythos.TRMythos;
-import com.github.trmythos.trmythos.registry.race.AllRaces;
-import com.github.trmythos.trmythos.registry.skill.AllSkills;
-import com.github.manasmods.tensura.ability.TensuraSkill;
-import com.github.manasmods.tensura.race.Race;
 import com.github.manasmods.tensura.registry.skill.IntrinsicSkills;
 import com.github.manasmods.tensura.util.JumpPowerHelper;
+import com.github.trmythos.trmythos.registry.race.TRMythosRaces;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -111,19 +109,19 @@ public class LesserSerpentRace extends Race {
 
     public List<Race> getNextEvolutions(Player player) {
         List<Race> list = new ArrayList<>();
-        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(AllRaces.SERPENT_RACE));
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TRMythosRaces.SERPENT_RACE));
         return list;
     }
     public @Nullable Race getDefaultEvolution(Player player) {
-        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(AllRaces.SERPENT_RACE));
+        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TRMythosRaces.SERPENT_RACE));
     }
 
     public @Nullable Race getAwakeningEvolution(Player player) {
-        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(AllRaces.SERPENT_RACE));
+        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TRMythosRaces.SERPENT_RACE));
     }
 
     public @Nullable Race getHarvestFestivalEvolution(Player player) {
-        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(AllRaces.SERPENT_RACE));
+        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TRMythosRaces.SERPENT_RACE));
     }
 
     @Override

@@ -20,7 +20,7 @@ import net.minecraftforge.registries.RegistryObject;
  *
  * All Skill types can go in here.
  */
-public class AllSkills {
+public class TRMythosSkills {
 
     // Here is that deferred register I was talking about. You don't need to change it at all
     public static DeferredRegister<ManasSkill> skillRegistry = DeferredRegister.create(SkillAPI.getSkillRegistryKey(), TRMythos.MODID);

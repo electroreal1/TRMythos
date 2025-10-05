@@ -6,7 +6,7 @@ import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.manasmods.tensura.registry.skill.IntrinsicSkills;
 import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
-import com.github.trmythos.trmythos.registry.race.AllRaces;
+import com.github.trmythos.trmythos.registry.race.TRMythosRaces;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -95,19 +95,19 @@ public class SonOfLokiRace extends Race {
 
     public List<Race> getNextEvolutions(Player player) {
        List<Race> list = new ArrayList<>();
-       list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(AllRaces.MIDGARDIAN_SPIRIT_RACE));
+       list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TRMythosRaces.MIDGARDIAN_SPIRIT_RACE));
        return list;
     }
      public @Nullable Race getDefaultEvolution(Player player) {
-        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(AllRaces.MIDGARDIAN_SPIRIT_RACE));
+        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TRMythosRaces.MIDGARDIAN_SPIRIT_RACE));
     }
 
     public @Nullable Race getAwakeningEvolution(Player player) {
-        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(AllRaces.MIDGARDIAN_SPIRIT_RACE));
+        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TRMythosRaces.MIDGARDIAN_SPIRIT_RACE));
     }
 
     public @Nullable Race getHarvestFestivalEvolution(Player player) {
-        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(AllRaces.MIDGARDIAN_SPIRIT_RACE));
+        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TRMythosRaces.MIDGARDIAN_SPIRIT_RACE));
     }
 
         public boolean isMajin() {

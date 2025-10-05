@@ -2,6 +2,11 @@ package com.github.trmythos.trmythos.registry.race;
 
 import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.trmythos.trmythos.TRMythos;
+import com.github.trmythos.trmythos.race.CanineRaceLines.CanineRace;
+import com.github.trmythos.trmythos.race.CanineRaceLines.CerberusRaceLine.CerberusRace;
+import com.github.trmythos.trmythos.race.CanineRaceLines.CerberusRaceLine.HellHoundRace;
+import com.github.trmythos.trmythos.race.CanineRaceLines.FenrirRaceLine.DreadBeastRace;
+import com.github.trmythos.trmythos.race.CanineRaceLines.FenrirRaceLine.FenrisWolfRace;
 import com.github.trmythos.trmythos.race.JormungandrRaceLine.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -10,9 +15,11 @@ import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegisterEvent;
 
 @Mod.EventBusSubscriber(modid = TRMythos.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class AllRaces {
+public class TRMythosRaces {
 
     // Define the Race that you want to add here
+
+    // Serpent Races
     public static final ResourceLocation LESSER_SERPENT_RACE = new ResourceLocation(TRMythos.MODID, "lesser_serpent");
     public static final ResourceLocation SERPENT_RACE = new ResourceLocation(TRMythos.MODID, "serpent");
     public static final ResourceLocation GREATER_SERPENT_RACE = new ResourceLocation(TRMythos.MODID, "greater_serpent");
@@ -20,6 +27,12 @@ public class AllRaces {
     public static final ResourceLocation MIDGARDIAN_SPIRIT_RACE = new ResourceLocation(TRMythos.MODID, "midgardian_spirit");
     public static final ResourceLocation JORMUNGANDR_RACE = new ResourceLocation(TRMythos.MODID, "jormungandr");
 
+    // Canine Races
+    public static final ResourceLocation CANINE_RACE = new ResourceLocation(TRMythos.MODID, "canine");
+    public static final ResourceLocation DREAD_BEAST_RACE = new ResourceLocation(TRMythos.MODID, "dread_beast");
+    public static final ResourceLocation FENRIS_WOLF_RACE = new ResourceLocation(TRMythos.MODID, "fenris_wolf");
+    public static final ResourceLocation HELL_HOUND_RACE = new ResourceLocation(TRMythos.MODID, "hell_hound");
+    public static final ResourceLocation CERBERUS_RACE = new ResourceLocation(TRMythos.MODID, "cerberus");
 
     /**
      * Make sure that you register the race, otherwise it will not show up correctly in the selection menu
@@ -27,6 +40,7 @@ public class AllRaces {
      */
     @SubscribeEvent
     public static void register(RegisterEvent event) {
+        // Serpent Races
         event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
             helper.register("serpent", new SerpentRace());
         });
@@ -45,6 +59,24 @@ public class AllRaces {
         event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
             helper.register("jormungandr", new JormungandrRace());
         });
+
+        // Canine Races
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("canine", new CanineRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("dread_beast", new DreadBeastRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("fenris_wolf", new FenrisWolfRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("hell_hound", new HellHoundRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("cerberus", new CerberusRace());
+        });
+
     }
 
 }

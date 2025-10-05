@@ -1,10 +1,12 @@
-package com.github.trmythos.trmythos.race.JormungandrRaceLine;
+package com.github.trmythos.trmythos.race.CanineRaceLines;
 
+import com.github.manasmods.manascore.api.skills.SkillAPI;
+import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
 import com.github.manasmods.tensura.ability.TensuraSkill;
 import com.github.manasmods.tensura.race.Race;
 import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.manasmods.tensura.registry.skill.CommonSkills;
-import com.github.manasmods.tensura.registry.skill.IntrinsicSkills;
+import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.trmythos.trmythos.registry.race.TRMythosRaces;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.world.entity.player.Player;
@@ -14,40 +16,40 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SerpentRace extends Race {
+public class CanineRace extends Race {
 
-    public SerpentRace(Difficulty difficulty) {
-        super(difficulty);
+    public CanineRace() {
+        super(Difficulty.INTERMEDIATE);
     }
-
     @Override
     public double getBaseHealth() {
         return 30;
     }
 
+
     @Override
     public double getSpiritualHealthMultiplier() {
-        return 5.0;
+        return 3.0;
     }
 
     @Override
     public float getPlayerSize() {
-        return 0.9f;
+        return 0.8f;
     }
 
     @Override
     public double getBaseAttackDamage() {
-        return 2;
+        return 1.5f;
     }
 
     @Override
     public double getBaseAttackSpeed() {
-        return 3.25;
+        return 3.5f;
     }
 
     @Override
     public double getKnockbackResistance() {
-        return 0;
+        return 0.1f;
     }
 
     @Override
@@ -59,11 +61,15 @@ public class SerpentRace extends Race {
     public double getMovementSpeed() {
         return 0.2;
     }
+    @Override
+    public double getSprintSpeed() {
+        return 0.22f;
+    }
 
-    private double auraMin = 5000.0;
-    private double auraMax = 5000.0;
-    private double startingMagiculeMin = 5000.0;
-    private double startingMagiculeMax = 5000.0;
+    private double auraMin = 300;
+    private double auraMax = 1300;
+    private double startingMagiculeMin = 700;
+    private double startingMagiculeMax = 1700;
 
     @Override
     public Pair<Double, Double> getBaseAuraRange() {
@@ -76,48 +82,36 @@ public class SerpentRace extends Race {
         // The range of values that the Max Magicules could be. So between 80 and 120
         return Pair.of(startingMagiculeMin, startingMagiculeMax);
     }
-
-    public SerpentRace() {
-        super(Difficulty.INTERMEDIATE);
-    }
-
     @Override
     public List<TensuraSkill> getIntrinsicSkills(Player player) {
         List<TensuraSkill> list = new ArrayList<>();
-        list.add(CommonSkills.CORROSION.get());
+        list.add(ExtraSkills.MAGIC_SENSE.get());
+        list.add(CommonSkills.COERCION.get());
         list.add(CommonSkills.SELF_REGENERATION.get());
-        list.add(IntrinsicSkills.DRAGON_EAR.get());
-        list.add(IntrinsicSkills.DRAGON_EYE.get());
-        list.add(IntrinsicSkills.DRAGON_SKIN.get());
+        return list;
+    }
+    public List<Race> getNextEvolutions(Player player) {
+        List<Race> list = new ArrayList<>();
+        SkillStorage storage = SkillAPI.getSkillsFrom(player);
+            list.add((Race)((IForgeRegistry)TensuraRaces.RACE_REGISTRY.get()).getValue(TRMythosRaces.DREAD_BEAST_RACE));
+            list.add((Race)((IForgeRegistry)TensuraRaces.RACE_REGISTRY.get()).getValue(TRMythosRaces.HELL_HOUND_RACE));
         return list;
     }
 
-    public List<Race> getNextEvolutions(Player player) {
-        List<Race> list = new ArrayList<>();
-        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TRMythosRaces.GREATER_SERPENT_RACE));
-        return list;
-    }
     public @Nullable Race getDefaultEvolution(Player player) {
-        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TRMythosRaces.GREATER_SERPENT_RACE));
+        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TRMythosRaces.DREAD_BEAST_RACE));
     }
 
     public @Nullable Race getAwakeningEvolution(Player player) {
-        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TRMythosRaces.GREATER_SERPENT_RACE));
+        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TRMythosRaces.DREAD_BEAST_RACE));
     }
 
     public @Nullable Race getHarvestFestivalEvolution(Player player) {
-        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TRMythosRaces.GREATER_SERPENT_RACE));
+        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TRMythosRaces.DREAD_BEAST_RACE));
     }
-
     public boolean isMajin() {
         return true;
     }
-    public boolean isSpiritual() {
-        return false;
-    }
-
-    public boolean isDivine() {
-        return false;
-    }
 
 }
+

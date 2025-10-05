@@ -1,7 +1,6 @@
 package com.github.trmythos.trmythos;
 
-import com.github.trmythos.trmythos.registry.race.AllRaces;
-import com.github.trmythos.trmythos.registry.skill.AllSkills;
+import com.github.trmythos.trmythos.registry.skill.TRMythosSkills;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
@@ -29,7 +28,7 @@ public class TRMythos {
         modEventBus.addListener(this::commonSetup);
 
         // Register the skills, items, etc. with the mod bus
-        AllSkills.register(modEventBus);
+        TRMythosSkills.register(modEventBus);
 
         MinecraftForge.EVENT_BUS.register(this);
         LOGGER.info("Tensura Mythos has been loaded successfully!");

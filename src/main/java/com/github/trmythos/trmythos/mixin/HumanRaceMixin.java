@@ -17,7 +17,7 @@ public abstract class HumanRaceMixin {
 //
 //        // Add your custom skills here
 //        // For example:
-//        skills.add(AllSkills.EXAMPLE_INTRINSIC.get());
+//        skills.add(TRMythosSkills.EXAMPLE_INTRINSIC.get());
 //
 //        // Set the modified list as the return value
 //        cir.setReturnValue(skills);
@@ -26,7 +26,7 @@ public abstract class HumanRaceMixin {
 //    @Inject(method = "getIntrinsicSkills", at = @AT("RETURN"), cancellable=true)
 //    private void addIntrinsicSkill(CallbackInfoReturnable<List<TensuraSkill>> cir) {
 //        List<TensuraSkill> skills = cir.getReturnValue();
-//        skills.add(AllSkills.EXAMPLE_EXTRA.get());
+//        skills.add(TRMythosSkills.EXAMPLE_EXTRA.get());
 //    }
 
 //        private final List<TensuraSkill> intrinsicSkills = new ArrayList<>();
@@ -34,7 +34,7 @@ public abstract class HumanRaceMixin {
 //        // Add a method to manage intrinsic skills
 //        public List<TensuraSkill> getCustomIntrinsicSkills() {
 //            if (intrinsicSkills.isEmpty()) {
-//                intrinsicSkills.add(AllSkills.EXAMPLE_INTRINSIC.get());
+//                intrinsicSkills.add(TRMythosSkills.EXAMPLE_INTRINSIC.get());
 //            }
 //            return intrinsicSkills;
 //        }
@@ -42,7 +42,7 @@ public abstract class HumanRaceMixin {
 //    @Inject(method = "getIntrinsicSkills", at = @At("RETURN"), cancellable = true, remap = false)
 //    private void addCustomSkill(CallbackInfoReturnable<List<TensuraSkill>> cir) {
 //        List<TensuraSkill> skills = cir.getReturnValue();
-//        skills.add(AllSkills.EXAMPLE_INTRINSIC.get());
+//        skills.add(TRMythosSkills.EXAMPLE_INTRINSIC.get());
 //        cir.setReturnValue(skills);
 //    }
 
@@ -56,7 +56,7 @@ public abstract class HumanRaceMixin {
 //        @Inject(method = "getIntrinsicSkills", at = @At("RETURN"), cancellable = true, remap = false)
 //        private void overrideIntrinsicSkills(CallbackInfoReturnable<List<TensuraSkill>> cir) {
 //            List<TensuraSkill> skills = cir.getReturnValue();
-//            skills.add(AllSkills.EXAMPLE_INTRINSIC.get());
+//            skills.add(TRMythosSkills.EXAMPLE_INTRINSIC.get());
 //            cir.setReturnValue(skills);
 //        }
 
@@ -66,7 +66,7 @@ public abstract class HumanRaceMixin {
 //
 //        // Add a skill conditionally based on the class of the instance
 //        if (this instanceof HumanRace) {
-//            skills.add(AllSkills.EXAMPLE_INTRINSIC);
+//            skills.add(TRMythosSkills.EXAMPLE_INTRINSIC);
 //        }
 //
 //        cir.setReturnValue(skills);

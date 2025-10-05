@@ -17,15 +17,19 @@
   "trmythos.skill.example_intrinsic.description": "This is a description for the intrinsic skill. Edit this description using the en_us.json file.",
 
   "trmythos.race.serpent": "Serpent",
-
   "trmythos.race.lesser_serpent": "Lesser Serpent",
   "trmythos.race.lesser_serpent.notes": "You emerge in the world as a lowly, fragile serpent. Your scales provide some protection, but not enough to stave off most, if not all that inhabits this land. \n You know you can be so much more, so will you wallow in the dirt forever, or live up to your potential?",
-
   "trmythos.race.greater_serpent": "Greater Serpent",
-
   "trmythos.race.son_of_loki": "Son of Loki",
-
   "trmythos.race.midgardian_spirit": "Midgardian Spirit",
+  "trmythos.race.jormungandr": "Jörmungandr",
 
-  "trmythos.race.jormungandr": "Jörmungandr"
+  "trmythos.race.canine": "Canine",
+  "trmythos.race.canine.notes": "A simple hound free to roam the land, eating, sleeping, and playing as freely as you please. Or as the world will allow.",
+  "trmythos.race.dread_beast": "Dread Beast",
+  "trmythos.race.fenris_wolf": "Fenris Wolf",
+  "trmythos.race.hell_hound": "Hell Hound",
+  "trmythos.race.cerberus": "Cerberus",
+  "trmythos.water_domination.acquired": "Obtain Water Domination",
+  "trmythos.flame_domination.acquired": "Obtain Flame Domination"
 }
