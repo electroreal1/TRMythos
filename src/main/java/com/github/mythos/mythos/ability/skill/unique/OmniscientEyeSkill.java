@@ -4,22 +4,16 @@ import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
-import com.github.manasmods.tensura.ability.ISpatialStorage;
 import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
+import com.github.manasmods.tensura.ability.magic.Magic;
+import com.github.manasmods.tensura.ability.magic.Magic.MagicType;
 import com.github.manasmods.tensura.ability.skill.Skill;
-import com.github.manasmods.tensura.ability.skill.extra.AnalyticalAppraisalSkill;
-import com.github.manasmods.tensura.ability.skill.extra.SageSkill;
 import com.github.manasmods.tensura.ability.skill.extra.ThoughtAccelerationSkill;
 import com.github.manasmods.tensura.ability.skill.unique.GreatSageSkill;
 import com.github.manasmods.tensura.capability.skill.TensuraSkillCapability;
 import com.github.manasmods.tensura.event.SkillPlunderEvent;
-import com.github.manasmods.tensura.menu.GreatSageCraftingMenu;
-import com.github.manasmods.tensura.menu.GreatSageRefiningMenu;
-import com.github.manasmods.tensura.menu.container.SpatialStorageContainer;
-import com.github.manasmods.tensura.network.TensuraNetwork;
-import com.github.manasmods.tensura.network.play2client.ClientboundSpatialStorageOpenPacket;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.manasmods.tensura.util.TensuraAdvancementsHelper;
 import net.minecraft.ChatFormatting;
@@ -27,6 +21,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -34,13 +29,9 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.level.ClipContext;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.PlayerContainerEvent;
-import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.UUID;
@@ -50,6 +41,13 @@ public class OmniscientEyeSkill extends Skill {
     public OmniscientEyeSkill() {
         super(SkillType.UNIQUE);
     }
+
+    @Nullable
+    @Override
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/unique/omniscienteye.png");
+    }
+
     public boolean canBeToggled(ManasSkillInstance instance, LivingEntity living) {
         return true;
     }
@@ -66,9 +64,9 @@ public class OmniscientEyeSkill extends Skill {
         return true;
     }
 
-//    protected boolean canActivateInRaceLimit(ManasSkillInstance instance) {
-//        return instance.getMode() == 1;
-//    }
+    protected boolean canActivateInRaceLimit(ManasSkillInstance instance) {
+        return instance.getMode() == 1;
+    }
     public void onToggleOn(ManasSkillInstance instance, LivingEntity entity) {
     ThoughtAccelerationSkill.onToggle(instance, entity, ACCELERATION, true);
     }
@@ -111,7 +109,6 @@ public class OmniscientEyeSkill extends Skill {
 
         return var10000;
     }
-
 
     public void onPressed(ManasSkillInstance instance, LivingEntity entity) {
         if (instance.getMode() == 1) {
@@ -164,7 +161,7 @@ public class OmniscientEyeSkill extends Skill {
                     }
                     entity.swing(InteractionHand.MAIN_HAND, true);
                     ServerLevel level = (ServerLevel)entity.getLevel();
-                    int chance = instance.isMastered(entity) ? 75 : 50;
+                    int chance = 75;
                     boolean failed = true;
                     if (entity.getRandom().nextInt(100) <= chance) {
                         List<ManasSkillInstance> collection = SkillAPI.getSkillsFrom(target).getLearnedSkills().stream().filter(this::canCopy).toList();
@@ -221,11 +218,12 @@ public class OmniscientEyeSkill extends Skill {
                 return false;
             } else {
                 Skill skill = (Skill)var3;
+                Magic magic = (Magic)var3;
                 return skill.getType().equals(SkillType.COMMON) ||
                         skill.getType().equals(SkillType.EXTRA) ||
                         skill.getType().equals(SkillType.INTRINSIC)||
-                        skill.getType().equals(SkillType.RESISTANCE) ||
-                        skill.getType().equals(SkillType.UNIQUE);
+                        magic.getType().equals(MagicType.SPIRITUAL) ||
+                        skill.getType().equals(SkillType.RESISTANCE);
                 }
             }
             return false;
