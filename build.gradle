@@ -125,7 +125,7 @@ minecraft {
 }
 
 mixin {
-    add sourceSets.main, "${mod_id}.refmap.json"
+    add sourceSets.main, "trmythos.refmap.json"
 
     config "${mod_id}.mixins.json"
 }
