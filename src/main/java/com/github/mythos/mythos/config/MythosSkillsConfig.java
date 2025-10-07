@@ -10,8 +10,11 @@ public class MythosSkillsConfig {
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> obtainableUltimates = null;
     public static ForgeConfigSpec.BooleanValue canAttackOtherPlayers;
     public static ForgeConfigSpec.BooleanValue enableUniqueSkillCompatibilityForUltimates;
+    public static ForgeConfigSpec.ConfigValue<List<? extends String>> fakerSkillRestrictedItems;
+
 
     public MythosSkillsConfig(ForgeConfigSpec.Builder builder) {
+
 
         builder.push("SkillsConfig");
 
@@ -19,7 +22,8 @@ public class MythosSkillsConfig {
         fakerSkillRestrictedItems = builder
                 .comment("Items that Faker cannot copy via projection.")
                 .comment("Use item registry IDs, e.g., 'tensura:bronze_coin'.")
-                .defineList("fakerSkillRestrictedItems",
+                .defineList(
+                        "fakerSkillRestrictedItems",
                         Arrays.asList(
                                 "tensura:bronze_coin",
                                 "tensura:silver_coin",
@@ -29,14 +33,17 @@ public class MythosSkillsConfig {
                         obj -> obj instanceof String
                 );
 
-        builder.pop();
+        builder.pop(); // pop SkillsConfig
     }
 
+    // Getter
     public static List<? extends String> getFakerSkillRestrictedItems() {
         return fakerSkillRestrictedItems.get();
     }
+
+
 }
-    }
+
 
     //  public MythosSkillsConfig(ForgeConfigSpec.Builder builder) {
      //   builder.push("availableUltimateSkills");
@@ -67,5 +74,5 @@ public class MythosSkillsConfig {
    // public static boolean getSkillUltimateCompatibility() {
     //    return (Boolean)enableUniqueSkillCompatibilityForUltimates.get();
    // }
-}
+
 
