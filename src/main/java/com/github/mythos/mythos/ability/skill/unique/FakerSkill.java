@@ -33,9 +33,11 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -327,72 +329,32 @@ public class FakerSkill extends Skill {
         ItemStack item = entity.getItemInHand(hand);
         if (item.isEmpty()) return;
 
-        Map<Enchantment, Integer> upgrades = new LinkedHashMap<>();
-        upgrades.put(Enchantments.SHARPNESS, 5);
-        upgrades.put(Enchantments.SMITE, 5);
-        upgrades.put(Enchantments.BANE_OF_ARTHROPODS, 5);
-        upgrades.put(Enchantments.UNBREAKING, 5);
-        upgrades.put(Enchantments.BLOCK_EFFICIENCY, 5);
-        upgrades.put(Enchantments.MOB_LOOTING, 5);
-        upgrades.put(Enchantments.MENDING, 5);
-        upgrades.put(Enchantments.POWER_ARROWS, 5);
-        upgrades.put(Enchantments.FLAMING_ARROWS, 5);
-        upgrades.put(Enchantments.INFINITY_ARROWS, 5);
-        upgrades.put(Enchantments.BLOCK_FORTUNE, 5);
-        upgrades.put(Enchantments.FISHING_LUCK, 5);
-        upgrades.put(Enchantments.RESPIRATION, 5);
-        upgrades.put(Enchantments.ALL_DAMAGE_PROTECTION, 5);
-        upgrades.put(Enchantments.FIRE_PROTECTION, 5);
-        upgrades.put(Enchantments.FALL_PROTECTION, 5);
-        upgrades.put(Enchantments.BLAST_PROTECTION, 5);
-        upgrades.put(Enchantments.PROJECTILE_PROTECTION, 5);
-        upgrades.put(Enchantments.THORNS, 5);
-        upgrades.put(Enchantments.DEPTH_STRIDER, 5);
-        upgrades.put(Enchantments.FROST_WALKER, 5);
-        upgrades.put(Enchantments.SOUL_SPEED, 5);
-        upgrades.put(Enchantments.SWEEPING_EDGE, 5);
-        upgrades.put(Enchantments.SILK_TOUCH, 1);
-        upgrades.put(Enchantments.FISHING_SPEED, 5);
-        upgrades.put(Enchantments.AQUA_AFFINITY, 5);
-        upgrades.put(Enchantments.KNOCKBACK, 5);
-        upgrades.put(Enchantments.FIRE_ASPECT, 5);
-        upgrades.put(Enchantments.QUICK_CHARGE, 5);
-        upgrades.put(Enchantments.MULTISHOT, 5);
-        upgrades.put(Enchantments.PIERCING, 5);
+        // Fetch the configured enchantments list from config
+        List<? extends String> configuredEnchantments = MythosSkillsConfig.getFakerSkillReinforceEnchantments();
 
-        // Tensura custom enchantments
-        upgrades.put(TensuraEnchantments.HOLY_COAT.get(), 3);
-        upgrades.put(TensuraEnchantments.HOLY_WEAPON.get(), 2);
-        upgrades.put(TensuraEnchantments.MAGIC_WEAPON.get(), 2);
-        upgrades.put(TensuraEnchantments.MAGIC_INTERFERENCE.get(), 3);
-        upgrades.put(TensuraEnchantments.SOUL_EATER.get(), 3);
-        upgrades.put(TensuraEnchantments.SEVERANCE.get(), 5);
-        upgrades.put(TensuraEnchantments.BARRIER_PIERCING.get(), 2);
-        upgrades.put(TensuraEnchantments.BREATHING_SUPPORT.get(), 5);
-        upgrades.put(TensuraEnchantments.CRUSHING.get(), 2);
-        upgrades.put(TensuraEnchantments.STURDY.get(), 3);
-        upgrades.put(TensuraEnchantments.ENERGY_STEAL.get(), 2);
-        upgrades.put(TensuraEnchantments.ELEMENTAL_BOOST.get(), 4);
-        upgrades.put(TensuraEnchantments.ELEMENTAL_RESISTANCE.get(), 4);
-        upgrades.put(TensuraEnchantments.SLOTTING.get(), 5);
-        upgrades.put(TensuraEnchantments.SWIFT.get(), 3);
+        for (String entry : configuredEnchantments) {
+            // Expecting format: "modid:enchantment_name:level", e.g., "minecraft:sharpness:5"
+            String[] parts = entry.split(":");
+            if (parts.length != 3) continue; // skip invalid entries
 
-        for (Map.Entry<Enchantment, Integer> entry : upgrades.entrySet()) {
-            Enchantment ench = entry.getKey();
-            int optimizedLevel = entry.getValue();
+            try {
+                ResourceLocation enchId = new ResourceLocation(parts[0], parts[1]);
+                Enchantment ench = ForgeRegistries.ENCHANTMENTS.getValue(enchId);
+                if (ench == null) continue; // skip invalid enchantments
 
-            int currentLevel = item.getEnchantmentLevel(ench); // returns 0 if not present
-            if (currentLevel <= 0) continue; // skip enchantments not currently present
+                int level = Integer.parseInt(parts[2]);
+                int currentLevel = item.getEnchantmentLevel(ench);
 
-            if (optimizedLevel <= 0) {
-                removeEnchantmentNbt(item, ench, currentLevel);
+                // Remove existing level
+                if (currentLevel > 0) removeEnchantmentNbt(item, ench, currentLevel);
 
-                Map<Enchantment, Integer> currentMap = EnchantmentHelper.getEnchantments(item);
-                currentMap.remove(ench);
-                EnchantmentHelper.setEnchantments(currentMap, item);
-            } else {
-                removeEnchantmentNbt(item, ench, currentLevel);
-                item.enchant(ench, optimizedLevel);
+                // Apply new level if > 0
+                if (level > 0) {
+                    item.enchant(ench, level);
+                }
+            } catch (Exception ignored) {
+                // Skip any malformed entries or parse errors
+                continue;
             }
         }
 
