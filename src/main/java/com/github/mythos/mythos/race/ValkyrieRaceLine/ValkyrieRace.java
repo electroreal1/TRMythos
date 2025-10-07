@@ -3,12 +3,17 @@ package com.github.mythos.mythos.race.ValkyrieRaceLine;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
 import com.github.manasmods.tensura.ability.TensuraSkill;
+import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
+import com.github.manasmods.tensura.config.TensuraConfig;
 import com.github.manasmods.tensura.race.Race;
+import com.github.manasmods.tensura.race.human.HumanSaintRace;
+import com.github.manasmods.tensura.registry.TensuraStats;
 import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.manasmods.tensura.registry.skill.*;
 import com.github.mythos.mythos.registry.race.MythosRaces;
 import com.github.mythos.mythos.registry.race.MythosRaces;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.registries.IForgeRegistry;
 
@@ -73,6 +78,21 @@ public class ValkyrieRace extends Race {
     @Override
     public Pair<Double, Double> getBaseAuraRange() {
         return Pair.of(auraMin, auraMax);
+    }
+    public double getEvolutionPercentage(Player player) {
+        double minimalEP = this.getMinBaseAura() + this.getMinBaseMagicule();
+
+        // Base EP contribution, capped at 50
+        double percentage = TensuraPlayerCapability.getBaseEP(player) * 50 / minimalEP;
+        percentage = Math.min(percentage, 50.0);
+        double boss = (double)Math.min(TensuraStats.getBossKilled(player) * 50 / (Integer)TensuraConfig.INSTANCE.racesConfig.bossForSaint.get(), 50);
+        return percentage + boss;
+    }
+    public List<Component> getRequirementsForRendering(Player player) {
+        List<Component> list = new ArrayList();
+        list.add(Component.translatable("tensura.evolution_menu.ep_requirement"));
+        list.add(Component.translatable("trmythos.evolution_menu.boss_kill_requirement"));
+        return list;
     }
 
     @Override
