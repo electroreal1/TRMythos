@@ -142,7 +142,7 @@ public class OmniscientEyeSkill extends Skill {
                             int level = this.isMastered(instance, entity) ? 128 : 32;
                             if (cap.getAnalysisLevel() != level) {
                                 cap.setAnalysisLevel(level);
-                                cap.setAnalysisDistance(this.isMastered(instance, entity) ? 100 : 75);
+                                cap.setAnalysisDistance(this.isMastered(instance, entity) ? 85 : 75);
                                 entity.getLevel().playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
                             } else {
                                 cap.setAnalysisLevel(0);
