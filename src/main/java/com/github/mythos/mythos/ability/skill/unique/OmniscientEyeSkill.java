@@ -42,6 +42,7 @@ public class OmniscientEyeSkill extends Skill {
         super(SkillType.UNIQUE);
     }
 
+
     @Nullable
     @Override
     public ResourceLocation getSkillIcon() {

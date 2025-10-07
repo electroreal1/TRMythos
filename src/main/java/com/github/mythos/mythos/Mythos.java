@@ -5,10 +5,13 @@
 
 package com.github.mythos.mythos;
 
+import com.github.manasmods.tensura.ability.skill.unique.GourmandSkill;
 import com.github.mythos.mythos.config.MythosConfig;
+import com.github.mythos.mythos.registry.MythosParticles;
 import com.github.mythos.mythos.registry.MythosRegistery;
 import com.github.mythos.mythos.registry.race.MythosRaces;
 import com.github.mythos.mythos.networking.MythosNetwork;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -19,6 +22,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
+import net.minecraftforge.registries.RegistryObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -42,7 +46,7 @@ public class Mythos {
         modEventBus.addListener(this::onCommonSetup);
         MythosRegistery.register(modEventBus);
         modEventBus.register(MythosRaces.class);
-
+        MythosParticles.PARTICLE_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, MythosConfig.SPEC, getConfigFileName("mythos-common"));
         LOGGER.info("Mythos has been loaded!");
     }

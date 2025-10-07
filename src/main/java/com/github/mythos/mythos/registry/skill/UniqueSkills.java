@@ -11,7 +11,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class UniqueSkills {
     private static final DeferredRegister<ManasSkill> registery = DeferredRegister.create(SkillAPI.getSkillRegistryKey(), "trmythos");
-    public static final RegistryObject<FakerSkill> PUNISHMENT;
+    public static final RegistryObject<FakerSkill> FAKER;
     public static final RegistryObject<OmniscientEyeSkill> OMNISCIENT_EYE;
     public static final RegistryObject<ExampleUniqueSkill> EXAMPLE_UNIQUE_SKILL;
 
@@ -24,7 +24,7 @@ public class UniqueSkills {
 
 
     static {
-        PUNISHMENT = registery.register("punishment", FakerSkill::new);
+        FAKER = registery.register("faker", FakerSkill::new);
         EXAMPLE_UNIQUE_SKILL = registery.register("example_unique_skill", ExampleUniqueSkill::new);
         OMNISCIENT_EYE = registery.register("omniscient_eye", OmniscientEyeSkill::new);
     }

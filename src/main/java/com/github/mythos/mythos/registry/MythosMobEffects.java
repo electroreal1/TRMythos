@@ -10,7 +10,6 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class MythosMobEffects {
     private static final DeferredRegister<MobEffect> registry;
-
     public MythosMobEffects() {
     }
 
