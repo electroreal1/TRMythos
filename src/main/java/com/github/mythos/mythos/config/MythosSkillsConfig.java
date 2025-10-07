@@ -12,6 +12,30 @@ public class MythosSkillsConfig {
     public static ForgeConfigSpec.BooleanValue enableUniqueSkillCompatibilityForUltimates;
 
     public MythosSkillsConfig(ForgeConfigSpec.Builder builder) {
+
+        builder.push("SkillsConfig");
+
+        // FakerSkill restricted items
+        fakerSkillRestrictedItems = builder
+                .comment("Items that Faker cannot copy via projection.")
+                .comment("Use item registry IDs, e.g., 'tensura:bronze_coin'.")
+                .defineList("fakerSkillRestrictedItems",
+                        Arrays.asList(
+                                "tensura:bronze_coin",
+                                "tensura:silver_coin",
+                                "tensura:gold_coin",
+                                "tensura:stellar_gold_coin"
+                        ),
+                        obj -> obj instanceof String
+                );
+
+        builder.pop();
+    }
+
+    public static List<? extends String> getFakerSkillRestrictedItems() {
+        return fakerSkillRestrictedItems.get();
+    }
+}
     }
 
     //  public MythosSkillsConfig(ForgeConfigSpec.Builder builder) {

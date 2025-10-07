@@ -1,38 +1,55 @@
 package com.github.mythos.mythos.ability.skill.unique;
 
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
+import com.github.manasmods.manascore.api.skills.SkillAPI;
+import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
 import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.ability.skill.extra.ThoughtAccelerationSkill;
 import com.github.manasmods.tensura.capability.skill.TensuraSkillCapability;
 import com.github.manasmods.tensura.registry.enchantment.TensuraEnchantments;
+import com.github.manasmods.tensura.registry.skill.UniqueSkills;
+import com.github.mythos.mythos.config.MythosSkillsConfig;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.network.chat.Style;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 public class FakerSkill extends Skill {
     protected static final UUID ACCELERATION = UUID.fromString("0147c153-32a2-4524-8ba3-ba4c2f449d7c");
 
+    @Nullable
+    @Override
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/unique/faker.png");
+    }
+
     public FakerSkill() {
-        // use Skill.SkillType to avoid a missing import for SkillType
         super(Skill.SkillType.UNIQUE);
     }
 
@@ -48,12 +65,40 @@ public class FakerSkill extends Skill {
         return true;
     }
 
+    private boolean messageSent = false;
+
     public void onToggleOn(ManasSkillInstance instance, LivingEntity entity) {
         ThoughtAccelerationSkill.onToggle(instance, entity, ACCELERATION, true);
     }
 
     public void onToggleOff(ManasSkillInstance instance, LivingEntity entity) {
         ThoughtAccelerationSkill.onToggle(instance, entity, ACCELERATION, false);
+    }
+
+    public void onTick(ManasSkillInstance instance, LivingEntity entity) { // in a tick
+        grantSevererIfMastered(instance, entity);
+    }
+
+    private void grantSevererIfMastered(ManasSkillInstance instance, LivingEntity entity) {
+        if (!(entity instanceof Player player)) return;
+        if (entity.level.isClientSide()) return;
+        if (!this.isMastered(instance, entity)) return;
+
+        SkillStorage storage = SkillAPI.getSkillsFrom(player);
+        Skill severer = UniqueSkills.SEVERER.get();
+
+        if (storage.getSkill(severer).isPresent()) return;
+        storage.learnSkill(severer);
+
+        player.displayClientMessage(
+                Component.translatable("trmythos.skill.faker.mastered.grant.severer").withStyle(ChatFormatting.GOLD),
+                false
+        );
+
+        player.level.playSound(null, player.getX(), player.getY(), player.getZ(),
+                SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1.0F, 1.2F);
+
+        TensuraSkillCapability.sync(player);
     }
 
     public int modes() {
@@ -68,28 +113,27 @@ public class FakerSkill extends Skill {
     }
 
     public Component getModeName(int mode) {
-        MutableComponent var10000;
+        MutableComponent name;
         switch (mode) {
             case 1:
-                var10000 = Component.translatable("trmythos.skill.mode.faker.analytical_appraisal");
+                name = Component.translatable("trmythos.skill.mode.faker.analytical_appraisal");
                 break;
             case 2:
-                var10000 = Component.translatable("trmythos.skill.mode.faker.reinforcement");
+                name = Component.translatable("trmythos.skill.mode.faker.reinforcement");
                 break;
             case 3:
-                var10000 = Component.translatable("trmythos.skill.mode.faker.projection");
+                name = Component.translatable("trmythos.skill.mode.faker.projection");
                 break;
             default:
-                var10000 = Component.empty();
+                name = Component.empty();
         }
-
-        return var10000;
+        return name;
     }
 
     public void onPressed(ManasSkillInstance instance, LivingEntity entity) {
         switch (instance.getMode()) {
             case 1:
-                // Only proceed if the entity has enough magicule
+                // Analytical mode logic (unchanged)
                 if (!SkillHelper.outOfMagicule(entity, instance)) {
                     if (entity instanceof Player) {
                         Player player = (Player) entity;
@@ -131,8 +175,9 @@ public class FakerSkill extends Skill {
                     }
                 }
                 break;
+
             case 2:
-                // Only proceed if the entity has enough magicule
+                // Reinforcement
                 if (!SkillHelper.outOfMagicule(entity, instance)) {
                     if (instance.getMode() == 2) {
                         ItemStack mainHandItem = entity.getMainHandItem();
@@ -144,10 +189,111 @@ public class FakerSkill extends Skill {
                     }
                 }
                 break;
+
             case 3:
-                // (no behavior defined yet)
+                // Projection
+                if (!(entity instanceof Player caster)) return;
+                if (SkillHelper.outOfMagicule(entity, instance)) return;
+
+                // perform projection logic
+                performProjection(instance, caster);
                 break;
         }
+    }
+
+    private void performProjection(ManasSkillInstance instance, Player caster) {
+        // server side only
+        if (caster.level.isClientSide()) return;
+
+        // ensure enough resource
+        if (SkillHelper.outOfMagicule(caster, instance)) return;
+
+        double range = 30;
+        Vec3 eyePos = caster.getEyePosition(1.0F);
+        Vec3 lookVec = caster.getViewVector(1.0F);
+        Vec3 end = eyePos.add(lookVec.scale(range));
+        AABB searchBox = caster.getBoundingBox().expandTowards(lookVec.scale(range)).inflate(1.0D);
+
+        Predicate<Entity> predicate = target ->
+                target instanceof LivingEntity living &&
+                        living != caster &&
+                        !living.getMainHandItem().isEmpty();
+
+        EntityHitResult hit = ProjectileUtil.getEntityHitResult(
+                caster,
+                eyePos,
+                end,
+                searchBox,
+                predicate,
+                range * range
+        );
+
+        if (hit == null || !(hit.getEntity() instanceof LivingEntity targetLiving)) {
+            caster.displayClientMessage(Component.translatable("trmythos.skill.faker.projection.no_target").withStyle(ChatFormatting.RED), true);
+            caster.level.playSound(null, caster.blockPosition(), SoundEvents.VILLAGER_NO, SoundSource.PLAYERS, 1.0F, 1.0F);
+            instance.setCoolDown(10);
+            return;
+        }
+
+        ItemStack targetItem = targetLiving.getMainHandItem();
+        if (targetItem.isEmpty()) {
+            caster.displayClientMessage(Component.translatable("trmythos.skill.faker.projection.empty_hand").withStyle(ChatFormatting.RED), true);
+            instance.setCoolDown(10);
+            return;
+        }
+
+        // Check tsukumogami enchantment (prevent copying) or coins
+        String itemId = Registry.ITEM.getKey(targetItem.getItem()).toString();
+        boolean isRestricted = MythosSkillsConfig.getFakerSkillRestrictedItems().contains(itemId);
+        boolean hasTsukumogami = EnchantmentHelper.getItemEnchantmentLevel(TensuraEnchantments.TSUKUMOGAMI.get(), targetItem) > 0;
+
+        if (isRestricted || hasTsukumogami) {
+            String translationKey = isRestricted
+                    ? "trmythos.skill.faker.projection.fail.restricted"
+                    : "trmythos.skill.faker.projection.fail.tsukumogami";
+
+            caster.displayClientMessage(
+                    Component.translatable(translationKey)
+                            .withStyle(ChatFormatting.RED),
+                    true
+            );
+
+            caster.level.playSound(
+                    null,
+                    caster.blockPosition(),
+                    SoundEvents.VILLAGER_NO,
+                    SoundSource.PLAYERS,
+                    1.0F,
+                    1.0F
+            );
+
+            instance.setCoolDown(10);
+            return;
+        }
+
+        ItemStack projectedCopy = targetItem.copy();
+        // make single count copy, optional
+        projectedCopy.setCount(1);
+
+        // tag as projection (optional)
+        CompoundTag tag = projectedCopy.getOrCreateTag();
+        tag.putBoolean("IsProjection", true);
+        tag.putUUID("ProjectedBy", caster.getUUID());
+        projectedCopy.setTag(tag);
+
+        // try to put in main hand if empty, else inventory, else drop
+        if (caster.getMainHandItem().isEmpty()) {
+            caster.setItemInHand(InteractionHand.MAIN_HAND, projectedCopy);
+        } else if (!caster.getInventory().add(projectedCopy)) {
+            caster.drop(projectedCopy, false);
+        }
+
+        caster.displayClientMessage(Component.translatable("trmythos.skill.faker.projection.success", targetLiving.getDisplayName()).withStyle(ChatFormatting.GOLD), true);
+        caster.level.playSound(null, caster.blockPosition(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 1.0F, 1.0F);
+
+        // cooldown and mastery point
+        instance.setCoolDown(120);
+        addMasteryPoint(instance, caster);
     }
 
     private static void removeEnchantmentNbt(ItemStack item, Enchantment enchantment, int levelToRemove) {
@@ -157,16 +303,14 @@ public class FakerSkill extends Skill {
         ListTag enchList = tag.getList("Enchantments", 10); // 10 = TAG_COMPOUND
         String enchKey = Registry.ENCHANTMENT.getKey(enchantment).toString(); // e.g. "minecraft:sharpness"
 
-        // iterate backwards and remove entries that match both id and level
         for (int i = enchList.size() - 1; i >= 0; i--) {
             CompoundTag e = enchList.getCompound(i);
             String id = e.getString("id");
-            int lvl = e.getShort("lvl"); // lvl stored as short in NBT
-            if (enchKey.equals(id) && lvl == levelToRemove) {
+            int lvl = e.getShort("lvl");
+            if (enchKey != null && enchKey.equals(id) && lvl == levelToRemove) {
                 enchList.remove(i);
             }
         }
-
 
         if (enchList.isEmpty()) {
             tag.remove("Enchantments");
@@ -183,7 +327,6 @@ public class FakerSkill extends Skill {
         ItemStack item = entity.getItemInHand(hand);
         if (item.isEmpty()) return;
 
-        // mapping of enchantments -> optimized level
         Map<Enchantment, Integer> upgrades = new LinkedHashMap<>();
         upgrades.put(Enchantments.SHARPNESS, 5);
         upgrades.put(Enchantments.SMITE, 5);
@@ -217,7 +360,6 @@ public class FakerSkill extends Skill {
         upgrades.put(Enchantments.MULTISHOT, 5);
         upgrades.put(Enchantments.PIERCING, 5);
 
-
         // Tensura custom enchantments
         upgrades.put(TensuraEnchantments.HOLY_COAT.get(), 3);
         upgrades.put(TensuraEnchantments.HOLY_WEAPON.get(), 2);
@@ -242,25 +384,18 @@ public class FakerSkill extends Skill {
             int currentLevel = item.getEnchantmentLevel(ench); // returns 0 if not present
             if (currentLevel <= 0) continue; // skip enchantments not currently present
 
-            // If optimizedLevel == 0: fully remove the enchantment (do not re-add)
             if (optimizedLevel <= 0) {
-                // remove all NBT entries for this enchantment (safest)
                 removeEnchantmentNbt(item, ench, currentLevel);
 
-                // also remove from the enchantment map that Minecraft uses to display/enforce enchantments
                 Map<Enchantment, Integer> currentMap = EnchantmentHelper.getEnchantments(item);
                 currentMap.remove(ench);
                 EnchantmentHelper.setEnchantments(currentMap, item);
             } else {
-                // remove the old NBT entry(s) for the previous level BEFORE applying the optimized level
                 removeEnchantmentNbt(item, ench, currentLevel);
-
-                // now apply the optimized level (this will add a single NBT entry with the optimized level)
                 item.enchant(ench, optimizedLevel);
             }
         }
 
-        // Save item back to the hand, animate and play sound
         entity.setItemInHand(hand, item);
         entity.swing(hand);
         entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),

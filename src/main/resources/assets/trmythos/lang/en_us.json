@@ -23,6 +23,11 @@
   "trmythos.skill.mode.faker.analytical_appraisal" : "§cAnalytical Appraisal",
   "trmythos.skill.mode.faker.reinforcement" : "§cReinforcement",
   "trmythos.skill.mode.faker.projection" : "§cProjection",
+  "trmythos.skill.faker.mastered.grant.severer": "§6Severer has been acquired.",
+  "trmythos.skill.faker.projection.no_target": "There is no target...",
+  "trmythos.skill.faker.projection.empty_hand": "The target has nothing to forge...",
+  "trmythos.skill.faker.projection.fail.tsukumogami": "This weapon rejects you, even as a replica...",
+  "trmythos.skill.faker.projection.fail.restricted": "This artifact is not one that can be so easily replicated...",
 
   "trmythos.race.serpent": "Serpent",
   "trmythos.race.lesser_serpent": "Lesser Serpent",

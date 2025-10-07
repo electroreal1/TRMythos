@@ -113,42 +113,45 @@ public class OmniscientEyeSkill extends Skill {
 
     public void onPressed(ManasSkillInstance instance, LivingEntity entity) {
         if (instance.getMode() == 1) {
-            if (entity instanceof Player) {
-                Player player = (Player)entity;
-                TensuraSkillCapability.getFrom(player).ifPresent((cap) -> {
-                    int level;
-                    if (player.isCrouching()) {
-                        level = cap.getAnalysisMode();
-                        switch (level) {
-                            case 1:
-                                cap.setAnalysisMode(2);
-                                player.displayClientMessage(Component.translatable("tensura.skill.analytical.analyzing_mode.block").setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_AQUA)), true);
-                                break;
-                            case 2:
-                                cap.setAnalysisMode(0);
-                                player.displayClientMessage(Component.translatable("tensura.skill.analytical.analyzing_mode.both").setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_AQUA)), true);
-                                break;
-                            default:
-                                cap.setAnalysisMode(1);
-                                player.displayClientMessage(Component.translatable("tensura.skill.analytical.analyzing_mode.entity").setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_AQUA)), true);
-                        }
-
-                        player.playNotifySound(SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
-                        TensuraSkillCapability.sync(player);
-                    } else {
-                        level = instance.isMastered(entity) ? 118 : 108;
-                        if (cap.getAnalysisLevel() != level) {
-                            cap.setAnalysisLevel(level);
-                            cap.setAnalysisDistance(instance.isMastered(entity) ? 130 : 120);
-                            entity.getLevel().playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
+            if (!SkillHelper.outOfMagicule(entity, instance)) {
+                if (entity instanceof Player) {
+                    Player player = (Player) entity;
+                    TensuraSkillCapability.getFrom(player).ifPresent(cap -> {
+                        if (player.isCrouching()) {
+                            int mode = cap.getAnalysisMode();
+                            switch (mode) {
+                                case 1:
+                                    cap.setAnalysisMode(2);
+                                    player.displayClientMessage(Component.translatable("tensura.skill.analytical.analyzing_mode.block")
+                                            .setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_AQUA)), true);
+                                    break;
+                                case 2:
+                                    cap.setAnalysisMode(0);
+                                    player.displayClientMessage(Component.translatable("tensura.skill.analytical.analyzing_mode.both")
+                                            .setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_AQUA)), true);
+                                    break;
+                                default:
+                                    cap.setAnalysisMode(1);
+                                    player.displayClientMessage(Component.translatable("tensura.skill.analytical.analyzing_mode.entity")
+                                            .setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_AQUA)), true);
+                                    break;
+                            }
+                            player.playNotifySound(SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
+                            TensuraSkillCapability.sync(player);
                         } else {
-                            cap.setAnalysisLevel(100);
-                            entity.getLevel().playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
+                            int level = this.isMastered(instance, entity) ? 128 : 32;
+                            if (cap.getAnalysisLevel() != level) {
+                                cap.setAnalysisLevel(level);
+                                cap.setAnalysisDistance(this.isMastered(instance, entity) ? 10 : 75);
+                                entity.getLevel().playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
+                            } else {
+                                cap.setAnalysisLevel(0);
+                                entity.getLevel().playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
+                            }
+                            TensuraSkillCapability.sync(player);
                         }
-
-                        TensuraSkillCapability.sync(player);
-                    }
-                });
+                    });
+                }
             }
         } else {
             LivingEntity target = SkillHelper.getTargetingEntity(entity, 100.0, false);
@@ -171,7 +174,7 @@ public class OmniscientEyeSkill extends Skill {
                             ManasSkill skill = ((ManasSkillInstance)collection.get(target.getRandom().nextInt(collection.size()))).getSkill();
                             SkillPlunderEvent event = new SkillPlunderEvent(target, entity, false, skill);
                             if (!MinecraftForge.EVENT_BUS.post(event) && SkillUtils.learnSkill(entity, event.getSkill(), instance.getRemoveTime())) {
-                                instance.setCoolDown(1);
+                                instance.setCoolDown(10);
                                 failed = false;
                                 if (entity instanceof Player) {
                                     Player player = (Player)entity;
@@ -187,7 +190,7 @@ public class OmniscientEyeSkill extends Skill {
                         Player player = (Player)entity;
                         player.displayClientMessage(Component.translatable("tensura.ability.activation_failed").setStyle(Style.EMPTY.withColor(ChatFormatting.RED)), false);
                         level.playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_WEAK, SoundSource.PLAYERS, 1.0F, 1.0F);
-                        instance.setCoolDown(1);
+                        instance.setCoolDown(5);
                     }
                 }
             }
@@ -219,14 +222,13 @@ public class OmniscientEyeSkill extends Skill {
                 return false;
             } else {
                 Skill skill = (Skill)var3;
-                Magic magic = (Magic)var3;
                 return skill.getType().equals(SkillType.COMMON) ||
                         skill.getType().equals(SkillType.EXTRA) ||
-                        skill.getType().equals(SkillType.INTRINSIC)||
-                        magic.getType().equals(MagicType.SPIRITUAL) ||
+                        skill.getType().equals(SkillType.INTRINSIC) ||
                         skill.getType().equals(SkillType.RESISTANCE);
-                }
             }
+        } else {
             return false;
         }
+    }
 }
