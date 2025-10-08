@@ -2,6 +2,7 @@ package com.github.mythos.mythos.race.CanineRaceLines.CerberusRaceLine;
 
 import com.github.manasmods.tensura.ability.TensuraSkill;
 import com.github.manasmods.tensura.race.Race;
+import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
 import com.github.manasmods.tensura.registry.skill.UniqueSkills;
@@ -11,6 +12,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.registries.IForgeRegistry;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -111,6 +113,23 @@ public class CerberusRace extends Race {
         List<Component> list = new ArrayList();
         list.add(Component.translatable("tensura.evolution_menu.ep_requirement"));
         return list;
+    }
+
+    public List<Race> getNextEvolutions(Player player) {
+        List<Race> list = new ArrayList<>();
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(MythosRaces.HOUND_OF_HADES_RACE));
+        return list;
+    }
+    public @Nullable Race getDefaultEvolution(Player player) {
+        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(MythosRaces.HOUND_OF_HADES_RACE));
+    }
+
+    public @Nullable Race getAwakeningEvolution(Player player) {
+        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(MythosRaces.HOUND_OF_HADES_RACE));
+    }
+
+    public @Nullable Race getHarvestFestivalEvolution(Player player) {
+        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(MythosRaces.HOUND_OF_HADES_RACE));
     }
 
     public List<TensuraSkill> getIntrinsicSkills (Player player){

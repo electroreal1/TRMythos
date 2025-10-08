@@ -2,6 +2,7 @@ package com.github.mythos.mythos.race.CanineRaceLines.FenrirRaceLine;
 
 import com.github.manasmods.tensura.ability.TensuraSkill;
 import com.github.manasmods.tensura.race.Race;
+import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.manasmods.tensura.registry.skill.IntrinsicSkills;
 import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
@@ -11,6 +12,7 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.registries.IForgeRegistry;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,11 +101,23 @@ public class FenrisWolfRace extends Race {
         list.add((Race)((IForgeRegistry) MythosRaces.DREAD_BEAST_RACE));
         return list;
     }
-    @Override
-    // public double getEvolutionPercentage(Player player) {
-    //  double minimalEP = this.getMinBaseAura() + this.getMaxBaseMagicule();
-    //   return TensuraPlayerCapability.getBaseEP(player) * 50;
-    //  }
+
+    public List<Race> getNextEvolutions(Player player) {
+        List<Race> list = new ArrayList<>();
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(MythosRaces.HERALD_OF_RAGNAROK_RACE));
+        return list;
+    }
+    public @Nullable Race getDefaultEvolution(Player player) {
+        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(MythosRaces.HERALD_OF_RAGNAROK_RACE));
+    }
+
+    public @Nullable Race getAwakeningEvolution(Player player) {
+        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(MythosRaces.HERALD_OF_RAGNAROK_RACE));
+    }
+
+    public @Nullable Race getHarvestFestivalEvolution(Player player) {
+        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(MythosRaces.HERALD_OF_RAGNAROK_RACE));
+    }
 
     public List<TensuraSkill> getIntrinsicSkills (Player player){
         List<TensuraSkill> list = new ArrayList<>();

@@ -2,6 +2,8 @@ package com.github.mythos.mythos.registry.race;
 
 import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.mythos.mythos.Mythos;
+import com.github.mythos.mythos.race.CanineRaceLines.CerberusRaceLine.HoundOfHadesRace;
+import com.github.mythos.mythos.race.CanineRaceLines.FenrirRaceLine.HeraldOfRagnarokRace;
 import com.github.mythos.mythos.race.JormungandrRaceLine.*;
 import com.github.mythos.mythos.race.CanineRaceLines.CanineRace;
 import com.github.mythos.mythos.race.CanineRaceLines.CerberusRaceLine.CerberusRace;
@@ -38,6 +40,8 @@ public class MythosRaces {
     public static final ResourceLocation FENRIS_WOLF_RACE = new ResourceLocation(Mythos.MOD_ID, "fenris_wolf");
     public static final ResourceLocation HELL_HOUND_RACE = new ResourceLocation(Mythos.MOD_ID, "hell_hound");
     public static final ResourceLocation CERBERUS_RACE = new ResourceLocation(Mythos.MOD_ID, "cerberus");
+    public static final ResourceLocation HERALD_OF_RAGNAROK_RACE = new ResourceLocation(Mythos.MOD_ID, "herald_of_ragnarok");
+    public static final ResourceLocation HOUND_OF_HADES_RACE = new ResourceLocation(Mythos.MOD_ID, "hound_of_hades");
 
     // Valkyrie Races
     public static final ResourceLocation MAIDEN_RACE = new ResourceLocation(Mythos.MOD_ID, "maiden");
@@ -86,6 +90,12 @@ public class MythosRaces {
         });
         event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
             helper.register("cerberus", new CerberusRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("herald_of_ragnarok", new HeraldOfRagnarokRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("hound_of_hades", new HoundOfHadesRace());
         });
 
         // Valkyrie Races
