@@ -16,5 +16,10 @@ public class SkillEvolutionHandler {
                 (LivingEntity) event.getEntity(), // <-- correct method to get LivingEntity
                 event
         );
+        SkillEvolutionMechanics.onChefMastered(
+                event.getSkillInstance(),
+                (LivingEntity) event.getEntity(),
+                event
+        );
     }
 }

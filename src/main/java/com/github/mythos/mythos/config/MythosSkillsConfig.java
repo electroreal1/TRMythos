@@ -12,6 +12,10 @@ public class MythosSkillsConfig {
     public static ForgeConfigSpec.BooleanValue enableUniqueSkillCompatibilityForUltimates;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> fakerSkillRestrictedItems;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> fakerSkillReinforceEnchantments;
+    public static ForgeConfigSpec.BooleanValue enableFighterEvolution;
+    public static ForgeConfigSpec.BooleanValue loseSkillOnFighterEvolution;
+    public static ForgeConfigSpec.BooleanValue enableChefEvolution;
+    public static ForgeConfigSpec.BooleanValue loseSkillOnChefEvolution;
 
 
 
@@ -68,6 +72,21 @@ public class MythosSkillsConfig {
                                 ),
                         obj -> obj instanceof String
                 );
+        enableFighterEvolution = builder
+                .comment("Enable or disable Fighter -> Martial Master evolution.")
+                .define("enableFighterEvolution", true);
+
+        loseSkillOnFighterEvolution = builder
+                .comment("If true, the Fighter skill is lost when evolving to Martial Master.")
+                .define("loseSkillOnFighterEvolution", true);
+
+        enableChefEvolution = builder
+                .comment("Enable or disable Chef -> Cook evolution.")
+                .define("enableChefEvolution", true);
+
+        loseSkillOnChefEvolution = builder
+                .comment("If true, the Chef skill is lost when evolving to Cook.")
+                .define("loseSkillOnChefEvolution", true);
 
         builder.pop(); // pop SkillsConfig
     }
@@ -79,6 +98,21 @@ public class MythosSkillsConfig {
     }
     public static List<? extends String> getFakerSkillReinforceEnchantments() {
         return fakerSkillReinforceEnchantments.get();
+    }
+    public static boolean isFighterEvolutionEnabled() {
+        return enableFighterEvolution.get();
+    }
+
+    public static boolean loseFighterOnEvolution() {
+        return loseSkillOnFighterEvolution.get();
+    }
+
+    public static boolean isChefEvolutionEnabled() {
+        return enableChefEvolution.get();
+    }
+
+    public static boolean loseChefOnEvolution() {
+        return loseSkillOnChefEvolution.get();
     }
 
 

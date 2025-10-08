@@ -16,8 +16,9 @@
   "trmythos.skill.example_intrinsic": "Example Intrinsic",
   "trmythos.skill.example_intrinsic.description": "This is a description for the intrinsic skill. Edit this description using the en_us.json file.",
 
-  "trmythos.skill.learn_failed":  "Failed to learn to lack of magicules",
-  "trmythos.skill.martial_master.obtainment":  "You have perfected your skill as a fighter and became a Martial Master.",
+  "trmythos.skill.learn_failed":  "Failed to learn due to lack of magicules",
+  "trmythos.skill.martial_master.obtainment":  "Your proficiency in martial arts grows. With this advancement in your growth, the world has seen it necessary to reward you. Martial Master has been engraved into your soul.",
+  "trmythos.skill.cook.obtainment": "Your creations have become known to create miracles. A new power has awakened within you in acknowledgement of this. Cook has been engraved into your soul.",
 
   "trmythos.skill.omniscient_eye": "Omniscient Eye",
   "trmythos.skill.omniscient_eye.description": "See all, comprehend all, able to peer into the souls of others and mimic that which makes up their being.",
