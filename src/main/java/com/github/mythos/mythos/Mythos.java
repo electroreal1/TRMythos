@@ -5,14 +5,14 @@
 
 package com.github.mythos.mythos;
 
-import com.github.manasmods.tensura.ability.skill.unique.GourmandSkill;
 import com.github.mythos.mythos.config.MythosConfig;
+import com.github.mythos.mythos.handler.SkillEvolutionHandler;
 import com.github.mythos.mythos.registry.MythosParticles;
 import com.github.mythos.mythos.registry.MythosRegistery;
 import com.github.mythos.mythos.registry.race.MythosRaces;
 import com.github.mythos.mythos.networking.MythosNetwork;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -22,7 +22,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
-import net.minecraftforge.registries.RegistryObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -45,6 +44,7 @@ public class Mythos {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(this::onCommonSetup);
         MythosRegistery.register(modEventBus);
+        MinecraftForge.EVENT_BUS.register(SkillEvolutionHandler.class);
         modEventBus.register(MythosRaces.class);
         MythosParticles.PARTICLE_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, MythosConfig.SPEC, getConfigFileName("mythos-common"));
@@ -130,8 +130,8 @@ public class Mythos {
         String content = contentBuilder.toString();
         String[] newStarting = new String[]{"trmythos:canine", "trmythos:maiden", "trmythos:lesser_serpent"};
         String[] newRandom = new String[]{"trmythos:canine", "trmythos:maiden", "trmythos:lesser_serpent"};
-        String[] newSkills = new String[]{"trmythos:omniscient_eye"};
-        String[] creatorSkills = new String[]{"trmythos:omniscient_eye"};
+        String[] newSkills = new String[]{"trmythos:omniscient_eye", "trmythos:faker"};
+        String[] creatorSkills = new String[]{"trmythos:omniscient_eye", "trmythos:faker"};
         String startingRacesKey = "startingRaces = [";
         String randomRacesKey = "possibleRandomRaces = [";
         String reincarnationSkillsKey = "reincarnationSkills = [";

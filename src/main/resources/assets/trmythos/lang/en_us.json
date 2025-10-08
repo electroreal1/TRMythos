@@ -16,10 +16,14 @@
   "trmythos.skill.example_intrinsic": "Example Intrinsic",
   "trmythos.skill.example_intrinsic.description": "This is a description for the intrinsic skill. Edit this description using the en_us.json file.",
 
+  "trmythos.skill.learn_failed":  "Failed to learn to lack of magicules",
+  "trmythos.skill.martial_master.obtainment":  "You have perfected your skill as a fighter and became a Martial Master.",
+
   "trmythos.skill.omniscient_eye": "Omniscient Eye",
   "trmythos.skill.omniscient_eye.description": "See all, comprehend all, able to peer into the souls of others and mimic that which makes up their being.",
 
   "trmythos.skill.faker": "§cFaker",
+  "trmythos.skill.faker.description": "Analysis, Projection, Reinforcement. Though shallow copies of what others wield, these items fit perfectly in your hand. Nurture them. Mend them. Perhaps one day, they may even surpass their originals.",
   "trmythos.skill.mode.faker.analytical_appraisal" : "§4Analytical Appraisal",
   "trmythos.skill.mode.faker.reinforcement" : "§4Reinforcement",
   "trmythos.skill.mode.faker.projection" : "§4Projection",

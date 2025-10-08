@@ -1,5 +1,6 @@
 package com.github.mythos.mythos.ability.skill.unique;
 
+import com.github.lucifel.virtuoso.registry.skill.IntrinsicSkills;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
@@ -7,10 +8,12 @@ import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.ability.skill.extra.ThoughtAccelerationSkill;
+import com.github.manasmods.tensura.ability.skill.unique.AbsoluteSeveranceSkill;
 import com.github.manasmods.tensura.capability.skill.TensuraSkillCapability;
 import com.github.manasmods.tensura.registry.enchantment.TensuraEnchantments;
 import com.github.manasmods.tensura.registry.skill.UniqueSkills;
 import com.github.mythos.mythos.config.MythosSkillsConfig;
+import com.github.mythos.mythos.registry.MythosMobEffects;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
@@ -22,6 +25,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -35,7 +40,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,14 +75,19 @@ public class FakerSkill extends Skill {
 
     public void onToggleOn(ManasSkillInstance instance, LivingEntity entity) {
         ThoughtAccelerationSkill.onToggle(instance, entity, ACCELERATION, true);
+        entity.addEffect(new MobEffectInstance((MobEffect) MythosMobEffects.AVALON_REGENERATION.get(), 1200, 1, false, false, false));
     }
 
     public void onToggleOff(ManasSkillInstance instance, LivingEntity entity) {
         ThoughtAccelerationSkill.onToggle(instance, entity, ACCELERATION, false);
+        MobEffectInstance effectInstance = entity.getEffect((MobEffect)MythosMobEffects.AVALON_REGENERATION.get());
+        if (effectInstance != null && effectInstance.getAmplifier() < 1)
+            entity.removeEffect((MobEffect)MythosMobEffects.AVALON_REGENERATION.get());
     }
 
     public void onTick(ManasSkillInstance instance, LivingEntity entity) { // in a tick
         grantSevererIfMastered(instance, entity);
+        grantAvalon(instance, entity);
     }
 
     private void grantSevererIfMastered(ManasSkillInstance instance, LivingEntity entity) {
@@ -101,6 +110,17 @@ public class FakerSkill extends Skill {
                 SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1.0F, 1.2F);
 
         TensuraSkillCapability.sync(player);
+    }
+
+    private void grantAvalon(ManasSkillInstance instance, LivingEntity entity) {
+        if (!(entity instanceof Player player)) return;
+        if (entity.level.isClientSide()) return;
+
+        SkillStorage storage = SkillAPI.getSkillsFrom(player);
+        Skill avalon = IntrinsicSkills.AVALON.get();
+
+        if (storage.getSkill(avalon).isPresent()) return;
+        storage.learnSkill(avalon);
     }
 
     public int modes() {
@@ -239,39 +259,32 @@ public class FakerSkill extends Skill {
 
         ItemStack targetItem = targetLiving.getMainHandItem();
         if (targetItem.isEmpty()) {
-            caster.displayClientMessage(Component.translatable("trmythos.skill.faker.projection.empty_hand").withStyle(ChatFormatting.RED), true);
+            caster.displayClientMessage(Component.translatable("trmythos.skill.faker.projection.empty_hand")
+                    .withStyle(ChatFormatting.RED), true);
             instance.setCoolDown(10);
             return;
         }
 
-        // Check tsukumogami enchantment (prevent copying) or coins
+// Check tsukumogami enchantment (prevent copying) or restricted items
         String itemId = Registry.ITEM.getKey(targetItem.getItem()).toString();
         boolean isRestricted = MythosSkillsConfig.getFakerSkillRestrictedItems().contains(itemId);
         boolean hasTsukumogami = EnchantmentHelper.getItemEnchantmentLevel(TensuraEnchantments.TSUKUMOGAMI.get(), targetItem) > 0;
 
-        if (isRestricted || hasTsukumogami) {
-            String translationKey = isRestricted
-                    ? "trmythos.skill.faker.projection.fail.restricted"
-                    : "trmythos.skill.faker.projection.fail.tsukumogami";
+        if (hasTsukumogami || isRestricted) {
+            String translationKey = hasTsukumogami
+                    ? "trmythos.skill.faker.projection.fail.tsukumogami"
+                    : "trmythos.skill.faker.projection.fail.restricted";
 
-            caster.displayClientMessage(
-                    Component.translatable(translationKey)
-                            .withStyle(ChatFormatting.RED),
-                    true
-            );
+            caster.displayClientMessage(Component.translatable(translationKey)
+                    .withStyle(ChatFormatting.RED), true);
 
-            caster.level.playSound(
-                    null,
-                    caster.blockPosition(),
-                    SoundEvents.VILLAGER_NO,
-                    SoundSource.PLAYERS,
-                    1.0F,
-                    1.0F
-            );
+            caster.level.playSound(null, caster.blockPosition(), SoundEvents.VILLAGER_NO,
+                    SoundSource.PLAYERS, 1.0F, 1.0F);
 
             instance.setCoolDown(10);
             return;
         }
+
 
         ItemStack projectedCopy = targetItem.copy();
         // make single count copy, optional
@@ -329,32 +342,31 @@ public class FakerSkill extends Skill {
         ItemStack item = entity.getItemInHand(hand);
         if (item.isEmpty()) return;
 
-        // Fetch the configured enchantments list from config
+        item.getOrCreateTag().putBoolean("Unbreakable", true);
+
         List<? extends String> configuredEnchantments = MythosSkillsConfig.getFakerSkillReinforceEnchantments();
 
-        for (String entry : configuredEnchantments) {
-            // Expecting format: "modid:enchantment_name:level", e.g., "minecraft:sharpness:5"
-            String[] parts = entry.split(":");
-            if (parts.length != 3) continue; // skip invalid entries
+        for (Enchantment ench : item.getAllEnchantments().keySet()) {
+            String enchId = Registry.ENCHANTMENT.getKey(ench).toString();
 
-            try {
-                ResourceLocation enchId = new ResourceLocation(parts[0], parts[1]);
-                Enchantment ench = ForgeRegistries.ENCHANTMENTS.getValue(enchId);
-                if (ench == null) continue; // skip invalid enchantments
+            // find matching config entry
+            for (String entry : configuredEnchantments) {
+                String[] parts = entry.split(":");
+                if (parts.length != 3) continue;
 
-                int level = Integer.parseInt(parts[2]);
-                int currentLevel = item.getEnchantmentLevel(ench);
-
-                // Remove existing level
-                if (currentLevel > 0) removeEnchantmentNbt(item, ench, currentLevel);
-
-                // Apply new level if > 0
-                if (level > 0) {
-                    item.enchant(ench, level);
+                String configId = parts[0] + ":" + parts[1];
+                int newLevel;
+                try {
+                    newLevel = Integer.parseInt(parts[2]);
+                } catch (NumberFormatException e) {
+                    continue;
                 }
-            } catch (Exception ignored) {
-                // Skip any malformed entries or parse errors
-                continue;
+
+                if (!enchId.equals(configId)) continue; // only apply matching enchantments
+
+                int currentLevel = item.getEnchantmentLevel(ench);
+                if (currentLevel > 0) removeEnchantmentNbt(item, ench, currentLevel);
+                if (newLevel > 0) item.enchant(ench, newLevel);
             }
         }
 

@@ -2,7 +2,6 @@ package com.github.mythos.mythos.registry.skill;
 
 import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
-import com.github.mythos.mythos.ability.skill.unique.ExampleUniqueSkill;
 import com.github.mythos.mythos.ability.skill.unique.FakerSkill;
 import com.github.mythos.mythos.ability.skill.unique.OmniscientEyeSkill;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -13,7 +12,6 @@ public class UniqueSkills {
     private static final DeferredRegister<ManasSkill> registery = DeferredRegister.create(SkillAPI.getSkillRegistryKey(), "trmythos");
     public static final RegistryObject<FakerSkill> FAKER;
     public static final RegistryObject<OmniscientEyeSkill> OMNISCIENT_EYE;
-    public static final RegistryObject<ExampleUniqueSkill> EXAMPLE_UNIQUE_SKILL;
 
     public UniqueSkills() {
     }
@@ -25,7 +23,6 @@ public class UniqueSkills {
 
     static {
         FAKER = registery.register("faker", FakerSkill::new);
-        EXAMPLE_UNIQUE_SKILL = registery.register("example_unique_skill", ExampleUniqueSkill::new);
         OMNISCIENT_EYE = registery.register("omniscient_eye", OmniscientEyeSkill::new);
     }
 }
