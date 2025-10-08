@@ -18,7 +18,7 @@ public class HoundOfHadesRace extends Race {
     public HoundOfHadesRace() { super(Difficulty.INTERMEDIATE); }
 
     @Override
-    public double getBaseHealth() { return 15000; }
+    public double getBaseHealth() { return 10000; }
 
     @Override
     public double getSpiritualHealthMultiplier() {

@@ -19,12 +19,12 @@ public class HeraldOfRagnarokRace extends Race {
 
     @Override
     public double getBaseHealth() {
-        return 30000;
+        return 10000;
     }
 
     @Override
     public double getSpiritualHealthMultiplier() {
-        return 0.5;
+        return 1;
     }
 
     @Override
