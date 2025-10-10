@@ -5,6 +5,7 @@
 
 package com.github.mythos.mythos;
 
+import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.mythos.mythos.config.MythosConfig;
 import com.github.mythos.mythos.handler.SkillEvolutionHandler;
 import com.github.mythos.mythos.registry.MythosParticles;
@@ -55,7 +56,6 @@ public class Mythos {
     public static Logger getLogger() {
         return LOGGER;
     }
-
     private String getConfigFileName(String name) {
         return String.format("%s/%s.toml", "tensura-reincarnated", name);
     }

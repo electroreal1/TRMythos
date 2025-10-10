@@ -29,6 +29,7 @@
   "trmythos.skill.mode.faker.reinforcement" : "§4Reinforcement",
   "trmythos.skill.mode.faker.projection" : "§4Projection",
   "trmythos.skill.faker.mastered.grant.severer": "§6Severer has been acquired.",
+  "trmythos.skill.faker.projection.success": "You've succeeded in creating a replica of the target's item.",
   "trmythos.skill.faker.projection.no_target": "There is no target...",
   "trmythos.skill.faker.projection.empty_hand": "The target has nothing to forge...",
   "trmythos.skill.faker.projection.fail.tsukumogami": "This weapon rejects you, even as a replica...",
