@@ -8,6 +8,7 @@ import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.ability.skill.extra.ThoughtAccelerationSkill;
+import com.github.manasmods.tensura.ability.skill.intrinsic.PossessionSkill;
 import com.github.manasmods.tensura.ability.skill.unique.AbsoluteSeveranceSkill;
 import com.github.manasmods.tensura.capability.skill.TensuraSkillCapability;
 import com.github.manasmods.tensura.registry.enchantment.TensuraEnchantments;

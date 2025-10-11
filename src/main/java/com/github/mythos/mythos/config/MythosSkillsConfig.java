@@ -12,6 +12,7 @@ public class MythosSkillsConfig {
     public static ForgeConfigSpec.BooleanValue enableUniqueSkillCompatibilityForUltimates;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> fakerSkillRestrictedItems;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> fakerSkillReinforceEnchantments;
+    public static ForgeConfigSpec.DoubleValue vassalAssemblyChance;
     public static ForgeConfigSpec.BooleanValue enableFighterEvolution;
     public static ForgeConfigSpec.BooleanValue loseSkillOnFighterEvolution;
     public static ForgeConfigSpec.BooleanValue enableChefEvolution;
@@ -82,6 +83,10 @@ public class MythosSkillsConfig {
                                 ),
                         obj -> obj instanceof String
                 );
+        vassalAssemblyChance = builder
+                .comment("Chance (0.0–1.0) for [True Passive] Vassal Assembly to trigger when damaged.")
+                .defineInRange("vassalAssemblyChance", 0.2, 0.0, 1.0);
+
         enableFighterEvolution = builder
                 .comment("Enable or disable Fighter -> Martial Master evolution.")
                 .define("enableFighterEvolution", true);
