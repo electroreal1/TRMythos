@@ -66,8 +66,8 @@ public class FoundationSkill extends Skill {
      //       vassalSkill = UniqueSkills.VASSAL_BALANCE;
         } else {
             vassalSkill = RANDOM.nextBoolean()
-                    ? UniqueSkills.UNITY_SKILL :
-                     UniqueSkills.EVOLUTION_SKILL;
+                    ? UniqueSkills.UNITY :
+                     UniqueSkills.EVOLUTION;
         }
 
         if (vassalSkill != null) {

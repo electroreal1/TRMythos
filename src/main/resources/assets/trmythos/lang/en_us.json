@@ -35,6 +35,11 @@
   "trmythos.skill.faker.projection.fail.tsukumogami": "This weapon rejects you, even as a replica...",
   "trmythos.skill.faker.projection.fail.restricted": "This artifact is not one that can be so easily replicated...",
 
+  "trmythos.skill.purity": "Purity",
+  "trmythos.skill.purity.description": "Cleanse the world of its evils, purging sin from its soil as the embodiment of purity.",
+  "trmythos.skill.purity.purification": "Purification",
+  "trmythos.skill.purity.justice": "Justice",
+
   "trmythos.race.serpent": "Serpent",
   "trmythos.race.lesser_serpent": "Lesser Serpent",
   "trmythos.race.lesser_serpent.notes": "You emerge in the world as a lowly, fragile serpent. Your scales provide some protection, but not enough to stave off most, if not all that inhabits this land. \n You know you can be so much more, so will you wallow in the dirt forever, or live up to your potential?",

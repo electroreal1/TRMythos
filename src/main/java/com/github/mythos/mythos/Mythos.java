@@ -8,6 +8,7 @@ package com.github.mythos.mythos;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.mythos.mythos.config.MythosConfig;
 import com.github.mythos.mythos.handler.SkillEvolutionHandler;
+import com.github.mythos.mythos.registry.MythosEntity;
 import com.github.mythos.mythos.registry.MythosParticles;
 import com.github.mythos.mythos.registry.MythosRegistery;
 import com.github.mythos.mythos.registry.race.MythosRaces;
@@ -47,6 +48,7 @@ public class Mythos {
         MythosRegistery.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(SkillEvolutionHandler.class);
         modEventBus.register(MythosRaces.class);
+        MythosEntity.ENTITY_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
         MythosParticles.PARTICLE_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, MythosConfig.SPEC, getConfigFileName("mythos-common"));
         LOGGER.info("Mythos has been loaded!");

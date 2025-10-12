@@ -1,9 +1,14 @@
 package com.github.mythos.mythos.config;
 
+import com.github.manasmods.tensura.effect.template.TensuraMobEffect;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MythosSkillsConfig {
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> allowedUltimates = null;
@@ -13,6 +18,7 @@ public class MythosSkillsConfig {
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> fakerSkillRestrictedItems;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> fakerSkillReinforceEnchantments;
     public static ForgeConfigSpec.DoubleValue vassalAssemblyChance;
+    public static ForgeConfigSpec.ConfigValue<List<? extends String>> purityImmuneEffects;
     public static ForgeConfigSpec.BooleanValue enableFighterEvolution;
     public static ForgeConfigSpec.BooleanValue loseSkillOnFighterEvolution;
     public static ForgeConfigSpec.BooleanValue enableChefEvolution;
@@ -83,6 +89,17 @@ public class MythosSkillsConfig {
                                 ),
                         obj -> obj instanceof String
                 );
+        purityImmuneEffects = builder
+                .comment("Effects that cannot be cleared by the Purity skill")
+                .defineList("purityImmuneEffects",
+                        List.of(
+                                "tensura:anti_skill",
+                                "tensura:infinite_imprisonment",
+                                "tensura:soul_drain"
+                        ),
+                        o -> o instanceof String
+                );
+
         vassalAssemblyChance = builder
                 .comment("Chance (0.0–1.0) for [True Passive] Vassal Assembly to trigger when damaged.")
                 .defineInRange("vassalAssemblyChance", 0.2, 0.0, 1.0);
@@ -114,6 +131,14 @@ public class MythosSkillsConfig {
     public static List<? extends String> getFakerSkillReinforceEnchantments() {
         return fakerSkillReinforceEnchantments.get();
     }
+    // Getter for Purity skill immune effects
+    public static List<MobEffect> getPurityImmuneEffects() {
+        return purityImmuneEffects.get().stream()
+                .map(id -> Registry.MOB_EFFECT.getOptional(new ResourceLocation((String) id)).orElse(null))
+                .filter(e -> e != null)
+                .collect(Collectors.toList());
+    }
+
     public static boolean isFighterEvolutionEnabled() {
         return enableFighterEvolution.get();
     }
