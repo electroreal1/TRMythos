@@ -248,7 +248,7 @@ public class PuritySkill extends Skill {
             }
 
             level.playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ILLUSIONER_CAST_SPELL, SoundSource.PLAYERS, 1.0F, 1.0F);
-            instance.setCoolDown(30);
+            instance.setCoolDown(5);
         }
     }
 }
