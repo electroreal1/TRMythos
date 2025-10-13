@@ -32,7 +32,7 @@ import java.io.*;
 @Mod("trmythos")
 public class Mythos {
     public static final String MOD_ID = "trmythos";
-    public static final String MOD_VERSION = "v1";
+    public static final String MOD_VERSION = "v1.2";
     public static final Logger LOGGER = LogManager.getLogger("trmythos");
     public static final SimpleChannel NETWORK_CHANNEL = NetworkRegistry.newSimpleChannel(new ResourceLocation("trmythos", "network"), () -> {
         return "1.0";
@@ -132,8 +132,8 @@ public class Mythos {
         String content = contentBuilder.toString();
         String[] newStarting = new String[]{"trmythos:canine", "trmythos:maiden", "trmythos:lesser_serpent"};
         String[] newRandom = new String[]{"trmythos:canine", "trmythos:maiden", "trmythos:lesser_serpent"};
-        String[] newSkills = new String[]{"trmythos:omniscient_eye", "trmythos:faker"};
-        String[] creatorSkills = new String[]{"trmythos:omniscient_eye", "trmythos:faker"};
+        String[] newSkills = new String[]{"trmythos:omniscient_eye", "trmythos:faker", "trmythos:purity"};
+        String[] creatorSkills = new String[]{"trmythos:omniscient_eye"};
         String startingRacesKey = "startingRaces = [";
         String randomRacesKey = "possibleRandomRaces = [";
         String reincarnationSkillsKey = "reincarnationSkills = [";

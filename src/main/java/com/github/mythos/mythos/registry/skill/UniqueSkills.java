@@ -3,6 +3,7 @@ package com.github.mythos.mythos.registry.skill;
 import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.tensura.ability.skill.Skill;
+import com.github.manasmods.tensura.ability.skill.extra.DemonLordHakiSkill;
 import com.github.mythos.mythos.ability.skill.unique.FakerSkill;
 import com.github.mythos.mythos.ability.skill.unique.OmniscientEyeSkill;
 import com.github.mythos.mythos.ability.skill.unique.PuritySkill;
