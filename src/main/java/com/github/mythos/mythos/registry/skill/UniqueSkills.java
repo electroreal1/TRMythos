@@ -6,6 +6,7 @@ import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.ability.skill.extra.DemonLordHakiSkill;
 import com.github.mythos.mythos.ability.skill.unique.FakerSkill;
 import com.github.mythos.mythos.ability.skill.unique.OmniscientEyeSkill;
+import com.github.mythos.mythos.ability.skill.unique.OpportunistSkill;
 import com.github.mythos.mythos.ability.skill.unique.PuritySkill;
 import com.github.mythos.mythos.ability.skill.unique.vassal_line.EvolutionSkill;
 import com.github.mythos.mythos.ability.skill.unique.vassal_line.FoundationSkill;
@@ -22,6 +23,7 @@ public class UniqueSkills {
     public static final RegistryObject<UnitySkill> UNITY;
     public static final RegistryObject<EvolutionSkill> EVOLUTION;
     public static final RegistryObject<PuritySkill> PURITY_SKILL;
+    public static final RegistryObject<OpportunistSkill> OPPORTUNIST_SKILL;
 
     public UniqueSkills() {
     }
@@ -38,5 +40,6 @@ public class UniqueSkills {
         UNITY = registery.register("unity", () -> new UnitySkill(Skill.SkillType.UNIQUE));
         FOUNDATION = registery.register("foundation", () -> new FoundationSkill(Skill.SkillType.UNIQUE));
         EVOLUTION = registery.register("evolution", () -> new EvolutionSkill(Skill.SkillType.UNIQUE));
+        OPPORTUNIST_SKILL = registery.register("opportunist", () -> new OpportunistSkill(Skill.SkillType.UNIQUE));
     }
 }
