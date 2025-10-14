@@ -21,7 +21,7 @@ import com.github.manasmods.tensura.registry.attribute.TensuraAttributeRegistry;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.mythos.mythos.menu.OrunMenu;
-import com.github.mythos.mythos.registry.skill.Skills;
+import com.github.mythos.mythos.registry.skill.UniqueSkills;
 import com.github.mythos.mythos.util.damage.MythosDamageSources;
 import io.github.Memoires.trmysticism.ability.skill.ultimate.SusanooSkill;
 import io.github.Memoires.trmysticism.ability.skill.ultimate.VicielSkill;
@@ -90,7 +90,7 @@ public class OrunmilaSkill extends Skill {
 //    }
 
     public boolean meetEPRequirement(Player entity, double newEP) {
-        return SkillUtils.isSkillMastered(entity, (ManasSkill) Skills.OMNISCIENT_EYE.get())
+        return SkillUtils.isSkillMastered(entity, (ManasSkill) UniqueSkills.OMNISCIENT_EYE.get())
                 && SkillUtils.isSkillMastered(entity, (ManasSkill) ExtraSkills.ALL_SEEING_EYE.get())
                 && SkillUtils.isSkillMastered(entity, (ManasSkill) ExtraSkills.UNIVERSAL_PERCEPTION.get())
                 && SkillUtils.isSkillMastered(entity, (ManasSkill) com.github.lucifel.virtuoso.registry.skill.ExtraSkills.CONCENTRATOR.get())
@@ -100,7 +100,7 @@ public class OrunmilaSkill extends Skill {
     public void onLearnSkill(ManasSkillInstance instance, LivingEntity entity, UnlockSkillEvent event) {
         if (instance.getMastery() >= 0 && !instance.isTemporarySkill() && entity instanceof Player player) {
             SkillStorage storage = SkillAPI.getSkillsFrom(player);
-            Skill previousSkill = (Skill) Skills.OMNISCIENT_EYE.get();
+            Skill previousSkill = (Skill) UniqueSkills.OMNISCIENT_EYE.get();
             Objects.requireNonNull(storage);
             storage.forgetSkill(previousSkill);
         }
