@@ -1,25 +1,25 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
 package com.github.mythos.mythos;
 
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.mythos.mythos.config.MythosConfig;
 import com.github.mythos.mythos.handler.SkillEvolutionHandler;
+import com.github.mythos.mythos.networking.MythosNetwork;
 import com.github.mythos.mythos.registry.MythosEntity;
 import com.github.mythos.mythos.registry.MythosParticles;
 import com.github.mythos.mythos.registry.MythosRegistery;
+import com.github.mythos.mythos.registry.menu.MythosMenuTypes;
 import com.github.mythos.mythos.registry.race.MythosRaces;
-import com.github.mythos.mythos.networking.MythosNetwork;
+import com.mojang.blaze3d.platform.ScreenManager;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.network.NetworkRegistry;
@@ -48,6 +48,7 @@ public class Mythos {
         MythosRegistery.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(SkillEvolutionHandler.class);
         modEventBus.register(MythosRaces.class);
+        MythosNetwork.register();
         MythosEntity.ENTITY_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
         MythosParticles.PARTICLE_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, MythosConfig.SPEC, getConfigFileName("mythos-common"));
@@ -75,6 +76,11 @@ public class Mythos {
             LOGGER.info("Common setup works. TOML file already edited.");
         }
 
+    }
+
+    private void onClientSetup(FMLClientSetupEvent event) {
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
+        //MenuScreens.register(MythosMenuTypes.ORUN_MENU.get(), OrunScreen::new);
     }
 
     private boolean isFirstLaunch() {

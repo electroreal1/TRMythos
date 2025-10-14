@@ -13,7 +13,7 @@ import com.github.manasmods.tensura.effect.template.SkillMobEffect;
 import com.github.manasmods.tensura.registry.attribute.TensuraAttributeRegistry;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSource;
-import com.github.mythos.mythos.registry.skill.UniqueSkills;
+import com.github.mythos.mythos.registry.skill.Skills;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -42,7 +42,7 @@ public class AvalonRegenerationEffect extends SkillMobEffect {
 
         if (missingHealth > 0.0F && !MobEffectHelper.shouldCancelHeal(entity)) {
             if (entity instanceof Player player) {
-                float cost = (amplifier == 0 && SkillUtils.isSkillToggled(entity, UniqueSkills.FAKER.get())) ? 20.0F : 100.0F;
+                float cost = (amplifier == 0 && SkillUtils.isSkillToggled(entity, Skills.FAKER.get())) ? 20.0F : 100.0F;
                 Skill toggledSkill = (amplifier > 0)
                         ? ExtraSkills.INFINITE_REGENERATION.get()
                         : ExtraSkills.ULTRASPEED_REGENERATION.get();

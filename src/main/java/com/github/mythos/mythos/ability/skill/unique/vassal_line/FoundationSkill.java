@@ -4,7 +4,7 @@ import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
 import com.github.manasmods.tensura.ability.skill.Skill;
-import com.github.mythos.mythos.registry.skill.UniqueSkills;
+import com.github.mythos.mythos.registry.skill.Skills;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -66,8 +66,8 @@ public class FoundationSkill extends Skill {
      //       vassalSkill = UniqueSkills.VASSAL_BALANCE;
         } else {
             vassalSkill = RANDOM.nextBoolean()
-                    ? UniqueSkills.UNITY :
-                     UniqueSkills.EVOLUTION;
+                    ? Skills.UNITY :
+                     Skills.EVOLUTION;
         }
 
         if (vassalSkill != null) {
