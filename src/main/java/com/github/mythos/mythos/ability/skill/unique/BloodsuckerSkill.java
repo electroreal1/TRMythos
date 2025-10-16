@@ -16,6 +16,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -34,6 +35,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.LightLayer;
 
+import java.util.UUID;
 import javax.annotation.Nullable;
 
 public class BloodsuckerSkill extends Skill {
@@ -227,12 +229,13 @@ public class BloodsuckerSkill extends Skill {
             float maxHealth = player.getMaxHealth();
             float damage = maxHealth * 0.01f;
 
-            player.hurt(level.damageSources().onFire(), damage);
+            player.hurt(DamageSource.ON_FIRE, damage);
             
         }
     }
+    private static final UUID ATTACK_DAMAGE_BOOST = UUID.fromString("e7e15cb0-2f6a-4bde-9b67-bb58ffb33d0d");
 
-    public boolean isDarkEnough(Player player) {
+    public static boolean isDarkEnough(Player player) {
         if (player == null || player.level == null)
             return false;
         Level level = player.level;

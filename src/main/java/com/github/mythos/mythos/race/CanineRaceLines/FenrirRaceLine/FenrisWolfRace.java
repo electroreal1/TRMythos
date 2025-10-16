@@ -40,7 +40,7 @@ public class FenrisWolfRace extends Race {
 
     @Override
     public double getBaseAttackSpeed() {
-        return 4;
+        return 3.0f;
     }
 
     @Override
@@ -50,7 +50,7 @@ public class FenrisWolfRace extends Race {
 
     @Override
     public double getJumpHeight() {
-        return 1;
+        return 1.5;
     }
 
     @Override

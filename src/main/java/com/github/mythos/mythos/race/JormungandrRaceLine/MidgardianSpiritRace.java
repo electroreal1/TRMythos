@@ -129,11 +129,11 @@ public class MidgardianSpiritRace extends Race {
         return true;
     }
     public boolean isSpiritual() {
-        return false;
+        return true;
     }
 
     public boolean isDivine() {
-        return true;
+        return false;
     }
 
 }

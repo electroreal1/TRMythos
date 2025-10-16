@@ -40,7 +40,7 @@ public class JormungandrRace extends Race {
 
     @Override
     public double getBaseAttackSpeed() {
-        return 5;
+        return 4;
     }
 
     @Override

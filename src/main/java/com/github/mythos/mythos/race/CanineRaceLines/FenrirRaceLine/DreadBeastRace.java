@@ -44,7 +44,7 @@ public class DreadBeastRace extends Race {
 
     @Override
     public double getBaseAttackSpeed() {
-        return 4;
+        return 2.0f;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class DreadBeastRace extends Race {
 
     @Override
     public double getJumpHeight() {
-        return 1;
+        return 1.2;
     }
 
     @Override
