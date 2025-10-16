@@ -137,5 +137,20 @@ public class ValkyrieRace extends Race {
     public boolean isDivine() {
         return true;
     }
-
+public void raceAbility(Player entity) {
+    if (!entity.m5833() && !entity.m7500()) {
+      Level level = entity.m9236();
+      if ((entity.m150110()).f35936) {
+        (entity.m150110()).f35936 = false;
+        (entity.m150110()).f35935 = false;
+      } else {
+        (entity.m150110()).f35936 = true;
+        (entity.m150110()).f35935 = true;
+      } 
+      entity.m150110().m35943(0.06F);
+      entity.m6885();
+      level.m6263((Player)null, entity.m20185(), entity.m20186(), entity.m20189(), SoundEvents.f11887, SoundSource.PLAYERS, 0.5F, 1.0F);
+        } 
+      }
+    
 }
