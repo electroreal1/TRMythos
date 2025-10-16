@@ -227,7 +227,8 @@ public class BloodsuckerSkill extends Skill {
             float maxHealth = player.getMaxHealth();
             float damage = maxHealth * 0.01f;
 
-            player.hurt(level.damageSource().onFire(), damage);
+            player.hurt(level.damageSources().onFire(), damage);
+            
         }
     }
 
@@ -269,5 +270,6 @@ public class BloodsuckerSkill extends Skill {
             removeAttributeBuffs(player);
         }
     }
+
 
 }
