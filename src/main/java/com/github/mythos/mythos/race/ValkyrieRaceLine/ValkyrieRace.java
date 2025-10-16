@@ -147,7 +147,7 @@ public void raceAbility(Player entity) {
         (entity.m150110()).f35936 = true;
         (entity.m150110()).f35935 = true;
       } 
-      entity.m150110().m35943(0.06F);
+      entity.m150110().m35943(0.08F);
       entity.m6885();
       level.m6263((Player)null, entity.m20185(), entity.m20186(), entity.m20189(), SoundEvents.f11887, SoundSource.PLAYERS, 0.5F, 1.0F);
         } 
