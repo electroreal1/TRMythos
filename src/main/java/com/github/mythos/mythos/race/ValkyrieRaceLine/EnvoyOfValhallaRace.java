@@ -8,7 +8,10 @@ import com.github.manasmods.tensura.registry.skill.UniqueSkills;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -114,6 +117,22 @@ public class EnvoyOfValhallaRace extends Race {
         return list;
     }
 
+    public void raceAbility(Player entity) {
+        if (!entity.isSpectator() && !entity.isCreative()) {
+            Level level = entity.level;
+            if ((entity.getAbilities()).mayfly) {
+                (entity.getAbilities()).mayfly = false;
+                (entity.getAbilities()).flying = false;
+            } else {
+                (entity.getAbilities()).mayfly = true;
+                (entity.getAbilities()).flying = true;
+            }
+            entity.getAbilities().setFlyingSpeed(0.12F);
+            entity.onUpdateAbilities();
+            level.playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ELYTRA_FLYING, SoundSource.PLAYERS, 0.5F, 1.0F);
+        }
+    }
+
     public boolean isMajin() {
         return false;
     }
@@ -125,20 +144,4 @@ public class EnvoyOfValhallaRace extends Race {
     public boolean isDivine() {
         return true;
     }
-    public void raceAbility(Player entity) {
-    if (!entity.m5833() && !entity.m7500()) {
-      Level level = entity.m9236();
-      if ((entity.m150110()).f35936) {
-        (entity.m150110()).f35936 = false;
-        (entity.m150110()).f35935 = false;
-      } else {
-        (entity.m150110()).f35936 = true;
-        (entity.m150110()).f35935 = true;
-      } 
-      entity.m150110().m35943(0.10F);
-      entity.m6885();
-      level.m6263((Player)null, entity.m20185(), entity.m20186(), entity.m20189(), SoundEvents.f11887, SoundSource.PLAYERS, 0.5F, 1.0F);
-    } 
-  }
-}
 }
