@@ -116,6 +116,19 @@ public class BloodsuckerSkill extends Skill {
         return name;
     }
 
+    private void ensureDistinctTags(ManasSkillInstance instance) {
+        CompoundTag tag = instance.getOrCreateTag();
+        String tag1 = tag.getString("spaceripperstingyeyes");
+        String tag2 = tag.getString("blood_drain");
+
+        if (tag1.equals(tag2)) {
+            tag2 = tag1 + "_alt";
+        }
+
+        tag.putString("spaceripperstingyeyes", tag1);
+        tag.putString("blood_drain", tag2);
+    }
+
     public void onPressed(ManasSkillInstance instance, LivingEntity entity) {
         switch (instance.getMode()) {
             case 1:
@@ -180,13 +193,13 @@ public class BloodsuckerSkill extends Skill {
                 case 3:
                     if (SkillHelper.outOfMagicule(entity, instance))
                         return;
-                    CompoundTag tag = instance.getOrCreateTag();
-                    learnPoint = tag.getInt("BloodDrain");
+                    CompoundTag tag2 = instance.getOrCreateTag();
+                    learnPoint = tag2.getInt("BloodDrain");
                     if (learnPoint < 100) {
-                        tag.putInt("BloodDrain", learnPoint + SkillUtils.getEarningLearnPoint(instance, entity, true));
+                        tag2.putInt("BloodDrain", learnPoint + SkillUtils.getEarningLearnPoint(instance, entity, true));
                         if (entity instanceof Player) {
                             Player player = (Player) entity;
-                            if (tag.getInt("BloodDrain") >= 100) {
+                            if (tag2.getInt("BloodDrain") >= 100) {
                                 player.displayClientMessage((Component) Component.translatable("tensura.skill.acquire_learning", new Object[]{getModeName(3)}).withStyle(Style.EMPTY.withColor(ChatFormatting.GOLD)), false);
                             } else {
                                 instance.setCoolDown(10);
