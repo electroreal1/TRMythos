@@ -50,7 +50,7 @@ public class JormungandrRace extends Race {
 
     @Override
     public double getJumpHeight() {
-        return 2;
+        return 1.75;
     }
 
     @Override
@@ -60,7 +60,7 @@ public class JormungandrRace extends Race {
 
     @Override
     public double getSprintSpeed() {
-        return 3f;
+        return 2f;
     }
 
     private double auraMin = 2500000.0;
