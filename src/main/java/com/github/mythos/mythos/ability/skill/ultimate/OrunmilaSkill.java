@@ -22,7 +22,6 @@ import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.mythos.mythos.menu.OrunMenu;
 import com.github.mythos.mythos.registry.skill.Skills;
-import com.github.mythos.mythos.registry.skill.UniqueSkills;
 import com.github.mythos.mythos.util.damage.MythosDamageSources;
 import io.github.Memoires.trmysticism.ability.skill.ultimate.SusanooSkill;
 import io.github.Memoires.trmysticism.ability.skill.ultimate.VicielSkill;
