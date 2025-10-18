@@ -46,6 +46,11 @@
   "trmythos.skill.purity.purification": "Purification",
   "trmythos.skill.purity.justice": "Justice",
 
+  "trmythos.skill.profanity": "§0Profanity",
+  "trmythos.skill.profanity.description": "§0Embody the malice of the world, blotting out the light with the darkness of sin and depravity.",
+  "trmythos.skill.profanity.tainted_soul": "§0Tainted Soul",
+  "trmythos.skill.profanity.baneful_essence": "§0Baneful Essence",
+
   "trmythos.skill.opportunist": "Opportunist",
   "trmythos.skill.opportunist.description": "Take advantage of the odds to exploit the opportunities presented to you. Although, who knows if others might be able to do the same...",
 

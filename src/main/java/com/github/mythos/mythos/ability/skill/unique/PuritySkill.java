@@ -58,6 +58,15 @@ public class PuritySkill extends Skill {
         });
     }
 
+    public void onTick(ManasSkillInstance instance, LivingEntity entity) {
+        TensuraEPCapability.getFrom(entity).ifPresent((cap) -> {
+            if (!cap.isChaos() || cap.isMajin()) {
+                cap.setMajin(false);
+            }
+        });
+    }
+
+
     @Override
     public boolean canBeToggled(ManasSkillInstance instance, LivingEntity living) {
         return true;

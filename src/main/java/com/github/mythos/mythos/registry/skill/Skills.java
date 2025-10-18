@@ -20,9 +20,10 @@ public class Skills {
     public static final RegistryObject<UnitySkill> UNITY;
     public static final RegistryObject<EvolutionSkill> EVOLUTION;
     public static final RegistryObject<PuritySkill> PURITY_SKILL;
+    public static final RegistryObject<ProfanitySkill> PROFANITY;
     public static final RegistryObject<OpportunistSkill> OPPORTUNIST_SKILL;
     public static final RegistryObject<OrunmilaSkill> ORUNMILA;
-    public static final RegistryObject<BloodsuckerSkill> BLOODSUCKER;
+   // public static final RegistryObject<BloodsuckerSkill> BLOODSUCKER;
 
     public Skills() {
     }
@@ -35,12 +36,13 @@ public class Skills {
     static {
         FAKER = registery.register("faker", FakerSkill::new);
         OMNISCIENT_EYE = registery.register("omniscient_eye", OmniscientEyeSkill::new);
+        ORUNMILA = registery.register("orunmila", () -> new OrunmilaSkill(Skill.SkillType.ULTIMATE));
         PURITY_SKILL = registery.register("purity", () -> new PuritySkill(Skill.SkillType.UNIQUE));
         UNITY = registery.register("unity", () -> new UnitySkill(Skill.SkillType.UNIQUE));
         FOUNDATION = registery.register("foundation", () -> new FoundationSkill(Skill.SkillType.UNIQUE));
         EVOLUTION = registery.register("evolution", () -> new EvolutionSkill(Skill.SkillType.UNIQUE));
-        ORUNMILA = registery.register("orunmila", () -> new OrunmilaSkill(Skill.SkillType.ULTIMATE));
         OPPORTUNIST_SKILL = registery.register("opportunist", () -> new OpportunistSkill(Skill.SkillType.UNIQUE));
-        BLOODSUCKER = registery.register("bloodsucker", () -> new BloodsuckerSkill(Skill.SkillType.UNIQUE));
+        PROFANITY = registery.register("profanity", () -> new ProfanitySkill(Skill.SkillType.UNIQUE));
+      //  BLOODSUCKER = registery.register("bloodsucker", () -> new BloodsuckerSkill(Skill.SkillType.UNIQUE));
     }
 }

@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 public class MythosSkillsConfig {
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> allowedUltimates = null;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> obtainableUltimates = null;
-    public static ForgeConfigSpec.BooleanValue canAttackOtherPlayers;
-    public static ForgeConfigSpec.BooleanValue enableUniqueSkillCompatibilityForUltimates;
+    //public static ForgeConfigSpec.BooleanValue canAttackOtherPlayers;
+    //public static ForgeConfigSpec.BooleanValue enableUniqueSkillCompatibilityForUltimates;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> fakerSkillRestrictedItems;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> fakerSkillReinforceEnchantments;
     public static ForgeConfigSpec.DoubleValue vassalAssemblyChance;
@@ -46,7 +46,7 @@ public class MythosSkillsConfig {
                                 "trnightmare:ark", "trnightmare:caliburn", "trnightmare:excalibur", "trnightmare:nodens_scythe", "trnightmare:nodens_the_world",
                                 "trnightmare:the_asura", "trnightmare:the_world", "trnightmare:life_essence", "trnightmare:ender_essence", "trnightmare:elder_essence",
                                 "trnightmare:holy_essence", "trnightmare:soul_essence", "trmysticism:blaze_essence", "trmysticism:cryptid_essence", "trmysticism:ice_essence",
-                                "trmysticism:axe", "trnightmare:ea", "trnightmare:ritual_scythe", "stellarprism:random_amulet", "stellarprism:random_heartstone", "stellarprism:world_memory",
+                                "trmysticism:axe", "trmysticism:ea", "trmysticism:ritual_scythe", "stellarprism:random_amulet", "stellarprism:random_heartstone", "stellarprism:world_memory",
                                 "stellarprism:reality_memory", "stellarprism:sword_of_starpower", "stellarprism:power_memory", "stellarprism:hope_memory", "stellarprism:time_memory",
                                 "stellarprism:space_memory", "stellarprism:black_slasher_katana", "btrultima:random_sin", "btrultima:random_virtue",
                                 "btrultima:random_unique", "btrultima:random_config", "btrultima:charity_shard", "btrultima:chastity_shard", "btrultima:diligence_shard",
@@ -62,7 +62,6 @@ public class MythosSkillsConfig {
                                 "minecraft:red_shulker_box", "minecraft:white_shulker_box", "minecraft:yellow_shulker_box", "sophisticatedstorage:shulker_box",
                                 "sophisticatedstorage:copper_shulker_box", "sophisticatedstorage:iron_shulker_box", "sophisticatedstorage:gold_shulker_box", "sophisticatedstorage:diamond_shulker_box",
                                 "sophisticatedstorage:netherite_shulker_box"
-
                         ),
                         obj -> obj instanceof String
                 );
