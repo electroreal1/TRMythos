@@ -57,7 +57,7 @@ public class GreaterSerpentRace extends Race {
 
     @Override
     public double getJumpHeight() {
-        return 1.5;
+        return 1.25;
     }
 
     @Override

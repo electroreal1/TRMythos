@@ -50,7 +50,7 @@ public class JormungandrRace extends Race {
 
     @Override
     public double getJumpHeight() {
-        return 1.75;
+        return 1.4;
     }
 
     @Override

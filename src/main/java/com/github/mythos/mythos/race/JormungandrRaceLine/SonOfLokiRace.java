@@ -52,7 +52,7 @@ public class SonOfLokiRace extends Race {
 
         @Override
         public double getJumpHeight() {
-            return 1.5;
+            return 1.3;
         }
 
         @Override

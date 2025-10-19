@@ -51,7 +51,7 @@ public class MidgardianSpiritRace extends Race {
 
     @Override
     public double getJumpHeight() {
-        return 1.5;
+        return 1.35;
     }
 
     @Override
