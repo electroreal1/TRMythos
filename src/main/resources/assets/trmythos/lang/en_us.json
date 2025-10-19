@@ -29,6 +29,11 @@
   "trmythos.skill.bloodsucker": "Bloodsucker",
   "trmythos.skill.bloodsucker.description": "Awaken to a much greater power at the measly cost of your humanity.",
 
+  "trmythos.skill.eltnam": "§5Eltnam",
+  "trmythos.skill.eltnam.description": "You've acheived immortality, but you crave more... the power to change the laws of the world... will you reach it?",
+  "trmythos.skill.mode.eltnam.Scry_proficiency" : "§5Scry Proficiency",
+  "trmythos.skill.mode.eltnam.Synthetic_blood_formula" : "§5Synthetic Blood",
+
   "trmythos.skill.faker": "§cFaker",
   "trmythos.skill.faker.description": "Analysis, Projection, Reinforcement. Though shallow copies of what others wield, these items fit perfectly in your hand. Nurture them. Mend them. Perhaps one day, they may even surpass their originals.",
   "trmythos.skill.mode.faker.analytical_appraisal" : "§4Analytical Appraisal",

@@ -1,0 +1,219 @@
+package com.github.mythos.mythos.ability.skill.unique;
+
+
+import com.github.manasmods.tensura.registry.skill.ExtraSkills;
+import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
+import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
+import com.github.manasmods.manascore.api.skills.ManasSkill;
+import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
+import com.github.manasmods.manascore.api.skills.SkillAPI;
+import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
+import com.github.manasmods.tensura.ability.SkillHelper;
+import com.github.manasmods.tensura.ability.SkillUtils;
+import com.github.manasmods.tensura.ability.TensuraSkillInstance;
+import com.github.manasmods.tensura.ability.skill.Skill;
+import com.github.manasmods.tensura.ability.skill.extra.ThoughtAccelerationSkill;
+import com.github.manasmods.tensura.capability.skill.TensuraSkillCapability;
+import com.github.manasmods.tensura.capability.effects.TensuraEffectsCapability;
+import com.github.manasmods.tensura.event.SkillPlunderEvent;
+import com.github.manasmods.tensura.registry.skill.ExtraSkills;
+import com.github.manasmods.tensura.util.TensuraAdvancementsHelper;
+import com.github.mythos.mythos.registry.MythosMobEffects;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.function.Predicate;
+
+public class EltnamSkill extends Skill {
+    protected static final UUID ACCELERATION = UUID.fromString("e15c70d7-56a3-4ee9-add5-9d42bbd3edea");
+    public EltnamSkill() {
+        super(SkillType.UNIQUE);
+    }
+
+
+    @Nullable
+    @Override
+
+    public boolean canBeToggled(ManasSkillInstance instance, LivingEntity living) {
+        return true;
+    }
+
+    public double getObtainingEpCost() {
+        return 130000.0;
+    }
+
+    public double learningCost() {
+        return 10000.0;
+    }
+
+    public boolean canTick(ManasSkillInstance instance, LivingEntity entity) {
+        return true;
+    }
+
+    @Override
+    public void onTick(ManasSkillInstance instance, LivingEntity entity) {
+        TensuraEPCapability.getFrom(entity).ifPresent(cap -> cap.setChaos(true));
+        TensuraEPCapability.sync(entity);
+        CompoundTag tag = instance.getOrCreateTag();
+        if (instance.isToggled()) {
+            this.gainMastery(instance, entity);
+        }
+    }
+
+    protected boolean canActivateInRaceLimit(ManasSkillInstance instance) {
+        return instance.getMode() == 1;
+    }
+    public void onToggleOn(ManasSkillInstance instance, LivingEntity entity) {
+    ThoughtAccelerationSkill.onToggle(instance, entity, ACCELERATION, true);
+        entity.addEffect(new MobEffectInstance((MobEffect) MythosMobEffects.APOSTLE_REGENERATION.get(), 1200, 1, false, false, false));
+    }
+
+    public void onToggleOff(ManasSkillInstance instance, LivingEntity entity) {
+        ThoughtAccelerationSkill.onToggle(instance, entity, ACCELERATION, false);
+        MobEffectInstance effectInstance = entity.getEffect((MobEffect)MythosMobEffects.APOSTLE_REGENERATION.get());
+        if (effectInstance != null && effectInstance.getAmplifier() < 1)
+            entity.removeEffect((MobEffect)MythosMobEffects.APOSTLE_REGENERATION.get());
+    }
+
+    public void onLearnSkill(@NotNull ManasSkillInstance instance, @NotNull LivingEntity entity, @NotNull UnlockSkillEvent event) {
+        if (instance.getMastery() >= 0 && !instance.isTemporarySkill()) {
+            SkillUtils.learnSkill(entity, (ManasSkill)ExtraSkills.SAGE.get());
+        }
+
+    }
+
+    public int modes() {
+        return 2;
+    }
+
+    public int nextMode(LivingEntity entity, TensuraSkillInstance instance, boolean reverse) {
+        return instance.getMode() == 1 ? 2 : 1;
+    }
+
+    public Component getModeName(int mode) {
+        MutableComponent name;
+        switch (mode) {
+            case 1:
+                name = Component.translatable("trmythos.skill.mode.eltnam.Scry_proficiency");
+                break;
+            case 2:
+                name = Component.translatable("trmythos.skill.mode.eltnam.Synthetic_blood_formula");
+                break;
+            default:
+                name = Component.empty();
+        }
+
+        return name;
+    }
+
+    public void onPressed(ManasSkillInstance instance, LivingEntity entity) {
+        switch (instance.getMode()) {
+            case 1:
+                if (!SkillHelper.outOfMagicule(entity, instance)) {
+                    if (entity instanceof Player) {
+                        Player player = (Player) entity;
+                        TensuraSkillCapability.getFrom(player).ifPresent(cap -> {
+                            if (player.isCrouching()) {
+                                int mode = cap.getAnalysisMode();
+                                switch (mode) {
+                                    case 1:
+                                        cap.setAnalysisMode(2);
+                                        player.displayClientMessage(Component.translatable("tensura.skill.analytical.analyzing_mode.block")
+                                                .setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_AQUA)), true);
+                                        break;
+                                    case 2:
+                                        cap.setAnalysisMode(0);
+                                        player.displayClientMessage(Component.translatable("tensura.skill.analytical.analyzing_mode.both")
+                                                .setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_AQUA)), true);
+                                        break;
+                                    default:
+                                        cap.setAnalysisMode(1);
+                                        player.displayClientMessage(Component.translatable("tensura.skill.analytical.analyzing_mode.entity")
+                                                .setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_AQUA)), true);
+                                        break;
+                                }
+                                player.playNotifySound(SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
+                                TensuraSkillCapability.sync(player);
+                            } else {
+                                int level = this.isMastered(instance, entity) ? 18 : 8;
+                                if (cap.getAnalysisLevel() != level) {
+                                    cap.setAnalysisLevel(level);
+                                    cap.setAnalysisDistance(this.isMastered(instance, entity) ? 30 : 20);
+                                    entity.getLevel().playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
+                                } else {
+                                    cap.setAnalysisLevel(0);
+                                    entity.getLevel().playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
+                                }
+                                TensuraSkillCapability.sync(player);
+                            }
+                        });
+                    }
+                }
+                break;
+            case 2:
+                boolean success;
+                int duration;
+                LivingEntity target, living = SkillHelper.getTargetingEntity(entity, 3.0D, false);
+
+                // Remove effects like Severance, poison, or other harmful debuffs
+                success = (TensuraEffectsCapability.getSeverance(entity) > 0.0D);
+                TensuraEffectsCapability.getFrom(entity).ifPresent(cap -> cap.setSeveranceAmount(0.0D));
+
+                Predicate predicate = effect -> (effect == MobEffectCategory.HARMFUL);
+                success = (success || SkillHelper.removePredicateEffect(entity, predicate, magiculeCost(entity, instance)));
+
+                // Heal missing HP and consume some magicule
+                int cost = instance.isMastered(entity)
+                        ? (int) (TensuraEPCapability.getEP(entity) * 0.025D)
+                        : (int) (TensuraEPCapability.getEP(entity) * 0.075D);
+                float healAmount = entity.getMaxHealth() - entity.getHealth();
+                SkillHelper.outOfMagiculeStillConsume(entity, cost);
+
+                entity.heal(healAmount);
+                success |= healAmount > 0.0F;
+
+                if (success) {
+                    TensuraParticleHelper.addServerParticlesAroundSelf(entity, ParticleTypes.HEART, 2.0D);
+                    addMasteryPoint(instance, entity);
+                    entity.swing(InteractionHand.MAIN_HAND, true);
+
+                }
+
+                instance.setCoolDown(5);
+            }
+
+        }
+
+    private void gainMastery(ManasSkillInstance instance, LivingEntity entity) {
+        CompoundTag tag = instance.getOrCreateTag();
+        int time = tag.getInt("activatedTimes");
+        if (time % 12 == 0) {
+            this.addMasteryPoint(instance, entity);
+        }
+
+        tag.putInt("activatedTimes", time + 1);
+    }
+
+
+}

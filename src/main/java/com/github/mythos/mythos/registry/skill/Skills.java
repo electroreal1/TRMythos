@@ -23,6 +23,7 @@ public class Skills {
     public static final RegistryObject<ProfanitySkill> PROFANITY;
     public static final RegistryObject<OpportunistSkill> OPPORTUNIST_SKILL;
     public static final RegistryObject<OrunmilaSkill> ORUNMILA;
+    public static final RegistryObject<EltnamSkill> ELTNAM;
    // public static final RegistryObject<BloodsuckerSkill> BLOODSUCKER;
 
     public Skills() {
@@ -35,6 +36,7 @@ public class Skills {
 
     static {
         FAKER = registery.register("faker", FakerSkill::new);
+        ELTNAM = registery.register("eltnam", EltnamSkill::new);
         OMNISCIENT_EYE = registery.register("omniscient_eye", OmniscientEyeSkill::new);
         ORUNMILA = registery.register("orunmila", () -> new OrunmilaSkill(Skill.SkillType.ULTIMATE));
         PURITY_SKILL = registery.register("purity", () -> new PuritySkill(Skill.SkillType.UNIQUE));

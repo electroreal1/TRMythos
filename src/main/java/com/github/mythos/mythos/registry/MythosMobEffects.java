@@ -22,6 +22,8 @@ public class MythosMobEffects {
 
     public static final RegistryObject<MobEffect> AVALON_REGENERATION = registry.register("avalon_regeneration", () ->
             new AvalonRegenerationEffect(MobEffectCategory.BENEFICIAL, (new Color(255, 166, 4)).getRGB()));
+    public static final RegistryObject<MobEffect> APOSTLE_REGENERATION = registry.register("apostle_regeneration", () ->
+            new AvalonRegenerationEffect(MobEffectCategory.BENEFICIAL, (new Color(40, 2, 66)).getRGB()));
 //    public static final RegistryObject<MobEffect> RAPID_REGENERATION = registry.register("rapid_regeneration", () ->
 //            new RapidRegenerationEffect(MobEffectCategory.BENEFICIAL, (new Color(255, 166, 4)).getRGB()));
 //    public static final RegistryObject<MobEffect> VAPORIZATION_FREEZE = registry.register("vaporization_freeze", () ->
