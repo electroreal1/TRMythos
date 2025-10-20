@@ -47,6 +47,7 @@ import java.util.function.Predicate;
 
 public class EltnamSkill extends Skill {
     protected static final UUID ACCELERATION = UUID.fromString("e15c70d7-56a3-4ee9-add5-9d42bbd3edea");
+
     public EltnamSkill() {
         super(SkillType.UNIQUE);
     }
@@ -67,6 +68,8 @@ public class EltnamSkill extends Skill {
         return 10000.0;
     }
 
+    private Player target;
+
     public boolean canTick(ManasSkillInstance instance, LivingEntity entity) {
         return true;
     }
@@ -84,27 +87,28 @@ public class EltnamSkill extends Skill {
     protected boolean canActivateInRaceLimit(ManasSkillInstance instance) {
         return instance.getMode() == 1;
     }
+
     public void onToggleOn(ManasSkillInstance instance, LivingEntity entity) {
-    ThoughtAccelerationSkill.onToggle(instance, entity, ACCELERATION, true);
+        ThoughtAccelerationSkill.onToggle(instance, entity, ACCELERATION, true);
         entity.addEffect(new MobEffectInstance((MobEffect) MythosMobEffects.APOSTLE_REGENERATION.get(), 1200, 1, false, false, false));
     }
 
     public void onToggleOff(ManasSkillInstance instance, LivingEntity entity) {
         ThoughtAccelerationSkill.onToggle(instance, entity, ACCELERATION, false);
-        MobEffectInstance effectInstance = entity.getEffect((MobEffect)MythosMobEffects.APOSTLE_REGENERATION.get());
+        MobEffectInstance effectInstance = entity.getEffect((MobEffect) MythosMobEffects.APOSTLE_REGENERATION.get());
         if (effectInstance != null && effectInstance.getAmplifier() < 1)
-            entity.removeEffect((MobEffect)MythosMobEffects.APOSTLE_REGENERATION.get());
+            entity.removeEffect((MobEffect) MythosMobEffects.APOSTLE_REGENERATION.get());
     }
 
     public void onLearnSkill(@NotNull ManasSkillInstance instance, @NotNull LivingEntity entity, @NotNull UnlockSkillEvent event) {
         if (instance.getMastery() >= 0 && !instance.isTemporarySkill()) {
-            SkillUtils.learnSkill(entity, (ManasSkill)ExtraSkills.SAGE.get());
+            SkillUtils.learnSkill(entity, (ManasSkill) ExtraSkills.SAGE.get());
         }
 
     }
 
     public int modes() {
-        return 2;
+        return 3;
     }
 
     public int nextMode(LivingEntity entity, TensuraSkillInstance instance, boolean reverse) {
@@ -115,10 +119,13 @@ public class EltnamSkill extends Skill {
         MutableComponent name;
         switch (mode) {
             case 1:
-                name = Component.translatable("trmythos.skill.mode.eltnam.Scry_proficiency");
+                name = Component.translatable("trmythos.skill.mode.eltnam.Scry_proficiency: Analysis");
                 break;
             case 2:
                 name = Component.translatable("trmythos.skill.mode.eltnam.Synthetic_blood_formula");
+                break;
+            case 3:
+                name = Component.translatable("trmythos.skill.mode.eltnam.Scry_proficiency: Divination");
                 break;
             default:
                 name = Component.empty();
@@ -172,38 +179,133 @@ public class EltnamSkill extends Skill {
                 }
                 break;
             case 2:
-                boolean success;
-                int duration;
-                LivingEntity target, living = SkillHelper.getTargetingEntity(entity, 3.0D, false);
+                private void processScrying (ManasSkillInstance instance, Player player){
+                ItemStack itemInHand = player.getMainHandItem();
 
-                // Remove effects like Severance, poison, or other harmful debuffs
-                success = (TensuraEffectsCapability.getSeverance(entity) > 0.0D);
-                TensuraEffectsCapability.getFrom(entity).ifPresent(cap -> cap.setSeveranceAmount(0.0D));
+                if (!itemInHand.isEmpty()) {
+                    String itemName = itemInHand.getHoverName()
+                            .getString()
+                            .replaceAll("[\\[\\]]", "")
+                            .trim()
+                            .toLowerCase();
 
-                Predicate predicate = effect -> (effect == MobEffectCategory.HARMFUL);
-                success = (success || SkillHelper.removePredicateEffect(entity, predicate, magiculeCost(entity, instance)));
+                    Player matchedPlayer = getPlayerByName(itemName, player);
 
-                // Heal missing HP and consume some magicule
-                int cost = instance.isMastered(entity)
-                        ? (int) (TensuraEPCapability.getEP(entity) * 0.025D)
-                        : (int) (TensuraEPCapability.getEP(entity) * 0.075D);
-                float healAmount = entity.getMaxHealth() - entity.getHealth();
-                SkillHelper.outOfMagiculeStillConsume(entity, cost);
+                    if (matchedPlayer != null) {
+                        this.target = matchedPlayer;
+                        double currentErrorRate = this.baseErrorRate;
+                        boolean scryable = true;
 
-                entity.heal(healAmount);
-                success |= healAmount > 0.0F;
+                        // Check for resistance skills
+                        if (SkillUtils.hasSkill(this.target, ResistanceSkills.SPATIAL_ATTACK_RESISTANCE.get())) {
+                            currentErrorRate *= 1.0D; // redundant but preserved from original
+                            if (SkillUtils.hasSkill(this.target, ResistanceSkills.SPATIAL_ATTACK_NULLIFICATION.get())) {
+                                currentErrorRate *= 3.0D;
+                            }
+                        }
 
-                if (success) {
-                    TensuraParticleHelper.addServerParticlesAroundSelf(entity, ParticleTypes.HEART, 2.0D);
-                    addMasteryPoint(instance, entity);
-                    entity.swing(InteractionHand.MAIN_HAND, true);
+                        // EP check
+                        if (TensuraEPCapability.getCurrentEP(this.target) <= 200000.0D) {
+                            scryable = false;
+                        }
 
+                        if (scryable) {
+                            if (instance.isMastered(player)) {
+                                currentErrorRate /= 2.0D;
+                            }
+
+                            ServerLevel serverLevel = (ServerLevel) this.target.level();
+
+                            // Random offset (error)
+                            double offsetX = serverLevel.random.nextDouble() * currentErrorRate - currentErrorRate / 2.0D;
+                            double offsetY = serverLevel.random.nextDouble() * currentErrorRate - currentErrorRate / 2.0D;
+                            double offsetZ = serverLevel.random.nextDouble() * currentErrorRate - currentErrorRate / 2.0D;
+
+                            // Compute “revealed” coordinates
+                            double revealedX = this.target.getX() + offsetX;
+                            double revealedY = this.target.getY() + offsetY;
+                            double revealedZ = this.target.getZ() + offsetZ;
+
+                            if (instance.isMastered(player)) {
+                                player.sendSystemMessage(Component.literal(String.format(
+                                        "Target found at: X=%.2f, Y=%.2f, Z=%.2f in %s",
+                                        revealedX,
+                                        revealedY,
+                                        revealedZ,
+                                        this.target.level().dimension().location().toString()
+                                )));
+                            } else {
+                                player.sendSystemMessage(Component.literal(String.format(
+                                        "Target is approximately at: X=%.2f, Y=%.2f, Z=%.2f",
+                                        revealedX,
+                                        revealedY,
+                                        revealedZ
+                                )));
+                            }
+
+                            addMasteryPoint(instance, player);
+                            instance.setCoolDown(600);
+
+                        } else {
+                            player.sendSystemMessage(Component.literal("The target is immune to scrying!"));
+                        }
+                    } else {
+                        player.sendSystemMessage(Component.literal("No player found with that name!"));
+                    }
+                } else {
+                    player.sendSystemMessage(Component.literal(
+                            "You must hold an item with the player's name in your main hand!"
+                    ));
                 }
-
-                instance.setCoolDown(5);
             }
 
+
+            private Player getPlayerByName (String itemName, Player player){
+                ServerLevel world = (ServerLevel) player.level();
+
+                for (ServerPlayer onlinePlayer : world.getServer().getPlayerList().getPlayers()) {
+                    if (onlinePlayer.getGameProfile().getName().equalsIgnoreCase(itemName)) {
+                        return onlinePlayer;
+                    }
+                }
+            }
+            return null;
         }
+
+        case 3:
+        boolean success;
+        int duration;
+        LivingEntity target, living = SkillHelper.getTargetingEntity(entity, 3.0D, false);
+
+        // Remove effects like Severance, poison, or other harmful debuffs
+        success = (TensuraEffectsCapability.getSeverance(entity) > 0.0D);
+        TensuraEffectsCapability.getFrom(entity).ifPresent(cap -> cap.setSeveranceAmount(0.0D));
+
+        Predicate predicate = effect -> (effect == MobEffectCategory.HARMFUL);
+        success = (success || SkillHelper.removePredicateEffect(entity, predicate, magiculeCost(entity, instance)));
+
+        // Heal missing HP and consume some magicule
+        int cost = instance.isMastered(entity)
+                ? (int) (TensuraEPCapability.getEP(entity) * 0.025D)
+                : (int) (TensuraEPCapability.getEP(entity) * 0.075D);
+        float healAmount = entity.getMaxHealth() - entity.getHealth();
+        SkillHelper.outOfMagiculeStillConsume(entity, cost);
+
+        entity.heal(healAmount);
+        success |= healAmount > 0.0F;
+
+        if (success) {
+            TensuraParticleHelper.addServerParticlesAroundSelf(entity, ParticleTypes.HEART, 2.0D);
+            addMasteryPoint(instance, entity);
+            entity.swing(InteractionHand.MAIN_HAND, true);
+
+        }
+
+        instance.setCoolDown(5);
+    }
+
+
+
 
     private void gainMastery(ManasSkillInstance instance, LivingEntity entity) {
         CompoundTag tag = instance.getOrCreateTag();
