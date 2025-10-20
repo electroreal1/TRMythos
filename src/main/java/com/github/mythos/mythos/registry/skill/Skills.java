@@ -24,7 +24,7 @@ public class Skills {
     public static final RegistryObject<OpportunistSkill> OPPORTUNIST_SKILL;
     public static final RegistryObject<OrunmilaSkill> ORUNMILA;
     public static final RegistryObject<EltnamSkill> ELTNAM;
-   // public static final RegistryObject<BloodsuckerSkill> BLOODSUCKER;
+    public static final RegistryObject<BloodsuckerSkill> BLOODSUCKER;
 
     public Skills() {
     }
@@ -45,6 +45,6 @@ public class Skills {
         EVOLUTION = registery.register("evolution", () -> new EvolutionSkill(Skill.SkillType.UNIQUE));
         OPPORTUNIST_SKILL = registery.register("opportunist", () -> new OpportunistSkill(Skill.SkillType.UNIQUE));
         PROFANITY = registery.register("profanity", () -> new ProfanitySkill(Skill.SkillType.UNIQUE));
-      //  BLOODSUCKER = registery.register("bloodsucker", () -> new BloodsuckerSkill(Skill.SkillType.UNIQUE));
+        BLOODSUCKER = registery.register("bloodsucker", () -> new BloodsuckerSkill(Skill.SkillType.UNIQUE));
     }
 }

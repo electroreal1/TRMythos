@@ -4,6 +4,9 @@ import com.github.mythos.mythos.mob_effect.AvalonRegenerationEffect;
 //import com.github.mythos.mythos.mob_effect.RapidRegenerationEffect;
 //import com.github.mythos.mythos.mob_effect.debuff.BloodDrainEffect;
 //import com.github.mythos.mythos.mob_effect.debuff.VaporizationFreezeEffect;
+import com.github.mythos.mythos.mob_effect.RapidRegenerationEffect;
+import com.github.mythos.mythos.mob_effect.debuff.BloodDrainEffect;
+import com.github.mythos.mythos.mob_effect.debuff.VaporizationFreezeEffect;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -24,12 +27,12 @@ public class MythosMobEffects {
             new AvalonRegenerationEffect(MobEffectCategory.BENEFICIAL, (new Color(255, 166, 4)).getRGB()));
     public static final RegistryObject<MobEffect> APOSTLE_REGENERATION = registry.register("apostle_regeneration", () ->
             new AvalonRegenerationEffect(MobEffectCategory.BENEFICIAL, (new Color(40, 2, 66)).getRGB()));
-//    public static final RegistryObject<MobEffect> RAPID_REGENERATION = registry.register("rapid_regeneration", () ->
-//            new RapidRegenerationEffect(MobEffectCategory.BENEFICIAL, (new Color(255, 166, 4)).getRGB()));
-//    public static final RegistryObject<MobEffect> VAPORIZATION_FREEZE = registry.register("vaporization_freeze", () ->
-//            new VaporizationFreezeEffect(MobEffectCategory.HARMFUL, (new Color(255, 144, 6)).getRGB()));
-//    public static final RegistryObject<MobEffect> BLOOD_DRAIN = registry.register("blood_drain", () ->
-//            new BloodDrainEffect(MobEffectCategory.HARMFUL, (new Color(255, 165, 3)).getRGB()));
+    public static final RegistryObject<MobEffect> RAPID_REGENERATION = registry.register("rapid_regeneration", () ->
+            new RapidRegenerationEffect(MobEffectCategory.BENEFICIAL, (new Color(255, 166, 4)).getRGB()));
+    public static final RegistryObject<MobEffect> VAPORIZATION_FREEZE = registry.register("vaporization_freeze", () ->
+            new VaporizationFreezeEffect(MobEffectCategory.HARMFUL, (new Color(255, 144, 6)).getRGB()));
+    public static final RegistryObject<MobEffect> BLOOD_DRAIN = registry.register("blood_drain", () ->
+            new BloodDrainEffect(MobEffectCategory.HARMFUL, (new Color(255, 165, 3)).getRGB()));
     public static void init(IEventBus modEventBus) {
         registry.register(modEventBus);
     }

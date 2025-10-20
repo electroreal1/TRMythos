@@ -28,9 +28,13 @@
 
   "trmythos.skill.bloodsucker": "Bloodsucker",
   "trmythos.skill.bloodsucker.description": "Awaken to a much greater power at the measly cost of your humanity.",
+  "trmythos.skill.mode.bloodsucker.space_ripper_stingy_eyes": "Space Ripper Stingy Eyes",
+  "trmythos.skill.mode.bloodsucker.vaporization_freezing_technique": "Vaporization Freezing Technique",
+  "trmythos.skill.mode.bloodsucker.blood_drain": "Blood Drain",
+  "trmythos.skill.mode.bloodsucker.flesh_bud": "Flesh Bud",
 
   "trmythos.skill.eltnam": "§5Eltnam",
-  "trmythos.skill.eltnam.description": "Cut! There are no second chances for actors that fall to the abyss...",
+  "trmythos.skill.eltnam.description": "You've acheived immortality, but you crave more... the power to change the laws of the world... will you reach it?",
   "trmythos.skill.mode.eltnam.Scry_proficiency" : "§5Scry Proficiency",
   "trmythos.skill.mode.eltnam.Synthetic_blood_formula" : "§5Synthetic Blood",
 
