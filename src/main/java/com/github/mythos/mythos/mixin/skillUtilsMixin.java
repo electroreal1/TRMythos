@@ -16,6 +16,9 @@ public class skillUtilsMixin {
         if (isSkillToggled(entity, Skills.ORUNMILA.get())) {
             point += 20;
         }
+        if (isSkillToggled(entity, Skills.ELTNAM.get())) {
+            point += 6;
+        }
         return point;
     }
 
@@ -23,6 +26,9 @@ public class skillUtilsMixin {
         int point = TensuraConfig.INSTANCE.skillsConfig.bonusMasteryGain.get();
         if (isSkillToggled(entity, Skills.ORUNMILA.get())) {
             point += 20 * originalPoint;
+        }
+        if (isSkillToggled(entity, Skills.ELTNAM.get())) {
+            point += 6 * originalPoint;
         }
         return point;
     }
