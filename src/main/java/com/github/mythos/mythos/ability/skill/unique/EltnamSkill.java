@@ -280,7 +280,7 @@ public class EltnamSkill extends Skill {
                     }
 
                     addMasteryPoint(instance, player);
-                    instance.setCoolDown(600);
+                    instance.setCoolDown(120);
 
                 } else {
                     player.sendSystemMessage(Component.literal("The target is immune to scrying!"));
