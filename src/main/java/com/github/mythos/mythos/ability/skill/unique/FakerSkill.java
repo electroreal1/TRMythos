@@ -89,6 +89,7 @@ public class FakerSkill extends Skill {
     public void onTick(ManasSkillInstance instance, LivingEntity entity) { // in a tick
         grantSevererIfMastered(instance, entity);
         grantAvalon(instance, entity);
+        return;
     }
 
     private void grantSevererIfMastered(ManasSkillInstance instance, LivingEntity entity) {

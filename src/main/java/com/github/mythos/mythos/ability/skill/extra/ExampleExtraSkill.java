@@ -143,6 +143,7 @@ public class ExampleExtraSkill extends Skill {
         } else {
             entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 200, 0, false, false, false));
         }
+        return;
     }
 
     /**

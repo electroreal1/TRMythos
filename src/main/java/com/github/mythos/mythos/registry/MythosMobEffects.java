@@ -4,6 +4,7 @@ import com.github.mythos.mythos.mob_effect.AvalonRegenerationEffect;
 //import com.github.mythos.mythos.mob_effect.RapidRegenerationEffect;
 //import com.github.mythos.mythos.mob_effect.debuff.BloodDrainEffect;
 //import com.github.mythos.mythos.mob_effect.debuff.VaporizationFreezeEffect;
+import com.github.mythos.mythos.mob_effect.ChildOfThePlaneEffect;
 import com.github.mythos.mythos.mob_effect.RapidRegenerationEffect;
 import com.github.mythos.mythos.mob_effect.debuff.BloodDrainEffect;
 import com.github.mythos.mythos.mob_effect.debuff.VaporizationFreezeEffect;
@@ -33,6 +34,8 @@ public class MythosMobEffects {
             new VaporizationFreezeEffect(MobEffectCategory.HARMFUL, (new Color(255, 144, 6)).getRGB()));
     public static final RegistryObject<MobEffect> BLOOD_DRAIN = registry.register("blood_drain", () ->
             new BloodDrainEffect(MobEffectCategory.HARMFUL, (new Color(255, 165, 3)).getRGB()));
+    public static final RegistryObject<MobEffect> CHILD_OF_THE_PLANE = registry.register("child_of_the_plane", () ->
+            new ChildOfThePlaneEffect(MobEffectCategory.BENEFICIAL, (new Color(255, 165, 3)).getRGB()));
     public static void init(IEventBus modEventBus) {
         registry.register(modEventBus);
     }

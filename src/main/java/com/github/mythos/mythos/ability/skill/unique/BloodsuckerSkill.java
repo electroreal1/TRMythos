@@ -2,7 +2,6 @@ package com.github.mythos.mythos.ability.skill.unique;
 
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.tensura.ability.SkillHelper;
-import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.ability.skill.intrinsic.CharmSkill;
@@ -11,6 +10,7 @@ import com.github.manasmods.tensura.entity.magic.beam.BeamProjectile;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.registry.entity.TensuraEntityTypes;
 import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
+import com.github.mythos.mythos.mob_effect.debuff.CurseOfLightEffect;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleOptions;
@@ -28,7 +28,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.event.TickEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class BloodsuckerSkill extends Skill {
@@ -220,5 +219,6 @@ public class BloodsuckerSkill extends Skill {
         if (!(entity instanceof Player player))
             return;
         CurseOfLightEffect.tick(instance, player);
+        return;
     }
 }

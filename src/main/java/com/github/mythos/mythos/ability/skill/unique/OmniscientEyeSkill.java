@@ -202,6 +202,7 @@ public class OmniscientEyeSkill extends Skill {
         if (instance.isToggled()) {
             this.gainMastery(instance, entity);
         }
+        return;
     }
 
     private void gainMastery(ManasSkillInstance instance, LivingEntity entity) {

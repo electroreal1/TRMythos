@@ -107,6 +107,7 @@ public class CursedBloodlineSkill extends Skill {
         }
 
         spawnSoulParticles(player);
+        return;
     }
 
 

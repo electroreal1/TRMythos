@@ -65,6 +65,7 @@ public class PuritySkill extends Skill {
                 cap.setMajin(false);
             }
         });
+        return;
     }
 
 

@@ -83,6 +83,7 @@ public class EltnamSkill extends Skill {
         if (instance.isToggled()) {
             this.gainMastery(instance, entity);
         }
+        return;
     }
 
     protected boolean canActivateInRaceLimit(ManasSkillInstance instance) {

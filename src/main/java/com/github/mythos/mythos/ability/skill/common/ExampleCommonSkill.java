@@ -137,6 +137,7 @@ public class ExampleCommonSkill extends Skill {
         }
 
         tag.putInt("activatedTimes", time + 1);
+        return;
     }
 
 

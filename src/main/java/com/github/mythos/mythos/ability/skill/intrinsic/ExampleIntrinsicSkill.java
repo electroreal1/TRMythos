@@ -72,6 +72,7 @@ public class ExampleIntrinsicSkill extends Skill {
         }
 
         tag.putInt("activatedTimes", time + 1);
+        return;
     }
 
     /**

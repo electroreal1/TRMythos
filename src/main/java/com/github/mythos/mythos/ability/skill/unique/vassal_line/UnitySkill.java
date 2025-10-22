@@ -64,6 +64,7 @@ public class UnitySkill extends Skill {
         owner.level.getEntitiesOfClass(LivingEntity.class, owner.getBoundingBox().inflate(50),
                         target -> target != owner && !(target instanceof Player))
                 .forEach(target -> charmPassive(owner, target));
+        return;
     }
 
     private void charmPassive(LivingEntity source, LivingEntity target) {
