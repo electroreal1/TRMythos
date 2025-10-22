@@ -120,7 +120,7 @@ public class OrunmilaSkill extends Skill {
     }
 
     public void onToggleOn(ManasSkillInstance instance, LivingEntity entity) {
-        entity.addEffect(new MobEffectInstance((MobEffect) TensuraMobEffects.PRESENCE_SENSE.get(), 1200, 6, false, false, false));
+        entity.addEffect(new MobEffectInstance((MobEffect) TensuraMobEffects.PRESENCE_SENSE.get(), 999999, 6, false, false, false));
     }
 
     public void onToggleOff(ManasSkillInstance instance, LivingEntity entity) {

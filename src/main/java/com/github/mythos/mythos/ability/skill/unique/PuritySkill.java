@@ -5,6 +5,7 @@ import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
 import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.ability.magic.Magic;
+import com.github.manasmods.tensura.ability.magic.spiritual.light.SolarFlareMagic;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
@@ -107,6 +108,7 @@ public class PuritySkill extends Skill {
 
     private void spawnLightArrows(ManasSkillInstance instance, LivingEntity entity, Vec3 pos, int arrowAmount, double distance) {
         int arrowRot = 360 / arrowAmount;
+        int souls = TensuraPlayerCapability.getSoulPoints((Player) entity) / 1000;
 
         for(int i = 0; i < arrowAmount; ++i) {
             Vec3 arrowPos = entity.getEyePosition().add((new Vec3(0.0, distance, 0.0)).zRot(((float)(arrowRot * i) - (float)arrowRot / 2.0F) * 0.017453292F).xRot(-entity.getXRot() * 0.017453292F).yRot(-entity.getYRot() * 0.017453292F));
@@ -115,10 +117,9 @@ public class PuritySkill extends Skill {
             arrow.setPos(arrowPos);
             arrow.shootFromRot(pos.subtract(arrowPos).normalize());
             arrow.setLife(50);
-            int souls = TensuraPlayerCapability.getSoulPoints((Player) entity);
             if (instance.isMastered(entity)) {
-                arrow.setDamage(100f + souls);
-            } else arrow.setDamage(50f + souls);
+                arrow.setDamage(12.5f + souls);
+            } else arrow.setDamage(6.25f + souls);
             arrow.setMpCost(this.magiculeCost(entity, instance) / (double)arrowAmount);
             arrow.setSpiritAttack(true);
             arrow.setSkill(instance);
@@ -250,7 +251,7 @@ public class PuritySkill extends Skill {
             }
 
             level.playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ILLUSIONER_CAST_SPELL, SoundSource.PLAYERS, 1.0F, 1.0F);
-            instance.setCoolDown(30);
+            instance.setCoolDown(10);
         }
     }
 }

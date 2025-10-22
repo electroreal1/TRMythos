@@ -1,4 +1,4 @@
-package com.github.mythos.mythos.mixin;
+package com.github.mythos.mythos.util;
 
 import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
@@ -10,14 +10,11 @@ import net.minecraft.world.entity.LivingEntity;
 
 import static com.github.manasmods.tensura.ability.SkillUtils.isSkillToggled;
 
-public class skillUtilsMixin {
+public class MythosSkillUtils extends com.github.manasmods.tensura.ability.SkillUtils {
     public static int getEarningLearnPoint(ManasSkillInstance instance, LivingEntity entity, boolean isMode) {
         int point = TensuraConfig.INSTANCE.skillsConfig.bonusLearningGain.get() + entity.getRandom().nextInt(1, isMode ? 3 : 5);
         if (isSkillToggled(entity, Skills.ORUNMILA.get())) {
             point += 20;
-        }
-        if (isSkillToggled(entity, Skills.ELTNAM.get())) {
-            point += 6;
         }
         return point;
     }
@@ -26,9 +23,6 @@ public class skillUtilsMixin {
         int point = TensuraConfig.INSTANCE.skillsConfig.bonusMasteryGain.get();
         if (isSkillToggled(entity, Skills.ORUNMILA.get())) {
             point += 20 * originalPoint;
-        }
-        if (isSkillToggled(entity, Skills.ELTNAM.get())) {
-            point += 6 * originalPoint;
         }
         return point;
     }
