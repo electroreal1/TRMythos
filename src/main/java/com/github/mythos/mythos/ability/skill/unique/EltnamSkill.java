@@ -38,13 +38,16 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Predicate;
 
 public class EltnamSkill extends Skill {
     protected static final UUID ACCELERATION = UUID.fromString("e15c70d7-56a3-4ee9-add5-9d42bbd3edea");
+
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/unique/eltnam.png");
+    }
 
     public EltnamSkill() {
         super(SkillType.UNIQUE);
