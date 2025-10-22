@@ -42,9 +42,15 @@ public class SkillUtilsMixin {
     )
     private static int trmythos$modifyEarningLearnPoint(int original, ManasSkillInstance instance, LivingEntity entity, boolean isMode) {
         int point = original;
-            if (isSkillToggled(entity, (ManasSkill)Skills.ORUNMILA.get())) {
-                point = original + 20;
-            }
+
+        if (isSkillToggled(entity, (ManasSkill)Skills.ORUNMILA.get())) {
+            point = original + 20;
+        }
+
+        if (hasSkill(entity, (ManasSkill)Skills.ELTNAM.get())) {
+            point += 6;
+        }
+
 
         return point;
     }
@@ -59,6 +65,9 @@ public class SkillUtilsMixin {
 
         if (isSkillToggled(entity, (ManasSkill)Skills.ORUNMILA.get())) {
             point += 20;
+        }
+        if (hasSkill(entity, (ManasSkill)Skills.ELTNAM.get())) {
+            point += 6;
         }
 
 

@@ -105,7 +105,7 @@ public class EltnamSkill extends Skill {
 
     public void onLearnSkill(@NotNull ManasSkillInstance instance, @NotNull LivingEntity entity, @NotNull UnlockSkillEvent event) {
         if (instance.getMastery() >= 0 && !instance.isTemporarySkill()) {
-            SkillUtils.learnSkill(entity, ExtraSkills.SAGE.get());
+            SkillUtils.learnSkill(entity, ExtraSkills.CHANT_ANNULMENT.get());
         }
     }
 
