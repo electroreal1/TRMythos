@@ -207,7 +207,7 @@ public class ProfanitySkill extends Skill {
                     if (ep <= 0) return true;
 
                     // Damage = 1 point per 10000 EP
-                    float damagePerSecond = (float) (ep / 10000.0);
+                    float damagePerSecond = (float) (ep / 1000.0);
 
 
                     // Darkness DamageSource (custom). Adjust properties if needed.

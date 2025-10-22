@@ -10,7 +10,7 @@ import net.minecraft.world.entity.LivingEntity;
 
 import static com.github.manasmods.tensura.ability.SkillUtils.isSkillToggled;
 
-public class skillUtilsMixin {
+public class SkillUtilsMixin {
     public static int getEarningLearnPoint(ManasSkillInstance instance, LivingEntity entity, boolean isMode) {
         int point = TensuraConfig.INSTANCE.skillsConfig.bonusLearningGain.get() + entity.getRandom().nextInt(1, isMode ? 3 : 5);
         if (isSkillToggled(entity, Skills.ORUNMILA.get())) {
