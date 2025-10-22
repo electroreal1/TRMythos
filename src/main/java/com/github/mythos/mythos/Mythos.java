@@ -138,7 +138,7 @@ public class Mythos {
         String content = contentBuilder.toString();
         String[] newStarting = new String[]{"trmythos:canine", "trmythos:maiden", "trmythos:lesser_serpent"};
         String[] newRandom = new String[]{"trmythos:canine", "trmythos:maiden", "trmythos:lesser_serpent"};
-        String[] newSkills = new String[]{"trmythos:omniscient_eye", "trmythos:faker", "trmythos:purity"};
+        String[] newSkills = new String[]{"trmythos:omniscient_eye", "trmythos:faker", "trmythos:purity", "trmythos:eltnam"};
         String[] creatorSkills = new String[]{"trmythos:omniscient_eye"};
         String startingRacesKey = "startingRaces = [";
         String randomRacesKey = "possibleRandomRaces = [";
