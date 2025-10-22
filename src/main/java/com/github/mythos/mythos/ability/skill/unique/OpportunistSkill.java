@@ -1,7 +1,9 @@
 package com.github.mythos.mythos.ability.skill.unique;
 
+import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
+import com.github.manasmods.tensura.ability.skill.unique.SurvivorSkill;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -24,6 +26,10 @@ public class OpportunistSkill extends Skill {
                 event.setAmount(event.getAmount() * 10.0F);
                 this.addMasteryPoint(instance, entity);
         }
+    }
+
+    public boolean canBeSlotted(ManasSkillInstance instance) {
+        return instance.getMastery() < 0;
     }
 
     public void onTakenDamage(ManasSkillInstance instance, LivingDamageEvent event) {
