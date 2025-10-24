@@ -28,6 +28,7 @@ public class HoundOfHadesRace extends Race {
     @Override
     public float getPlayerSize() { return 4.0f; }
 
+
     @Override
     public double getBaseAttackDamage() {
         return 20.0f;
@@ -76,7 +77,7 @@ public class HoundOfHadesRace extends Race {
     @Override
     public List<TensuraSkill> getIntrinsicSkills(Player player) {
         List<TensuraSkill> list = new ArrayList<>();
-        list.add(UniqueSkills.DIVINE_BERSERKER.get());
+       // list.add(UniqueSkills.DIVINE_BERSERKER.get());
         list.add(IntrinsicSkills.POSSESSION.get());
         return list;
     }

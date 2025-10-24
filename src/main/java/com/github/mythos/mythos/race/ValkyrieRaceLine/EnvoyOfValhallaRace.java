@@ -24,7 +24,7 @@ public class EnvoyOfValhallaRace extends Race {
 
     @Override
     public double getBaseHealth() {
-        return 1500;
+        return 3000;
     }
 
     @Override
