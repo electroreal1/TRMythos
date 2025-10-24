@@ -1,6 +1,7 @@
 package com.github.mythos.mythos;
 
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
+import com.github.mythos.mythos.client.screen.OrunScreen;
 import com.github.mythos.mythos.config.MythosConfig;
 import com.github.mythos.mythos.handler.SkillEvolutionHandler;
 import com.github.mythos.mythos.networking.MythosNetwork;
@@ -51,6 +52,7 @@ public class Mythos {
         MythosNetwork.register();
         MythosEntity.ENTITY_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
         MythosParticles.PARTICLE_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
+        //FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, MythosConfig.SPEC, getConfigFileName("mythos-common"));
         LOGGER.info("Mythos has been loaded!");
     }
@@ -66,6 +68,7 @@ public class Mythos {
     @SubscribeEvent
     public void onCommonSetup(FMLCommonSetupEvent event) {
         LOGGER.info("Common Setup");
+       // FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
         event.enqueueWork(MythosNetwork::register);
         if (this.isFirstLaunch()) {
             this.editTOMLFile();
@@ -80,7 +83,7 @@ public class Mythos {
 
     private void onClientSetup(FMLClientSetupEvent event) {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
-        //MenuScreens.register(MythosMenuTypes.ORUN_MENU.get(), OrunScreen::new);
+        MenuScreens.register(MythosMenuTypes.ORUN_MENU.get(), OrunScreen::new);
     }
 
     private boolean isFirstLaunch() {

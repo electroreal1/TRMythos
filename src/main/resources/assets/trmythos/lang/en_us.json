@@ -16,6 +16,13 @@
   "trmythos.skill.example_intrinsic": "Example Intrinsic",
   "trmythos.skill.example_intrinsic.description": "This is a description for the intrinsic skill. Edit this description using the en_us.json file.",
 
+  "trmythos.effect.avalon_regeneration": "Avalon Regeneration",
+  "trmythos.effect.apostle_regeneration": "Apostle Regeneration",
+  "trmythos.effect.rapid_regeneration": "Rapid Regeneration",
+  "trmythos.effect.vaporization_freeze": "Vaporization Freeze",
+  "trmythos.effect.blood_drain": "Blood Drain",
+  "trmythos.effect.child_of_the_plane_effect": "Child of the Plane Effect",
+
   "trmythos.skill.learn_failed":  "Failed to learn due to lack of magicules",
   "trmythos.skill.martial_master.obtainment":  "Your proficiency in martial arts grows. With this advancement in your growth, the world has seen it necessary to reward you. Martial Master has been engraved into your soul.",
   "trmythos.skill.cook.obtainment": "Your creations have become known to create miracles. A new power has awakened within you in acknowledgement of this. Cook has been engraved into your soul.",
@@ -24,7 +31,7 @@
   "trmythos.skill.omniscient_eye.description": "See all, comprehend all, able to peer into the souls of others and mimic that which makes up their being.",
 
   "trmythos.skill.orunmila": "Orunmila",
-  "trmythos.skill.orunmila.description": "Your consciousness has elevated. Your mind has become so advanced, it now acts as a sort of library - a repository for all the world's information, whose knowledge only you are privy to search through as you please.",
+  "trmythos.skill.orunmila.description": "Your consciousness has elevated. Your mind has become so advanced, it now acts as a sort of library - a repository for all the world's information, whose knowledge only you are privy to search through as you please. (WIP, I HATE GUIs WITH ALL MY BEING).",
 
   "trmythos.skill.bloodsucker": "Bloodsucker",
   "trmythos.skill.bloodsucker.description": "Awaken to a much greater power at the measly cost of your humanity.",
@@ -55,6 +62,9 @@
   "trmythos.skill.purity.description": "Cleanse the world of its evils, purging sin from its soil as the embodiment of purity.",
   "trmythos.skill.purity.purification": "Purification",
   "trmythos.skill.purity.justice": "Justice",
+
+  "trmythos.skill.child_of_the_plane": "Child of the Plane",
+  "trmythos.skill.child_of_the_plane.description": "When the plane itself takes notice, even gods must bow.",
 
   "trmythos.skill.profanity": "§0Profanity",
   "trmythos.skill.profanity.description": "§0Embody the malice of the world, blotting out the light with the darkness of sin and depravity.",

@@ -107,6 +107,20 @@ public class PuritySkill extends Skill {
         event.setAmount(event.getAmount() / 2f);
     }
 
+    public void PurityDamageCap(LivingHurtEvent event) {
+        final LivingEntity target = event.getEntity();
+        if (target.getLevel().isClientSide()) return;
+
+        final double cap = MythosSkillsConfig.purityDamageCap.get();
+
+        float amount = event.getAmount();
+        if (amount <= 0f || Float.isNaN(amount) || Float.isInfinite(amount)) return;
+
+        if (amount > cap) {
+            event.setAmount((float) cap);
+        }
+    }
+
     private void spawnLightArrows(ManasSkillInstance instance, LivingEntity entity, Vec3 pos, int arrowAmount, double distance) {
         int arrowRot = 360 / arrowAmount;
         int souls = TensuraPlayerCapability.getSoulPoints((Player) entity) / 1000;
@@ -121,8 +135,15 @@ public class PuritySkill extends Skill {
             if (instance.isMastered(entity)) {
                 arrow.setDamage(12.5f + souls);
             } else arrow.setDamage(6.25f + souls);
+
+            final double cap = MythosSkillsConfig.purityDamageCap.get();
+
+            if (arrow.getDamage() >= cap) {
+                arrow.setDamage((float) cap);
+            }
+
             arrow.setMpCost(this.magiculeCost(entity, instance) / (double)arrowAmount);
-            arrow.setSpiritAttack(true);
+            arrow.setSpiritAttack(false);
             arrow.setSkill(instance);
             entity.getLevel().addFreshEntity(arrow);
         }

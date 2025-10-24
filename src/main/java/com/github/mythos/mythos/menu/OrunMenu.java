@@ -1,11 +1,14 @@
 package com.github.mythos.mythos.menu;
 
 import com.github.mythos.mythos.registry.menu.MythosMenuTypes;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.ItemStack;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,23 +16,38 @@ public class OrunMenu extends AbstractContainerMenu {
 
     public List<ResourceLocation> skills;
     public UUID targetUUID;
-    public boolean isPaste;
 
-    public OrunMenu(int id, Inventory playerInventory) {
-        super(MythosMenuTypes.ORUN_MENU.get(), id);
+    public OrunMenu(int pContainerId, Inventory inventory, FriendlyByteBuf buf) {
+        this(pContainerId, inventory);
+        this.targetUUID = buf.readUUID();
+        this.skills = buf.readList(FriendlyByteBuf::readResourceLocation);
     }
 
-    @Override
-    public boolean stillValid(net.minecraft.world.entity.player.Player player) {
+    public OrunMenu(int pContainerId, Inventory inventory) {
+        super((MenuType) MythosMenuTypes.ORUN_MENU.get(), pContainerId);
+    }
+
+
+    public boolean stillValid(Player pPlayer) {
         return true;
     }
 
-    @Override
-    public net.minecraft.world.item.ItemStack quickMoveStack(net.minecraft.world.entity.player.Player player, int index) {
-        return net.minecraft.world.item.ItemStack.EMPTY;
+    public ItemStack quickMoveStack(Player pPlayer, int pIndex) {
+        return ItemStack.EMPTY;
     }
 
-    public Arrays getSkills() {
-        return null;
+    public boolean check() {
+        return true;
     }
+
+    public List<ResourceLocation> getSkills() {
+        return this.skills;
+    }
+
+    public UUID getTargetUUID() {
+        return this.targetUUID;
+    }
+
+
+
 }

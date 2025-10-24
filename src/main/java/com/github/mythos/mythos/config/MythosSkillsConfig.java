@@ -19,6 +19,7 @@ public class MythosSkillsConfig {
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> fakerSkillReinforceEnchantments;
     public static ForgeConfigSpec.DoubleValue vassalAssemblyChance;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> purityImmuneEffects;
+    public static ForgeConfigSpec.DoubleValue purityDamageCap;
     public static ForgeConfigSpec.BooleanValue enableFighterEvolution;
     public static ForgeConfigSpec.BooleanValue loseSkillOnFighterEvolution;
     public static ForgeConfigSpec.BooleanValue enableChefEvolution;
@@ -98,6 +99,10 @@ public class MythosSkillsConfig {
                         ),
                         o -> o instanceof String
                 );
+        purityDamageCap = builder
+                .comment("maximum amount of damage that can be dealt by purity's justice ability (0.0–10000).")
+                .defineInRange("vassalAssemblyChance", 1000, 0.0, 10000.0);
+
 
         vassalAssemblyChance = builder
                 .comment("Chance (0.0–1.0) for [True Passive] Vassal Assembly to trigger when damaged.")

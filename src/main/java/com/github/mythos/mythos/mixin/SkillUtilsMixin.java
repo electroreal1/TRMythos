@@ -4,6 +4,7 @@ import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.tensura.ability.SkillUtils;
+import com.github.mythos.mythos.ability.skill.unique.ChildOfThePlaneSkill;
 import com.github.mythos.mythos.registry.skill.Skills;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import io.github.Memoires.trmysticism.registry.skill.UltimateSkills;
@@ -51,7 +52,6 @@ public class SkillUtilsMixin {
             point += 6;
         }
 
-
         return point;
     }
 
@@ -96,7 +96,7 @@ public class SkillUtilsMixin {
             at = {@At("RETURN")},
             remap = false
     )
-    private static boolean customReduction(boolean original, LivingEntity entity) {
+    private static boolean NullToResistAndResistToNothing(boolean original, LivingEntity entity) {
         return original ||
                 isSkillInSlot(entity, (ManasSkill)Skills.ORUNMILA.get()) ||
                 isSkillInSlot(entity, (ManasSkill)Skills.CHILD_OF_THE_PLANE.get());
@@ -108,18 +108,11 @@ public class SkillUtilsMixin {
             at = {@At("RETURN")},
             remap = false
     )
-    private static float modifyMagiculeGain(float original, Player player, boolean majin) {
-        float bonus = original;
-        if (hasSkill(player, (ManasSkill)Skills.CHILD_OF_THE_PLANE.get())) {
-            Optional<ManasSkillInstance> instance = SkillAPI.getSkillsFrom(player).getSkill((ManasSkill) Skills.CHILD_OF_THE_PLANE.get());
-            if (instance.isPresent()) {
-                bonus = ((ManasSkillInstance)instance.get()).isMastered(player) ? 0.075F : 0.05F;
-                if (((ManasSkillInstance)instance.get()).getOrCreateTag().getBoolean("ChildOfThePlane")) {
-                    bonus *= 3.0F;
-                }
-            }
-        }
-        return bonus;
+    private static float MythosMagiculeGain(float original, Player player, boolean majin) {
+
+        original += ChildOfThePlaneSkill.getChildOfThePlaneBoost(player, true, majin);
+
+        return original;
     }
 
     @ModifyReturnValue(
@@ -127,21 +120,12 @@ public class SkillUtilsMixin {
             at = {@At("RETURN")},
             remap = false
     )
-    private static float modifyAuraGain(float original, Player player, boolean majin) {
-        float bonus = original;
-        if (hasSkill(player, (ManasSkill)Skills.CHILD_OF_THE_PLANE.get())) {
-            Optional<ManasSkillInstance> instance = SkillAPI.getSkillsFrom(player).getSkill((ManasSkill)Skills.CHILD_OF_THE_PLANE.get());
-            if (instance.isPresent()) {
-                bonus = ((ManasSkillInstance)instance.get()).isMastered(player) ? 0.075F : 0.05F;
-                if (((ManasSkillInstance)instance.get()).getOrCreateTag().getBoolean("ChildOfThePlane")) {
-                    bonus *= 3.0F;
-                }
-            }
-        }
-        return bonus;
+    private static float MythosAuraGain(float original, Player player, boolean majin) {
+
+        original += ChildOfThePlaneSkill.getChildOfThePlaneBoost(player, false, majin);
+
+        return original;
     }
-
-
 
 }
 

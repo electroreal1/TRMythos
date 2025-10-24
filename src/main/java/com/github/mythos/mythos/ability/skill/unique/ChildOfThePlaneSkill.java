@@ -2,7 +2,9 @@ package com.github.mythos.mythos.ability.skill.unique;
 
 import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
+import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.tensura.ability.SkillHelper;
+import com.github.manasmods.tensura.ability.TensuraSkill;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.ability.skill.intrinsic.DragonModeSkill;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
@@ -12,6 +14,8 @@ import com.github.manasmods.tensura.effect.template.Transformation;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.registry.particle.TensuraParticles;
 import com.github.mythos.mythos.registry.MythosMobEffects;
+import com.github.mythos.mythos.registry.skill.Skills;
+import io.github.Memoires.trmysticism.network.MysticismNetwork;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -21,6 +25,8 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+
+import java.util.Optional;
 
 
 public class ChildOfThePlaneSkill extends Skill implements Transformation {
@@ -40,11 +46,7 @@ public class ChildOfThePlaneSkill extends Skill implements Transformation {
     public boolean canTick(ManasSkillInstance instance, LivingEntity entity) {
         return entity.hasEffect((MobEffect) MythosMobEffects.CHILD_OF_THE_PLANE.get());
     }
-    @Override
-    public void onTick(ManasSkillInstance instance, LivingEntity living) {
-        instance.getOrCreateTag().getBoolean("ChildOfThePlane");
-        return;
-    }
+
 
     public boolean canIgnoreCoolDown(ManasSkillInstance instance, LivingEntity entity) {
         return instance.getOrCreateTag().getBoolean("ChildOfThePlane");
@@ -88,9 +90,6 @@ public class ChildOfThePlaneSkill extends Skill implements Transformation {
                 if (entity instanceof Player player) {
                     int amplifier = player.getServer().getPlayerList().getPlayerCount();
 
-                    // Optional: cap the amplifier if you don’t want it to go too high
-                    amplifier = Math.min(amplifier, 10);
-
                     entity.addEffect(new MobEffectInstance(
                             (MobEffect) MythosMobEffects.CHILD_OF_THE_PLANE.get(),
                             this.isMastered(instance, entity) ? 7200 : 3600,
@@ -111,5 +110,21 @@ public class ChildOfThePlaneSkill extends Skill implements Transformation {
             }
 
         }
+    }
+
+    public static float getChildOfThePlaneBoost(Player player, boolean magicule, boolean majin) {
+        TensuraSkill skill = (TensuraSkill) Skills.CHILD_OF_THE_PLANE.get();
+
+        Optional<ManasSkillInstance> optional = SkillAPI.getSkillsFrom(player).getSkill(skill);
+        if (optional.isEmpty()) {
+            return 0.0F;
+        }
+
+        else if (majin) {
+            return magicule ? 0.08F : 0.07F;
+        } else {
+            return magicule ? 0.07F : 0.08F;
+        }
+
     }
 }

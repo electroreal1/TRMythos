@@ -1,6 +1,7 @@
 package com.github.mythos.mythos.networking;
 
 import com.github.manasmods.tensura.network.play2client.SyncPlayerCapabilityPacket;
+import com.github.mythos.mythos.networking.play2server.RequestSkillCopyOrunmilaPacket;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -28,7 +29,7 @@ public class MythosNetwork {
     }
 
     public static void register() {
-
+        registerPacket(RequestSkillCopyOrunmilaPacket.class, RequestSkillCopyOrunmilaPacket::toBytes, RequestSkillCopyOrunmilaPacket::new, RequestSkillCopyOrunmilaPacket::handle);
     }
 
     private static <MSG> void registerPacket(Class<MSG> messageType, BiConsumer<MSG, FriendlyByteBuf> encoder, Function<FriendlyByteBuf, MSG> decoder, BiConsumer<MSG, Supplier<NetworkEvent.Context>> messageConsumer) {

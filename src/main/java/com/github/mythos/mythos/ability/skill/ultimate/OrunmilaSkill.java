@@ -174,15 +174,14 @@ public class OrunmilaSkill extends Skill {
         if (!copyableSkills.isEmpty()) {
             player.openMenu(new MenuProvider() {
 
-                public AbstractContainerMenu createMenu(int id, Inventory inv, Player p) {
-                    OrunMenu menu = new OrunMenu(id, inv);
+                public AbstractContainerMenu createMenu(int pContainerId, Inventory inventory, Player p) {
+                    OrunMenu menu = new OrunMenu(pContainerId, inventory);
 
-                    // Assign extra fields
                     menu.skills = copyableSkills.stream()
                             .map(Skill::getRegistryName)
                             .collect(Collectors.toList());
                     menu.targetUUID = target.getUUID();
-                    menu.isPaste = true;
+
 
                     return menu;
                 }
@@ -287,13 +286,12 @@ public class OrunmilaSkill extends Skill {
 
         if (target instanceof CloneEntity) {
             serverPlayer.displayClientMessage(
-                    Component.translatable("trmysticism.skill.viciel.clone")
+                    Component.translatable("trmythos.skill.orunmila.clone")
                             .withStyle(ChatFormatting.RED), false
             );
             return;
         }
 
-        // Collect copyable skills
         SkillStorage targetStorage = SkillAPI.getSkillsFrom(target);
         if (targetStorage == null) return;
 
@@ -324,17 +322,16 @@ public class OrunmilaSkill extends Skill {
 
             @Override
             public AbstractContainerMenu createMenu(int id, Inventory inv, Player p) {
-                // Correct constructor for Forge menu
+
                 OrunMenu menu = new OrunMenu(id, inv);
 
-                // Assign extra data
                 menu.skills = copyableSkills.stream()
                         .filter(s -> s instanceof Skill)
                         .map(s -> ((Skill) s).getRegistryName())
                         .filter(Objects::nonNull)
                         .toList();
                 menu.targetUUID = target.getUUID();
-                menu.isPaste = true;
+
 
                 return menu;
             }
@@ -345,7 +342,6 @@ public class OrunmilaSkill extends Skill {
 
             Level level = player.level;
 
-            // Raytrace target
             double reach = 10D;
             Vec3 eyePos = player.getEyePosition(1.0F);
             Vec3 lookVec = player.getLookAngle();
@@ -364,7 +360,7 @@ public class OrunmilaSkill extends Skill {
             AttributeInstance shpAttr = target.getAttribute(TensuraAttributeRegistry.MAX_SPIRITUAL_HEALTH.get());
 
             if (player.isShiftKeyDown()) {
-                // Restore permanent damage
+
                 if (hpAttr != null && hpAttr.getModifier(UUID.fromString(DESTROY_RECORD)) != null)
                     hpAttr.removePermanentModifier(UUID.fromString(DESTROY_RECORD));
 
@@ -376,7 +372,7 @@ public class OrunmilaSkill extends Skill {
                 player.displayClientMessage(Component.literal("You restore the torn page of the record.")
                         .withStyle(ChatFormatting.GREEN), true);
             } else {
-                // Destroy half HP & SHP permanently
+
                 if (hpAttr != null) {
                     double reduction = hpAttr.getBaseValue() / 2.0 * -1.0;
                     AttributeModifier permDamage = new AttributeModifier(UUID.fromString(DESTROY_RECORD), "DestroyRecordHP", reduction,
