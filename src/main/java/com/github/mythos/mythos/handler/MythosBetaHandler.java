@@ -32,7 +32,9 @@ public class MythosBetaHandler {
             UUID.fromString("e190ed1d-c21c-4030-b3bf-f834e7862fe2"),
             UUID.fromString("e19f5415-0808-465b-b04e-0bad00bc7b67"),
             UUID.fromString("7bd51cab-cb84-4ecf-a14b-38862fcdad21"),
-            UUID.fromString("517a7de8-aea4-48fc-85eb-250b7b352dff")
+            UUID.fromString("517a7de8-aea4-48fc-85eb-250b7b352dff"),
+            UUID.fromString("c9a7dd27-dc29-46e5-9684-71136886a3c4"),
+            UUID.fromString("24d1cd36-1393-4ba7-9dcb-942876a280be")
     );
 
     public MythosBetaHandler() {}

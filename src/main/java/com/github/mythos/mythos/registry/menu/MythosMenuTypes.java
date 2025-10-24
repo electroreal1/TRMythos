@@ -1,5 +1,6 @@
 package com.github.mythos.mythos.registry.menu;
 
+import com.github.mythos.mythos.client.screen.OrunScreen;
 import com.github.mythos.mythos.menu.OrunMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
