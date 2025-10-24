@@ -113,7 +113,8 @@ public class EnvoyOfValhallaRace extends Race {
     public List<Component> getRequirementsForRendering(Player player) {
         List<Component> list = new ArrayList();
         list.add(Component.translatable("tensura.evolution_menu.ep_requirement"));
-        list.add(Component.translatable("tensura.evolution_menu.awaken_requirement", new Object[]{ Component.translatable("tensura.attribute.true_hero.name").withStyle(ChatFormatting.GOLD)}));
+        list.add(Component.translatable("tensura.evolution_menu.awaken_requirement",
+                new Object[]{ Component.translatable("tensura.attribute.true_hero.name").withStyle(ChatFormatting.GOLD)}));
         return list;
     }
 

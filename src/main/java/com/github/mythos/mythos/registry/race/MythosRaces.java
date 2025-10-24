@@ -4,6 +4,11 @@ import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.mythos.mythos.Mythos;
 import com.github.mythos.mythos.race.CanineRaceLines.CerberusRaceLine.HoundOfHadesRace;
 import com.github.mythos.mythos.race.CanineRaceLines.FenrirRaceLine.HeraldOfRagnarokRace;
+import com.github.mythos.mythos.race.GodlingLines.BuddingDemigodRace;
+import com.github.mythos.mythos.race.GodlingLines.EgyptianPantheon.DivineHostRace;
+import com.github.mythos.mythos.race.GodlingLines.GodlingRace;
+import com.github.mythos.mythos.race.GodlingLines.GreekPantheon.SemideusRace;
+import com.github.mythos.mythos.race.GodlingLines.NorsePantheon.UulbornRace;
 import com.github.mythos.mythos.race.JormungandrRaceLine.*;
 import com.github.mythos.mythos.race.CanineRaceLines.CanineRace;
 import com.github.mythos.mythos.race.CanineRaceLines.CerberusRaceLine.CerberusRace;
@@ -49,6 +54,12 @@ public class MythosRaces {
     public static final ResourceLocation VALKYRIE_RACE = new ResourceLocation(Mythos.MOD_ID, "valkyrie");
     public static final ResourceLocation ENVOY_OF_VALHALLA = new ResourceLocation(Mythos.MOD_ID, "envoy_of_valhalla");
 
+    // Godling Races
+    public static final ResourceLocation GODLING_RACE = new ResourceLocation(Mythos.MOD_ID, "godling");
+    public static final ResourceLocation BUDDING_DEMIGOD = new ResourceLocation(Mythos.MOD_ID, "budding_demigod");
+    public static final ResourceLocation SEMIDEUS = new ResourceLocation(Mythos.MOD_ID, "semideus");
+    public static final ResourceLocation UUL_BORN = new ResourceLocation(Mythos.MOD_ID, "uul_born");
+    public static final ResourceLocation DIVINE_HOST = new ResourceLocation(Mythos.MOD_ID, "divine_host");
     /**
      * Make sure that you register the race, otherwise it will not show up correctly in the selection menu
      * @param event
@@ -111,6 +122,24 @@ public class MythosRaces {
         event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
             helper.register("envoy_of_valhalla", new EnvoyOfValhallaRace());
         });
+
+        // Godling Races
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("godling", new GodlingRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("budding_demigod", new BuddingDemigodRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("semideus", new SemideusRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("uul_born", new UulbornRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("divine_host", new DivineHostRace());
+        });
+
 
     }
 

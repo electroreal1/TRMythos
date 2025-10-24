@@ -22,7 +22,6 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -34,7 +33,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import org.jetbrains.annotations.NotNull;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class OrunScreen extends AbstractContainerScreen<OrunMenu> {
     private static final ResourceLocation BACKGROUND = new ResourceLocation("tensura", "textures/gui/skill_creator/skill_creator.png");
@@ -64,8 +64,12 @@ public class OrunScreen extends AbstractContainerScreen<OrunMenu> {
         this.targetUUID = ((OrunMenu)this.menu).getTargetUUID();
     }
 
+    public static final Logger LOG = LogManager.getLogger("Mythos");
+
     @Override
     protected void init() {
+        LOG.info("OrunScreen.init() called. searchField = {}", this.searchField);
+        LOG.info("skills size = {}", skills == null ? "null" : skills.size());
         super.init();
         this.scrollOffs = 0.0F;
         this.startIndex = 0;
@@ -103,7 +107,6 @@ public class OrunScreen extends AbstractContainerScreen<OrunMenu> {
                 }
         );
 
-        // Create gain skill button
         int buttonX = this.getGuiLeft() + 162;
         int buttonY = this.getGuiTop() + 116;
 
@@ -124,6 +127,7 @@ public class OrunScreen extends AbstractContainerScreen<OrunMenu> {
                 this.menu::check
         );
         this.addRenderableWidget(gainSkillButton);
+
     }
 
 //        OrunMenu orunMenu = (OrunMenu)this.menu;
@@ -135,6 +139,9 @@ public class OrunScreen extends AbstractContainerScreen<OrunMenu> {
 
     @Override
     protected void renderBg(PoseStack poseStack, float pPartialTick, int pX, int pY) {
+        LOG.info("OrunScreen.renderBg() called scrollsOffs={} startIndex={}", this.scrollOffs, this.startIndex);
+        LOG.info("skills size = {}", skills == null ? "null" : skills.size());
+        fill(poseStack, this.searchField.x, this.searchField.y, this.searchField.x + this.searchField.getWidth(), this.searchField.y + this.searchField.getHeight(), 0x80FF0000);
         this.renderBackground(poseStack);
 
         // Draw background

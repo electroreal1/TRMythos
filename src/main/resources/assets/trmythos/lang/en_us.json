@@ -98,5 +98,16 @@
   "trmythos.race.soul_courier": "Soul Courier",
   "trmythos.race.valkyrie": "Valkyrie",
   "trmythos.evolution_menu.boss_kill_requirement": "Kill Bosses",
-  "trmythos.race.envoy_of_valhalla": "Envoy of Valhalla"
+  "trmythos.race.envoy_of_valhalla": "Envoy of Valhalla",
+
+  "trmythos.race.godling": "Godling",
+  "trmythos.race.godling.notes": "The blood of a being more divine in nature courses through your veins, granting you more power than most could even dream of.",
+  "trmythos.race.budding_demigod": "Budding Demigod",
+  "trmythos.race.semideus": "Semideus",
+  "trmythos.race.uul_born": "Uul-born",
+  "trmythos.race.divine_host": "Divine Host",
+  "trmythos.race.require.hero_egg": "Hero Egg",
+  "trmythos.race.require.demon_lord_seed": "Demon Lord Seed",
+  "trmythos.race.uul_born.no_egg_seed": "Must not be a Hero Egg/Demon Lord Seed",
+  "trmythos.evolution_menu.pre_awakening": "Become a"
 }

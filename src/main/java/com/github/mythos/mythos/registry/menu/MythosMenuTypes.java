@@ -4,6 +4,7 @@ import com.github.mythos.mythos.client.screen.OrunScreen;
 import com.github.mythos.mythos.menu.OrunMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -18,4 +19,8 @@ public class MythosMenuTypes {
     public static final RegistryObject<MenuType<OrunMenu>> ORUN_MENU = MENU_TYPES.register("orun_menu",
             () -> IForgeMenuType.create((id, inv, data) -> new OrunMenu(id, inv))
     );
+
+    public static void register(IEventBus eventBus) {
+        MENU_TYPES.register(eventBus);
+    }
 }
