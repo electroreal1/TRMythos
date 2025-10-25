@@ -10,10 +10,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class MythosSkillsConfig {
-    public static ForgeConfigSpec.ConfigValue<List<? extends String>> allowedUltimates = null;
-    public static ForgeConfigSpec.ConfigValue<List<? extends String>> obtainableUltimates = null;
-    //public static ForgeConfigSpec.BooleanValue canAttackOtherPlayers;
-    //public static ForgeConfigSpec.BooleanValue enableUniqueSkillCompatibilityForUltimates;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> fakerSkillRestrictedItems;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> fakerSkillReinforceEnchantments;
     public static ForgeConfigSpec.DoubleValue vassalAssemblyChance;
@@ -23,6 +19,7 @@ public class MythosSkillsConfig {
     public static ForgeConfigSpec.BooleanValue loseSkillOnFighterEvolution;
     public static ForgeConfigSpec.BooleanValue enableChefEvolution;
     public static ForgeConfigSpec.BooleanValue loseSkillOnChefEvolution;
+    public static ForgeConfigSpec.ConfigValue<List<? extends String>> racesThatCanCompeteForChildOfThePlane = null;
 
 
 
@@ -102,7 +99,6 @@ public class MythosSkillsConfig {
                 .comment("maximum amount of damage that can be dealt by purity's justice ability (0.0–10000).")
                 .defineInRange("purityDamageCap", 1000, 0.0, 10000.0);
 
-
         vassalAssemblyChance = builder
                 .comment("Chance (0.0–1.0) for [True Passive] Vassal Assembly to trigger when damaged.")
                 .defineInRange("vassalAssemblyChance", 0.2, 0.0, 1.0);
@@ -123,6 +119,13 @@ public class MythosSkillsConfig {
                 .comment("If true, the Chef skill is lost when evolving to Cook.")
                 .define("loseSkillOnChefEvolution", true);
 
+        racesThatCanCompeteForChildOfThePlane = builder
+                .comment("List of races that can compete for Child of the Plane.")
+                .defineList("eligibleRaces",
+                        List.of("herald_of_ragnarok", "hound_of_hades", "jormungandr", "envoy_of_valhalla"),
+                        obj -> obj instanceof String
+                );
+
         builder.pop(); // pop SkillsConfig
     }
 
@@ -134,7 +137,6 @@ public class MythosSkillsConfig {
     public static List<? extends String> getFakerSkillReinforceEnchantments() {
         return fakerSkillReinforceEnchantments.get();
     }
-    // Getter for Purity skill immune effects
     public static List<MobEffect> getPurityImmuneEffects() {
         return purityImmuneEffects.get().stream()
                 .map(id -> Registry.MOB_EFFECT.getOptional(new ResourceLocation((String) id)).orElse(null))
@@ -157,39 +159,12 @@ public class MythosSkillsConfig {
     public static boolean loseChefOnEvolution() {
         return loseSkillOnChefEvolution.get();
     }
+    public static List<? extends String> getRacesThatCanCompeteForChildOfThePlane() {
+        return racesThatCanCompeteForChildOfThePlane.get();
+    }
 
 
 }
 
-
-    //  public MythosSkillsConfig(ForgeConfigSpec.Builder builder) {
-     //   builder.push("availableUltimateSkills");
-    //    allowedUltimates = builder.comment("The Ultimate Skills that are allowed to be used.").comment("Default: [\"trmysticism:adephaga\", \"trmysticism:ame_no_uzume_no_mikoto\", \"trmysticism:amaterasu\", \"trmysticism:antaeus\", \"trmysticism:antevorta\",\n                                \"trmysticism:antithesis\", \"trmysticism:apollo\", \"trmysticism:asmodeus\", \"trmysticism:beelzebub\", \"trmysticism:belphegor\",\n                                \"trmysticism:bushyasta\", \"trmysticism:dionysus\", \"trmysticism:galileo\", \"trmysticism:gilgamesh\", \"trmysticism:hades\",\n                                \"trmysticism:heracles\", \"trmysticism:hestia\", \"trmysticism:ignis\", \"trmysticism:invictus\", \"trmysticism:laverna\",\n                                \"trmysticism:mephisto\", \"trmysticism:oizys\", \"trmysticism:pernida\", \"trmysticism:sandalphon\",\n                                \"trmysticism:sariel\", \"trmysticism:satanael\", \"trmysticism:sephirot\", \"trmysticism:susanoo\",\n                                \"trmysticism:takemikazuchi\", \"trmysticism:tsukuyomi\", \"trmysticism:uriel\", \"trmysticism:viciel\",\n                                \"trmysticism:xezbeth\"]").defineList("availableUltimateSkills", Arrays.asList("trmysticism:adephaga", "trmysticism:ame_no_uzume_no_mikoto", "trmysticism:amaterasu", "trmysticism:antaeus", "trmysticism:antevorta", "trmysticism:antithesis", "trmysticism:apollo", "trmysticism:asmodeus", "trmysticism:beelzebub", "trmysticism:belphegor", "trmysticism:bushyasta", "trmysticism:dionysus", "trmysticism:galileo", "trmysticism:gilgamesh", "trmysticism:hades", "trmysticism:heracles", "trmysticism:hestia", "trmysticism:ignis", "trmysticism:invictus", "trmysticism:laverna", "trmysticism:mephisto", "trmysticism:oizys", "trmysticism:pernida", "trmysticism:sandalphon", "trmysticism:sariel", "trmysticism:satanael", "trmysticism:sephirot", "trmysticism:susanoo", "trmysticism:takemikazuchi", "trmysticism:tsukuyomi", "trmysticism:uriel", "trmysticism:viciel", "trmysticism:xezbeth"), (check) -> {
-     //       return true;
-    //    });
-      //  obtainableUltimates = builder.comment("The Ultimate Skills that can be obtained.").comment(Arrays.asList(), (check) -> {
-     //       return true;
-   //     });
-     //   builder.pop();
-   //     builder.push("SkillsConfig");
-     //   canAttackOtherPlayers = builder.comment("If set to true, players with Ame-no-Uzume-no-Mikoto will force other players to attack the spotlit target. For more info, please check the wiki on what the effect does.").comment("Default: true").comment("Allowed values: \"true/false\"").define("canAttackOtherPlayers", true);
-     //   enableUniqueSkillCompatibilityForUltimates = builder.comment("If set to true, players with Guardian or Gourmet has a small chance to receive the other skill needed to create Beelzebub from Royal Orcs.").comment("If set to true, players with Captivator or Bewilder has a small chance to receive the other skill needed to create Ame-no-Uzume-no-Mikoto from Ai Hoshino and Kirara Mizutani respectively.").comment("Default: true").comment("Allowed values: \"true/false\"").define("enableUniqueSkillCompatibilityForUltimates", true);
-   // }
-
-   // public static List<? extends String> getAllowedUltimates() {
-      //  return (List)allowedUltimates.get();
-   // }
-
-    //public static List<? extends String> getObtainableUltimates() {
-    //    return (List)obtainableUltimates.get();
-  //  }
-
-    // public static boolean getAmeNoUzumePlayerAttack() {
-      //  return (Boolean)canAttackOtherPlayers.get();
-  //  }
-
-   // public static boolean getSkillUltimateCompatibility() {
-    //    return (Boolean)enableUniqueSkillCompatibilityForUltimates.get();
-   // }
 
 

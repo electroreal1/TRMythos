@@ -83,8 +83,8 @@ public class SkillEvolutionMechanics {
             storage.getSkill(chefSkill).ifPresent(storage::forgetSkill);
         }
 
-        if (!MythosSkillsConfig.isFighterEvolutionEnabled()) return;
-        if (MythosSkillsConfig.loseFighterOnEvolution()) {
+        if (!MythosSkillsConfig.isChefEvolutionEnabled()) return;
+        if (MythosSkillsConfig.loseChefOnEvolution()) {
             storage.getSkill(chefSkill).ifPresent(storage::forgetSkill);
         }
 
