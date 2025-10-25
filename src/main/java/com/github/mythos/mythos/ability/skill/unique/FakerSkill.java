@@ -1,6 +1,5 @@
 package com.github.mythos.mythos.ability.skill.unique;
 
-import com.github.lucifel.virtuoso.registry.skill.IntrinsicSkills;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
@@ -8,8 +7,6 @@ import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.ability.skill.extra.ThoughtAccelerationSkill;
-import com.github.manasmods.tensura.ability.skill.intrinsic.PossessionSkill;
-import com.github.manasmods.tensura.ability.skill.unique.AbsoluteSeveranceSkill;
 import com.github.manasmods.tensura.capability.skill.TensuraSkillCapability;
 import com.github.manasmods.tensura.registry.enchantment.TensuraEnchantments;
 import com.github.manasmods.tensura.registry.skill.UniqueSkills;
@@ -28,22 +25,19 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
-import java.util.LinkedHashMap;
+
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.function.Predicate;
 
@@ -88,7 +82,7 @@ public class FakerSkill extends Skill {
 
     public void onTick(ManasSkillInstance instance, LivingEntity entity) { // in a tick
         grantSevererIfMastered(instance, entity);
-        grantAvalon(instance, entity);
+        //grantAvalon(instance, entity);
         return;
     }
 
@@ -114,16 +108,16 @@ public class FakerSkill extends Skill {
         TensuraSkillCapability.sync(player);
     }
 
-    private void grantAvalon(ManasSkillInstance instance, LivingEntity entity) {
-        if (!(entity instanceof Player player)) return;
-        if (entity.level.isClientSide()) return;
-
-        SkillStorage storage = SkillAPI.getSkillsFrom(player);
-        Skill avalon = IntrinsicSkills.AVALON.get();
-
-        if (storage.getSkill(avalon).isPresent()) return;
-        storage.learnSkill(avalon);
-    }
+//    private void grantAvalon(ManasSkillInstance instance, LivingEntity entity) {
+//        if (!(entity instanceof Player player)) return;
+//        if (entity.level.isClientSide()) return;
+//
+//        SkillStorage storage = SkillAPI.getSkillsFrom(player);
+//        Skill avalon = IntrinsicSkills.AVALON.get();
+//
+//        if (storage.getSkill(avalon).isPresent()) return;
+//        storage.learnSkill(avalon);
+//    }
 
     public int modes() {
         return 3;
@@ -157,7 +151,6 @@ public class FakerSkill extends Skill {
     public void onPressed(ManasSkillInstance instance, LivingEntity entity) {
         switch (instance.getMode()) {
             case 1:
-                // Analytical mode logic (unchanged)
                 if (!SkillHelper.outOfMagicule(entity, instance)) {
                     if (entity instanceof Player) {
                         Player player = (Player) entity;

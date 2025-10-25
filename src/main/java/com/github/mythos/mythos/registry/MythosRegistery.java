@@ -11,4 +11,6 @@ public class MythosRegistery {
         Skills.init(modEventBus);
         MythosMobEffects.register(modEventBus);
         MythosEntity.register(modEventBus);
+      //  MythosClient.clientSetup((FMLClientSetupEvent) modEventBus);
+        MythosParticles.PARTICLE_TYPES.register(modEventBus);
     }}

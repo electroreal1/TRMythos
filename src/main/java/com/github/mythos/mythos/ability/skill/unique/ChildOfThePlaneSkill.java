@@ -1,24 +1,20 @@
 package com.github.mythos.mythos.ability.skill.unique;
 
-import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.TensuraSkill;
 import com.github.manasmods.tensura.ability.skill.Skill;
-import com.github.manasmods.tensura.ability.skill.intrinsic.DragonModeSkill;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
-import com.github.manasmods.tensura.effect.skill.DragonModeEffect;
 import com.github.manasmods.tensura.effect.template.Transformation;
-import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.registry.particle.TensuraParticles;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.registry.skill.Skills;
-import io.github.Memoires.trmysticism.network.MysticismNetwork;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffect;
@@ -26,6 +22,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
+import javax.annotation.Nullable;
 import java.util.Optional;
 
 
@@ -34,9 +31,9 @@ public class ChildOfThePlaneSkill extends Skill implements Transformation {
         super(SkillType.UNIQUE);
     }
 
-///     public @Nullable ResourceLocation getSkillIcon() {
-//        return new ResourceLocation("trmythos", "textures/skill/unique/child_of_the_plane.png");
-//    }
+     public @Nullable ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/unique/child_of_the_plane.png");
+    }
 
     @Override
     public double getObtainingEpCost() {
@@ -46,7 +43,6 @@ public class ChildOfThePlaneSkill extends Skill implements Transformation {
     public boolean canTick(ManasSkillInstance instance, LivingEntity entity) {
         return entity.hasEffect((MobEffect) MythosMobEffects.CHILD_OF_THE_PLANE.get());
     }
-
 
     public boolean canIgnoreCoolDown(ManasSkillInstance instance, LivingEntity entity) {
         return instance.getOrCreateTag().getBoolean("ChildOfThePlane");

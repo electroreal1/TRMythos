@@ -5,7 +5,6 @@ import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
 import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.ability.magic.Magic;
-import com.github.manasmods.tensura.ability.magic.spiritual.light.SolarFlareMagic;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
@@ -65,7 +64,6 @@ public class PuritySkill extends Skill {
                 cap.setMajin(false);
             }
         });
-        return;
     }
 
 
@@ -223,7 +221,7 @@ public class PuritySkill extends Skill {
                         if (changed) {
                             TensuraParticleHelper.addServerParticlesAroundSelf(target, ParticleTypes.SCULK_SOUL, 2.0);
                             entity.level.playSound(
-                                    null, // player who hears it, null = all
+                                    null,
                                     entity.getX(), entity.getY(), entity.getZ(),
                                     SoundEvents.BLAZE_SHOOT,
                                     SoundSource.PLAYERS,

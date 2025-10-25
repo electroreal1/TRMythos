@@ -1,15 +1,13 @@
 package com.github.mythos.mythos.registry.menu;
 
-import com.github.mythos.mythos.client.screen.OrunScreen;
 import com.github.mythos.mythos.menu.OrunMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class MythosMenuTypes {

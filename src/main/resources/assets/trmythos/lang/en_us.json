@@ -65,6 +65,11 @@
 
   "trmythos.skill.child_of_the_plane": "Child of the Plane",
   "trmythos.skill.child_of_the_plane.description": "When the plane itself takes notice, even gods must bow.",
+  "trmythos.skill.child_of_the_plane.mode": "default",
+
+  "trmythos.skill.crimson_tyrant": "§4Crimson Tyrant",
+  "trmythos.skill.crimson_tyrant.tyrants_malevolence": "§4Tyrant's Malevolence",
+  "trmythos.skill.crimson_tyrant.blood_sovereignty": "§4Blood Sovereignty",
 
   "trmythos.skill.profanity": "§0Profanity",
   "trmythos.skill.profanity.description": "§0Embody the malice of the world, blotting out the light with the darkness of sin and depravity.",

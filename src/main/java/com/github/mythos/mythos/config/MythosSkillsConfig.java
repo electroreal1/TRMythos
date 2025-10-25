@@ -1,6 +1,5 @@
 package com.github.mythos.mythos.config;
 
-import com.github.manasmods.tensura.effect.template.TensuraMobEffect;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
@@ -101,7 +100,7 @@ public class MythosSkillsConfig {
                 );
         purityDamageCap = builder
                 .comment("maximum amount of damage that can be dealt by purity's justice ability (0.0–10000).")
-                .defineInRange("vassalAssemblyChance", 1000, 0.0, 10000.0);
+                .defineInRange("purityDamageCap", 1000, 0.0, 10000.0);
 
 
         vassalAssemblyChance = builder
