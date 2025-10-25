@@ -2,6 +2,7 @@ package com.github.mythos.mythos;
 
 import com.github.mythos.mythos.client.screen.OrunScreen;
 import com.github.mythos.mythos.config.MythosConfig;
+import com.github.mythos.mythos.handler.CrimsonTyrantHandler;
 import com.github.mythos.mythos.handler.SkillEvolutionHandler;
 import com.github.mythos.mythos.networking.MythosNetwork;
 import com.github.mythos.mythos.registry.MythosEntity;
@@ -45,6 +46,7 @@ public class Mythos {
         modEventBus.addListener(this::onCommonSetup);
         MythosRegistery.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(SkillEvolutionHandler.class);
+        MinecraftForge.EVENT_BUS.register(CrimsonTyrantHandler.class);
         modEventBus.register(MythosRaces.class);
         MythosNetwork.register();
         MythosEntity.ENTITY_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());

@@ -31,20 +31,23 @@ public class CrimsonTyrantHandler {
 
     @SubscribeEvent
     public static void onLivingDeath(LivingDeathEvent event) {
+        LivingEntity victim = event.getEntity(); // entity that died
+
+        // Check if killer is a player
         if (!(event.getSource().getEntity() instanceof Player player)) return;
-        if (player.level.isClientSide) return;
-        Random rand = (Random) player.getRandom();
+        if (player == null || player.level.isClientSide) return;
+
+        Random rand = (Random) player.level.getRandom();
 
         SkillStorage storage = SkillAPI.getSkillsFrom(player);
         if (storage == null) return;
 
-        Skill crimsonTyrant = Skills.CRIMSON_TYRANT.get();
+        Skill CrimsonTyrant = Skills.CRIMSON_TYRANT.get();
         Skill ChildOfThePlane = Skills.CHILD_OF_THE_PLANE.get();
 
-        if (!storage.getSkill(crimsonTyrant).isPresent()) return;
+        if (!storage.getSkill(CrimsonTyrant).isPresent()) return;
 
-        LivingEntity victim = event.getEntity();
-
+        // Low HP warning
         if (player.getHealth() <= player.getMaxHealth() * 0.25) {
             player.displayClientMessage(
                     Component.literal("You must fight harder!, slay more!, SHED MORE BLOOD.")
@@ -52,84 +55,77 @@ public class CrimsonTyrantHandler {
             );
         }
 
-        // --- Player kill check ---
-        if (event.getSource().getEntity() == player) {
-            int streak = player.getPersistentData().getInt("TyrantKillStreak");
-            streak++;
-            player.getPersistentData().putInt("TyrantKillStreak", streak);
+        // --- Player kill streak ---
+        int streak = player.getPersistentData().getInt("TyrantKillStreak") + 1;
+        player.getPersistentData().putInt("TyrantKillStreak", streak);
 
-            if (streak == 2) {
-                player.displayClientMessage(
-                        Component.literal("LET THE CARNAGE BEGIN!")
-                                .withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD), false
-                );
-            } else if (streak == 3) {
-                player.displayClientMessage(
-                        Component.literal("Blood flows freely... and I shall bathe in it!")
-                                .withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD), false
-                );
-            } else if (streak == 5) {
-                player.displayClientMessage(
-                        Component.literal("A SYMPHONY OF CARNAGE!")
-                                .withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD), false
-                );
-            } else if (streak == 10) {
-                player.displayClientMessage(
-                        Component.literal("AH THE CARNAGE, THE BLOOD FLOWS FREELY, THIS ECSTASY!")
-                                .withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD), false
-                );
-            }
-
-            player.displayClientMessage(
-                    Component.literal("Yes... more blood! MORE! MORE CARNAGE!")
-                            .withStyle(ChatFormatting.DARK_RED), false
+        switch (streak) {
+            case 2 -> player.displayClientMessage(
+                    Component.literal("LET THE CARNAGE BEGIN!").withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD), false
+            );
+            case 3 -> player.displayClientMessage(
+                    Component.literal("Blood flows freely... and I shall bathe in it!").withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD), false
+            );
+            case 5 -> player.displayClientMessage(
+                    Component.literal("A SYMPHONY OF CARNAGE!").withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD), false
+            );
+            case 10 -> player.displayClientMessage(
+                    Component.literal("AH THE CARNAGE, THE BLOOD FLOWS FREELY, THIS ECSTASY!").withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD), false
             );
         }
 
+        player.displayClientMessage(
+                Component.literal("Yes... more blood! MORE! MORE CARNAGE!").withStyle(ChatFormatting.DARK_RED), false
+        );
+
         // --- Specific enemies ---
-        if (victim instanceof WitherBoss || victim instanceof EnderDragon) {
+        if (WitherBoss.class.isAssignableFrom(victim.getClass()) || EnderDragon.class.isAssignableFrom(victim.getClass())) {
             player.displayClientMessage(
                     Component.literal("A worthy foe... but still beneath me.").withStyle(ChatFormatting.DARK_RED), false
             );
         }
-        if (victim instanceof HinataSakaguchiEntity) {
+        if (HinataSakaguchiEntity.class.isAssignableFrom(victim.getClass())) {
             player.displayClientMessage(
                     Component.literal("Blasted saint, her blood shall feed the earth.").withStyle(ChatFormatting.DARK_RED), false
             );
         }
-        if (victim instanceof IfritEntity) {
+        if (IfritEntity.class.isAssignableFrom(victim.getClass())) {
             player.displayClientMessage(
                     Component.literal("Blasted Fire Spirit, they don't shed blood... what a shame.").withStyle(ChatFormatting.DARK_RED), false
             );
         }
-        if (victim instanceof CharybdisEntity) {
+        if (CharybdisEntity.class.isAssignableFrom(victim.getClass())) {
             player.displayClientMessage(
                     Component.literal("THE MONARCH OF THE SKIES CAN BLEED DRY, A WORTHY FOE INDEED.").withStyle(ChatFormatting.DARK_RED), false
             );
         }
-        if (victim instanceof OrcDisasterEntity) {
+        if (OrcDisasterEntity.class.isAssignableFrom(victim.getClass())) {
             player.displayClientMessage(
-                    Component.literal("This was supposed to be a disaster? SHOW THEM A REAL DISASTER — SHED MORE BLOOD!")
-                            .withStyle(ChatFormatting.DARK_RED), false
+                    Component.literal("This was supposed to be a disaster? SHOW THEM A REAL DISASTER — SHED MORE BLOOD!").withStyle(ChatFormatting.DARK_RED), false
             );
         }
 
         // --- Passive mobs ---
-        if (victim instanceof Villager || victim instanceof Animal) {
+        if (Villager.class.isAssignableFrom(victim.getClass()) || Animal.class.isAssignableFrom(victim.getClass())) {
             player.displayClientMessage(
                     Component.literal("Even the meek bleed beautifully. Do not stop.").withStyle(ChatFormatting.DARK_RED, ChatFormatting.ITALIC), false
             );
         }
 
         // --- Undead ---
-        if (victim instanceof Zombie || victim instanceof Skeleton) {
+        if (Zombie.class.isAssignableFrom(victim.getClass()) || Skeleton.class.isAssignableFrom(victim.getClass())) {
             player.displayClientMessage(
                     Component.literal("Even death bends the knee before the Crimson Tyrant.").withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD), false
             );
         }
 
         // --- Boss kill while low HP ---
-        if ((victim instanceof WitherBoss || victim instanceof EnderDragon || victim instanceof HinataSakaguchiEntity || victim instanceof CharybdisEntity || victim instanceof OrcDisasterEntity || victim instanceof IfritEntity)
+        if ((WitherBoss.class.isAssignableFrom(victim.getClass())
+                || EnderDragon.class.isAssignableFrom(victim.getClass())
+                || HinataSakaguchiEntity.class.isAssignableFrom(victim.getClass())
+                || CharybdisEntity.class.isAssignableFrom(victim.getClass())
+                || OrcDisasterEntity.class.isAssignableFrom(victim.getClass())
+                || IfritEntity.class.isAssignableFrom(victim.getClass()))
                 && player.getHealth() <= player.getMaxHealth() * 0.5) {
             player.displayClientMessage(
                     Component.literal("Bleeding and victorious... the true essence of carnage!")
@@ -137,6 +133,7 @@ public class CrimsonTyrantHandler {
             );
         }
 
+        // --- Skill-based flavor text ---
         if (storage.getSkill(Skills.CHILD_OF_THE_PLANE.get()).isPresent()) {
             String[] lines = {
                     "Even the Plane’s child cannot escape bloodshed.",
@@ -144,10 +141,7 @@ public class CrimsonTyrantHandler {
                     "The world bleeds for me.",
                     "All the world's blessings could not save you from me!"
             };
-            player.displayClientMessage(
-                    Component.literal(lines[rand.nextInt(lines.length)]).withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD),
-                    false
-            );
+            player.displayClientMessage(Component.literal(lines[rand.nextInt(lines.length)]).withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD), false);
         }
 
         if (storage.getSkill(Skills.PURITY_SKILL.get()).isPresent()) {
@@ -401,25 +395,30 @@ public class CrimsonTyrantHandler {
 
     @SubscribeEvent
     public static void onLivingHurt(LivingHurtEvent event) {
+        // Only run if source is a player
         if (!(event.getSource().getEntity() instanceof Player player)) return;
+
         if (player.level.isClientSide) return;
 
         SkillStorage storage = SkillAPI.getSkillsFrom(player);
-        if (storage == null) return;
+        if (storage == null || !storage.getSkill(Skills.CRIMSON_TYRANT.get()).isPresent()) return;
 
-        if (!storage.getSkill(Skills.CRIMSON_TYRANT.get()).isPresent()) return;
+        long tick = player.level.getGameTime();
 
-        // Massive damage triggers
         if (event.getAmount() >= 300.0F) {
             player.displayClientMessage(
                     Component.literal("Do you feel it? The rush of slaughter! The ecstasy of power!")
                             .withStyle(ChatFormatting.RED), false
             );
         }
-        if (event.getAmount() >= player.getMaxHealth() * 0.3) {
+
+        long lastTrigger = player.getPersistentData().getLong("CrimsonTyrant_HurtTrigger");
+        if (tick - lastTrigger >= 40) {
             player.displayClientMessage(
-                    Component.literal("Hurt? Good. Let the pain ignite your fury!").withStyle(ChatFormatting.DARK_RED), false
+                    Component.literal("Hurt? Good. Let the pain ignite your fury!").withStyle(ChatFormatting.DARK_RED),
+                    false
             );
+            player.getPersistentData().putLong("CrimsonTyrant_HurtTrigger", tick);
         }
     }
 
@@ -443,9 +442,5 @@ public class CrimsonTyrantHandler {
             player.getPersistentData().putBoolean("CrimsonTyrant_ChildOfThePlane_FusionTriggered", true);
         }
     }
-
-
-
-
 }
 
