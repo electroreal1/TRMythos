@@ -119,8 +119,6 @@ public class CrimsonTyrantSkill extends Skill {
         TensuraParticleHelper.addServerParticlesAroundSelf(entity, ParticleTypes.EXPLOSION_EMITTER);
         TensuraParticleHelper.spawnServerParticles(entity.level, (ParticleOptions) TensuraParticles.DARK_RED_LIGHTNING_SPARK.get(),
                 entity.getX(), entity.getY(), entity.getZ(), 55, 0.08, 0.08, 0.08, 0.5, true);
-        TensuraParticleHelper.spawnServerParticles(entity.level, (ParticleOptions) TensuraParticles.RED_FIRE.get(),
-                entity.getX(), entity.getY(), entity.getZ(), 55, 0.08, 0.08, 0.08, 0.5, true);
 
         instance.setCoolDown(1200);
     }
