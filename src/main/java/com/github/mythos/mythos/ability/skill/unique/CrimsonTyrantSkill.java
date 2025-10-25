@@ -7,10 +7,15 @@ import com.github.manasmods.tensura.ability.skill.extra.HakiSkill;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
 import com.github.manasmods.tensura.config.TensuraConfig;
+import com.github.manasmods.tensura.entity.CharybdisEntity;
+import com.github.manasmods.tensura.entity.IfritEntity;
+import com.github.manasmods.tensura.entity.OrcDisasterEntity;
+import com.github.manasmods.tensura.entity.human.HinataSakaguchiEntity;
 import com.github.manasmods.tensura.network.TensuraNetwork;
 import com.github.manasmods.tensura.network.play2client.RequestFxSpawningPacket;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.registry.particle.TensuraParticles;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -22,6 +27,8 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -159,4 +166,92 @@ public class CrimsonTyrantSkill extends Skill {
             }
         }
     }
+
+    public void PseudoEgo(Player player, LivingDeathEvent event) {
+        int streak = player.getPersistentData().getInt("TyrantKillStreak");
+        if (player.getHealth() <= player.getMaxHealth() * 0.25) {
+            player.displayClientMessage(
+                    Component.literal(
+                            "You must fight harder!, slay more!, SHED MORE BLOOD.").withStyle(ChatFormatting.DARK_RED), false
+            );
+        }
+
+        if (event.getSource().getEntity() == player) {
+            player.displayClientMessage(
+                    Component.literal("Yes... more blood! MORE! MORE CARNAGE!").withStyle(ChatFormatting.DARK_RED), false
+            );
+        }
+
+        if (event.getEntity() instanceof WitherBoss || event.getEntity() instanceof EnderDragon) {
+            player.displayClientMessage(
+                    Component.literal("A worthy foe... but still beneath me.").withStyle(ChatFormatting.DARK_RED), false
+            );
+        }
+
+        if (event.getEntity() instanceof HinataSakaguchiEntity) {
+            player.displayClientMessage(
+                    Component.literal("Blasted saint, her blood shall feed the earth.").withStyle(ChatFormatting.DARK_RED), false
+            );
+        }
+
+        if (event.getEntity() instanceof IfritEntity) {
+            player.displayClientMessage(
+                    Component.literal("Blasted Fire Spirit, they don't shed blood what a shame.").withStyle(ChatFormatting.DARK_RED), false
+            );
+        }
+
+        if (event.getEntity() instanceof CharybdisEntity) {
+            player.displayClientMessage(
+                    Component.literal("THE MONARCH OF THE SKIES CAN BLEED DRY, A WORTHY FOE INDEED.").withStyle(ChatFormatting.DARK_RED), false
+            );
+        }
+
+        if (event.getEntity() instanceof OrcDisasterEntity) {
+                player.displayClientMessage(
+                        Component.literal("This was supposed to be a disaster?, SHOW THEM A REAL DISATER, SHED MORE BLOOD.").withStyle(ChatFormatting.DARK_RED), false
+                );
+        }
+
+        if (player.getPersistentData().getBoolean("InCombat") && player.getCombatTracker().getCombatDuration() > 400) {
+            player.getPersistentData().putBoolean("InCombat", false);
+            player.displayClientMessage(
+                    Component.literal("The silence mocks me... where is the next offering?, the next bloodshed?, the next carnage?")
+                            .withStyle(ChatFormatting.GRAY, ChatFormatting.DARK_RED), false
+            );
+        }
+
+        if (event.getSource().getEntity() == player) {
+            streak++;
+            player.getPersistentData().putInt("TyrantKillStreak", streak);
+
+            if (streak == 3) {
+                player.displayClientMessage(
+                        Component.literal("Blood flows freely... and I shall bathe in it!")
+                                .withStyle(ChatFormatting.RED, ChatFormatting.BOLD), false
+                );
+            } else if (streak == 5) {
+                player.displayClientMessage(
+                        Component.literal("A SYMPHONY OF CARNAGE!")
+                                .withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD), false
+                );
+            }
+        }
+
+        if (player.isSleeping()) {
+            player.displayClientMessage(
+                    Component.literal("You sleep while your blade thirsts? Disappointing.")
+                            .withStyle(ChatFormatting.DARK_RED, ChatFormatting.ITALIC), false
+            );
+        }
+
+        if (event.getEntity() instanceof Player && event.getSource().getEntity() == player) {
+            player.displayClientMessage(
+                    Component.literal("Friend or foe... all bleed the same, ONLY THE RESULT MATTERS.. CARNAGE!")
+                            .withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD), false
+            );
+        }
+
+    }
+
+
 }
