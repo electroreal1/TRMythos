@@ -28,6 +28,7 @@ public class CrimsonTyrantHandler {
     public static void CrimsonTyrantPseudoEgo(LivingDeathEvent event, ManasSkillInstance instance, Player player, LivingHurtEvent eventHurt) {
         SkillStorage storage = SkillAPI.getSkillsFrom(player);
         Skill CrimsonTyrantSkill = Skills.CRIMSON_TYRANT.get();
+        Skill ChildOfThePlane = Skills.CHILD_OF_THE_PLANE.get();
         if (storage.getSkill(CrimsonTyrantSkill).isPresent()) {
             if (!(event.getSource().getEntity() instanceof Player)) return;
             if (player.level.isClientSide) return;
@@ -187,7 +188,16 @@ public class CrimsonTyrantHandler {
                 );
             }
 
-
+            if (storage.getSkill(ChildOfThePlane).isPresent()) {
+                if (!player.getPersistentData().getBoolean("CrimsonTyrant_ChildOfThePlane_FusionTriggered")) {
+                    player.displayClientMessage(
+                            Component.literal("Blood and Plane converge… the world itself takes notice of me.")
+                                    .withStyle(ChatFormatting.DARK_RED, ChatFormatting.ITALIC, ChatFormatting.BOLD),
+                            false
+                    );
+                    player.getPersistentData().putBoolean("CrimsonTyrant_ChildOfThePlane_FusionTriggered", true);
+                }
+            }
 
         }
     }
