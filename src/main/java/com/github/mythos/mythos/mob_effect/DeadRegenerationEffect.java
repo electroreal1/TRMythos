@@ -25,8 +25,8 @@ import net.minecraft.world.entity.player.Player;
 import java.util.Optional;
 
 
-public class ApostleRegenerationEffect extends SkillMobEffect {
-    public ApostleRegenerationEffect(MobEffectCategory category, int color) {
+public class DeadRegenerationEffect extends SkillMobEffect {
+    public DeadRegenerationEffect(MobEffectCategory category, int color) {
         super(category, color);
     }
 
@@ -42,7 +42,7 @@ public class ApostleRegenerationEffect extends SkillMobEffect {
 
         if (missingHealth > 0.0F && !MobEffectHelper.shouldCancelHeal(entity)) {
             if (entity instanceof Player player) {
-                float cost = (amplifier == 0 && SkillUtils.isSkillToggled(entity, Skills.ELTNAM.get())) ? 50.0F : 100.0F;
+                float cost = (amplifier == 0 && SkillUtils.isSkillToggled(entity, Skills.ZEPIA.get())) ? 16.0F : 100.0F;
                 Skill toggledSkill = (amplifier > 0)
                         ? ExtraSkills.INFINITE_REGENERATION.get()
                         : ExtraSkills.ULTRASPEED_REGENERATION.get();
