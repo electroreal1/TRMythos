@@ -52,6 +52,10 @@ public class SkillUtilsMixin {
             point += 6;
         }
 
+        if (hasSkill(entity, (ManasSkill)Skills.ZEPIA.get())) {
+            point += 9;
+        }
+
         return point;
     }
 
@@ -68,6 +72,9 @@ public class SkillUtilsMixin {
         }
         if (hasSkill(entity, (ManasSkill)Skills.ELTNAM.get())) {
             point += 6;
+        }
+        if (hasSkill(entity, (ManasSkill)Skills.ZEPIA.get())) {
+            point += 9;
         }
 
 

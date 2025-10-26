@@ -41,10 +41,19 @@
   "trmythos.skill.mode.bloodsucker.flesh_bud": "Flesh Bud",
 
   "trmythos.skill.eltnam": "§5Eltnam",
-  "trmythos.skill.eltnam.description": "You've acheived immortality, but you crave more... the power to change the laws of the world... will you reach it?",
+  "trmythos.skill.eltnam.description": "Cut! There are no second chances for actors that fall to the abyss...",
   "trmythos.skill.mode.eltnam.Scry_proficiency: Analysis" : "§5Scry Proficiency: Analysis",
   "trmythos.skill.mode.eltnam.Synthetic_blood_formula" : "§5Synthetic Blood",
   "trmythos.skill.mode.eltnam.Scry_proficiency: Divination" : "§5Scry Proficiency: Divination",
+
+  "trmythos.skill.zepia": "§cZepia",
+  "trmythos.skill.zepia.description": "Kill yourself! Destroy yourself! End your inane existance!",
+  "trmythos.skill.mode.zepia.True_scry_proficiency: Analysis" : "§5True Scry Proficiency: Analysis",
+  "trmythos.skill.mode.zepia.Synthetic_blood_formula" : "§5Synthetic Blood",
+  "trmythos.skill.mode.zepia.True_scry_proficiency: Divination" : "§5True Scry Proficiency: Divination",
+  "trmythos.skill.mode.zepia.Blood_liar" : "§5Blood Liar",
+  "trmythos.skill.mode.zepia.Cleave" : "§5Cleave",
+  "trmythos.skill.mode.zepia.Bad_news_(Malice)" : "§5Bad News (Malice)",
 
   "trmythos.skill.faker": "§cFaker",
   "trmythos.skill.faker.description": "Analysis, Projection, Reinforcement. Though shallow copies of what others wield, these items fit perfectly in your hand. Nurture them. Mend them. Perhaps one day, they may even surpass their originals.",

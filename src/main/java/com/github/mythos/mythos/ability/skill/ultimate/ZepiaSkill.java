@@ -1,7 +1,6 @@
 package com.github.mythos.mythos.ability.skill.ultimate;
 import com.github.manasmods.tensura.event.SkillPlunderEvent;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
-import com.github.manasmods.tensura.registry.items.TensuraMobDropItems;
 import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
@@ -34,7 +33,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
@@ -45,44 +43,15 @@ import com.github.manasmods.tensura.entity.magic.projectile.SeveranceCutterProje
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Predicate;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Style;
-import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundPlayerInfoPacket;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.core.particles.ParticleTypes;
 import com.github.manasmods.tensura.network.TensuraNetwork;
 import com.github.manasmods.tensura.network.play2client.RequestFxSpawningPacket;
 import net.minecraftforge.network.PacketDistributor;
-import com.github.manasmods.tensura.ability.skill.extra.HakiSkill;
-
 
 
 public class ZepiaSkill extends Skill {
@@ -576,10 +545,6 @@ public class ZepiaSkill extends Skill {
                 addMasteryPoint(instance, entity);
             }
 
-            // Play aura sound
-            entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(),
-                    SoundEvents.BEACON_AMBIENT, SoundSource.PLAYERS, 1.0F, 1.0F);
-
             // Send FX packet
             TensuraNetwork.INSTANCE.send(
                     PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity),
@@ -588,7 +553,7 @@ public class ZepiaSkill extends Skill {
             );
 
             // Affect nearby entities
-            List<LivingEntity> nearbyEntities = entity.level().getEntitiesOfClass(
+            List<LivingEntity> nearbyEntities = entity.getLevel().getEntitiesOfClass(
                     LivingEntity.class,
                     entity.getBoundingBox().inflate(15.0D),
                     target -> !target.isAlliedTo(entity) && target.isAlive() && !entity.isAlliedTo(target)
@@ -599,7 +564,6 @@ public class ZepiaSkill extends Skill {
                 if (target instanceof Player player && player.getAbilities().instabuild)
                     continue;
 
-                // Apply Infection effect (short duration, mild intensity)
                 SkillHelper.checkThenAddEffectSource(
                         target,
                         entity,
@@ -608,7 +572,6 @@ public class ZepiaSkill extends Skill {
                         1
                 );
 
-                // Apply Insanity effect (longer duration, stronger impact)
                 SkillHelper.checkThenAddEffectSource(
                         target,
                         entity,
