@@ -40,6 +40,10 @@ public class CrimsonTyrantSkill extends Skill {
     public double getObtainingEpCost() {
         return 100000.0;
     }
+    @Override
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/unique/crimson_tyrant.png");
+    }
 
     public int modes() {
         return 2;

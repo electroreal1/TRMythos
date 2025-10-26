@@ -30,7 +30,7 @@
   "trmythos.skill.omniscient_eye": "Omniscient Eye",
   "trmythos.skill.omniscient_eye.description": "See all, comprehend all, able to peer into the souls of others and mimic that which makes up their being.",
 
-  "trmythos.skill.orunmila": "Orunmila",
+  "trmythos.skill.orunmila": "Orunmila (WIP)",
   "trmythos.skill.orunmila.description": "Your consciousness has elevated. Your mind has become so advanced, it now acts as a sort of library - a repository for all the world's information, whose knowledge only you are privy to search through as you please. (WIP, I HATE GUIs WITH ALL MY BEING).",
 
   "trmythos.skill.bloodsucker": "Bloodsucker",
@@ -84,6 +84,10 @@
   "trmythos.skill.profanity.description": "§0Embody the malice of the world, blotting out the light with the darkness of sin and depravity.",
   "trmythos.skill.profanity.tainted_soul": "§0Tainted Soul",
   "trmythos.skill.profanity.baneful_essence": "§0Baneful Essence",
+
+  "trmythos.skill.genesis_core": "Genesis Core (EXTREMELY WIP)",
+  "trmythos.skill.mode.genesis_core.optimize_skill": "Optimize Skill",
+  "trmythos.skill.mode.genesis_core.fuse_skill" : "Fuse Skills",
 
   "trmythos.skill.opportunist": "Opportunist",
   "trmythos.skill.opportunist.description": "Take advantage of the odds to exploit the opportunities presented to you. Although, who knows if others might be able to do the same...",

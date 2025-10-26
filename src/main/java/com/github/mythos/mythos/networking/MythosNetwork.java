@@ -1,7 +1,8 @@
 package com.github.mythos.mythos.networking;
 
-import com.github.manasmods.tensura.network.play2client.SyncPlayerCapabilityPacket;
+import com.github.mythos.mythos.networking.play2server.RequestGenesisCorePacket;
 import com.github.mythos.mythos.networking.play2server.RequestSkillCopyOrunmilaPacket;
+import com.google.common.base.Function;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -16,7 +17,6 @@ import net.minecraftforge.network.simple.SimpleChannel;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -29,6 +29,7 @@ public class MythosNetwork {
     }
 
     public static void register() {
+        registerPacket(RequestGenesisCorePacket.class, RequestGenesisCorePacket::toBytes, RequestGenesisCorePacket::new, RequestGenesisCorePacket::handle);
         registerPacket(RequestSkillCopyOrunmilaPacket.class, RequestSkillCopyOrunmilaPacket::toBytes, RequestSkillCopyOrunmilaPacket::new, RequestSkillCopyOrunmilaPacket::handle);
     }
 
@@ -39,13 +40,13 @@ public class MythosNetwork {
     public static <MSG> void sendToServer(MSG msg) {
         INSTANCE.sendToServer(msg);
     }
-
     public static <MSG> void sendTo(MSG msg, LivingEntity target) {
         if (target instanceof Player) {
             INSTANCE.send(PacketDistributor.PLAYER.with(() -> {
-                return (ServerPlayer) target;
+                return (ServerPlayer)target;
             }), msg);
         }
+
     }
 
     public static <MSG> void sendToAllTrackingAndSelf(MSG msg, LivingEntity tracked) {
@@ -61,8 +62,10 @@ public class MythosNetwork {
         };
         String var10002 = PROTOCOL_VERSION;
         Objects.requireNonNull(var10002);
+        Objects.requireNonNull(var10002);
         Predicate var0 = var10002::equals;
         String var10003 = PROTOCOL_VERSION;
+        Objects.requireNonNull(var10003);
         Objects.requireNonNull(var10003);
         INSTANCE = NetworkRegistry.newSimpleChannel(var10000, var10001, var0, var10003::equals);
         PACKET_ID = new AtomicInteger();
