@@ -7,6 +7,7 @@ import com.github.mythos.mythos.ability.skill.extra.AutomaticHakiCoatSkill;
 import com.github.mythos.mythos.ability.skill.ultimate.OrunmilaSkill;
 import com.github.mythos.mythos.ability.skill.ultimate.ZepiaSkill;
 import com.github.mythos.mythos.ability.skill.unique.*;
+import com.github.mythos.mythos.ability.skill.unique.evolved.CarnageSkill;
 import com.github.mythos.mythos.ability.skill.unique.vassal_line.EvolutionSkill;
 import com.github.mythos.mythos.ability.skill.unique.vassal_line.FoundationSkill;
 import com.github.mythos.mythos.ability.skill.unique.vassal_line.UnitySkill;
@@ -34,8 +35,9 @@ public class Skills {
     public static final RegistryObject<BloodsuckerSkill> BLOODSUCKER;
     public static final RegistryObject<ChildOfThePlaneSkill> CHILD_OF_THE_PLANE;
     public static final RegistryObject<CrimsonTyrantSkill> CRIMSON_TYRANT;
-    public static final RegistryObject<GenesisCoreSkill> GENESIS_CORE;
 
+    // evolved uniques
+    public static final RegistryObject<CarnageSkill> CARNAGE;
     // extra
     public static final RegistryObject<AutomaticHakiCoatSkill> AUTOMATIC_HAKI_COAT;
 
@@ -66,8 +68,9 @@ public class Skills {
         BLOODSUCKER = registery.register("bloodsucker", () -> new BloodsuckerSkill(Skill.SkillType.UNIQUE));
         CHILD_OF_THE_PLANE = registery.register("child_of_the_plane", () -> new ChildOfThePlaneSkill(Skill.SkillType.UNIQUE));
         CRIMSON_TYRANT = registery.register("crimson_tyrant", () -> new CrimsonTyrantSkill(Skill.SkillType.UNIQUE));
-        GENESIS_CORE = registery.register("genesis_core",() -> new GenesisCoreSkill(Skill.SkillType.UNIQUE));
 
+        // evolved uniques
+        CARNAGE = registery.register("carnage", () -> new CarnageSkill(Skill.SkillType.UNIQUE));
         // extra
         AUTOMATIC_HAKI_COAT = registery.register("automatic_haki_coat", () -> new AutomaticHakiCoatSkill(Skill.SkillType.EXTRA));
     }

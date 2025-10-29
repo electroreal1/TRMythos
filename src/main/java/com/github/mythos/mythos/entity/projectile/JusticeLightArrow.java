@@ -2,11 +2,9 @@ package com.github.mythos.mythos.entity.projectile;
 
 import com.github.manasmods.tensura.entity.projectile.LightArrowProjectile;
 import com.github.manasmods.tensura.registry.entity.TensuraEntityTypes;
-import com.github.mythos.mythos.registry.MythosEntity;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
@@ -16,7 +14,7 @@ public class JusticeLightArrow extends LightArrowProjectile {
 
     public JusticeLightArrow(Level world, LivingEntity shooter) {
         super(TensuraEntityTypes.LIGHT_ARROW.get(), world);
-        // super(MythosEntity.JUSTICE_LIGHT_ARROW.get(), world);
+        // super(MythosEntityTypes.JUSTICE_LIGHT_ARROW.get(), world);
         this.setOwner(shooter);
         this.setNoGravity(true);
     }

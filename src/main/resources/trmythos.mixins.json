@@ -6,9 +6,11 @@
   "refmap": "trmythos.refmap.json",
   "mixins": [
     "HumanRaceMixin",
+    "MixinHormeSkill",
+    "MixinHandlerSkill$MixinHandlerSkillInvoker",
+    "MixinResistSkill",
     "NullBypass",
-    "SkillUtilsMixin",
-    "MixinResistSkill"
+    "SkillUtilsMixin"
   ],
   "client": [],
   "injectors": {

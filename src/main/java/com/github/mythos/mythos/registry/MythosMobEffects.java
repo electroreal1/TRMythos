@@ -1,10 +1,8 @@
 package com.github.mythos.mythos.registry;
 
 import com.github.mythos.mythos.mob_effect.*;
-//import com.github.mythos.mythos.mob_effect.RapidRegenerationEffect;
-//import com.github.mythos.mythos.mob_effect.debuff.BloodDrainEffect;
-//import com.github.mythos.mythos.mob_effect.debuff.VaporizationFreezeEffect;
 import com.github.mythos.mythos.mob_effect.debuff.BloodDrainEffect;
+import com.github.mythos.mythos.mob_effect.debuff.DragonfireEffect;
 import com.github.mythos.mythos.mob_effect.debuff.VaporizationFreezeEffect;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -36,6 +34,10 @@ public class MythosMobEffects {
             new BloodDrainEffect(MobEffectCategory.HARMFUL, (new Color(255, 165, 3)).getRGB()));
     public static final RegistryObject<MobEffect> CHILD_OF_THE_PLANE = registry.register("child_of_the_plane_effect", () ->
             new ChildOfThePlaneEffect(MobEffectCategory.BENEFICIAL, (new Color(255, 165, 3)).getRGB()));
+    public static final RegistryObject<MobEffect> DRAGONFIRE = registry.register("dragonfire", () ->
+            new DragonfireEffect(MobEffectCategory.HARMFUL, (new Color(255, 0, 0)).getRGB()));
+    public static final RegistryObject<MobEffect> BLOOD_COAT = registry.register("blood_coat", () ->
+            new BloodCoatEffect(MobEffectCategory.BENEFICIAL, (new Color(220, 20, 60)).getRGB()));
     public static void init(IEventBus modEventBus) {
         registry.register(modEventBus);
     }

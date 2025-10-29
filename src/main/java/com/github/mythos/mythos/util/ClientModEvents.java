@@ -1,7 +1,9 @@
 package com.github.mythos.mythos.util;
 
 import com.github.mythos.mythos.client.screen.OrunScreen;
+import com.github.mythos.mythos.registry.MythosEntityTypes;
 import com.github.mythos.mythos.registry.menu.MythosMenuTypes;
+import com.github.mythos.mythos.renderers.DragonfireRenderer;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -24,5 +26,10 @@ public class ClientModEvents {
         event.enqueueWork(() -> {
             MenuScreens.register(MythosMenuTypes.ORUN_MENU.get(), OrunScreen::new);
         });
+    }
+
+    @SubscribeEvent
+    public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerEntityRenderer(MythosEntityTypes.DRAGONFIRE.get(), DragonfireRenderer::new);
     }
 }

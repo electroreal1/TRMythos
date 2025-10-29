@@ -5,14 +5,13 @@ import com.github.mythos.mythos.config.MythosConfig;
 import com.github.mythos.mythos.handler.CrimsonTyrantHandler;
 import com.github.mythos.mythos.handler.SkillEvolutionHandler;
 import com.github.mythos.mythos.networking.MythosNetwork;
-import com.github.mythos.mythos.registry.MythosEntity;
-import com.github.mythos.mythos.registry.MythosParticles;
 import com.github.mythos.mythos.registry.MythosRegistery;
 import com.github.mythos.mythos.registry.menu.MythosMenuTypes;
 import com.github.mythos.mythos.registry.race.MythosRaces;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -49,8 +48,6 @@ public class Mythos {
         MinecraftForge.EVENT_BUS.register(CrimsonTyrantHandler.class);
         modEventBus.register(MythosRaces.class);
         MythosNetwork.register();
-        MythosEntity.ENTITY_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
-        MythosParticles.PARTICLE_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
         //FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, MythosConfig.SPEC, getConfigFileName("mythos-common"));
         LOGGER.info("Mythos has been loaded!");
@@ -83,6 +80,11 @@ public class Mythos {
     private void onClientSetup(FMLClientSetupEvent event) {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
         MenuScreens.register(MythosMenuTypes.ORUN_MENU.get(), OrunScreen::new);
+    }
+
+    @SubscribeEvent
+    public void onRegisterCommands(RegisterCommandsEvent event) {
+        FuseCommand.register(event.getDispatcher());
     }
 
     private boolean isFirstLaunch() {

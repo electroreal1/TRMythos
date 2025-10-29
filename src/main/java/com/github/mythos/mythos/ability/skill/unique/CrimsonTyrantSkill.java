@@ -11,6 +11,7 @@ import com.github.manasmods.tensura.network.TensuraNetwork;
 import com.github.manasmods.tensura.network.play2client.RequestFxSpawningPacket;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.registry.particle.TensuraParticles;
+import com.github.mythos.mythos.registry.MythosMobEffects;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -116,6 +117,7 @@ public class CrimsonTyrantSkill extends Skill {
 
         entity.getLevel().playSound(null, entity.blockPosition(), SoundEvents.WITHER_DEATH, SoundSource.PLAYERS, 2.0f, 0.9f);
 
+        entity.addEffect(new MobEffectInstance(MythosMobEffects.BLOOD_COAT.get(), 1200, 1, false, false, false));
         entity.addEffect(new MobEffectInstance(TensuraMobEffects.HAKI_COAT.get(), 1200, 1, false, false, false));
         entity.addEffect(new MobEffectInstance(TensuraMobEffects.STRENGTHEN.get(), 1200, 15, false, false, false));
         entity.addEffect(new MobEffectInstance(TensuraMobEffects.INSPIRATION.get(), 1200, 10, false, false, false));

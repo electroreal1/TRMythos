@@ -77,6 +77,7 @@
   "trmythos.skill.child_of_the_plane.mode": "default",
 
   "trmythos.skill.crimson_tyrant": "§4Crimson Tyrant",
+  "trmythos.skill.crimson_tyrant.description": "In the roar of battle, your bloodlust shapes the fate of all who stand before you.",
   "trmythos.skill.crimson_tyrant.tyrants_malevolence": "§4Tyrant's Malevolence",
   "trmythos.skill.crimson_tyrant.blood_sovereignty": "§4Blood Sovereignty",
 
@@ -88,6 +89,11 @@
   "trmythos.skill.genesis_core": "Genesis Core (EXTREMELY WIP)",
   "trmythos.skill.mode.genesis_core.optimize_skill": "Optimize Skill",
   "trmythos.skill.mode.genesis_core.fuse_skill" : "Fuse Skills",
+
+  "trmythos.skill.paranoia": "§0Paranoia",
+  "trmythos.skill.paranoia.dragonfire": "Dream of Dragonfire",
+  "trmythos.skill.paranoia.frozen": "Dream of Frozen Oblivion",
+  "trmythos.skill.paranoia.death": "Dream of Death",
 
   "trmythos.skill.opportunist": "Opportunist",
   "trmythos.skill.opportunist.description": "Take advantage of the odds to exploit the opportunities presented to you. Although, who knows if others might be able to do the same...",

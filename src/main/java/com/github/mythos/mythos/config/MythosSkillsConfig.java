@@ -19,6 +19,7 @@ public class MythosSkillsConfig {
     public static ForgeConfigSpec.BooleanValue loseSkillOnFighterEvolution;
     public static ForgeConfigSpec.BooleanValue enableChefEvolution;
     public static ForgeConfigSpec.BooleanValue loseSkillOnChefEvolution;
+    public static ForgeConfigSpec.BooleanValue VampireCarnage;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> racesThatCanCompeteForChildOfThePlane = null;
 
 
@@ -119,6 +120,10 @@ public class MythosSkillsConfig {
                 .comment("If true, the Chef skill is lost when evolving to Cook.")
                 .define("loseSkillOnChefEvolution", true);
 
+        VampireCarnage = builder
+                .comment("if true, then on learning carnage you will be set to vampire race.")
+                .define("VampireCarnage", true);
+
         racesThatCanCompeteForChildOfThePlane = builder
                 .comment("List of races that can compete for Child of the Plane.")
                 .defineList("eligibleRaces",
@@ -158,6 +163,9 @@ public class MythosSkillsConfig {
 
     public static boolean loseChefOnEvolution() {
         return loseSkillOnChefEvolution.get();
+    }
+    public static boolean VampireCarnage() {
+        return VampireCarnage.get();
     }
     public static List<? extends String> getRacesThatCanCompeteForChildOfThePlane() {
         return racesThatCanCompeteForChildOfThePlane.get();

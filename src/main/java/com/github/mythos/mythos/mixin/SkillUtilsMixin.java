@@ -2,13 +2,11 @@ package com.github.mythos.mythos.mixin;
 
 import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
-import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.mythos.mythos.ability.skill.unique.ChildOfThePlaneSkill;
+import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.registry.skill.Skills;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import io.github.Memoires.trmysticism.registry.skill.UltimateSkills;
-import io.github.Memoires.trmysticism.registry.skill.UniqueSkills;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -16,8 +14,6 @@ import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-
-import java.util.Optional;
 
 import static com.github.manasmods.tensura.ability.SkillUtils.isSkillToggled;
 import static com.github.manasmods.tensura.capability.skill.TensuraSkillCapability.isSkillInSlot;
@@ -106,8 +102,12 @@ public class SkillUtilsMixin {
     private static boolean NullToResistAndResistToNothing(boolean original, LivingEntity entity) {
         return original ||
                 isSkillInSlot(entity, (ManasSkill)Skills.ORUNMILA.get()) ||
-                isSkillInSlot(entity, (ManasSkill)Skills.CHILD_OF_THE_PLANE.get());
+                isSkillInSlot(entity, (ManasSkill)Skills.CHILD_OF_THE_PLANE.get()) ||
+                entity.hasEffect(MythosMobEffects.BLOOD_COAT.get());
+
     }
+
+
 
 
     @ModifyReturnValue(

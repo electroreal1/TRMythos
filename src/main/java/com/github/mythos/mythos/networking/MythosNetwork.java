@@ -1,6 +1,5 @@
 package com.github.mythos.mythos.networking;
 
-import com.github.mythos.mythos.networking.play2server.RequestGenesisCorePacket;
 import com.github.mythos.mythos.networking.play2server.RequestSkillCopyOrunmilaPacket;
 import com.google.common.base.Function;
 import net.minecraft.network.FriendlyByteBuf;
@@ -29,9 +28,9 @@ public class MythosNetwork {
     }
 
     public static void register() {
-        registerPacket(RequestGenesisCorePacket.class, RequestGenesisCorePacket::toBytes, RequestGenesisCorePacket::new, RequestGenesisCorePacket::handle);
         registerPacket(RequestSkillCopyOrunmilaPacket.class, RequestSkillCopyOrunmilaPacket::toBytes, RequestSkillCopyOrunmilaPacket::new, RequestSkillCopyOrunmilaPacket::handle);
     }
+
 
     private static <MSG> void registerPacket(Class<MSG> messageType, BiConsumer<MSG, FriendlyByteBuf> encoder, Function<FriendlyByteBuf, MSG> decoder, BiConsumer<MSG, Supplier<NetworkEvent.Context>> messageConsumer) {
         INSTANCE.registerMessage(PACKET_ID.getAndIncrement(), messageType, encoder, decoder, messageConsumer);
