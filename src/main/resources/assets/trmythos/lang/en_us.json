@@ -80,15 +80,19 @@
   "trmythos.skill.crimson_tyrant.description": "In the roar of battle, your bloodlust shapes the fate of all who stand before you.",
   "trmythos.skill.crimson_tyrant.tyrants_malevolence": "§4Tyrant's Malevolence",
   "trmythos.skill.crimson_tyrant.blood_sovereignty": "§4Blood Sovereignty",
+  "trmythos.skill.require.crimson_tyrant": "Must have the unique skill Crimson Tyrant.",
+
+  "trmythos.skill.carnage": "§4Carnage",
+  "trmythos.skill.carnage.description": "§4Unleash unstoppable fury, striking all enemies around you with devastating blows that deal massive damage and cause bleeding. The battlefield becomes chaos incarnate.",
+  "trmythos.skill.carnage.blood": "§4Blood Dominion",
+  "trmythos.skill.carnage.absolute": "§4Absolute Bloodlord",
+  "trmythos.skill.carnage.obtainment": "For all the blood that has been spilled, you still yearn for more. Your nature has grown from one that simply strives for the flow of crimson. Now you hunger for pure, mindless Carnage...",
+  "trmythos.skill.require.carnage": "Must have the unique skill Carnage.",
 
   "trmythos.skill.profanity": "§0Profanity",
   "trmythos.skill.profanity.description": "§0Embody the malice of the world, blotting out the light with the darkness of sin and depravity.",
   "trmythos.skill.profanity.tainted_soul": "§0Tainted Soul",
   "trmythos.skill.profanity.baneful_essence": "§0Baneful Essence",
-
-  "trmythos.skill.genesis_core": "Genesis Core (EXTREMELY WIP)",
-  "trmythos.skill.mode.genesis_core.optimize_skill": "Optimize Skill",
-  "trmythos.skill.mode.genesis_core.fuse_skill" : "Fuse Skills",
 
   "trmythos.skill.paranoia": "§0Paranoia",
   "trmythos.skill.paranoia.dragonfire": "Dream of Dragonfire",

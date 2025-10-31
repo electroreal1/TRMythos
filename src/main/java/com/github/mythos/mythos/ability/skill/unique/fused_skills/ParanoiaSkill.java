@@ -1,9 +1,6 @@
 package com.github.mythos.mythos.ability.skill.unique.fused_skills;
 
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
-import com.github.manasmods.manascore.api.skills.SkillAPI;
-import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
-import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
 import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
@@ -16,18 +13,11 @@ import com.github.manasmods.tensura.entity.magic.barrier.BlizzardEntity;
 import com.github.manasmods.tensura.entity.magic.breath.BreathEntity;
 import com.github.manasmods.tensura.registry.attribute.TensuraAttributeRegistry;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSource;
-import com.github.manasmods.tensura.util.damage.TensuraDamageSources;
 import com.github.mythos.mythos.registry.MythosEntityTypes;
-import com.github.mythos.mythos.registry.skill.FusedSkills;
-import com.github.mythos.mythos.registry.skill.Skills;
-import io.github.Memoires.trmysticism.registry.skill.UniqueSkills;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -52,19 +42,20 @@ public class ParanoiaSkill extends Skill {
     }
 
 
-    public void onLearnSkill(ManasSkillInstance instance, LivingEntity living, UnlockSkillEvent event, Player player) {
-         SkillStorage storage = SkillAPI.getSkillsFrom(player);
-         Skill profanitySkill = Skills.PROFANITY.get();
-         Skill dreamerSkill = UniqueSkills.DREAMER.get();
-         Skill paranoiaSkill = FusedSkills.PARANOIA.get();
-        if (storage.getSkill(profanitySkill).isPresent() && storage.getSkill(dreamerSkill).isPresent() && storage.getSkill(paranoiaSkill).isPresent()) {
-            storage.forgetSkill(profanitySkill);
-            storage.forgetSkill(dreamerSkill);
-        }
-    }
+//    public void onLearnSkill(ManasSkillInstance instance, LivingEntity living, UnlockSkillEvent event, Player player) {
+//         SkillStorage storage = SkillAPI.getSkillsFrom(player);
+//         Skill profanitySkill = Skills.PROFANITY.get();
+//         Skill dreamerSkill = UniqueSkills.DREAMER.get();
+//         Skill paranoiaSkill = FusedSkills.PARANOIA.get();
+//        if (storage.getSkill(profanitySkill).isPresent() && storage.getSkill(dreamerSkill).isPresent() && storage.getSkill(paranoiaSkill).isPresent()) {
+//            storage.forgetSkill(profanitySkill);
+//            storage.forgetSkill(dreamerSkill);
+//            storage.learnSkill(paranoiaSkill);
+//        }
+//    }
 
     public double getObtainingEpCost() {
-        return 500000;
+        return 250000;
     }
 
     @Override
@@ -187,7 +178,7 @@ public class ParanoiaSkill extends Skill {
     }
 
     public int modes() {
-        return 3;
+        return 2;
     }
 
     public void onTick(ManasSkillInstance instance, @NotNull LivingEntity entity) {
@@ -201,7 +192,6 @@ public class ParanoiaSkill extends Skill {
         return switch (mode) {
             case 1 -> Component.translatable("trmythos.skill.paranoia.dragonfire");
             case 2 -> Component.translatable("trmythos.skill.paranoia.frozen");
-            case 3 -> Component.translatable("trmythos.skill.paranoia.death");
             default -> Component.empty();
         };
     }
@@ -211,9 +201,6 @@ public class ParanoiaSkill extends Skill {
         switch (instance.getMode()) {
             case 2:
                 var10000 = 10000;
-                break;
-            case 3:
-                var10000 = 10000.0;
                 break;
             default:
                 var10000 = 100000;
@@ -267,68 +254,7 @@ public class ParanoiaSkill extends Skill {
             );
 
             return true;
-        } else if (instance.getMode() == 3) {
-            CompoundTag tag = instance.getOrCreateTag();
-            int heldSeconds = tag.getInt("heldSeconds");
-
-            LivingEntity target = (LivingEntity) SkillHelper.getTargetingEntity(
-                    LivingEntity.class,
-                    entity,
-                    5.0,
-                    0.5,
-                    true,
-                    true
-            );
-
-            CompoundTag tag1 = instance.getOrCreateTag();
-            if (!tag1.contains("target") || target == null || !target.getUUID().equals(tag1.getUUID("target"))) {
-                // Reset charge if no target or target changed
-                tag1.remove("target");
-                tag1.putInt("heldSeconds", 0);
-
-                if (entity instanceof Player player && entity.tickCount % 20 == 0) {
-                    player.displayClientMessage(
-                            Component.translatable("tensura.skill.time_held", 0)
-                                    .setStyle(Style.EMPTY.withColor(ChatFormatting.GOLD)),
-                            true
-                    );
-                }
-                return false;
-            }
-
-            // Target is valid
-            if (target instanceof Player player && player.getAbilities().invulnerable) return false;
-
-            heldSeconds++;
-            tag.putInt("heldSeconds", heldSeconds);
-            tag.putUUID("target", target.getUUID());
-
-            if (entity instanceof ServerPlayer player && entity.tickCount % 20 == 0) {
-                player.displayClientMessage(
-                        Component.translatable("tensura.skill.time_held.max", heldSeconds, 5)
-                                .setStyle(Style.EMPTY.withColor(ChatFormatting.GOLD)),
-                        true
-                );
-                TensuraParticleHelper.addServerParticlesAroundSelfToOnePlayer(player, target, ParticleTypes.WHITE_ASH, 1.0);
-            }
-
-            if (heldSeconds >= 5) {
-                tag.putInt("heldSeconds", 0);
-                tag.remove("target");
-
-                if (SkillHelper.outOfMagicule(entity, instance)) return false;
-
-                this.addMasteryPoint(instance, entity);
-
-                if (target.hurt(this.sourceWithMP(TensuraDamageSources.deathWish(entity), entity, instance),
-                        target.getMaxHealth() * 10.0F)) {
-                    TensuraParticleHelper.addServerParticlesAroundSelf(target, ParticleTypes.SQUID_INK);
-                    TensuraParticleHelper.addServerParticlesAroundSelf(target, ParticleTypes.ENCHANTED_HIT);
-                    return true;
-                }
-            }
-        }
-        return false;
+        } return true;
     }
 
 

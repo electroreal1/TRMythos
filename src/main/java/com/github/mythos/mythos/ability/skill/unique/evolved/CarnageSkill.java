@@ -11,6 +11,7 @@ import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.registry.particle.TensuraParticles;
 import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.mythos.mythos.registry.MythosMobEffects;
+import com.github.mythos.mythos.registry.race.MythosSecretRaces;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -40,6 +41,7 @@ public class CarnageSkill extends Skill {
     }
 
     public static boolean VAMPIRE_CARNAGE = true;
+    public static boolean CarnageBloodDominion = true;
 //    @Override
 //    public ResourceLocation getSkillIcon() {
 //        return new ResourceLocation("trmythos", "textures/skill/unique/crimson_tyrant.png");
@@ -105,17 +107,16 @@ public class CarnageSkill extends Skill {
 
 
     public void onLearnSkill(ManasSkillInstance instance, LivingEntity entity, UnlockSkillEvent event, Player player) {
-        if (VAMPIRE_CARNAGE) {
-            TensuraPlayerCapability.getFrom(player).ifPresent((cap) -> {
-
-                Race vampireRace = TensuraRaces.VAMPIRE.get();
-                Race currentRace = cap.getRace();
-
-                if (currentRace != vampireRace) {
-                    cap.setRace(player, vampireRace, true);
+        TensuraPlayerCapability.getFrom(player).ifPresent((cap) -> {
+            Race vampireBaronRace = TensuraRaces.RACE_REGISTRY.get().getValue(MythosSecretRaces.VAMPIRE_BARON);
+            Race currentRace = cap.getRace();
+            if (VAMPIRE_CARNAGE) {
+                if (currentRace != vampireBaronRace) {
+                    cap.setRace(player, vampireBaronRace, true);
                 }
-            });
-        }
+            }
+            ;
+        });
     }
 
     public int modes() {
@@ -153,55 +154,51 @@ public class CarnageSkill extends Skill {
     }
 
     public void onPressed(ManasSkillInstance instance, LivingEntity entity, Player caster) {
-        switch (instance.getMode()) {
-            case 1:
-                double range = 5.0;
+        if (instance.getMode() == 1) {
+            double range = 5.0;
 
-                List<LivingEntity> targets = caster.getLevel().getEntitiesOfClass(LivingEntity.class,
-                        caster.getBoundingBox().inflate(15.0),
-                        e -> e != caster && e.isAlive() && !e.isAlliedTo(caster));
+            List<LivingEntity> targets = caster.getLevel().getEntitiesOfClass(LivingEntity.class,
+                    caster.getBoundingBox().inflate(15.0),
+                    e -> e != caster && e.isAlive() && !e.isAlliedTo(caster));
 
-                if (!targets.isEmpty()) {
-                    float casterEP = (float) TensuraEPCapability.getCurrentEP(caster);
+            if (!targets.isEmpty()) {
+                float casterEP = (float) TensuraEPCapability.getCurrentEP(caster);
 
-                    for (LivingEntity target : targets) {
-                        // Skip invulnerable players
-                        if (target instanceof Player player && player.getAbilities().invulnerable) continue;
+                for (LivingEntity target : targets) {
+                    // Skip invulnerable players
+                    if (target instanceof Player player && player.getAbilities().invulnerable) continue;
 
-                        float targetEP = target instanceof Player p ? (float) TensuraEPCapability.getCurrentEP(p) : 0f;
+                    float targetEP = target instanceof Player p ? (float) TensuraEPCapability.getCurrentEP(p) : 0f;
 
-                        if (targetEP <= casterEP * 0.85f) {
-                            assert target instanceof Player;
-                            TensuraPlayerCapability.getFrom((Player) target).ifPresent(cap -> {
-                                Race targetRace = cap.getRace();
-                                Race vampireRace = TensuraRaces.VAMPIRE.get();
+                    if (targetEP <= casterEP * 0.85f) {
+                        assert target instanceof Player;
+                        TensuraPlayerCapability.getFrom((Player) target).ifPresent(cap -> {
+                            Race targetRace = cap.getRace();
+                            Race vampireRace = TensuraRaces.VAMPIRE.get();
 
-                                if (targetRace != null && targetRace != vampireRace) {
-                                    cap.setRace(target instanceof Player ? (Player) target : null, vampireRace, true);
-                                }
-                            });
-                        }
+                            if (targetRace != null && targetRace != vampireRace) {
+                                cap.setRace(target instanceof Player ? (Player) target : null, vampireRace, true);
+                            }
+                        });
                     }
                 }
-                break;
+            }
+        } else if (instance.getMode() == 2) {
+            entity.getLevel().playSound(null, entity.blockPosition(), SoundEvents.WITHER_DEATH, SoundSource.PLAYERS, 2.0f, 0.9f);
 
-            case 2:
-                entity.getLevel().playSound(null, entity.blockPosition(), SoundEvents.WITHER_DEATH, SoundSource.PLAYERS, 2.0f, 0.9f);
+            entity.addEffect(new MobEffectInstance(MythosMobEffects.BLOOD_COAT.get(), 1200, 1, false, false, false));
+            entity.addEffect(new MobEffectInstance(TensuraMobEffects.HAKI_COAT.get(), 1200, 1, false, false, false));
+            entity.addEffect(new MobEffectInstance(TensuraMobEffects.STRENGTHEN.get(), 1200, 20, false, false, false));
+            entity.addEffect(new MobEffectInstance(TensuraMobEffects.INSPIRATION.get(), 1200, 15, false, false, false));
 
-                entity.addEffect(new MobEffectInstance(MythosMobEffects.BLOOD_COAT.get(), 1200, 1, false, false, false));
-                entity.addEffect(new MobEffectInstance(TensuraMobEffects.HAKI_COAT.get(), 1200, 1, false, false, false));
-                entity.addEffect(new MobEffectInstance(TensuraMobEffects.STRENGTHEN.get(), 1200, 20, false, false, false));
-                entity.addEffect(new MobEffectInstance(TensuraMobEffects.INSPIRATION.get(), 1200, 15, false, false, false));
+            TensuraParticleHelper.addServerParticlesAroundSelf(entity, ParticleTypes.EXPLOSION_EMITTER);
+            TensuraParticleHelper.spawnServerParticles(entity.level, (ParticleOptions) TensuraParticles.DARK_RED_LIGHTNING_SPARK.get(),
+                    entity.getX(), entity.getY(), entity.getZ(), 55, 0.08, 0.08, 0.08, 0.5, true);
 
-                TensuraParticleHelper.addServerParticlesAroundSelf(entity, ParticleTypes.EXPLOSION_EMITTER);
-                TensuraParticleHelper.spawnServerParticles(entity.level, (ParticleOptions) TensuraParticles.DARK_RED_LIGHTNING_SPARK.get(),
-                        entity.getX(), entity.getY(), entity.getZ(), 55, 0.08, 0.08, 0.08, 0.5, true);
+            entity.getPersistentData().putBoolean("AbsoluteBloodLordActive", true);
 
-                entity.getPersistentData().putBoolean("AbsoluteBloodLordActive", true);
-
-                instance.setCoolDown(1200);
+            instance.setCoolDown(1200);
         }
     }
-
 
 }

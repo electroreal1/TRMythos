@@ -8,10 +8,10 @@ import com.github.mythos.mythos.networking.MythosNetwork;
 import com.github.mythos.mythos.registry.MythosRegistery;
 import com.github.mythos.mythos.registry.menu.MythosMenuTypes;
 import com.github.mythos.mythos.registry.race.MythosRaces;
+import com.github.mythos.mythos.registry.race.MythosSecretRaces;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -47,6 +47,7 @@ public class Mythos {
         MinecraftForge.EVENT_BUS.register(SkillEvolutionHandler.class);
         MinecraftForge.EVENT_BUS.register(CrimsonTyrantHandler.class);
         modEventBus.register(MythosRaces.class);
+        modEventBus.register(MythosSecretRaces.class);
         MythosNetwork.register();
         //FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, MythosConfig.SPEC, getConfigFileName("mythos-common"));
@@ -82,10 +83,7 @@ public class Mythos {
         MenuScreens.register(MythosMenuTypes.ORUN_MENU.get(), OrunScreen::new);
     }
 
-    @SubscribeEvent
-    public void onRegisterCommands(RegisterCommandsEvent event) {
-        FuseCommand.register(event.getDispatcher());
-    }
+
 
     private boolean isFirstLaunch() {
         File markerFile = new File("defaultconfigs/tensura-reincarnated/mythos_first_launch_marker");

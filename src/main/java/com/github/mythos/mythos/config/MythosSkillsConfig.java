@@ -19,7 +19,11 @@ public class MythosSkillsConfig {
     public static ForgeConfigSpec.BooleanValue loseSkillOnFighterEvolution;
     public static ForgeConfigSpec.BooleanValue enableChefEvolution;
     public static ForgeConfigSpec.BooleanValue loseSkillOnChefEvolution;
+    public static ForgeConfigSpec.BooleanValue VampireAncestor;
     public static ForgeConfigSpec.BooleanValue VampireCarnage;
+    public static ForgeConfigSpec.BooleanValue CarnageBloodDominion;
+    public static ForgeConfigSpec.BooleanValue enableUniqueEvolution;
+    public static ForgeConfigSpec.BooleanValue loseUniqueOnEvolution;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> racesThatCanCompeteForChildOfThePlane = null;
 
 
@@ -120,9 +124,23 @@ public class MythosSkillsConfig {
                 .comment("If true, the Chef skill is lost when evolving to Cook.")
                 .define("loseSkillOnChefEvolution", true);
 
+        VampireAncestor = builder
+                .comment("if true, then on unlocking Crimson Tyrant you will be set to vampire race.")
+                .define("VampireAncestor", true);
         VampireCarnage = builder
-                .comment("if true, then on learning carnage you will be set to vampire race.")
+                .comment("if true, then on learning Carnage you will be set to vampire baron race.")
                 .define("VampireCarnage", true);
+        CarnageBloodDominion = builder
+                .comment("if true, then carnage will be able to convert players and mobs into the vampire race.")
+                .define("CarnageBloodDominion", true);
+
+        enableUniqueEvolution = builder
+                .comment("if true unique skills from mythos will be able to evolve into their higher forms, i.e Crimson Tyrant into Carnage.")
+                .define("enableUniqueEvolution", true);
+
+        loseUniqueOnEvolution = builder
+                .comment("If true then on evolving a unique skill into a higher form you will lose the previous version of it.")
+                .define("loseUniqueOnEvolution", true);
 
         racesThatCanCompeteForChildOfThePlane = builder
                 .comment("List of races that can compete for Child of the Plane.")
@@ -164,8 +182,20 @@ public class MythosSkillsConfig {
     public static boolean loseChefOnEvolution() {
         return loseSkillOnChefEvolution.get();
     }
+    public static boolean VampireAncestor() {
+        return VampireAncestor.get();
+    }
     public static boolean VampireCarnage() {
         return VampireCarnage.get();
+    }
+    public static boolean CarnageBloodDominion() {
+        return CarnageBloodDominion.get();
+    }
+    public static boolean enableUniqueEvolution() {
+        return enableUniqueEvolution.get();
+    }
+    public static boolean loseUniqueOnEvolution() {
+        return loseUniqueOnEvolution.get();
     }
     public static List<? extends String> getRacesThatCanCompeteForChildOfThePlane() {
         return racesThatCanCompeteForChildOfThePlane.get();

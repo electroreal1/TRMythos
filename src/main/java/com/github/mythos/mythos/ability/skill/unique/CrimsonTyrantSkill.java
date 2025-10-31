@@ -1,16 +1,20 @@
 package com.github.mythos.mythos.ability.skill.unique;
 
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
+import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
 import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.ability.skill.extra.HakiSkill;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
+import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
 import com.github.manasmods.tensura.config.TensuraConfig;
 import com.github.manasmods.tensura.network.TensuraNetwork;
 import com.github.manasmods.tensura.network.play2client.RequestFxSpawningPacket;
+import com.github.manasmods.tensura.race.Race;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.registry.particle.TensuraParticles;
+import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -44,6 +48,23 @@ public class CrimsonTyrantSkill extends Skill {
     @Override
     public ResourceLocation getSkillIcon() {
         return new ResourceLocation("trmythos", "textures/skill/unique/crimson_tyrant.png");
+    }
+
+    public static boolean VAMPIRE_ANCESTOR = true;
+
+
+    public void onLearnSkill(ManasSkillInstance instance, LivingEntity entity, UnlockSkillEvent event, Player player) {
+        if (VAMPIRE_ANCESTOR) {
+            TensuraPlayerCapability.getFrom(player).ifPresent((cap) -> {
+
+                Race vampireRace = TensuraRaces.VAMPIRE.get();
+                Race currentRace = cap.getRace();
+
+                if (currentRace != vampireRace) {
+                    cap.setRace(player, vampireRace, true);
+                }
+            });
+        }
     }
 
     public int modes() {
@@ -133,6 +154,10 @@ public class CrimsonTyrantSkill extends Skill {
         if (instance.getMode() != 1) return;
 
         if (heldTicks % 20 == 0) {
+            entity.getLevel().playSound(null, entity.blockPosition(), SoundEvents.BEEHIVE_DRIP, SoundSource.PLAYERS, 1.0F, 1.0F);
+            entity.getLevel().playSound(null, entity.blockPosition(), SoundEvents.BEEHIVE_DRIP, SoundSource.PLAYERS, 1.0F, 1.0F);
+            entity.getLevel().playSound(null, entity.blockPosition(), SoundEvents.BEEHIVE_DRIP, SoundSource.PLAYERS, 1.0F, 1.0F);
+            entity.getLevel().playSound(null, entity.blockPosition(), SoundEvents.BEEHIVE_DRIP, SoundSource.PLAYERS, 1.0F, 1.0F);
             entity.getLevel().playSound(null, entity.blockPosition(), SoundEvents.BEEHIVE_DRIP, SoundSource.PLAYERS, 1.0F, 1.0F);
         }
 

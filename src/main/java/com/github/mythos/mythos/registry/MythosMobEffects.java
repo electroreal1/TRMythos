@@ -38,6 +38,8 @@ public class MythosMobEffects {
             new DragonfireEffect(MobEffectCategory.HARMFUL, (new Color(255, 0, 0)).getRGB()));
     public static final RegistryObject<MobEffect> BLOOD_COAT = registry.register("blood_coat", () ->
             new BloodCoatEffect(MobEffectCategory.BENEFICIAL, (new Color(220, 20, 60)).getRGB()));
+    public static final RegistryObject<MobEffect> COMPLETE_REGENERATION = registry.register("complete_regeneration", () ->
+            new CompleteRegenerationEffect(MobEffectCategory.BENEFICIAL, (new Color(255, 0, 0)).getRGB()));
     public static void init(IEventBus modEventBus) {
         registry.register(modEventBus);
     }
