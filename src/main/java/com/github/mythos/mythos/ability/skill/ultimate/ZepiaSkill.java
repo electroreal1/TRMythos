@@ -1,4 +1,5 @@
 package com.github.mythos.mythos.ability.skill.ultimate;
+import com.github.manasmods.tensura.data.TensuraTags;
 import com.github.manasmods.tensura.event.SkillPlunderEvent;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.manascore.api.skills.ManasSkill;
@@ -14,6 +15,7 @@ import com.github.manasmods.tensura.capability.effects.TensuraEffectsCapability;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.capability.skill.TensuraSkillCapability;
 import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
+import com.github.manasmods.tensura.registry.items.TensuraMobDropItems;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
 import com.github.mythos.mythos.registry.MythosMobEffects;
@@ -32,8 +34,10 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.NotNull;
@@ -54,6 +58,7 @@ import com.github.manasmods.tensura.network.play2client.RequestFxSpawningPacket;
 import net.minecraftforge.network.PacketDistributor;
 
 
+
 public class ZepiaSkill extends Skill {
     protected static final UUID ACCELERATION = UUID.fromString("8a67e638-7159-4ec8-8556-2c25c457262b");
     public static final UUID COOK = UUID.fromString("7d9edf73-c44a-46ca-93b9-f18ca595ca63");
@@ -72,7 +77,7 @@ public class ZepiaSkill extends Skill {
         return 8000000.0;
     }
 
-    public boolean meetEPRequirement(Player player) {
+    public boolean meetEPRequirement(Player player, double newEP) {
         // Check EP using Tensura capability
         double currentEP = TensuraEPCapability.getCurrentEP(player);
         if (currentEP < getObtainingEpCost()) {
@@ -80,7 +85,33 @@ public class ZepiaSkill extends Skill {
         }
         return SkillUtils.isSkillMastered(player, (ManasSkill) Skills.ELTNAM.get());
 
-    }
+        TensuraTags.Items royalBlood = new TensuraTags.Items();
+        final int required = 10;
+        int found = 0;
+
+            // Count how many Royal Blood items the player has
+            for (ItemStack stack : player.getInventory().items) {
+                if (stack.getItem() == royalBlood) {
+                    found += stack.getCount();
+                    if (found >= required) break;
+                }
+            }
+
+            // If they have enough, remove exactly 'required' and return true
+            if (found >= required) {
+                int toRemove = required;
+                for (ItemStack stack : player.getInventory().items) {
+                    if (stack.getItem() == royalBlood) {
+                        int remove = Math.min(stack.getCount(), toRemove);
+                        stack.shrink(remove);
+                        toRemove -= remove;
+                        if (toRemove <= 0) break;
+                    }
+                }
+                return true;
+            }
+        }
+
 
 
     public double learningCost() {
@@ -287,7 +318,7 @@ public class ZepiaSkill extends Skill {
                         addMasteryPoint(instance, entity);
                         entity.swing(InteractionHand.MAIN_HAND, true);
                     }
-                else {
+                 else {
                         // Remove Severance and harmful effects from the target
                         success = (TensuraEffectsCapability.getSeverance(living) > 0.0D);
                         TensuraEffectsCapability.getFrom(living).ifPresent(cap -> cap.setSeveranceAmount(0.0D));
