@@ -10,6 +10,7 @@ import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
 import com.github.manasmods.tensura.network.TensuraNetwork;
 import com.github.manasmods.tensura.network.play2client.RequestFxSpawningPacket;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSource;
+import com.github.mythos.mythos.config.MythosSkillsConfig;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -28,9 +29,8 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ProfanitySkill extends Skill {
 
@@ -237,31 +237,63 @@ public class ProfanitySkill extends Skill {
         return false;
     }
 
-    private static void applyRandomEffects(LivingEntity target, RandomSource random) {
-        List<MobEffect> allEffects = new ArrayList<>();
+//    private static void applyRandomEffects(LivingEntity target, RandomSource random) {
+//        Set<String> blacklist = new HashSet<>(MythosSkillsConfig.blacklistedEffects.get());
+//
+//        List<MobEffect> allEffects = ForgeRegistries.MOB_EFFECTS.getValues().stream()
+//                .filter(Objects::nonNull)
+//                .filter(effect -> !blacklist.contains(ForgeRegistries.MOB_EFFECTS.getKey(effect).toString()))
+//                .collect(Collectors.toList());
+//
+//        for (MobEffect effect : ForgeRegistries.MOB_EFFECTS) {
+//            if (effect == null) continue; // skip null effects
+//            allEffects.add(effect);
+//        }
+//
+//        if (allEffects.isEmpty()) return;
+//
+//        Collections.shuffle(allEffects, new java.util.Random(random.nextLong()));
+//
+//        // Random number of effects: 1, 2, or 3
+//        int count = 1 + random.nextInt(3);
+//
+//        for (int i = 0; i < count && i < allEffects.size(); i++) {
+//            MobEffect effect = allEffects.get(i);
+//
+//            // Random duration: 5–20 seconds (100–400 ticks)
+//            int duration = 100 + random.nextInt(301);
+//
+//            // Random amplifier: 0–2 (level I–III)
+//            int amplifier = random.nextInt(3);
+//
+//            target.addEffect(new MobEffectInstance(effect, duration, amplifier));
+//        }
+//    }
+private static void applyRandomEffects(LivingEntity target, RandomSource random) {
+    Set<String> blacklist = new HashSet<>(MythosSkillsConfig.blacklistedEffects.get());
 
-        for (MobEffect effect : ForgeRegistries.MOB_EFFECTS) {
-            if (effect == null) continue; // skip null effects
-            allEffects.add(effect);
-        }
+    List<MobEffect> availableEffects = ForgeRegistries.MOB_EFFECTS.getValues().stream()
+            .filter(Objects::nonNull)
+            .filter(effect -> {
+                var key = ForgeRegistries.MOB_EFFECTS.getKey(effect);
+                return key != null && !blacklist.contains(key.toString());
+            })
+            .collect(Collectors.toList());
 
-        if (allEffects.isEmpty()) return;
+    if (availableEffects.isEmpty()) return;
 
-        Collections.shuffle(allEffects, new java.util.Random(random.nextLong()));
+    Collections.shuffle(availableEffects, new java.util.Random(random.nextLong()));
 
-        // Random number of effects: 1, 2, or 3
-        int count = 1 + random.nextInt(3);
+    int count = 1 + random.nextInt(3);
 
-        for (int i = 0; i < count && i < allEffects.size(); i++) {
-            MobEffect effect = allEffects.get(i);
+        for (int i = 0; i < count && i < availableEffects.size(); i++) {
+          MobEffect effect = availableEffects.get(i);
 
-            // Random duration: 5–20 seconds (100–400 ticks)
-            int duration = 100 + random.nextInt(301);
+         int duration = 100 + random.nextInt(301);
 
-            // Random amplifier: 0–2 (level I–III)
-            int amplifier = random.nextInt(3);
+         int amplifier = random.nextInt(3);
 
-            target.addEffect(new MobEffectInstance(effect, duration, amplifier));
+         target.addEffect(new MobEffectInstance(effect, duration, amplifier));
         }
     }
 }

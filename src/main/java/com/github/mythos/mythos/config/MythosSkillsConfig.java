@@ -170,6 +170,9 @@ public class MythosSkillsConfig {
     public static List<? extends String> getFakerSkillReinforceEnchantments() {
         return fakerSkillReinforceEnchantments.get();
     }
+    public static List<? extends String> blacklistedEffects() {
+        return blacklistedEffects.get();
+    }
     public static List<MobEffect> getPurityImmuneEffects() {
         return purityImmuneEffects.get().stream()
                 .map(id -> Registry.MOB_EFFECT.getOptional(new ResourceLocation((String) id)).orElse(null))
