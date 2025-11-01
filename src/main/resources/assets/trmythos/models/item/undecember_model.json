@@ -1,13 +1,15 @@
 {
-	"parent": "builtin/entity",
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
+	"texture_size": [4, 4],
 	"textures": {
-		"0": "trmythos:item/undecemberTexture1",
-		"1": "trmythos:item/undecemberTexture2",
-		"2": "trmythos:item/undecemberTexture3",
-		"3": "trmythos:item/undecemberTexture4",
-		"4": "trmythos:item/undecemberTexture5",
-		"5": "trmythos:item/undecemberTexture6",
-		"particle": "trmythos:item/undecemberTexture1"
+		"0": "trmythos:item/UndecemberTexture1",
+		"1": "trmythos:item/UndecemberTexture2",
+		"2": "trmythos:item/UndecemberTexture3",
+		"3": "trmythos:item/UndecemberTexture4",
+		"4": "trmythos:item/UndecemberTexture5",
+		"5": "trmythos:item/UndecemberTexture6",
+		"particle": "trmythos:item/UndecemberTexture1"
 	},
 	"elements": [
 		{
