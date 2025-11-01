@@ -2,13 +2,13 @@ package com.github.mythos.mythos;
 
 import com.github.mythos.mythos.client.screen.OrunScreen;
 import com.github.mythos.mythos.config.MythosConfig;
+import com.github.mythos.mythos.handler.CarnageHandler;
 import com.github.mythos.mythos.handler.CrimsonTyrantHandler;
 import com.github.mythos.mythos.handler.SkillEvolutionHandler;
 import com.github.mythos.mythos.networking.MythosNetwork;
 import com.github.mythos.mythos.registry.MythosRegistery;
 import com.github.mythos.mythos.registry.menu.MythosMenuTypes;
 import com.github.mythos.mythos.registry.race.MythosRaces;
-import com.github.mythos.mythos.registry.race.MythosSecretRaces;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
@@ -46,8 +46,8 @@ public class Mythos {
         MythosRegistery.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(SkillEvolutionHandler.class);
         MinecraftForge.EVENT_BUS.register(CrimsonTyrantHandler.class);
+        MinecraftForge.EVENT_BUS.register(CarnageHandler.class);
         modEventBus.register(MythosRaces.class);
-        modEventBus.register(MythosSecretRaces.class);
         MythosNetwork.register();
         //FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, MythosConfig.SPEC, getConfigFileName("mythos-common"));

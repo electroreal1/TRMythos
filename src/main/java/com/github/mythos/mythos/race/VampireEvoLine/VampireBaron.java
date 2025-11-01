@@ -3,6 +3,7 @@ package com.github.mythos.mythos.race.VampireEvoLine;
 import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.TensuraSkill;
+import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.effect.template.Transformation;
 import com.github.manasmods.tensura.race.Race;
 import com.github.manasmods.tensura.race.RaceHelper;
@@ -14,9 +15,10 @@ import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.manasmods.tensura.registry.skill.IntrinsicSkills;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSources;
 import com.github.manasmods.tensura.world.TensuraGameRules;
-import com.github.mythos.mythos.registry.race.MythosSecretRaces;
+import com.github.mythos.mythos.registry.race.MythosRaces;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffect;
@@ -25,6 +27,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.registries.IForgeRegistry;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -117,16 +120,33 @@ public class VampireBaron extends VampireRace implements Transformation {
     }
 
     public @Nullable Race getDefaultEvolution(Player player) {
-        return (Race) TensuraRaces.RACE_REGISTRY.get().getValue(MythosSecretRaces.VAMPIRE_VISCOUNT);
+        return (Race) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.VAMPIRE_VISCOUNT);
     }
 
     public @Nullable Race getHarvestFestivalEvolution(Player player) {
-        return (Race) TensuraRaces.RACE_REGISTRY.get().getValue(MythosSecretRaces.VAMPIRE_VISCOUNT);
+        return (Race) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.VAMPIRE_VISCOUNT);
     }
 
     public List<Race> getNextEvolutions(Player player) {
-        List<Race> list = new ArrayList();
-        return (List<Race>) TensuraRaces.RACE_REGISTRY.get().getValue(MythosSecretRaces.VAMPIRE_VISCOUNT);
+        List<Race> list = new ArrayList<>();
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(MythosRaces.VAMPIRE_VISCOUNT));
+        return list;
+    }
+
+    public double getEvolutionPercentage(Player player) {
+        double minimalEP = this.getMinBaseAura() + this.getMinBaseMagicule();
+        // Base EP contribution, capped at 50
+        double percentage = TensuraPlayerCapability.getBaseEP(player) * 100 / minimalEP;
+        percentage = Math.min(percentage, 100.0);
+
+
+        return Math.min(percentage, 100.0);
+    }
+
+    public List<Component> getRequirementsForRendering(Player player) {
+        List<Component> list = new ArrayList();
+        list.add(Component.translatable("tensura.evolution_menu.ep_requirement"));
+        return list;
     }
 
     public void raceAbility(Player player) {

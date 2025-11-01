@@ -11,12 +11,15 @@ public class MythosRegistery {
 
     public static void register(IEventBus modEventBus) {
         Skills.init(modEventBus);
+
         FusedSkills.init(modEventBus);
         MythosMobEffects.register(modEventBus);
         MythosEntityTypes.register(modEventBus);
         MythosMenuTypes.register(modEventBus);
+        MythosWeapons.init(modEventBus);
         //MythosClient.clientSetup((FMLClientSetupEvent) modEventBus);
         modEventBus.addListener(MythosClient::clientSetup);
+
 
     }
 

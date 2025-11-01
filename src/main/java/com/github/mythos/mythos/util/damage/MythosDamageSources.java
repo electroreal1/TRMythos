@@ -8,8 +8,9 @@ import net.minecraft.world.entity.Entity;
 public class MythosDamageSources {
 
     public static final String DESTROY_RECORD = "trmythos.destroy_record";
-
     public static final DamageSource DRAGONFIRE = (new TensuraDamageSource("trmythos.dragonfire")).setIsFire().bypassEnchantments().setMagic().setNoAggro();
+    public static final DamageSource ROT = (new TensuraDamageSource("trmythos.rot")).setNotTensuraMagic().bypassArmor().bypassEnchantments().setMagic();
+
 
 
     public MythosDamageSources() {
@@ -23,4 +24,7 @@ public class MythosDamageSources {
         return (new TensuraEntityDamageSource("trmythos.dragonfire", entity)).setNoKnock().bypassArmor().setIsFire().setMagic().setNoAggro();
     }
 
+    public static DamageSource rot(Entity pSource) {
+        return (new TensuraEntityDamageSource("trmythos.rot", pSource)).setNoKnock().setNotTensuraMagic().bypassArmor().bypassEnchantments().setMagic();
+    }
 }

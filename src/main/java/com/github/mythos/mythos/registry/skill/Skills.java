@@ -41,7 +41,8 @@ public class Skills {
     public static final RegistryObject<TheWorldSkill> THE_WORLD;
     public static final RegistryObject<ChildOfThePlaneSkill> CHILD_OF_THE_PLANE;
     public static final RegistryObject<CrimsonTyrantSkill> CRIMSON_TYRANT;
-    public static final RegistryObject<CursedBloodline> TEST;
+    public static final RegistryObject<Sporeblood> SPOREBLOOD;
+
 
     // evolved uniques
     public static final RegistryObject<CarnageSkill> CARNAGE;
@@ -77,7 +78,7 @@ public class Skills {
         BLOODSUCKER = registery.register("bloodsucker", () -> new BloodsuckerSkill(Skill.SkillType.UNIQUE));
         CHILD_OF_THE_PLANE = registery.register("child_of_the_plane", () -> new ChildOfThePlaneSkill(Skill.SkillType.UNIQUE));
         CRIMSON_TYRANT = registery.register("crimson_tyrant", () -> new CrimsonTyrantSkill(Skill.SkillType.UNIQUE));
-        TEST = registery.register("cursed", () -> new CursedBloodline(Skill.SkillType.UNIQUE));
+        SPOREBLOOD = registery.register("sporeblood", () -> new Sporeblood(Skill.SkillType.UNIQUE));
 
         // evolved uniques
         CARNAGE = registery.register("carnage", () -> new CarnageSkill(Skill.SkillType.UNIQUE));

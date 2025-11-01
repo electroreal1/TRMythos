@@ -1,10 +1,8 @@
 package com.github.mythos.mythos.ability.skill.ultimate;
-import com.github.manasmods.tensura.data.TensuraTags;
-import com.github.manasmods.tensura.event.SkillPlunderEvent;
-import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
+
 import com.github.manasmods.manascore.api.skills.ManasSkill;
-import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
+import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
 import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.SkillUtils;
@@ -15,7 +13,12 @@ import com.github.manasmods.tensura.capability.effects.TensuraEffectsCapability;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.capability.skill.TensuraSkillCapability;
 import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
-import com.github.manasmods.tensura.registry.items.TensuraMobDropItems;
+import com.github.manasmods.tensura.entity.magic.TensuraProjectile;
+import com.github.manasmods.tensura.entity.magic.projectile.SeveranceCutterProjectile;
+import com.github.manasmods.tensura.event.SkillPlunderEvent;
+import com.github.manasmods.tensura.network.TensuraNetwork;
+import com.github.manasmods.tensura.network.play2client.RequestFxSpawningPacket;
+import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
 import com.github.mythos.mythos.registry.MythosMobEffects;
@@ -26,36 +29,31 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
+import net.minecraft.network.protocol.game.ClientboundPlayerInfoPacket;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.players.PlayerList;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.github.manasmods.tensura.entity.magic.TensuraProjectile;
-import com.github.manasmods.tensura.entity.magic.projectile.SeveranceCutterProjectile;
+
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Predicate;
-import net.minecraft.network.protocol.game.ClientboundPlayerInfoPacket;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.players.PlayerList;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import com.github.manasmods.tensura.network.TensuraNetwork;
-import com.github.manasmods.tensura.network.play2client.RequestFxSpawningPacket;
-import net.minecraftforge.network.PacketDistributor;
 
 
 
@@ -85,31 +83,31 @@ public class ZepiaSkill extends Skill {
         }
         return SkillUtils.isSkillMastered(player, (ManasSkill) Skills.ELTNAM.get());
 
-        TensuraTags.Items royalBlood = new TensuraTags.Items();
-        final int required = 10;
-        int found = 0;
-
-            // Count how many Royal Blood items the player has
-            for (ItemStack stack : player.getInventory().items) {
-                if (stack.getItem() == royalBlood) {
-                    found += stack.getCount();
-                    if (found >= required) break;
-                }
-            }
-
-            // If they have enough, remove exactly 'required' and return true
-            if (found >= required) {
-                int toRemove = required;
-                for (ItemStack stack : player.getInventory().items) {
-                    if (stack.getItem() == royalBlood) {
-                        int remove = Math.min(stack.getCount(), toRemove);
-                        stack.shrink(remove);
-                        toRemove -= remove;
-                        if (toRemove <= 0) break;
-                    }
-                }
-                return true;
-            }
+//        TensuraTags.Items royalBlood = new TensuraTags.Items();
+//        final int required = 10;
+//        int found = 0;
+//
+//            // Count how many Royal Blood items the player has
+//            for (ItemStack stack : player.getInventory().items) {
+//                if (stack.getItem() == royalBlood) {
+//                    found += stack.getCount();
+//                    if (found >= required) break;
+//                }
+//            }
+//
+//            // If they have enough, remove exactly 'required' and return true
+//            if (found >= required) {
+//                int toRemove = required;
+//                for (ItemStack stack : player.getInventory().items) {
+//                    if (stack.getItem() == royalBlood) {
+//                        int remove = Math.min(stack.getCount(), toRemove);
+//                        stack.shrink(remove);
+//                        toRemove -= remove;
+//                        if (toRemove <= 0) break;
+//                    }
+//                }
+//                return true;
+           // }
         }
 
 

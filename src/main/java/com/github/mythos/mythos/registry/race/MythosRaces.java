@@ -2,7 +2,12 @@ package com.github.mythos.mythos.registry.race;
 
 import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.mythos.mythos.Mythos;
+import com.github.mythos.mythos.race.CanineRaceLines.CanineRace;
+import com.github.mythos.mythos.race.CanineRaceLines.CerberusRaceLine.CerberusRace;
+import com.github.mythos.mythos.race.CanineRaceLines.CerberusRaceLine.HellHoundRace;
 import com.github.mythos.mythos.race.CanineRaceLines.CerberusRaceLine.HoundOfHadesRace;
+import com.github.mythos.mythos.race.CanineRaceLines.FenrirRaceLine.DreadBeastRace;
+import com.github.mythos.mythos.race.CanineRaceLines.FenrirRaceLine.FenrisWolfRace;
 import com.github.mythos.mythos.race.CanineRaceLines.FenrirRaceLine.HeraldOfRagnarokRace;
 import com.github.mythos.mythos.race.GodlingLines.BuddingDemigodRace;
 import com.github.mythos.mythos.race.GodlingLines.EgyptianPantheon.DivineHostRace;
@@ -10,15 +15,10 @@ import com.github.mythos.mythos.race.GodlingLines.GodlingRace;
 import com.github.mythos.mythos.race.GodlingLines.GreekPantheon.SemideusRace;
 import com.github.mythos.mythos.race.GodlingLines.NorsePantheon.UulbornRace;
 import com.github.mythos.mythos.race.JormungandrRaceLine.*;
-import com.github.mythos.mythos.race.CanineRaceLines.CanineRace;
-import com.github.mythos.mythos.race.CanineRaceLines.CerberusRaceLine.CerberusRace;
-import com.github.mythos.mythos.race.CanineRaceLines.CerberusRaceLine.HellHoundRace;
-import com.github.mythos.mythos.race.CanineRaceLines.FenrirRaceLine.DreadBeastRace;
-import com.github.mythos.mythos.race.CanineRaceLines.FenrirRaceLine.FenrisWolfRace;
-import com.github.mythos.mythos.race.JormungandrRaceLine.*;
 import com.github.mythos.mythos.race.ValkyrieRaceLine.EnvoyOfValhallaRace;
 import com.github.mythos.mythos.race.ValkyrieRaceLine.MaidenRace;
 import com.github.mythos.mythos.race.ValkyrieRaceLine.ValkyrieRace;
+import com.github.mythos.mythos.race.VampireEvoLine.*;
 import com.github.trmythos.trmythos.race.ValkyrieRaceLine.SoulCourierRace;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -60,6 +60,17 @@ public class MythosRaces {
     public static final ResourceLocation SEMIDEUS = new ResourceLocation(Mythos.MOD_ID, "semideus");
     public static final ResourceLocation UUL_BORN = new ResourceLocation(Mythos.MOD_ID, "uul_born");
     public static final ResourceLocation DIVINE_HOST = new ResourceLocation(Mythos.MOD_ID, "divine_host");
+
+    // Vampires
+
+    public static final ResourceLocation VAMPIRE_BARON = new ResourceLocation(Mythos.MOD_ID, "vampire_baron");
+    public static final ResourceLocation VAMPIRE_VISCOUNT = new ResourceLocation(Mythos.MOD_ID, "vampire_viscount");
+    public static final ResourceLocation VAMPIRE_EARL = new ResourceLocation(Mythos.MOD_ID, "vampire_earl");
+    public static final ResourceLocation VAMPIRE_MARQUIS = new ResourceLocation(Mythos.MOD_ID, "vampire_marquis");
+    public static final ResourceLocation VAMPIRE_DUKE = new ResourceLocation(Mythos.MOD_ID, "vampire_duke");
+    public static final ResourceLocation VAMPIRE_ARCHDUKE = new ResourceLocation(Mythos.MOD_ID, "vampire_archduke");
+    public static final ResourceLocation VAMPIRE_PRINCE = new ResourceLocation(Mythos.MOD_ID, "vampire_prince");
+    public static final ResourceLocation VAMPIRE_TRUE_ANCESTOR = new ResourceLocation(Mythos.MOD_ID, "vampire_true_ancestor");
     /**
      * Make sure that you register the race, otherwise it will not show up correctly in the selection menu
      * @param event
@@ -139,6 +150,32 @@ public class MythosRaces {
         event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
             helper.register("divine_host", new DivineHostRace());
         });
+
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("vampire_baron", new VampireBaron());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("vampire_viscount", new VampireViscount());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("vampire_earl", new VampireEarl());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("vampire_marquis", new VampireMarquis());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("vampire_duke", new VampireDuke());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("vampire_archduke", new VampireArchduke());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("vampire_prince", new VampirePrince());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("vampire_true_ancestor", new VampireTrueAncestor());
+        });
+
 
 
     }

@@ -3,6 +3,7 @@ package com.github.mythos.mythos.registry;
 import com.github.mythos.mythos.mob_effect.*;
 import com.github.mythos.mythos.mob_effect.debuff.BloodDrainEffect;
 import com.github.mythos.mythos.mob_effect.debuff.DragonfireEffect;
+import com.github.mythos.mythos.mob_effect.debuff.RotEffect;
 import com.github.mythos.mythos.mob_effect.debuff.VaporizationFreezeEffect;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -40,6 +41,8 @@ public class MythosMobEffects {
             new BloodCoatEffect(MobEffectCategory.BENEFICIAL, (new Color(220, 20, 60)).getRGB()));
     public static final RegistryObject<MobEffect> COMPLETE_REGENERATION = registry.register("complete_regeneration", () ->
             new CompleteRegenerationEffect(MobEffectCategory.BENEFICIAL, (new Color(255, 0, 0)).getRGB()));
+    public static final RegistryObject<MobEffect> ROT = registry.register("rot", () ->
+            new RotEffect(MobEffectCategory.HARMFUL, (new Color(255, 0, 0))));
     public static void init(IEventBus modEventBus) {
         registry.register(modEventBus);
     }

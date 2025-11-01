@@ -13,7 +13,7 @@ import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.manasmods.tensura.registry.skill.IntrinsicSkills;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSources;
 import com.github.manasmods.tensura.world.TensuraGameRules;
-import com.github.mythos.mythos.registry.race.MythosSecretRaces;
+import com.github.mythos.mythos.registry.race.MythosRaces;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
@@ -24,6 +24,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.registries.IForgeRegistry;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -121,16 +122,17 @@ public class VampireEarl extends Race implements Transformation {
     }
 
     public @Nullable Race getDefaultEvolution(Player player) {
-        return (Race) TensuraRaces.RACE_REGISTRY.get().getValue(MythosSecretRaces.VAMPIRE_MARQUIS);
+        return (Race) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.VAMPIRE_MARQUIS);
     }
 
     public @Nullable Race getHarvestFestivalEvolution(Player player) {
-        return (Race) TensuraRaces.RACE_REGISTRY.get().getValue(MythosSecretRaces.VAMPIRE_MARQUIS);
+        return (Race) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.VAMPIRE_MARQUIS);
     }
 
     public List<Race> getNextEvolutions(Player player) {
         List<Race> list = new ArrayList();
-        return (List<Race>) TensuraRaces.RACE_REGISTRY.get().getValue(MythosSecretRaces.VAMPIRE_MARQUIS);
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(MythosRaces.VAMPIRE_MARQUIS));
+        return list;
     }
 
     public void raceAbility(Player player) {
