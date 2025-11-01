@@ -1,6 +1,6 @@
 package com.github.mythos.mythos.registry;
 
-import com.github.mythos.mythos.item.UndecemberItem;
+import com.github.mythos.mythos.item.undecember;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -21,6 +21,6 @@ public class MythosWeapons {
 
     static {
         registry = DeferredRegister.create(ForgeRegistries.ITEMS, "trmythos");
-        UNDECEMBER = registry.register("undecember", UndecemberItem::new);
+        UNDECEMBER = registry.register("undecember", undecember::new);
     }
 }
