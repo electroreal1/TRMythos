@@ -16,7 +16,7 @@ public class MythosRegistery {
         MythosMobEffects.register(modEventBus);
         MythosEntityTypes.register(modEventBus);
         MythosMenuTypes.register(modEventBus);
-        MythosWeapons.init(modEventBus);
+        MythosItems.register(modEventBus);
         //MythosClient.clientSetup((FMLClientSetupEvent) modEventBus);
         modEventBus.addListener(MythosClient::clientSetup);
 

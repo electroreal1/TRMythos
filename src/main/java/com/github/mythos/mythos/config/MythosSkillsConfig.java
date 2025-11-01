@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 public class MythosSkillsConfig {
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> fakerSkillRestrictedItems;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> fakerSkillReinforceEnchantments;
+    public static ForgeConfigSpec.ConfigValue<List<? extends String>> blacklistedEffects;
     public static ForgeConfigSpec.DoubleValue vassalAssemblyChance;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> purityImmuneEffects;
     public static ForgeConfigSpec.DoubleValue purityDamageCap;
@@ -88,6 +89,15 @@ public class MythosSkillsConfig {
                                 "tensura:elemental_resistance:4", "tensura:slotting:5", "tensura:swift:3"
 
                                 ),
+                        obj -> obj instanceof String
+                );
+        blacklistedEffects = builder
+                .comment("List of effects that cannot be given via profanity")
+                .defineList(
+                        "blacklistedEffects",
+                        Arrays.asList(
+                                "stellar_prism:devil_union"
+                        ),
                         obj -> obj instanceof String
                 );
         purityImmuneEffects = builder
