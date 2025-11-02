@@ -1,6 +1,4 @@
 {
-  "item.trmythos.undecember_sword": "Undecember",
-
   "trmythos.skill.example_ultimate": "Example Ultimate",
   "trmythos.skill.example_ultimate.description": "This is a description for the ultimate skill. Edit this description using the en_us.json file.",
 
@@ -100,6 +98,10 @@
   "trmythos.skill.paranoia.dragonfire": "Dream of Dragonfire",
   "trmythos.skill.paranoia.frozen": "Dream of Frozen Oblivion",
   "trmythos.skill.paranoia.death": "Dream of Death",
+
+  "item.trmythos.undecember": "Undecember",
+  "trmythos.skill.sporeblood": "sporeblood",
+  "trmythos.skill.sporeblood.description": "You have walked between Light and Shadow, Gods and Spores. You have touched corruption and felt it's power, and in it's rotten and magnificent glory, you have changed.",
 
   "trmythos.skill.opportunist": "Opportunist",
   "trmythos.skill.opportunist.description": "Take advantage of the odds to exploit the opportunities presented to you. Although, who knows if others might be able to do the same...",

@@ -72,6 +72,16 @@ public class Sporeblood extends Skill {
         }
     }
 
+    private void gainMastery(ManasSkillInstance instance, LivingEntity entity) {
+        CompoundTag tag = instance.getOrCreateTag();
+        int time = tag.getInt("activatedTimes");
+        if (time % 12 == 0) {
+            this.addMasteryPoint(instance, entity);
+        }
+
+        tag.putInt("activatedTimes", time + 1);
+    }
+
     @Override
     public int modes() {
         return 1;
@@ -114,7 +124,7 @@ public class Sporeblood extends Skill {
 
     private void spawnDummySword(ManasSkillInstance instance, LivingEntity entity, InteractionHand hand) {
         if (!SkillHelper.outOfMagicule(entity, instance)) {
-            this.addMasteryPoint(instance, entity);
+//            this.addMasteryPoint(instance, entity);
             ItemStack blade = new ItemStack((ItemLike) MythosWeapons.UNDECEMBER.get());
             entity.setItemInHand(hand, blade);
             entity.swing(hand, true);
