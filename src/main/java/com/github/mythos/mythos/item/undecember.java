@@ -12,9 +12,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 
-public class undecember_sword extends SimpleLongSwordItem {
+public class undecember extends SimpleLongSwordItem {
 
-    public undecember_sword() {
+    public undecember() {
         super(TensuraToolTiers.PURE_MAGISTEEL, (new Item.Properties()).tab(TensuraCreativeTab.GEAR).fireResistant().rarity(TensuraRarity.UNIQUE));
     }
 
@@ -23,7 +23,7 @@ public class undecember_sword extends SimpleLongSwordItem {
 //    }
 
     public static void applyEnchants(ItemStack toStack, ItemStack fromStack, LivingEntity entity, EquipmentSlot toSlot) {
-        if (toSlot.getType() == EquipmentSlot.Type.HAND && toStack.getItem() instanceof undecember_sword) {
+        if (toSlot.getType() == EquipmentSlot.Type.HAND && toStack.getItem() instanceof undecember) {
             Enchantment enchant5 = (Enchantment) TensuraEnchantments.TSUKUMOGAMI.get();
             if (toStack.getEnchantmentLevel(enchant5) < 1) {
                 EngravingEnchantment.engrave(toStack, enchant5, 1);
