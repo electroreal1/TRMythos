@@ -45,8 +45,10 @@ public class Sporeblood extends Skill {
 
     public void onToggleOn(ManasSkillInstance instance, LivingEntity attacker, LivingHurtEvent e) {
         DamageSource source = e.getSource();
-        if (source.getDirectEntity() == attacker && DamageSourceHelper.isCorrosion(source) && DamageSourceHelper.isPoison(source) && MythosDamageSourceHelper.isRot(source)) {
+        if (source.getDirectEntity() == attacker &&
+                (DamageSourceHelper.isCorrosion(source) || DamageSourceHelper.isPoison(source) || MythosDamageSourceHelper.isRot(source))) {
             e.setAmount(e.getAmount() * 2.0F);
+            e.getEntity().setRemainingFireTicks((int)(e.getEntity().getRemainingFireTicks() * 1.15F));
         }
     }
 
@@ -62,6 +64,15 @@ public class Sporeblood extends Skill {
                     SkillHelper.checkThenAddEffectSource(target, attacker, poison, 200, 1);
                     SkillHelper.checkThenAddEffectSource(target, attacker, corrosion, 200, 1);
                     SkillHelper.checkThenAddEffectSource(target, attacker, rot, 200, 1);
+
+                    for (LivingEntity nearby : target.level.getEntitiesOfClass(LivingEntity.class, target.getBoundingBox().inflate(3.0D))) {
+                        if (nearby != target && nearby.isAlive() && nearby.distanceTo(target) < 3.0F) {
+                            SkillHelper.checkThenAddEffectSource(nearby, attacker, poison, 200, 1);
+                            SkillHelper.checkThenAddEffectSource(nearby, attacker, corrosion, 200, 1);
+                            SkillHelper.checkThenAddEffectSource(nearby, attacker, rot, 200, 1);
+                        }
+                    }
+
                     level.playSound((Player)null, attacker.getX(), attacker.getY(), attacker.getZ(), SoundEvents.LAVA_EXTINGUISH, SoundSource.PLAYERS, 1.0F, 1.0F);
                     ((ServerLevel)level).sendParticles((SimpleParticleType) TensuraParticles.POISON_BUBBLE.get(), target.position().x, target.position().y + (double)target.getBbHeight() / 2.0, target.position().z, 20, 0.08, 0.08, 0.08, 0.15);
                     ((ServerLevel)level).sendParticles((SimpleParticleType) TensuraParticles.ACID_BUBBLE.get(), target.position().x, target.position().y + (double)target.getBbHeight() / 2.0, target.position().z, 20, 0.08, 0.08, 0.08, 0.15);
