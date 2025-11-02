@@ -25,10 +25,14 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.ThrowableProjectile;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -174,10 +178,46 @@ public class CrimsonTyrantSkill extends Skill {
 
     @SubscribeEvent
     public static void onDamage(LivingDamageEvent event) {
-        if (event.getSource().getEntity() instanceof Player player) {
-            float healAmount = event.getAmount() * 0.05f;
-            player.heal(healAmount);
+        LivingEntity target = event.getEntity();
+
+        if (target == null) return;
+
+        Entity sourceEntity = event.getSource().getEntity();
+
+        if (sourceEntity == null) return;
+
+        Player attacker = null;
+
+        if (sourceEntity instanceof Player p) {
+            attacker = p;
         }
+
+        else if (sourceEntity instanceof Projectile projectile) {
+            Entity owner = projectile.getOwner();
+            if (owner instanceof Player p2) attacker = p2;
+        }
+
+        else if (sourceEntity instanceof AbstractArrow arrow) {
+            Entity owner = arrow.getOwner();
+            if (owner instanceof Player p3) attacker = p3;
+        }
+
+        else if (sourceEntity instanceof ThrowableProjectile thrown) {
+            Entity owner = thrown.getOwner();
+            if (owner instanceof Player p4) attacker = p4;
+        }
+
+        if (attacker == null) return;
+
+        if (attacker.level.isClientSide()) return;
+
+        double damage = event.getAmount();
+        if (damage <= 0) return;
+
+        float healAmount = (float)(damage * 0.05d);
+        if (healAmount <= 0f) return;
+
+        attacker.heal(healAmount);
     }
 
     public boolean onHeld(ManasSkillInstance instance, LivingEntity entity, int heldTicks) {
