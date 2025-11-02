@@ -3,7 +3,7 @@ package com.github.mythos.mythos.mixin;
 import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.tensura.ability.SkillUtils;
-import com.github.mythos.mythos.ability.skill.unique.ChildOfThePlaneSkill;
+import com.github.mythos.mythos.ability.mythos.skill.unique.ChildOfThePlaneSkill;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.registry.skill.Skills;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;

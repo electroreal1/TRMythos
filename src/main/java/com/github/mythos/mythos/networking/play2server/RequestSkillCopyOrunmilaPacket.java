@@ -9,7 +9,7 @@ import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.capability.skill.TensuraSkillCapability;
-import com.github.mythos.mythos.ability.skill.ultimate.OrunmilaSkill;
+import com.github.mythos.mythos.ability.mythos.skill.ultimate.OrunmilaSkill;
 import com.github.mythos.mythos.registry.skill.Skills;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.*;

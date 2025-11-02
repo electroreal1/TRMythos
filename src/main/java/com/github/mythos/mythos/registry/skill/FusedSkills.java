@@ -3,7 +3,7 @@ package com.github.mythos.mythos.registry.skill;
 import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.tensura.ability.skill.Skill;
-import com.github.mythos.mythos.ability.skill.unique.fused_skills.ParanoiaSkill;
+import com.github.mythos.mythos.ability.mythos.skill.unique.fused_skills.ParanoiaSkill;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;

@@ -99,8 +99,9 @@
   "trmythos.skill.paranoia.frozen": "Dream of Frozen Oblivion",
   "trmythos.skill.paranoia.death": "Dream of Death",
 
-  "item.trmythos.undecember": "Undecember",
-  "trmythos.skill.sporeblood": "sporeblood",
+  "item.trmythos.undecember": "§0Undecember",
+  "trmythos.skill.sporeblood": "§0Sporeblood",
+  "trmythos.skill.sporeblood.undecember": "§0Undecember",
   "trmythos.skill.sporeblood.description": "You have walked between Light and Shadow, Gods and Spores. You have touched corruption and felt it's power, and in it's rotten and magnificent glory, you have changed.",
 
   "trmythos.skill.opportunist": "Opportunist",

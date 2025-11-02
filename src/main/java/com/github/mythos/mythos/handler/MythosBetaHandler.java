@@ -34,6 +34,7 @@ public class MythosBetaHandler {
             UUID.fromString("7bd51cab-cb84-4ecf-a14b-38862fcdad21"),
             UUID.fromString("517a7de8-aea4-48fc-85eb-250b7b352dff"),
             UUID.fromString("c9a7dd27-dc29-46e5-9684-71136886a3c4"),
+            UUID.fromString("6914e96f-355c-44b6-bfcb-b9e933c5e037"),
             UUID.fromString("24d1cd36-1393-4ba7-9dcb-942876a280be")
     );
 
