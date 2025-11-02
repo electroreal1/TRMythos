@@ -32,7 +32,6 @@ public class VaporizationFreezeEffect extends SkillMobEffect {
 
     public VaporizationFreezeEffect(MobEffectCategory pCategory, int pColor) {
         super(pCategory, pColor);
-        addAttributeModifier(Attributes.MAX_HEALTH, "3f5b674c-8437-3c5b-b88c-c15b6f1bfcaf", -1.0D, AttributeModifier.Operation.MULTIPLY_TOTAL);
         addAttributeModifier(Attributes.MOVEMENT_SPEED, "3f5b674c-8437-3c5b-b88c-c15b6f1bfcaf", -1.0D, AttributeModifier.Operation.MULTIPLY_TOTAL);
         addAttributeModifier(Attributes.ATTACK_DAMAGE, "3f5b674c-8437-3c5b-b88c-c15b6f1bfcaf", -1.0D, AttributeModifier.Operation.MULTIPLY_TOTAL);
         addAttributeModifier(Attributes.ATTACK_SPEED, "3f5b674c-8437-3c5b-b88c-c15b6f1bfcaf", -1.0D, AttributeModifier.Operation.MULTIPLY_TOTAL);
@@ -65,4 +64,5 @@ public class VaporizationFreezeEffect extends SkillMobEffect {
     public List<ItemStack> getCurativeItems() {
         return Collections.emptyList();
     }
+
 }
