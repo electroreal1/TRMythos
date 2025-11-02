@@ -44,6 +44,11 @@ public class ChildOfThePlaneSkill extends Skill implements Transformation {
         return entity.hasEffect((MobEffect) MythosMobEffects.CHILD_OF_THE_PLANE.get());
     }
 
+    @Override
+    public int getMaxMastery() {
+        return 3000;
+    }
+
     public boolean canIgnoreCoolDown(ManasSkillInstance instance, LivingEntity entity) {
         return instance.getOrCreateTag().getBoolean("ChildOfThePlane");
     }

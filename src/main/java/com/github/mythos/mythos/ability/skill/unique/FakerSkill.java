@@ -62,6 +62,11 @@ public class FakerSkill extends Skill {
         return 1000.0;
     }
 
+    @Override
+    public int getMaxMastery() {
+        return 3000;
+    }
+
     public boolean canBeToggled(ManasSkillInstance instance, LivingEntity living) {
         return true;
     }

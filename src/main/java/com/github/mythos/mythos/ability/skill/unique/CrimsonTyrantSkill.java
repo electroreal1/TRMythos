@@ -26,8 +26,10 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -35,9 +37,20 @@ import net.minecraftforge.network.PacketDistributor;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class CrimsonTyrantSkill extends Skill {
+
+    private static final Map<UUID, Integer> killStacks = new HashMap<>();
+    private static final Map<UUID, Long> lastKillTime = new HashMap<>();
+
+    private static final UUID ATTACK_DAMAGE_MODIFIER = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
+    private static final UUID ATTACK_SPEED_MODIFIER = UUID.fromString("123e4567-e89b-12d3-a456-426614174001");
+
+    private static final int MAX_STACKS = 100;
+    private static final int DECAY_INTERVAL_TICKS = 200;
+
     public CrimsonTyrantSkill(SkillType type) {
         super(SkillType.UNIQUE);
     }
@@ -52,6 +65,10 @@ public class CrimsonTyrantSkill extends Skill {
 
     public static boolean VAMPIRE_ANCESTOR = true;
 
+    @Override
+    public int getMaxMastery() {
+        return 3000;
+    }
 
     public void onLearnSkill(ManasSkillInstance instance, LivingEntity entity, UnlockSkillEvent event, Player player) {
         if (VAMPIRE_ANCESTOR) {
@@ -89,23 +106,71 @@ public class CrimsonTyrantSkill extends Skill {
         return name;
     }
 
-    private static final HashMap<UUID, Integer> killStacks = new HashMap<>();
-
 
     @SubscribeEvent
     public static void onKill(LivingDeathEvent event) {
-        if (event.getSource().getEntity() instanceof Player player) {
-            UUID id = player.getUUID();
-            int stacks = killStacks.getOrDefault(id, 0);
+        if (!(event.getSource().getEntity() instanceof Player player)) return;
+        if (player.level.isClientSide()) return;
 
-            stacks = Math.min(stacks + 1, 100);
+        UUID id = player.getUUID();
+        int stacks = killStacks.getOrDefault(id, 0);
+        stacks = Math.min(stacks + 1, MAX_STACKS);
+
+        killStacks.put(id, stacks);
+        lastKillTime.put(id, player.level.getGameTime());
+
+        updatePlayerAttributes(player, stacks);
+    }
+
+    @SubscribeEvent
+    public static void onServerTick(TickEvent.PlayerTickEvent event) {
+        Player player = event.player;
+        if (player.level.isClientSide() || event.phase != TickEvent.Phase.END) return;
+
+        UUID id = player.getUUID();
+        int stacks = killStacks.getOrDefault(id, 0);
+        if (stacks <= 0) return;
+
+        long gameTime = player.level.getGameTime();
+        long lastKill = lastKillTime.getOrDefault(id, 0L);
+
+        if (gameTime - lastKill >= DECAY_INTERVAL_TICKS) {
+            stacks -= 1;
             killStacks.put(id, stacks);
-
-            float multiplier = 1.0f + (stacks * 0.01f);
-            player.getAttributes().getInstance(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE).setBaseValue(4.0F * multiplier);
-            player.getAttributes().getInstance(Attributes.ATTACK_SPEED).setBaseValue(0.1F * multiplier);
+            lastKillTime.put(id, gameTime);
+            updatePlayerAttributes(player, stacks);
         }
     }
+
+    private static void updatePlayerAttributes(Player player, int stacks) {
+        double multiplier = 1.0 + (stacks * 0.01);
+
+        var damageAttr = player.getAttribute(Attributes.ATTACK_DAMAGE);
+        var speedAttr = player.getAttribute(Attributes.ATTACK_SPEED);
+
+        if (damageAttr != null) {
+            damageAttr.removeModifier(ATTACK_DAMAGE_MODIFIER);
+            damageAttr.addTransientModifier(new AttributeModifier(
+                    ATTACK_DAMAGE_MODIFIER,
+                    "Kill stack damage boost",
+                    4.0 * (multiplier - 1.0),
+                    AttributeModifier.Operation.ADDITION
+            ));
+        }
+
+        if (speedAttr != null) {
+            speedAttr.removeModifier(ATTACK_SPEED_MODIFIER);
+            speedAttr.addTransientModifier(new AttributeModifier(
+                    ATTACK_SPEED_MODIFIER,
+                    "Kill stack speed boost",
+                    0.1 * (multiplier - 1.0),
+                    AttributeModifier.Operation.ADDITION
+            ));
+        }
+    }
+
+
+
 
     @SubscribeEvent
     public static void onDamage(LivingDamageEvent event) {

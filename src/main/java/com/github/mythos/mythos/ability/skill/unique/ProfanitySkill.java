@@ -44,6 +44,11 @@ public class ProfanitySkill extends Skill {
         super(SkillType.UNIQUE);
     }
 
+    @Override
+    public int getMaxMastery() {
+        return 1500;
+    }
+
     public double getObtainingEpCost() {
         return 100000;
     }

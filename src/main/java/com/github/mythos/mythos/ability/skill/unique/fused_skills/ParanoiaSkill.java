@@ -283,7 +283,7 @@ public class ParanoiaSkill extends Skill {
                 float damage = instance.isMastered(entity) ? 500.0F : 250.0f;
                 blizzard.setDamage(damage);
                 entity.getLevel().addFreshEntity(blizzard);
-
+                blizzard.applyEffect(entity);
                 // Swing and play sound
                 entity.swing(InteractionHand.MAIN_HAND, true);
                 entity.getLevel().playSound(null, entity.getX(), entity.getY(), entity.getZ(),

@@ -7,11 +7,8 @@ import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
 import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
-import com.github.manasmods.tensura.ability.magic.Magic;
-import com.github.manasmods.tensura.ability.magic.Magic.MagicType;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.ability.skill.extra.ThoughtAccelerationSkill;
-import com.github.manasmods.tensura.ability.skill.unique.GreatSageSkill;
 import com.github.manasmods.tensura.capability.skill.TensuraSkillCapability;
 import com.github.manasmods.tensura.event.SkillPlunderEvent;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
@@ -70,6 +67,11 @@ public class OmniscientEyeSkill extends Skill {
     }
     public void onToggleOn(ManasSkillInstance instance, LivingEntity entity) {
     ThoughtAccelerationSkill.onToggle(instance, entity, ACCELERATION, true);
+    }
+
+    @Override
+    public int getMaxMastery() {
+        return 1500;
     }
 
     public void onToggleOff(ManasSkillInstance instance, LivingEntity entity) {

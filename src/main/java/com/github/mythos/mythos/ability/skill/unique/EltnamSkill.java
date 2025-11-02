@@ -1,23 +1,18 @@
 package com.github.mythos.mythos.ability.skill.unique;
 
 
-import com.github.manasmods.tensura.registry.skill.ExtraSkills;
-import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
-import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
-import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
-import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
 import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
-import com.github.manasmods.tensura.event.SkillPlunderEvent;
 import com.github.manasmods.tensura.ability.skill.extra.ThoughtAccelerationSkill;
-import com.github.manasmods.tensura.capability.skill.TensuraSkillCapability;
 import com.github.manasmods.tensura.capability.effects.TensuraEffectsCapability;
-import com.github.manasmods.tensura.event.SkillPlunderEvent;
-import com.github.manasmods.tensura.util.TensuraAdvancementsHelper;
+import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
+import com.github.manasmods.tensura.capability.skill.TensuraSkillCapability;
+import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
+import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
@@ -31,16 +26,14 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import java.util.List;
+
 import java.util.UUID;
 import java.util.function.Predicate;
 
@@ -67,6 +60,11 @@ public class EltnamSkill extends Skill {
 
     public double learningCost() {
         return 10000.0;
+    }
+
+    @Override
+    public int getMaxMastery() {
+        return 2000;
     }
 
     private Player target;

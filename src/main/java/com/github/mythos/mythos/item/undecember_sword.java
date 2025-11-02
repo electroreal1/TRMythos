@@ -18,15 +18,20 @@ public class undecember_sword extends SimpleLongSwordItem {
         super(TensuraToolTiers.PURE_MAGISTEEL, (new Item.Properties()).tab(TensuraCreativeTab.GEAR).fireResistant().rarity(TensuraRarity.UNIQUE));
     }
 
+//    public undecember_sword(Tier tier, int attackDamage, float attackSpeed, double range, double critChance, double critDamage, Item.Properties properties) {
+//        super(tier, attackDamage, attackSpeed, range, critChance, critDamage, properties);
+//    }
+
     public static void applyEnchants(ItemStack toStack, ItemStack fromStack, LivingEntity entity, EquipmentSlot toSlot) {
         if (toSlot.getType() == EquipmentSlot.Type.HAND && toStack.getItem() instanceof undecember_sword) {
-            Enchantment tsuku = (Enchantment) TensuraEnchantments.TSUKUMOGAMI.get();
-
-            if (toStack.getEnchantmentLevel(tsuku) < 1) {
-                EngravingEnchantment.engrave(toStack, tsuku, 1);
+            Enchantment enchant5 = (Enchantment) TensuraEnchantments.TSUKUMOGAMI.get();
+            if (toStack.getEnchantmentLevel(enchant5) < 1) {
+                EngravingEnchantment.engrave(toStack, enchant5, 1);
             }
         }
     }
+
+
 
 
 }

@@ -45,6 +45,11 @@ public class CarnageSkill extends Skill {
     }
 
     @Override
+    public int getMaxMastery() {
+        return 4000;
+    }
+
+    @Override
     public double getObtainingEpCost() {
         return 500000.0;
     }

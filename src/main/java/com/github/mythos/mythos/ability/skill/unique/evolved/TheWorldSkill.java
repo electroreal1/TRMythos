@@ -4,24 +4,21 @@ import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
+import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.entity.magic.projectile.SpatialArrowProjectile;
-import com.github.manasmods.tensura.entity.projectile.KunaiProjectile;
 import com.github.manasmods.tensura.registry.attribute.TensuraAttributeRegistry;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
-import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
 import com.github.mythos.mythos.registry.skill.Skills;
-import com.github.manasmods.tensura.ability.SkillHelper;
 import com.mojang.math.Vector3f;
 import io.github.Memoires.trmysticism.data.repeater.PlayerActionFrame;
 import io.github.Memoires.trmysticism.registry.effects.MysticismMobEffects;
 import io.github.Memoires.trmysticism.registry.skill.UltimateSkills;
-import io.github.Memoires.trmysticism.registry.skill.UniqueSkills;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -32,10 +29,10 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
@@ -67,6 +64,11 @@ public class TheWorldSkill extends Skill {
 
     public double getObtainingEpCost() {
         return 250000.0;
+    }
+
+    @Override
+    public int getMaxMastery() {
+        return 5000;
     }
 
     public void onToggleOn(ManasSkillInstance instance, LivingEntity entity) {

@@ -50,6 +50,11 @@ public class PuritySkill extends Skill {
     }
 
     @Override
+    public int getMaxMastery() {
+        return 1500;
+    }
+
+    @Override
     public void onLearnSkill(ManasSkillInstance instance, LivingEntity entity, UnlockSkillEvent event) {
         TensuraEPCapability.getFrom(entity).ifPresent((cap) -> {
             if (!cap.isChaos() || cap.isMajin()) {

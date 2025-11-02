@@ -54,6 +54,11 @@ public class BloodsuckerSkill extends Skill {
         return 10000.0;
     }
 
+    @Override
+    public int getMaxMastery() {
+        return 3000;
+    }
+
     public boolean canTick(ManasSkillInstance instance, LivingEntity entity) {
         return true;
     }

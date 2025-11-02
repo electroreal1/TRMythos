@@ -1,20 +1,41 @@
 package com.github.mythos.mythos.ability.skill.unique;
 
-import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
-import com.github.manasmods.tensura.ability.skill.unique.SurvivorSkill;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
 public class OpportunistSkill extends Skill {
-    public OpportunistSkill(SkillType type) { super(SkillType.UNIQUE); }
+    public OpportunistSkill(SkillType type) {
+        super(SkillType.UNIQUE);
+    }
+
+    @Override
+    public int getMaxMastery() {
+        return 1500;
+    }
+
+    public void onTick(ManasSkillInstance instance, LivingEntity entity) {
+        CompoundTag tag = instance.getOrCreateTag();
+        if (instance.isToggled()) {
+            this.gainMastery(instance, entity);
+        }
+        return;
+    }
+
+    private void gainMastery(ManasSkillInstance instance, LivingEntity entity) {
+        CompoundTag tag = instance.getOrCreateTag();
+        int time = tag.getInt("activatedTimes");
+        if (time % 12 == 0) {
+            this.addMasteryPoint(instance, entity);
+        }
+
+        tag.putInt("activatedTimes", time + 1);
+    }
 
     @Override
     public ResourceLocation getSkillIcon() {
