@@ -20,7 +20,6 @@ import com.github.mythos.mythos.registry.skill.Skills;
 import com.github.mythos.mythos.util.damage.MythosDamageSources;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -45,6 +44,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +72,7 @@ public class OrunmilaSkill extends Skill {
 //        return new ResourceLocation("trmythos", "textures/skill/ultimate/orunmila.png");
 //    }
 
-    public boolean meetEPRequirement(Player entity, double newEP) {
+    public boolean meetEPRequirement(@NotNull Player entity, double newEP) {
         return SkillUtils.isSkillMastered(entity, (ManasSkill) Skills.OMNISCIENT_EYE.get())
                 && SkillUtils.isSkillMastered(entity, (ManasSkill) ExtraSkills.ALL_SEEING_EYE.get())
                 && SkillUtils.isSkillMastered(entity, (ManasSkill) ExtraSkills.UNIVERSAL_PERCEPTION.get())
@@ -80,7 +80,7 @@ public class OrunmilaSkill extends Skill {
                 && SkillUtils.hasSkill(entity, (ManasSkill) ExtraSkills.SAGE.get());
     }
 
-    public void onLearnSkill(ManasSkillInstance instance, LivingEntity entity, UnlockSkillEvent event) {
+    public void onLearnSkill(ManasSkillInstance instance, @NotNull LivingEntity entity, @NotNull UnlockSkillEvent event) {
         if (instance.getMastery() >= 0 && !instance.isTemporarySkill() && entity instanceof Player player) {
             SkillStorage storage = SkillAPI.getSkillsFrom(player);
             Skill previousSkill = (Skill) Skills.OMNISCIENT_EYE.get();
@@ -90,11 +90,11 @@ public class OrunmilaSkill extends Skill {
 
     }
 
-    public boolean canBeToggled(ManasSkillInstance instance, LivingEntity entity) {
+    public boolean canBeToggled(@NotNull ManasSkillInstance instance, @NotNull LivingEntity entity) {
         return true;
     }
 
-    public boolean canTick(ManasSkillInstance instance, LivingEntity entity) {
+    public boolean canTick(@NotNull ManasSkillInstance instance, @NotNull LivingEntity entity) {
         return true;
     }
 
@@ -102,11 +102,23 @@ public class OrunmilaSkill extends Skill {
         return instance.getMode() == 1;
     }
 
-    public void onToggleOn(ManasSkillInstance instance, LivingEntity entity) {
-        entity.addEffect(new MobEffectInstance((MobEffect) TensuraMobEffects.PRESENCE_SENSE.get(), 999999, 6, false, false, false));
+    public void onToggleOn(@NotNull ManasSkillInstance instance, @NotNull LivingEntity entity) {
+        if (entity instanceof LivingEntity) {
+            MobEffectInstance existing = entity.getEffect(TensuraMobEffects.PRESENCE_SENSE.get());
+            if (existing == null || existing.getAmplifier() < 7) {
+                entity.addEffect(new MobEffectInstance(
+                        TensuraMobEffects.PRESENCE_SENSE.get(),
+                        1200,
+                        7,
+                        false,
+                        false,
+                        false
+                ));
+            }
+        }
     }
 
-    public void onToggleOff(ManasSkillInstance instance, LivingEntity entity) {
+    public void onToggleOff(@NotNull ManasSkillInstance instance, LivingEntity entity) {
         if (entity.hasEffect((MobEffect) TensuraMobEffects.PRESENCE_SENSE.get())) {
             int level = ((MobEffectInstance) Objects.requireNonNull(entity.getEffect((MobEffect) TensuraMobEffects.PRESENCE_SENSE.get()))).getAmplifier();
             if (level == 6) {
@@ -115,7 +127,7 @@ public class OrunmilaSkill extends Skill {
         }
     }
 
-    public void onBeingDamaged(ManasSkillInstance instance, LivingAttackEvent event) {
+    public void onBeingDamaged(@NotNull ManasSkillInstance instance, LivingAttackEvent event) {
         if (!event.isCanceled()) {
             if (instance.isToggled()) {
                 DamageSource damageSource = event.getSource();
@@ -170,7 +182,7 @@ public class OrunmilaSkill extends Skill {
                 }
 
                 @Override
-                public Component getDisplayName() {
+                public @NotNull Component getDisplayName() {
                     return Component.literal("Select Skill to Copy");
                 }
             });
@@ -185,27 +197,18 @@ public class OrunmilaSkill extends Skill {
     }
 
 
-    public Component getModeName(int mode) {
-        MutableComponent var10000;
-        switch (mode) {
-            case 1:
-                var10000 = Component.translatable("tensura.skill.analytical_appraisal");
-                break;
-            case 2:
-                var10000 = Component.translatable("trmythos.ski.orunmila.read_record_analysis");
-                break;
-            case 3:
-                var10000 = Component.translatable("trmythos.skill.orunmila.destroy_record");
-                break;
-            default:
-                var10000 = Component.empty();
-        }
-        return var10000;
+    public @NotNull Component getModeName(int mode) {
+        return switch (mode) {
+            case 1 -> Component.translatable("tensura.skill.analytical_appraisal");
+            case 2 -> Component.translatable("trmythos.ski.orunmila.read_record_analysis");
+            case 3 -> Component.translatable("trmythos.skill.orunmila.destroy_record");
+            default -> Component.empty();
+        };
     }
 
 
 
-    public int nextMode(LivingEntity entity, TensuraSkillInstance instance, boolean reverse) {
+    public int nextMode(@NotNull LivingEntity entity, TensuraSkillInstance instance, boolean reverse) {
         if (instance.isMastered(entity)) {
             return instance.getMode() == 3 ? 1 : instance.getMode() + 1;
         } else {
@@ -213,7 +216,7 @@ public class OrunmilaSkill extends Skill {
         }
     }
 
-    public void onPressed(ManasSkillInstance instance, LivingEntity entity) {
+    public void onPressed(ManasSkillInstance instance, @NotNull LivingEntity entity) {
         if (instance.getMode() == 1) {
             if (!SkillHelper.outOfMagicule(entity, instance)) {
                 if (entity instanceof Player) {
@@ -299,12 +302,12 @@ public class OrunmilaSkill extends Skill {
 
         NetworkHooks.openScreen(serverPlayer, new MenuProvider() {
             @Override
-            public Component getDisplayName() {
+            public @NotNull Component getDisplayName() {
                 return Component.literal("Select Skill to Copy");
             }
 
             @Override
-            public AbstractContainerMenu createMenu(int id, Inventory inv, Player p) {
+            public AbstractContainerMenu createMenu(int id, @NotNull Inventory inv, @NotNull Player p) {
 
                 OrunMenu menu = new OrunMenu(id, inv);
 

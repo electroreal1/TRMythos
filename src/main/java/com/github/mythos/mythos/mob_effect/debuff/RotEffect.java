@@ -14,7 +14,7 @@ import java.awt.*;
 public class RotEffect extends MobEffect {
 
     public RotEffect(MobEffectCategory pCategory, Color pColor) {
-        super(MobEffectCategory.BENEFICIAL, 990000 );
+        super(MobEffectCategory.HARMFUL, 990000 );
     }
 
     public void applyEffectTick(LivingEntity pLivingEntity, int pAmplifier) {

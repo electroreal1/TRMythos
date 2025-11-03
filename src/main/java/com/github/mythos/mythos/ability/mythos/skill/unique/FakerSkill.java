@@ -75,7 +75,13 @@ public class FakerSkill extends Skill {
 
     public void onToggleOn(ManasSkillInstance instance, LivingEntity entity) {
         ThoughtAccelerationSkill.onToggle(instance, entity, ACCELERATION, true);
-        entity.addEffect(new MobEffectInstance((MobEffect) MythosMobEffects.AVALON_REGENERATION.get(), 1200, 1, false, false, false));
+        if (entity instanceof LivingEntity) {
+            if (entity.hasEffect(MythosMobEffects.AVALON_REGENERATION.get())) {
+                return;
+            } else {
+                entity.addEffect(new MobEffectInstance((MobEffect) MythosMobEffects.AVALON_REGENERATION.get(), 1200, 1, false, false, false));
+            }
+        }
     }
 
     public void onToggleOff(ManasSkillInstance instance, LivingEntity entity) {

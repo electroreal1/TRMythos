@@ -43,6 +43,8 @@ public class MythosMobEffects {
             new CompleteRegenerationEffect(MobEffectCategory.BENEFICIAL, (new Color(255, 0, 0)).getRGB()));
     public static final RegistryObject<MobEffect> ROT = registry.register("rot", () ->
             new RotEffect(MobEffectCategory.HARMFUL, (new Color(255, 0, 0))));
+    public static final RegistryObject<MobEffect> EXCALIBUR_REGENERATION = registry.register("excalibur_regeneration", () ->
+            new ExcaliburRegeneration(MobEffectCategory.BENEFICIAL, (new Color(15, 100, 100))));
     public static void init(IEventBus modEventBus) {
         registry.register(modEventBus);
     }
