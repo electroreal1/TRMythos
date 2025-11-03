@@ -52,6 +52,10 @@ public class SkillUtilsMixin {
             point += 9;
         }
 
+        if (hasSkill(entity, (ManasSkill)Skills.OMNISCIENT_EYE.get())) {
+            point += 10;
+        }
+
         return point;
     }
 
@@ -71,6 +75,12 @@ public class SkillUtilsMixin {
         }
         if (hasSkill(entity, (ManasSkill)Skills.ZEPIA.get())) {
             point += 9;
+        }
+        if (hasSkill(entity, (ManasSkill)Skills.OMNISCIENT_EYE.get())) {
+            point += 10;
+        }
+        if (hasSkill(entity, (ManasSkill)Skills.OMNISCIENT_EYE.get()) && instance.getSkill() instanceof com.github.manasmods.tensura.ability.magic.Magic) {
+            point += 999;
         }
 
 

@@ -9,8 +9,10 @@ import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.ability.skill.extra.ThoughtAccelerationSkill;
+import com.github.manasmods.tensura.ability.skill.unique.CookSkill;
 import com.github.manasmods.tensura.capability.effects.TensuraEffectsCapability;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
+import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.capability.skill.TensuraSkillCapability;
 import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
 import com.github.manasmods.tensura.entity.magic.TensuraProjectile;
@@ -18,10 +20,13 @@ import com.github.manasmods.tensura.entity.magic.projectile.SeveranceCutterProje
 import com.github.manasmods.tensura.event.SkillPlunderEvent;
 import com.github.manasmods.tensura.network.TensuraNetwork;
 import com.github.manasmods.tensura.network.play2client.RequestFxSpawningPacket;
+import com.github.manasmods.tensura.race.Race;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
+import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
 import com.github.mythos.mythos.registry.MythosMobEffects;
+import com.github.mythos.mythos.registry.race.MythosRaces;
 import com.github.mythos.mythos.registry.skill.Skills;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
@@ -50,7 +55,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
+import com.github.manasmods.tensura.ability.skill.unique.WrathSkill;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -60,6 +65,7 @@ import java.util.function.Predicate;
 public class ZepiaSkill extends Skill {
     protected static final UUID ACCELERATION = UUID.fromString("8a67e638-7159-4ec8-8556-2c25c457262b");
     public static final UUID COOK = UUID.fromString("7d9edf73-c44a-46ca-93b9-f18ca595ca63");
+    public static boolean DeadApostleAncestor = true;
 
     public ZepiaSkill() {
         super(SkillType.ULTIMATE);
@@ -83,31 +89,6 @@ public class ZepiaSkill extends Skill {
         }
         return SkillUtils.isSkillMastered(player, (ManasSkill) Skills.ELTNAM.get());
 
-//        TensuraTags.Items royalBlood = new TensuraTags.Items();
-//        final int required = 10;
-//        int found = 0;
-//
-//            // Count how many Royal Blood items the player has
-//            for (ItemStack stack : player.getInventory().items) {
-//                if (stack.getItem() == royalBlood) {
-//                    found += stack.getCount();
-//                    if (found >= required) break;
-//                }
-//            }
-//
-//            // If they have enough, remove exactly 'required' and return true
-//            if (found >= required) {
-//                int toRemove = required;
-//                for (ItemStack stack : player.getInventory().items) {
-//                    if (stack.getItem() == royalBlood) {
-//                        int remove = Math.min(stack.getCount(), toRemove);
-//                        stack.shrink(remove);
-//                        toRemove -= remove;
-//                        if (toRemove <= 0) break;
-//                    }
-//                }
-//                return true;
-           // }
         }
 
 
@@ -154,7 +135,6 @@ public class ZepiaSkill extends Skill {
                     "multiplayer.player.left", player.getDisplayName()
             ).setStyle(Style.EMPTY.withColor(ChatFormatting.YELLOW));
 
-            // Send to all players who meet the effect/distance conditions
             for (ServerPlayer target : playerList.getPlayers()) {
                 MobEffectInstance effect = target.getEffect(TensuraMobEffects.PRESENCE_SENSE.get());
                   target.connection.send(removePacket);
@@ -189,16 +169,24 @@ public class ZepiaSkill extends Skill {
             }
         }
 
-    public void onLearnSkill(@NotNull ManasSkillInstance instance, @NotNull LivingEntity entity, @NotNull UnlockSkillEvent event) {
+    public void onLearnSkill(@NotNull ManasSkillInstance instance, @NotNull LivingEntity entity, @NotNull UnlockSkillEvent event, Player player) {
         if (instance.getMastery() >= 0 && !instance.isTemporarySkill()) {
             SkillUtils.learnSkill(entity, ExtraSkills.SAGE.get());
             SkillUtils.learnSkill(entity, ResistanceSkills.DARKNESS_ATTACK_NULLIFICATION.get());
-            SkillUtils.learnSkill(entity, ResistanceSkills.MAGIC_RESISTANCE.get());
+            SkillUtils.learnSkill(entity, ResistanceSkills.SPIRITUAL_ATTACK_NULLIFICATION.get());
             SkillUtils.learnSkill(entity, ResistanceSkills.PHYSICAL_ATTACK_RESISTANCE.get());
-            SkillUtils.learnSkill(entity, ResistanceSkills.CORROSION_RESISTANCE.get());
             SkillUtils.learnSkill(entity, ResistanceSkills.PAIN_RESISTANCE.get());
             SkillUtils.learnSkill(entity, ResistanceSkills.SPIRITUAL_ATTACK_NULLIFICATION.get());
+            SkillUtils.learnSkill(entity, ResistanceSkills.ABNORMAL_CONDITION_NULLIFICATION.get());
         }
+        if (!DeadApostleAncestor) return;
+        TensuraPlayerCapability.getFrom(player).ifPresent(cap -> {
+            Race vampirePrince = TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.VAMPIRE_PRINCE);
+            if (cap.getRace() != vampirePrince) {
+                cap.setRace(player, vampirePrince, true);
+            }
+        });
+
     }
 
     public int modes() {
@@ -554,7 +542,8 @@ public class ZepiaSkill extends Skill {
                 Skill skill = (Skill)var3;
                 return skill.getType().equals(SkillType.COMMON) ||
                         skill.getType().equals(SkillType.EXTRA) ||
-                        skill.getType().equals(SkillType.INTRINSIC);
+                        (skill.getClass().equals(CookSkill.class) || skill.getClass().equals(WrathSkill.class)) ||
+                skill.getType().equals(SkillType.INTRINSIC);
             }
         } else {
             return false;

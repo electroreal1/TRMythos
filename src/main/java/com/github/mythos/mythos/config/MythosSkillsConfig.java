@@ -21,6 +21,7 @@ public class MythosSkillsConfig {
     public static ForgeConfigSpec.BooleanValue enableChefEvolution;
     public static ForgeConfigSpec.BooleanValue loseSkillOnChefEvolution;
     public static ForgeConfigSpec.BooleanValue VampireAncestor;
+    public static ForgeConfigSpec.BooleanValue DeadApostleAncestor;
     public static ForgeConfigSpec.BooleanValue VampireCarnage;
     public static ForgeConfigSpec.BooleanValue CarnageBloodDominion;
     public static ForgeConfigSpec.BooleanValue enableUniqueEvolution;
@@ -133,7 +134,9 @@ public class MythosSkillsConfig {
         loseSkillOnChefEvolution = builder
                 .comment("If true, the Chef skill is lost when evolving to Cook.")
                 .define("loseSkillOnChefEvolution", true);
-
+        DeadApostleAncestor = builder
+                .comment("if true, then on evolving eltnam you will be set to the vampire prince race.")
+                .define("DeadApostleAncestor", true);
         VampireAncestor = builder
                 .comment("if true, then on unlocking Crimson Tyrant you will be set to vampire race.")
                 .define("VampireAncestor", true);
@@ -197,6 +200,9 @@ public class MythosSkillsConfig {
     }
     public static boolean VampireAncestor() {
         return VampireAncestor.get();
+    }
+    public static boolean DeadApostleAncestor() {
+        return DeadApostleAncestor.get();
     }
     public static boolean VampireCarnage() {
         return VampireCarnage.get();
