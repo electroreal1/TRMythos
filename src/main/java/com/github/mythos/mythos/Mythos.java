@@ -140,7 +140,7 @@ public class Mythos {
         String content = contentBuilder.toString();
         String[] newStarting = new String[]{"trmythos:canine", "trmythos:maiden", "trmythos:lesser_serpent","trmythos:godling"};
         String[] newRandom = new String[]{"trmythos:canine", "trmythos:maiden", "trmythos:lesser_serpent","trmythos:godling"};
-        String[] newSkills = new String[]{"trmythos:omniscient_eye", "trmythos:faker", "trmythos:purity", "trmythos:eltnam","trmythos:bloodsucker","trmythos:child_of_the_plane","trmythos:crimson_tyrant"};
+        String[] newSkills = new String[]{"trmythos:omniscient_eye", "trmythos:faker", "trmythos:purity","trmythos:bloodsucker","trmythos:child_of_the_plane","trmythos:crimson_tyrant"};
         String[] creatorSkills = new String[]{""};
         String startingRacesKey = "startingRaces = [";
         String randomRacesKey = "possibleRandomRaces = [";
