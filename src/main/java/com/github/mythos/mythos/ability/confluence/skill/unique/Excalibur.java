@@ -8,6 +8,7 @@ import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.registry.skill.CommonSkills;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.mythos.mythos.registry.MythosMobEffects;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
@@ -21,6 +22,11 @@ public class Excalibur extends Skill {
     @Override
     public boolean canBeToggled(ManasSkillInstance instance, LivingEntity entity) {
         return true;
+    }
+
+    @Override
+    public double getObtainingEpCost() {
+        return 250000;
     }
 
     public void onToggleOn(ManasSkillInstance instance, LivingEntity entity) {
@@ -46,6 +52,21 @@ public class Excalibur extends Skill {
             SkillUtils.learnSkill(entity, CommonSkills.SELF_REGENERATION.get());
             SkillUtils.learnSkill(entity, ExtraSkills.MAJESTY.get());
         }
+    }
+
+    private void gainMastery(ManasSkillInstance instance, LivingEntity entity) {
+        CompoundTag tag = instance.getOrCreateTag();
+        int time = tag.getInt("activatedTimes");
+        if (time % 12 == 0) {
+            this.addMasteryPoint(instance, entity);
+        }
+
+        tag.putInt("activatedTimes", time + 1);
+    }
+
+    @Override
+    public int getMaxMastery() {
+        return 3000;
     }
 
 

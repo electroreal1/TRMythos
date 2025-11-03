@@ -100,6 +100,11 @@
   "trmythos.skill.paranoia.frozen": "Dream of Frozen Oblivion",
   "trmythos.skill.paranoia.death": "Dream of Death",
 
+  "item.trmythos.fragarach": "§3Fragarach",
+  "trmythos.skill.fragarach": "§3Fragarach",
+  "trmythos.skill.fragarach.fragarach": "§3Fragarach",
+  "trmythos.skill.fragarach.description": "The blade of Truth, none shall hide, none shall escape you.",
+
   "item.trmythos.undecember": "§0Undecember",
   "trmythos.skill.sporeblood": "§0Sporeblood",
   "trmythos.skill.sporeblood.undecember": "§0Undecember",

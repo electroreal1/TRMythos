@@ -42,6 +42,10 @@ public class Sporeblood extends Skill {
         return instance.isMastered(entity);
     }
 
+    @Override
+    public double getObtainingEpCost() {
+        return 250000;
+    }
 
     public void onToggleOn(ManasSkillInstance instance, LivingEntity attacker, LivingHurtEvent e) {
         DamageSource source = e.getSource();

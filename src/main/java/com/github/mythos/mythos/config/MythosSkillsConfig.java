@@ -26,7 +26,8 @@ public class MythosSkillsConfig {
     public static ForgeConfigSpec.BooleanValue CarnageBloodDominion;
     public static ForgeConfigSpec.BooleanValue enableUniqueEvolution;
     public static ForgeConfigSpec.BooleanValue loseUniqueOnEvolution;
-    public static ForgeConfigSpec.ConfigValue<List<? extends String>> racesThatCanCompeteForChildOfThePlane = null;
+    public static ForgeConfigSpec.ConfigValue<List<? extends String>> racesThatCanCompeteForChildOfThePlane;
+    public static ForgeConfigSpec.ConfigValue<List<? extends  String>> GRAM_EXTRA_DAMAGE_RACES;
 
 
 
@@ -134,15 +135,19 @@ public class MythosSkillsConfig {
         loseSkillOnChefEvolution = builder
                 .comment("If true, the Chef skill is lost when evolving to Cook.")
                 .define("loseSkillOnChefEvolution", true);
+
         DeadApostleAncestor = builder
                 .comment("if true, then on evolving eltnam you will be set to the vampire prince race.")
                 .define("DeadApostleAncestor", true);
+
         VampireAncestor = builder
                 .comment("if true, then on unlocking Crimson Tyrant you will be set to vampire race.")
                 .define("VampireAncestor", true);
+
         VampireCarnage = builder
                 .comment("if true, then on learning Carnage you will be set to vampire baron race.")
                 .define("VampireCarnage", true);
+
         CarnageBloodDominion = builder
                 .comment("if true, then carnage will be able to convert players and mobs into the vampire race.")
                 .define("CarnageBloodDominion", true);
@@ -161,6 +166,13 @@ public class MythosSkillsConfig {
                         List.of("herald_of_ragnarok", "hound_of_hades", "jormungandr", "envoy_of_valhalla"),
                         obj -> obj instanceof String
                 );
+        GRAM_EXTRA_DAMAGE_RACES = builder
+                .comment("List of races, registry names that take bonus damage from Gram's in-slot passive")
+                .defineList("GRAM_EXTRA_DAMAGE_RACES",
+                        List.of("trmysticism:dragonoid"),
+                        obj -> obj instanceof String
+                );
+
 
         builder.pop(); // pop SkillsConfig
     }
@@ -218,6 +230,9 @@ public class MythosSkillsConfig {
     }
     public static List<? extends String> getRacesThatCanCompeteForChildOfThePlane() {
         return racesThatCanCompeteForChildOfThePlane.get();
+    }
+    public static List<? extends String> GRAM_EXTRA_DAMAGE_RACES() {
+        return GRAM_EXTRA_DAMAGE_RACES.get();
     }
 
 
