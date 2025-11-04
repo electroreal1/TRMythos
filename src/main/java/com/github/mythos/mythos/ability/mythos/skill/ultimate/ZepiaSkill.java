@@ -68,7 +68,7 @@ public class ZepiaSkill extends Skill {
     public static boolean DeadApostleAncestor = true;
 
     public ResourceLocation getSkillIcon() {
-        return new ResourceLocation("trmythos", "textures/skill/ultimate/zepia.png");
+        return new ResourceLocation("trmythos", "textures/skill/ultimate/ZepiaIcon.png");
     }
 
 
@@ -181,8 +181,7 @@ public class ZepiaSkill extends Skill {
             SkillUtils.learnSkill(entity, ResistanceSkills.SPIRITUAL_ATTACK_NULLIFICATION.get());
             SkillUtils.learnSkill(entity, ResistanceSkills.PHYSICAL_ATTACK_RESISTANCE.get());
             SkillUtils.learnSkill(entity, ResistanceSkills.PAIN_RESISTANCE.get());
-            SkillUtils.learnSkill(entity, ResistanceSkills.SPIRITUAL_ATTACK_NULLIFICATION.get());
-            SkillUtils.learnSkill(entity, ResistanceSkills.ABNORMAL_CONDITION_NULLIFICATION.get());
+             SkillUtils.learnSkill(entity, ResistanceSkills.ABNORMAL_CONDITION_NULLIFICATION.get());
         }
         if (!DeadApostleAncestor) return;
         TensuraPlayerCapability.getFrom(player).ifPresent(cap -> {
