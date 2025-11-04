@@ -68,7 +68,7 @@ public class ZepiaSkill extends Skill {
     public static boolean DeadApostleAncestor = true;
 
     public ResourceLocation getSkillIcon() {
-        return new ResourceLocation("trmythos", "textures/skill/ultimate/ZepiaIcon.png");
+        return new ResourceLocation("trmythos", "textures/skill/ultimate/ZepiaIconBIG.png");
     }
 
 
