@@ -38,6 +38,7 @@ public class Skills {
     public static final RegistryObject<EltnamSkill> ELTNAM;
     public static final RegistryObject<ZepiaSkill> ZEPIA;
     public static final RegistryObject<BloodsuckerSkill> BLOODSUCKER;
+//    public static final RegistryObject<DullahanSkill> DULLAHAN;
     public static final RegistryObject<TheWorldSkill> THE_WORLD;
     public static final RegistryObject<ChildOfThePlaneSkill> CHILD_OF_THE_PLANE;
     public static final RegistryObject<CrimsonTyrantSkill> CRIMSON_TYRANT;
@@ -66,6 +67,7 @@ public class Skills {
         // uniques
         FAKER = registery.register("faker", FakerSkill::new);
         ELTNAM = registery.register("eltnam", EltnamSkill::new);
+//        DULLAHAN = registery.register("dullahan", DullahanSkill::new);
         OMNISCIENT_EYE = registery.register("omniscient_eye", OmniscientEyeSkill::new);
         PURITY_SKILL = registery.register("purity", () -> new PuritySkill(Skill.SkillType.UNIQUE));
         UNITY = registery.register("unity", () -> new UnitySkill(Skill.SkillType.UNIQUE));

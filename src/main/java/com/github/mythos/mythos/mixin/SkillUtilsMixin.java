@@ -143,6 +143,6 @@ public class SkillUtilsMixin {
 
         return original;
     }
-
+    
 }
 

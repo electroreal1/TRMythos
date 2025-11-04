@@ -67,6 +67,11 @@ public class ZepiaSkill extends Skill {
     public static final UUID COOK = UUID.fromString("7d9edf73-c44a-46ca-93b9-f18ca595ca63");
     public static boolean DeadApostleAncestor = true;
 
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/ultimate/zepia.png");
+    }
+
+
     public ZepiaSkill() {
         super(SkillType.ULTIMATE);
     }
