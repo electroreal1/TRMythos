@@ -76,7 +76,7 @@ public class OrunmilaSkill extends Skill {
         return SkillUtils.isSkillMastered(entity, (ManasSkill) Skills.OMNISCIENT_EYE.get())
                 && SkillUtils.isSkillMastered(entity, (ManasSkill) ExtraSkills.ALL_SEEING_EYE.get())
                 && SkillUtils.isSkillMastered(entity, (ManasSkill) ExtraSkills.UNIVERSAL_PERCEPTION.get())
-                && SkillUtils.isSkillMastered(entity, (ManasSkill) com.github.lucifel.virtuoso.registry.skill.ExtraSkills.CONCENTRATOR.get())
+                && SkillUtils.isSkillMastered(entity, (ManasSkill) com.github.lucifel.virtuoso.registry.skill.VExtraSkills.CONCENTRATOR.get())
                 && SkillUtils.hasSkill(entity, (ManasSkill) ExtraSkills.SAGE.get());
     }
 

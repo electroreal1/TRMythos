@@ -3,6 +3,7 @@ package com.github.mythos.mythos.mixin;
 import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.tensura.ability.SkillUtils;
+import com.github.mythos.mythos.ability.confluence.skill.unique.ConfluenceUniques;
 import com.github.mythos.mythos.ability.mythos.skill.unique.ChildOfThePlaneSkill;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.registry.skill.Skills;
@@ -98,6 +99,9 @@ public class SkillUtilsMixin {
         if (var4 instanceof LivingEntity attacker) {
             if (isSkillInSlot(attacker, (ManasSkill)Skills.ORUNMILA.get())) {
                 return true;
+            }
+            if (isSkillInSlot(attacker, (ManasSkill) ConfluenceUniques.FRAGARACH.get())) {
+                return Math.random() < 0.5;
             }
         }
 

@@ -33,7 +33,10 @@ public abstract class MixinHormeSkill {
 //            remap = false
 //    )
 
-    @Shadow protected abstract boolean canCreateSkill(ResourceLocation location, ServerPlayer serverPlayer, ManasSkillInstance instance);
+    @Shadow
+    public static boolean canCreateSkill(ResourceLocation location, ServerPlayer serverPlayer, ManasSkillInstance instance) {
+        return false;
+    }
 
     @Inject(method = "onPressed", at = @At("RETURN"), remap = false)
     private void addExtraSkills(ManasSkillInstance instance, LivingEntity entity, CallbackInfo ci) {

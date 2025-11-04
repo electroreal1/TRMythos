@@ -78,10 +78,11 @@ public class Fragarach extends Skill {
     }
 
     @SubscribeEvent
-    public static void onHurt(LivingHurtEvent event, LivingEntity entity) {
+    public static void onHurt(LivingHurtEvent event, LivingEntity entity, Player player) {
         if (!(event.getSource().getEntity() instanceof LivingEntity living)) return;
+        boolean holdingFragarach = isHoldingFragarach(player);
 
-        if (!TensuraSkillCapability.isSkillInSlot(living, (ManasSkill) ConfluenceUniques.FRAGARACH.get())) return;
+        if (!TensuraSkillCapability.isSkillInSlot(living, (ManasSkill) ConfluenceUniques.FRAGARACH.get()) && !holdingFragarach) return;
 
         LivingEntity target = event.getEntity();
 
@@ -130,7 +131,6 @@ public class Fragarach extends Skill {
     public void onPressed(ManasSkillInstance instance, LivingEntity entity) {
         if (entity.level.isClientSide) return;
         if (SkillHelper.outOfMagicule(entity, instance)) return;
-        if (MythosWeapons.FRAGARACH.get() == null) return;
 
         if (instance.getOrCreateTag().getBoolean("FragarachCreated")) {
             if (entity instanceof Player player) {
@@ -192,5 +192,12 @@ public class Fragarach extends Skill {
         if (entity instanceof ServerPlayer player) {
             player.inventoryMenu.broadcastChanges();
         }
+    }
+
+    private static boolean isHoldingFragarach(Player player) {
+        ItemStack main = player.getMainHandItem();
+        ItemStack off = player.getOffhandItem();
+
+        return main.getItem() == MythosWeapons.FRAGARACH.get() || off.getItem() == MythosWeapons.FRAGARACH.get();
     }
 }

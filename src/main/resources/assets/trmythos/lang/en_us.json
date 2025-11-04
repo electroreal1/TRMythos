@@ -96,6 +96,7 @@
   "trmythos.skill.profanity.baneful_essence": "§0Baneful Essence",
 
   "trmythos.skill.paranoia": "§0Paranoia",
+  "trmythos.skill.paranoia.description": "A shift in your mind has turned your pleasant, comforting dreams into horrible nightmares. Your paranoia manages to bring these horrors into reality.",
   "trmythos.skill.paranoia.dragonfire": "Dream of Dragonfire",
   "trmythos.skill.paranoia.frozen": "Dream of Frozen Oblivion",
   "trmythos.skill.paranoia.death": "Dream of Death",
@@ -105,13 +106,37 @@
   "trmythos.skill.fragarach.fragarach": "§3Fragarach",
   "trmythos.skill.fragarach.description": "The blade of Truth, none shall hide, none shall escape you.",
 
-  "item.trmythos.undecember": "§0Undecember",
-  "trmythos.skill.sporeblood": "§0Sporeblood",
-  "trmythos.skill.sporeblood.undecember": "§0Undecember",
+  "trmythos.skill.excalibur": "Excalibur",
+  "trmythos.skill.excalibur.description": "The blade of kings, knights and monarchs, lead your army into battle.",
+
+  "trmythos.skill.the_world": "The World",
+  "trmythos.skill.the_world.the_world": "The World",
+  "trmythos.skill.the_world.knife_throw": "Knife Throw",
+  "trmythos.skill.the_world.the_passion": "The Passion",
+  "trmythos.skill.the_world.menacing_pose": "Menacing Pose",
+  "trmythos.skill.the_world.description": "Your power continues to grow, surging in ways you could have never perceived. Now a strange, ghostly companion stands at your side, granting you control over the hands of time, if only for a few precious moments.",
+
+  "item.trmythos.catharsis": "§4Catharsis",
+  "trmythos.skill.catharsis": "§4Catharsis",
+  "item.trmythos.skill.catharsis.catharsis": "§4Catharsis",
+  "trmythos.skill.catharsis.description": "§4The change between matter, to sever all things, heart.. body.. mind.. and soul.",
+
+  "item.trmythos.undecember": "§5Undecember",
+  "trmythos.skill.sporeblood": "§5Sporeblood",
+  "trmythos.skill.sporeblood.undecember": "§5Undecember",
   "trmythos.skill.sporeblood.description": "You have walked between Light and Shadow, Gods and Spores. You have touched corruption and felt it's power, and in it's rotten and magnificent glory, you have changed.",
+
+  "trmythos.skill.eternal": "Eternal",
+  "trmythos.skill.eternal.description": "Stand firm in the face of adversity, your natural longevity acting as a reminder of your immutability.",
+
+  "trmythos.skill.immortal": "Immortal",
+  "trmythos.skill.immortal.description": "Immortality and eternal youth through regeneration, reminding the world that you will remain as flawless as marble at the end of any conflict.",
 
   "trmythos.skill.opportunist": "Opportunist",
   "trmythos.skill.opportunist.description": "Take advantage of the odds to exploit the opportunities presented to you. Although, who knows if others might be able to do the same...",
+
+  "trmythos.skill.automatic_haki_coat": "Automatic Haki Coat",
+  "trmythos.skill.automatic_haki_coat.description": "Cover yourself with haki automatically.",
 
   "trmythos.race.serpent": "Serpent",
   "trmythos.race.lesser_serpent": "Lesser Serpent",

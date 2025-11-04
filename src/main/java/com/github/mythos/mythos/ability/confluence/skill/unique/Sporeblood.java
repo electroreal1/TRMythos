@@ -133,7 +133,6 @@ public class Sporeblood extends Skill {
     public void onPressed(ManasSkillInstance instance, LivingEntity entity) {
         if (entity.level.isClientSide) return;
         if (SkillHelper.outOfMagicule(entity, instance)) return;
-        if (MythosWeapons.UNDECEMBER.get() == null) return;
 
         if (instance.getOrCreateTag().getBoolean("UndecemberCreated")) {
             if (entity instanceof Player player) {

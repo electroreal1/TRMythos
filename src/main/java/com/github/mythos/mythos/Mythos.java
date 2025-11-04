@@ -3,6 +3,7 @@ package com.github.mythos.mythos;
 import com.github.mythos.mythos.client.screen.OrunScreen;
 import com.github.mythos.mythos.config.MythosConfig;
 import com.github.mythos.mythos.handler.CarnageHandler;
+import com.github.mythos.mythos.handler.CatharsisHandler;
 import com.github.mythos.mythos.handler.CrimsonTyrantHandler;
 import com.github.mythos.mythos.handler.SkillEvolutionHandler;
 import com.github.mythos.mythos.networking.MythosNetwork;
@@ -49,6 +50,7 @@ public class Mythos {
         MinecraftForge.EVENT_BUS.register(CarnageHandler.class);
         modEventBus.register(MythosRaces.class);
         MythosNetwork.register();
+        CatharsisHandler.register();
         //FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, MythosConfig.SPEC, getConfigFileName("mythos-common"));
         LOGGER.info("Mythos has been loaded!");

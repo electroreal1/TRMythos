@@ -21,5 +21,10 @@ public class SkillEvolutionHandler {
                 (LivingEntity) event.getEntity(),
                 event
         );
+        SkillEvolutionMechanics.onCrimsonTyrantMastered(
+                event.getSkillInstance(),
+                (LivingEntity) event.getEntity(),
+                event
+        );
     }
 }

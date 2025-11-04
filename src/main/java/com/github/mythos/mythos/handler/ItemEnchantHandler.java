@@ -15,6 +15,10 @@ public class ItemEnchantHandler {
         if ((toStack.is(MythosWeapons.FRAGARACH.get())) && toStack.getEnchantmentLevel((Enchantment) TensuraEnchantments.TSUKUMOGAMI.get()) < 1) {
             EngravingEnchantment.engrave(toStack, (Enchantment)TensuraEnchantments.TSUKUMOGAMI.get(), 1);
         }
+                if ((toStack.is(MythosWeapons.CATHARSIS.get())) && toStack.getEnchantmentLevel((Enchantment) TensuraEnchantments.TSUKUMOGAMI.get()) < 1) {
+            EngravingEnchantment.engrave(toStack, (Enchantment)TensuraEnchantments.TSUKUMOGAMI.get(), 1);
+        }
+
     }
 
 
