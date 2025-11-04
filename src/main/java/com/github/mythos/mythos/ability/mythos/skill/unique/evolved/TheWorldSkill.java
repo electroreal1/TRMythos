@@ -23,6 +23,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
@@ -47,6 +48,10 @@ import java.util.*;
 
 public class TheWorldSkill extends Skill {
     public TheWorldSkill(SkillType type) {super(SkillType.UNIQUE);}
+
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/unique/world.png");
+    }
 
     private static final ThreadLocal<Boolean> isRepeating = ThreadLocal.withInitial(() -> Boolean.valueOf(false));
     private static boolean recursionDepth;
