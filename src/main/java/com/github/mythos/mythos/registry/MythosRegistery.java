@@ -2,6 +2,7 @@ package com.github.mythos.mythos.registry;
 
 import com.github.mythos.mythos.ability.confluence.skill.unique.ConfluenceUniques;
 import com.github.mythos.mythos.handler.CatharsisHandler;
+import com.github.mythos.mythos.registry.dimensions.MythosDimensions;
 import com.github.mythos.mythos.registry.menu.MythosMenuTypes;
 import com.github.mythos.mythos.registry.skill.FusedSkills;
 import com.github.mythos.mythos.registry.skill.Skills;
@@ -17,6 +18,7 @@ public class MythosRegistery {
         FusedSkills.init(modEventBus);
         MythosMobEffects.register(modEventBus);
         MythosEntityTypes.register(modEventBus);
+        MythosDimensions.register(modEventBus);
         MythosMenuTypes.register(modEventBus);
         MythosItems.register(modEventBus);
         CatharsisHandler.register();
