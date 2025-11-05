@@ -58,7 +58,7 @@ public class MythosUtils extends SkillUtils {
 
                 var playerRace = TensuraPlayerCapability.getRace(serverPlayer);
                 if (TensuraPlayerCapability.getRace((LivingEntity)player) == TensuraRaces.WIGHT.get() && (
-                        new Random()).nextInt(100) < 5) {
+                        new Random()).nextInt(100) < 50) {
                     EltnamSkill eltnam = (EltnamSkill) Skills.ELTNAM.get();
                     TensuraSkillInstance noCost = new TensuraSkillInstance((ManasSkill)eltnam);
                     noCost.getOrCreateTag().putBoolean("NoMagiculeCost", true);
