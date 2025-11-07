@@ -28,6 +28,8 @@ public class MythosSkillsConfig {
     public static ForgeConfigSpec.BooleanValue loseUniqueOnEvolution;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> racesThatCanCompeteForChildOfThePlane;
     public static ForgeConfigSpec.ConfigValue<List<? extends  String>> GRAM_EXTRA_DAMAGE_RACES;
+    public static ForgeConfigSpec.ConfigValue<List<? extends String>> summonBlacklistedEntities;
+
 
 
 
@@ -172,6 +174,18 @@ public class MythosSkillsConfig {
                         List.of("trmysticism:dragonoid"),
                         obj -> obj instanceof String
                 );
+        summonBlacklistedEntities = builder
+                .comment("List of entity IDs that cannot be summoned via Monster Creator.")
+                .comment("Use full registry IDs, e.g., 'minecraft:wither', 'minecraft:ender_dragon'")
+                .defineList(
+                        "summonBlacklistedEntities",
+                        Arrays.asList(
+                                "minecraft:ender_dragon",
+                                "minecraft:wither",
+                                "minecraft:player"
+                        ),
+                        obj -> obj instanceof String
+                );
 
 
         builder.pop(); // pop SkillsConfig
@@ -235,7 +249,9 @@ public class MythosSkillsConfig {
         return GRAM_EXTRA_DAMAGE_RACES.get();
     }
 
-
+    public static List<? extends String> getSummonBlacklistedEntities() {
+        return summonBlacklistedEntities.get();
+    }
 }
 
 

@@ -4,6 +4,8 @@ import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.mythos.mythos.ability.mythos.skill.extra.AutomaticHakiCoatSkill;
+import com.github.mythos.mythos.ability.mythos.skill.extra.SpatialStorageSkill;
+import com.github.mythos.mythos.ability.mythos.skill.extra.ThunderRainSkill;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.EternalSkill;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.ImmortalSkill;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.OrunmilaSkill;
@@ -42,12 +44,16 @@ public class Skills {
     public static final RegistryObject<TheWorldSkill> THE_WORLD;
     public static final RegistryObject<ChildOfThePlaneSkill> CHILD_OF_THE_PLANE;
     public static final RegistryObject<CrimsonTyrantSkill> CRIMSON_TYRANT;
+    public static final RegistryObject<MonsterCreatorSkill> MONSTER_CREATOR;
+    public static final RegistryObject<ZephyrosSkill> ZEPHYROS;
+    public static final RegistryObject<HeavensWrathSkill> HEAVENS_WRATH;
 
     // evolved uniques
     public static final RegistryObject<CarnageSkill> CARNAGE;
     // extra
     public static final RegistryObject<AutomaticHakiCoatSkill> AUTOMATIC_HAKI_COAT;
-
+    public static final RegistryObject<SpatialStorageSkill> SPATIAL_STORAGE_SKILL;
+    public static final RegistryObject<ThunderRainSkill> THUNDER_RAIN;
     public Skills() {
     }
 
@@ -78,6 +84,9 @@ public class Skills {
         BLOODSUCKER = registery.register("bloodsucker", () -> new BloodsuckerSkill(Skill.SkillType.UNIQUE));
         CHILD_OF_THE_PLANE = registery.register("child_of_the_plane", () -> new ChildOfThePlaneSkill(Skill.SkillType.UNIQUE));
         CRIMSON_TYRANT = registery.register("crimson_tyrant", () -> new CrimsonTyrantSkill(Skill.SkillType.UNIQUE));
+        MONSTER_CREATOR = registery.register("monster_creator", () -> new MonsterCreatorSkill(Skill.SkillType.UNIQUE));
+        ZEPHYROS = registery.register("zephyros", () -> new ZephyrosSkill(Skill.SkillType.UNIQUE));
+        HEAVENS_WRATH = registery.register("heavens_wrath", () -> new HeavensWrathSkill(Skill.SkillType.UNIQUE));
 
         // evolved uniques
         CARNAGE = registery.register("carnage", () -> new CarnageSkill(Skill.SkillType.UNIQUE));
@@ -85,5 +94,8 @@ public class Skills {
 
         // extra
         AUTOMATIC_HAKI_COAT = registery.register("automatic_haki_coat", () -> new AutomaticHakiCoatSkill(Skill.SkillType.EXTRA));
+        SPATIAL_STORAGE_SKILL = registery.register("spatial_storage", () -> new SpatialStorageSkill(Skill.SkillType.EXTRA));
+        THUNDER_RAIN = registery.register("thunder_rain", () -> new ThunderRainSkill(Skill.SkillType.EXTRA));
+        // magic
     }
 }

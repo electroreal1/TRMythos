@@ -17,6 +17,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -32,6 +33,8 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
+import javax.annotation.Nullable;
+
 public class Sporeblood extends Skill {
     public Sporeblood(SkillType type) {
         super(SkillType.UNIQUE);
@@ -40,6 +43,12 @@ public class Sporeblood extends Skill {
     @Override
     public boolean canBeToggled(ManasSkillInstance instance, LivingEntity entity) {
         return instance.isMastered(entity);
+    }
+
+    @Nullable
+    @Override
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/unique/sporeblood.png");
     }
 
     @Override

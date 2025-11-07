@@ -4,7 +4,9 @@ import com.github.mythos.mythos.client.screen.OrunScreen;
 import com.github.mythos.mythos.registry.MythosEntityTypes;
 import com.github.mythos.mythos.registry.menu.MythosMenuTypes;
 import com.github.mythos.mythos.renderers.DragonfireRenderer;
+import com.github.mythos.mythos.renderers.ThunderStormRenderer;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -25,11 +27,13 @@ public class ClientModEvents {
     public static void onClientSetup(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
             MenuScreens.register(MythosMenuTypes.ORUN_MENU.get(), OrunScreen::new);
+            EntityRenderers.register(MythosEntityTypes.THUNDER_STORM.get(), ThunderStormRenderer::new);
         });
     }
 
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(MythosEntityTypes.DRAGONFIRE.get(), DragonfireRenderer::new);
+        event.registerEntityRenderer(MythosEntityTypes.THUNDER_STORM.get(), ThunderStormRenderer::new);
     }
 }

@@ -9,7 +9,7 @@ import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
 import com.github.manasmods.tensura.network.TensuraNetwork;
 import com.github.manasmods.tensura.network.play2client.RequestFxSpawningPacket;
-import com.github.manasmods.tensura.util.damage.TensuraDamageSource;
+import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
 import com.github.mythos.mythos.config.MythosSkillsConfig;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -72,22 +72,15 @@ public class ProfanitySkill extends Skill {
         return true;
     }
 
-    public void onDamageEntity(ManasSkillInstance instance, LivingEntity user, LivingHurtEvent event) {
-        if (!instance.isToggled()) return;
-
-        DamageSource source = event.getSource();
-        if (!(source instanceof TensuraDamageSource damageSource)) return;
-
-        if (damageSource.getEntity() != user) return;
-
-        boolean isDarkness = false;
-        try {
-            isDarkness = "tensura.dark_attack".equals(damageSource.getMsgId());
-        } catch (Exception ignored) {}
-
-        if (isDarkness) {
-            float multiplier = instance.isMastered(user) ? 4.0F : 3.0F;
-            event.setAmount(event.getAmount() * multiplier);
+    public void onDamageEntity(ManasSkillInstance instance, LivingEntity living, LivingHurtEvent e) {
+        if (instance.isToggled()) {
+            if (DamageSourceHelper.isDarkDamage(e.getSource())) {
+                if (instance.isMastered(living)) {
+                    e.setAmount(e.getAmount() * 4.0F);
+                } else {
+                    e.setAmount(e.getAmount() * 3.0F);
+                }
+            }
         }
     }
 

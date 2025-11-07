@@ -1,6 +1,9 @@
 package com.github.mythos.mythos.ability.mythos.skill.unique.fused_skills;
 
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
+import com.github.manasmods.manascore.api.skills.SkillAPI;
+import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
+import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
 import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
@@ -12,8 +15,12 @@ import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
 import com.github.manasmods.tensura.entity.magic.barrier.BlizzardEntity;
 import com.github.manasmods.tensura.entity.magic.breath.BreathEntity;
 import com.github.manasmods.tensura.registry.attribute.TensuraAttributeRegistry;
+import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSource;
 import com.github.mythos.mythos.registry.MythosEntityTypes;
+import com.github.mythos.mythos.registry.skill.FusedSkills;
+import com.github.mythos.mythos.registry.skill.Skills;
+import io.github.Memoires.trmysticism.registry.skill.UniqueSkills;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -42,17 +49,17 @@ public class ParanoiaSkill extends Skill {
     }
 
 
-//    public void onLearnSkill(ManasSkillInstance instance, LivingEntity living, UnlockSkillEvent event, Player player) {
-//         SkillStorage storage = SkillAPI.getSkillsFrom(player);
-//         Skill profanitySkill = Skills.PROFANITY.get();
-//         Skill dreamerSkill = UniqueSkills.DREAMER.get();
-//         Skill paranoiaSkill = FusedSkills.PARANOIA.get();
-//        if (storage.getSkill(profanitySkill).isPresent() && storage.getSkill(dreamerSkill).isPresent() && storage.getSkill(paranoiaSkill).isPresent()) {
-//            storage.forgetSkill(profanitySkill);
-//            storage.forgetSkill(dreamerSkill);
-//            storage.learnSkill(paranoiaSkill);
-//        }
-//    }
+    public void onLearnSkill(ManasSkillInstance instance, LivingEntity living, UnlockSkillEvent event, Player player) {
+         SkillStorage storage = SkillAPI.getSkillsFrom(player);
+         Skill profanitySkill = Skills.PROFANITY.get();
+         Skill dreamerSkill = UniqueSkills.DREAMER.get();
+         Skill paranoiaSkill = FusedSkills.PARANOIA.get();
+        if (storage.getSkill(profanitySkill).isPresent() && storage.getSkill(dreamerSkill).isPresent() && storage.getSkill(paranoiaSkill).isPresent()) {
+            storage.forgetSkill(profanitySkill);
+            storage.forgetSkill(dreamerSkill);
+            storage.learnSkill(paranoiaSkill);
+        }
+    }
 
     public double getObtainingEpCost() {
         return 250000;
@@ -157,23 +164,15 @@ public class ParanoiaSkill extends Skill {
         }
     }
 
-    public void onDamageEntity(ManasSkillInstance instance, @NotNull LivingEntity user, @NotNull LivingHurtEvent event) {
-        if (!instance.isToggled()) return;
-
-        DamageSource source = event.getSource();
-        if (!(source instanceof TensuraDamageSource damageSource)) return;
-
-        if (damageSource.getEntity() != user) return;
-
-        boolean isDarkness = false;
-        try {
-            isDarkness = "tensura.dark_attack".equals(damageSource.getMsgId());
-        } catch (Exception ignored) {
-        }
-
-        if (isDarkness) {
-            float multiplier = instance.isMastered(user) ? 6.0F : 4.0F;
-            event.setAmount(event.getAmount() * multiplier);
+    public void onDamageEntity(ManasSkillInstance instance, LivingEntity living, LivingHurtEvent e) {
+        if (instance.isToggled()) {
+            if (DamageSourceHelper.isDarkDamage(e.getSource())) {
+                if (instance.isMastered(living)) {
+                    e.setAmount(e.getAmount() * 6.0F);
+                } else {
+                    e.setAmount(e.getAmount() * 4.0F);
+                }
+            }
         }
     }
 
@@ -221,17 +220,14 @@ public class ParanoiaSkill extends Skill {
 
     public boolean onHeld(ManasSkillInstance instance, @NotNull LivingEntity entity, int heldTicks) {
         if (instance.getMode() == 1) {
-            // Check for magicule every 20 ticks
             if (heldTicks % 20 == 0 && SkillHelper.outOfMagicule(entity, instance)) {
                 return false;
             }
 
-            // Add mastery points every 100 ticks
             if (heldTicks % 100 == 0 && heldTicks > 0) {
                 this.addMasteryPoint(instance, entity);
             }
 
-            // Damage
             float damage = instance.isMastered(entity) ? 1000.0F : 500.0F;
             BreathEntity.spawnBreathEntity(
                     MythosEntityTypes.DRAGONFIRE.get(),
@@ -241,7 +237,6 @@ public class ParanoiaSkill extends Skill {
                     this.magiculeCost(entity, instance)
             );
 
-            // Play sound
             entity.getLevel().playSound(
                     null,
                     entity.getX(),
@@ -260,7 +255,7 @@ public class ParanoiaSkill extends Skill {
 
 
     public void onPressed(ManasSkillInstance instance, @NotNull LivingEntity entity) {
-        if (instance.getMode() != 2) return;
+        if (instance.getMode() == 2) return;
 
         boolean hasBlizzard = !entity.getLevel().getEntitiesOfClass(BlizzardEntity.class, entity.getBoundingBox(),
                 blizzard -> blizzard.getOwner() == entity).isEmpty();

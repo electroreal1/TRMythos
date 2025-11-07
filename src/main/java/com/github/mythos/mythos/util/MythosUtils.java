@@ -13,16 +13,19 @@ import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.mythos.mythos.ability.mythos.skill.unique.EltnamSkill;
 import com.github.mythos.mythos.registry.skill.Skills;
 import io.github.Memoires.trmysticism.registry.skill.UniqueSkills;
-import net.minecraft.server.level.ServerPlayer;
-import java.util.Random;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+
+import java.util.Optional;
+import java.util.Random;
 
 public class MythosUtils extends SkillUtils {
 
@@ -70,6 +73,29 @@ public class MythosUtils extends SkillUtils {
         }
     }
 
+    public static LivingEntity getLookedAtEntity(LivingEntity user, double distance) {
+        Vec3 eyePos = user.getEyePosition();
+        Vec3 lookVec = user.getLookAngle();
+        Vec3 endPos = eyePos.add(lookVec.scale(distance));
+
+        AABB box = user.getBoundingBox().expandTowards(lookVec.scale(distance)).inflate(1.0D);
+        LivingEntity nearest = null;
+        double nearestDist = distance * distance;
+
+        for (LivingEntity target : user.level.getEntitiesOfClass(LivingEntity.class, box, e -> e != user && e.isAlive())) {
+            AABB targetBox = target.getBoundingBox().inflate(0.3D);
+            Optional<Vec3> hit = targetBox.clip(eyePos, endPos);
+            if (hit.isPresent()) {
+                double dist = eyePos.distanceToSqr(hit.get());
+                if (dist < nearestDist) {
+                    nearest = target;
+                    nearestDist = dist;
+                }
+            }
+        }
+        return nearest;
+
+    }
 
 }
 

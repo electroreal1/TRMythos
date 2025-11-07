@@ -45,6 +45,8 @@ public class MythosMobEffects {
             new RotEffect(MobEffectCategory.HARMFUL, (new Color(255, 0, 0))));
     public static final RegistryObject<MobEffect> EXCALIBUR_REGENERATION = registry.register("excalibur_regeneration", () ->
             new ExcaliburRegeneration(MobEffectCategory.BENEFICIAL, (new Color(15, 100, 100))));
+    public static final RegistryObject<MobEffect> LIGHTNING_COAT = registry.register("lightning_coat", () ->
+            new LightningCoatEffect(MobEffectCategory.BENEFICIAL, (new Color(15,100, 125))));
     public static void init(IEventBus modEventBus) {
         registry.register(modEventBus);
     }

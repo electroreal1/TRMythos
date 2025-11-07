@@ -10,6 +10,7 @@ import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
 import com.github.manasmods.tensura.entity.projectile.LightArrowProjectile;
+import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSource;
 import com.github.mythos.mythos.config.MythosSkillsConfig;
 import net.minecraft.ChatFormatting;
@@ -21,7 +22,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -153,22 +153,22 @@ public class PuritySkill extends Skill {
 
     }
 
-    public void onDamageEntity(ManasSkillInstance instance, LivingEntity user, LivingHurtEvent e) {
-        if (!instance.isToggled()) return;
-
-        DamageSource source = e.getSource();
-        if (!(source instanceof TensuraDamageSource damageSource)) return;
-
-        if (damageSource.getEntity() != user) return;
-
-        boolean isLight = false;
-        try {
-            isLight = "tensura.light_attack".equals(damageSource.getMsgId());
-        } catch (Exception ignored) {}
-
-        if (isLight || damageSource.isHoly()) {
-            float multiplier = instance.isMastered(user) ? 4.0F : 3.0F;
-            e.setAmount(e.getAmount() * multiplier);
+    public void onDamageEntity(ManasSkillInstance instance, LivingEntity living, LivingHurtEvent e) {
+        if (instance.isToggled()) {
+                if (DamageSourceHelper.isLightDamage(e.getSource())) {
+                    if (instance.isMastered(living)) {
+                        e.setAmount(e.getAmount() * 4.0F);
+                    } else {
+                        e.setAmount(e.getAmount() * 3.0F);
+                    }
+                }
+            if (DamageSourceHelper.isHoly(e.getSource())) {
+                if (instance.isMastered(living)) {
+                    e.setAmount(e.getAmount() * 4.0F);
+                } else {
+                    e.setAmount(e.getAmount() * 3.0F);
+                }
+            }
         }
     }
 

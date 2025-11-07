@@ -14,6 +14,7 @@ public class MythosDamageSources {
     public static String TRUTH_DAMAGE = "trmythos.truth";
     public static final DamageSource DRAGONFIRE = (new TensuraDamageSource("trmythos.dragonfire")).setIsFire().bypassEnchantments().setMagic().setNoAggro();
     public static final DamageSource ROT = (new TensuraDamageSource("trmythos.rot")).setNotTensuraMagic().bypassArmor().bypassEnchantments().setMagic();
+    public static final DamageSource OVERPRESSURE_BURST_WIND = (new TensuraDamageSource("trmythos.overpressure_burst_wind")).bypassArmor();
 
 
 
@@ -33,6 +34,9 @@ public class MythosDamageSources {
     }
     public static DamageSource truthDamage(Entity pSource) {
         return (new TensuraEntityDamageSource("trmythos.truth", pSource)).setSkill(new ManasSkillInstance((ManasSkill) ConfluenceUniques.FRAGARACH.get())).setNoKnock().setIgnoreBarrier(1.0F).bypassArmor().bypassInvul().bypassMagic();
+    }
+    public static DamageSource overpressureBurstWind() {
+        return (new TensuraDamageSource("trmythos.overpressure_burst_wind")).bypassArmor();
     }
 
 }

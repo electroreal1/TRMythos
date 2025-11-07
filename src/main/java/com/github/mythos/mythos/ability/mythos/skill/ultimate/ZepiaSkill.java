@@ -71,7 +71,6 @@ public class ZepiaSkill extends Skill {
         return new ResourceLocation("trmythos", "textures/skill/ultimate/ZepiaIconBIG.png");
     }
 
-
     public ZepiaSkill() {
         super(SkillType.ULTIMATE);
     }

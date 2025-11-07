@@ -30,6 +30,15 @@
   "trmythos.skill.omniscient_eye": "Omniscient Eye",
   "trmythos.skill.omniscient_eye.description": "See all, comprehend all, able to peer into the souls of others and mimic that which makes up their being.",
 
+  "trmythos.skill.spatial_storage": "Spatial Storage",
+  "trmythos.skill.spatial_storage.description": "Spatial Storage",
+  "trmythos.skill.spatial_storage.mode": "Spatial Storage",
+
+  "trmythos.skill.thunder_rain": "Thunder Rain",
+  "trmythos.skill.thunder_rain.description": "Thunder Rain",
+  "trmythos.skill.thunder_rain.rain": "Lightning Rain",
+  "trmythos.skill.thunder_rain.coat": "Lightning Coat",
+
   "trmythos.skill.orunmila": "Orunmila (WIP)",
   "trmythos.skill.orunmila.description": "Your consciousness has elevated. Your mind has become so advanced, it now acts as a sort of library - a repository for all the world's information, whose knowledge only you are privy to search through as you please. (WIP, I HATE GUIs WITH ALL MY BEING).",
 
@@ -55,6 +64,16 @@
   "trmythos.skill.mode.zepia.Blood_liar" : "§5Blood Liar",
   "trmythos.skill.mode.zepia.Cleave" : "§5Cleave",
   "trmythos.skill.mode.zepia.Bad_news_(Malice)" : "§5Bad News (Malice)",
+
+  "trmythos.skill.heavens_wrath": "§1Heaven's Wrath",
+  "trmythos.skill.heavens_wrath.description": "quote...",
+  "trmythos.skill.heavens_wrath.breath": "Thunder Breath",
+  "trmythos.skill.heavens_wrath.storm": "Thunder Storm",
+
+  "trmythos.skill.zephyros": "§fZephyros",
+  "trmythos.skill.zephyros.description": "The dominion over all that moves unseen, the breath of life and the hand of storm.",
+  "trmythos.skill.zephyros.burst": "Overpressure Burst",
+  "trmythos.skill.zephyros.wind": "Wind Breath",
 
   "trmythos.skill.faker": "§cFaker",
   "trmythos.skill.faker.description": "Analysis, Projection, Reinforcement. Though shallow copies of what others wield, these items fit perfectly in your hand. Nurture them. Mend them. Perhaps one day, they may even surpass their originals.",
