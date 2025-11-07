@@ -10,6 +10,7 @@ import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.entity.magic.projectile.LightningLanceProjectile;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.mythos.mythos.registry.MythosMobEffects;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.sounds.SoundEvents;
@@ -68,26 +69,30 @@ public class ThunderRainSkill extends Skill {
         return 1000;
     }
 
-    private void spawnLightningSpears(ManasSkillInstance instance, LivingEntity entity, Vec3 pos, int arrowAmount, double distance) {
-        int arrowRot = 360 / arrowAmount;
-
-        for(int i = 0; i < arrowAmount; ++i) {
-            Vec3 arrowPos = entity.getEyePosition().add((new Vec3(0.0, distance, 0.0)).zRot(((float)(arrowRot * i) - (float)arrowRot / 2.0F) * 0.017453292F).xRot(-entity.getXRot() * 0.017453292F).yRot(-entity.getYRot() * 0.017453292F));
-            LightningLanceProjectile arrow = new LightningLanceProjectile(entity.getLevel(), entity);
-            arrow.setSpeed(2.0F);
-            arrow.setPos(arrowPos);
-            arrow.shootFromRot(pos.subtract(arrowPos).normalize());
-            arrow.setLife(50);
-            arrow.setDamage(30f);
-
-            arrow.setMpCost(this.magiculeCost(entity, instance) / (double)arrowAmount);
-            arrow.setSpiritAttack(false);
-            arrow.setSkill(instance);
-            entity.getLevel().addFreshEntity(arrow);
+    private void spawnThunderRain(ManasSkillInstance instance, LivingEntity entity, Level level) {
+        if (instance.getMode() == 2 && !SkillHelper.outOfMagicule(entity, instance)) {
+            entity.swing(InteractionHand.MAIN_HAND, true);
+            addMasteryPoint(instance, entity);
+            level = entity.getLevel();
+            int distance = instance.isMastered(entity) ? 15 : 5;
+            LivingEntity target = SkillHelper.getTargetingEntity(entity, distance, false, true);
+            Vec3 pos;
+            if (target != null) {
+                pos = target.position();
+            } else {
+                BlockHitResult result = SkillHelper.getPlayerPOVHitResult(entity.getLevel(), entity, ClipContext.Fluid.NONE, distance);
+                pos = result.getLocation().add(0.0D, 0.5D, 0.0D);
+                if (instance.isMastered(entity)) {
+                    spawnLightningSpears(instance, entity, pos, 10, 2.0D);
+                    spawnLightningSpears(instance, entity, pos, 10, 4.0D);
+                } else {
+                    spawnLightningSpears(instance, entity, pos, 10, 3.0D);
+                }
+                level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
+                        SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.PLAYERS, 1.0F, 1.0F);
+            }
         }
-
     }
-
     public void onPressed(ManasSkillInstance instance, LivingEntity entity, Level level) {
         if (instance.getMode() == 1) {
             entity.swing(InteractionHand.MAIN_HAND, true);
@@ -126,7 +131,35 @@ public class ThunderRainSkill extends Skill {
             }
         }
     }
+    private void spawnLightningSpears(ManasSkillInstance instance, LivingEntity entity, Vec3 pos, int spearAmount, double distance) {
+        Level level = entity.getLevel();
 
+        for (int i = 0; i < spearAmount; i++) {
+            double angle = Math.toRadians(360.0D / spearAmount * i);
+            double xOffset = distance * Math.cos(angle);
+            double zOffset = distance * Math.sin(angle);
+
+            Vec3 spearPos = pos.add(xOffset, 1.5D, zOffset);
+
+            LightningLanceProjectile spear = new LightningLanceProjectile(level, entity);
+            spear.setSpeed(2.5F);
+            spear.setPos(spearPos.x, spearPos.y, spearPos.z);
+
+            Vec3 direction = pos.subtract(spearPos).normalize();
+            spear.shoot(direction.x, direction.y, direction.z, 2.5F, 0.0F);
+
+            spear.setLife(60);
+            spear.setDamage(200.0F);
+            spear.setMpCost(magiculeCost(entity, instance) / spearAmount);
+            spear.setSkill(instance);
+
+            level.addParticle(ParticleTypes.ELECTRIC_SPARK, spearPos.x, spearPos.y, spearPos.z, 0, 0.05, 0);
+            level.addParticle(ParticleTypes.SMOKE, spearPos.x, spearPos.y - 0.5, spearPos.z, 0, 0.02, 0);
+
+
+            level.addFreshEntity(spear);
+        }
+    }
 
 }
 
