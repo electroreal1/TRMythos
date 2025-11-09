@@ -157,11 +157,9 @@ public class ZepiaSkill extends Skill {
             MinecraftServer server = player.getServer();
             PlayerList playerList = server.getPlayerList();
 
-            // Create a packet to add the player back to the player info (tab list)
             ClientboundPlayerInfoPacket addPacket =
                     new ClientboundPlayerInfoPacket(ClientboundPlayerInfoPacket.Action.ADD_PLAYER, player);
 
-            // Create the "player joined the game" message in yellow
             MutableComponent joinMessage = Component.translatable(
                     "multiplayer.player.joined", player.getDisplayName()
             ).setStyle(Style.EMPTY.withColor(ChatFormatting.YELLOW));
@@ -276,7 +274,6 @@ public class ZepiaSkill extends Skill {
                 break;
 
             case 2:
-                // call scrying logic when in mode 2 and player pressed
                 if (entity instanceof Player) {
                     processScrying(instance, (Player) entity);
                 }
@@ -286,13 +283,12 @@ public class ZepiaSkill extends Skill {
                 boolean success;
                 int duration;
                 LivingEntity targetA, living = SkillHelper.getTargetingEntity(entity, 3.0D, false);
-                    // Remove effects like Severance, poison, or other harmful debuffs
                     success = (TensuraEffectsCapability.getSeverance(entity) > 0.0D);
                     TensuraEffectsCapability.getFrom(entity).ifPresent(cap -> cap.setSeveranceAmount(0.0D));
 
                     Predicate predicate = effect -> (effect == MobEffectCategory.HARMFUL); success = (success || SkillHelper.removePredicateEffect(entity, predicate, magiculeCost(entity, instance)));
 
-                    // Heal missing HP and consume some magicule
+
                     int cost = instance.isMastered(entity)
                             ? (int) (TensuraEPCapability.getEP(entity) * 0.075D)
                             : (int) (TensuraEPCapability.getEP(entity) * 0.085D);
@@ -308,19 +304,16 @@ public class ZepiaSkill extends Skill {
                         entity.swing(InteractionHand.MAIN_HAND, true);
                     }
                  else {
-                        // Remove Severance and harmful effects from the target
                         success = (TensuraEffectsCapability.getSeverance(living) > 0.0D);
                         TensuraEffectsCapability.getFrom(living).ifPresent(cap -> cap.setSeveranceAmount(0.0D));
 
                         Predicate<MobEffect> predicate2 = effect -> effect.getCategory() == MobEffectCategory.HARMFUL;
                         success = success || SkillHelper.removePredicateEffect(entity, predicate2, magiculeCost(entity, instance));
 
-                        // Consume magicules (10% if mastered, 15% otherwise)
                         int cost2 = instance.isMastered(entity)
                                 ? (int) (TensuraEPCapability.getEP(entity) * 0.075D)
                                 : (int) (TensuraEPCapability.getEP(entity) * 0.085D);
 
-                        // Calculate healing amount
                         float missingHealth = entity.getMaxHealth() - entity.getHealth();
                         double remainingMagicule = SkillHelper.outOfMagiculeStillConsume(entity, cost2);
 
@@ -328,10 +321,8 @@ public class ZepiaSkill extends Skill {
                             missingHealth = entity.getMaxHealth() - entity.getHealth();
                         }
 
-                        // Heal target
                         living.heal(missingHealth);
 
-                        // Remove "Cooked HP" modifier if present
                         removeCookedHP(living, instance);
 
                         success = success || missingHealth > 0.0F;
@@ -396,22 +387,17 @@ public class ZepiaSkill extends Skill {
                 spaceCutter.setMpCost(magiculeCost(entity, instance));
                 spaceCutter.setSkill(instance);
 
-// Set position and direction
                 spaceCutter.setPosAndShoot(entity);
                 spaceCutter.setPosDirection(entity, TensuraProjectile.PositionDirection.MIDDLE);
 
-// Spawn the projectile into the world
                 entity.getLevel().addFreshEntity(spaceCutter);
 
-// Gain mastery experience and apply cooldown
                 instance.addMasteryPoint(entity);
                 instance.setCoolDown(10);
 
-// Swing both hands
                 entity.swing(InteractionHand.MAIN_HAND, true);
                 entity.swing(InteractionHand.OFF_HAND, true);
 
-// Play attack sound
                 entity.getLevel().playSound(
                         null,
                         entity.getX(),
@@ -449,7 +435,7 @@ public class ZepiaSkill extends Skill {
                 double currentErrorRate = this.baseErrorRate;
                 boolean scryable = true;
 
-                // EP check
+
                 if (TensuraEPCapability.getCurrentEP(this.target) <= 200000.0D) {
                     scryable = false;
                 }
@@ -461,12 +447,12 @@ public class ZepiaSkill extends Skill {
 
                     ServerLevel serverLevel = (ServerLevel) this.target.getLevel();
 
-                    // Random offset (error)
+
                     double offsetX = serverLevel.random.nextDouble() * currentErrorRate - currentErrorRate / 2.0D;
                     double offsetY = serverLevel.random.nextDouble() * currentErrorRate - currentErrorRate / 2.0D;
                     double offsetZ = serverLevel.random.nextDouble() * currentErrorRate - currentErrorRate / 2.0D;
 
-                    // Compute “revealed” coordinates
+
                     double revealedX = this.target.getX() + offsetX;
                     double revealedY = this.target.getY() + offsetY;
                     double revealedZ = this.target.getZ() + offsetZ;
@@ -525,14 +511,12 @@ public class ZepiaSkill extends Skill {
         tag.putInt("activatedTimes", time + 1);
     }
     public static void removeCookedHP(LivingEntity entity, @Nullable ManasSkillInstance instance) {
-        // Get the entity's max health attribute
         AttributeInstance healthAttribute = entity.getAttribute(Attributes.MAX_HEALTH);
 
-        // If the attribute exists and has the COOK modifier, remove it
+
         if (healthAttribute != null && healthAttribute.getModifier(COOK) != null) {
             healthAttribute.removeModifier(COOK);
 
-            // Spawn smoke particles around the entity
             TensuraParticleHelper.addServerParticlesAroundSelf(entity, ParticleTypes.CAMPFIRE_COSY_SMOKE);
         }
     }
@@ -556,24 +540,20 @@ public class ZepiaSkill extends Skill {
     public boolean onHeld(ManasSkillInstance instance, LivingEntity entity, int heldTicks) {
         if (!SkillHelper.outOfMagicule(entity, instance)) {
 
-            // Stop if invalid mode or cooldown
             if (instance.getMode() != 6 || instance.onCoolDown()) {
                 return false;
             }
 
-            // Gain mastery every 3 seconds
             if (heldTicks % 60 == 0 && heldTicks > 0) {
                 addMasteryPoint(instance, entity);
             }
 
-            // Send FX packet
             TensuraNetwork.INSTANCE.send(
                     PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity),
                     new RequestFxSpawningPacket(new ResourceLocation("tensura:haki"),
                             entity.getId(), 0.0D, 1.0D, 0.0D, true)
             );
 
-            // Affect nearby entities
             List<LivingEntity> nearbyEntities = entity.getLevel().getEntitiesOfClass(
                     LivingEntity.class,
                     entity.getBoundingBox().inflate(15.0D),
@@ -581,7 +561,6 @@ public class ZepiaSkill extends Skill {
             );
 
             for (LivingEntity target : nearbyEntities) {
-                // Skip creative/spectator players
                 if (target instanceof Player player && player.getAbilities().instabuild)
                     continue;
 

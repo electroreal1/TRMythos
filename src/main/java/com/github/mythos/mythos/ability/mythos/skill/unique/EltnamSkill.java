@@ -196,13 +196,11 @@ public class EltnamSkill extends Skill {
                 LivingEntity target;
                 LivingEntity living = SkillHelper.getTargetingEntity(entity, 3.0D, false);
 
-                // Remove effects like Severance, poison, or other harmful debuffs
                 success = (TensuraEffectsCapability.getSeverance(entity) > 0.0D);
                 TensuraEffectsCapability.getFrom(entity).ifPresent(cap -> cap.setSeveranceAmount(0.0D));
 
                 Predicate predicate = effect -> (effect == MobEffectCategory.HARMFUL); success = (success || SkillHelper.removePredicateEffect(entity, predicate, magiculeCost(entity, instance)));
 
-                // Heal missing HP and consume some magicule
                 int cost = instance.isMastered(entity)
                         ? (int) (TensuraEPCapability.getEP(entity) * 0.025D)
                         : (int) (TensuraEPCapability.getEP(entity) * 0.075D);
@@ -222,7 +220,6 @@ public class EltnamSkill extends Skill {
                 break;
 
             default:
-                // no-op for other modes
                 break;
         }
     }
@@ -256,12 +253,10 @@ public class EltnamSkill extends Skill {
 
                     ServerLevel serverLevel = (ServerLevel) this.target.getLevel();
 
-                    // Random offset (error)
                     double offsetX = serverLevel.random.nextDouble() * currentErrorRate - currentErrorRate / 2.0D;
                     double offsetY = serverLevel.random.nextDouble() * currentErrorRate - currentErrorRate / 2.0D;
                     double offsetZ = serverLevel.random.nextDouble() * currentErrorRate - currentErrorRate / 2.0D;
 
-                    // Compute “revealed” coordinates
                     double revealedX = this.target.getX() + offsetX;
                     double revealedY = this.target.getY() + offsetY;
                     double revealedZ = this.target.getZ() + offsetZ;
