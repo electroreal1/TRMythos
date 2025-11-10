@@ -225,75 +225,8 @@ public class EltnamSkill extends Skill {
     }
 
     private void processScrying(ManasSkillInstance instance, Player player) {
-        ItemStack itemInHand = player.getMainHandItem();
-
-        if (!itemInHand.isEmpty()) {
-            String itemName = itemInHand.getHoverName()
-                    .getString()
-                    .replaceAll("[\\[\\]]", "")
-                    .trim()
-                    .toLowerCase();
-
-            Player matchedPlayer = getPlayerByName(itemName, player);
-
-            if (matchedPlayer != null) {
-                this.target = matchedPlayer;
-                double currentErrorRate = this.baseErrorRate;
-                boolean scryable = true;
-
-                // EP check
-                if (TensuraEPCapability.getCurrentEP(this.target) <= 200000.0D) {
-                    scryable = false;
-                }
-
-                if (scryable) {
-                    if (instance.isMastered(player)) {
-                        currentErrorRate /= 2.0D;
-                    }
-
-                    ServerLevel serverLevel = (ServerLevel) this.target.getLevel();
-
-                    double offsetX = serverLevel.random.nextDouble() * currentErrorRate - currentErrorRate / 2.0D;
-                    double offsetY = serverLevel.random.nextDouble() * currentErrorRate - currentErrorRate / 2.0D;
-                    double offsetZ = serverLevel.random.nextDouble() * currentErrorRate - currentErrorRate / 2.0D;
-
-                    double revealedX = this.target.getX() + offsetX;
-                    double revealedY = this.target.getY() + offsetY;
-                    double revealedZ = this.target.getZ() + offsetZ;
-
-                    if (instance.isMastered(player)) {
-                        player.sendSystemMessage(Component.literal(String.format(
-                                "Target found at: X=%.2f, Y=%.2f, Z=%.2f in %s",
-                                revealedX,
-                                revealedY,
-                                revealedZ,
-                                this.target.getLevel().dimension().location().toString()
-                        )));
-                    } else {
-                        player.sendSystemMessage(Component.literal(String.format(
-                                "Target is approximately at: X=%.2f, Y=%.2f, Z=%.2f",
-                                revealedX,
-                                revealedY,
-                                revealedZ
-                        )));
-                    }
-
-                    addMasteryPoint(instance, player);
-                    instance.setCoolDown(120);
-
-                } else {
-                    player.sendSystemMessage(Component.literal("The target is immune to scrying!"));
-                }
-            } else {
-                player.sendSystemMessage(Component.literal("No player found with that name!"));
-            }
-        } else {
-            player.sendSystemMessage(Component.literal(
-                    "You must hold an item with the player's name in your main hand!"
-            ));
-        }
+        //TBD
     }
-
     private Player getPlayerByName(String itemName, Player player) {
         ServerLevel world = (ServerLevel) player.getLevel();
 
