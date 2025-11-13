@@ -93,7 +93,6 @@ public class FakerSkill extends Skill {
 
     public void onTick(ManasSkillInstance instance, LivingEntity entity) { // in a tick
         grantSevererIfMastered(instance, entity);
-        //grantAvalon(instance, entity);
         return;
     }
 
@@ -118,17 +117,6 @@ public class FakerSkill extends Skill {
 
         TensuraSkillCapability.sync(player);
     }
-
-//    private void grantAvalon(ManasSkillInstance instance, LivingEntity entity) {
-//        if (!(entity instanceof Player player)) return;
-//        if (entity.level.isClientSide()) return;
-//
-//        SkillStorage storage = SkillAPI.getSkillsFrom(player);
-//        Skill avalon = IntrinsicSkills.AVALON.get();
-//
-//        if (storage.getSkill(avalon).isPresent()) return;
-//        storage.learnSkill(avalon);
-//    }
 
     public int modes() {
         return 3;

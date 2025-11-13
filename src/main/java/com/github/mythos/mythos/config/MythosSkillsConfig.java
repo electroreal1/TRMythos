@@ -29,7 +29,8 @@ public class MythosSkillsConfig {
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> racesThatCanCompeteForChildOfThePlane;
     public static ForgeConfigSpec.ConfigValue<List<? extends  String>> GRAM_EXTRA_DAMAGE_RACES;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> summonBlacklistedEntities;
-
+    public static ForgeConfigSpec.ConfigValue<List<? extends String>> SAPLING_ENGRAVE_LIST;
+    public static ForgeConfigSpec.ConfigValue<List<? extends String>> SAPLING_DISALLOWED_SKILLS;
 
 
 
@@ -186,6 +187,28 @@ public class MythosSkillsConfig {
                         ),
                         obj -> obj instanceof String
                 );
+        SAPLING_ENGRAVE_LIST = builder
+                .comment("List of enchantments that can be engraved with min and max levels.")
+                .comment("Format: 'modid:enchantment_name:min:max', e.g., 'tensura:holy_weapon:1:2'")
+                .defineList(
+                        "SAPLING_ENGRAVE_LISt",
+                        Arrays.asList(
+                                "tensura:severance:1:2",
+                                "tensura:holy_coat:1:2",
+                                "tensura:holy_weapon:1:2",
+                                "tensura:magic_weapon:1:2",
+                                "tensura:soul_eater:1:2"
+                        ),
+                        obj -> obj instanceof String
+                );
+        SAPLING_DISALLOWED_SKILLS = builder
+                .comment("List of Unique Skills that cannot be granted by Blessing: Power.")
+                        .defineList("SAPLING_DISALLOWED_SKILLS",
+                                Arrays.asList(
+                                        "virtuoso:handler"
+                                ),
+                                obj -> obj instanceof String
+                                );
 
 
         builder.pop(); // pop SkillsConfig
@@ -251,6 +274,12 @@ public class MythosSkillsConfig {
 
     public static List<? extends String> getSummonBlacklistedEntities() {
         return summonBlacklistedEntities.get();
+    }
+    public static List<? extends String> SAPLING_ENGRAVE_LIST() {
+        return SAPLING_ENGRAVE_LIST.get();
+    }
+    public static List<? extends String> SAPLING_DISALLOWED_SKILLS() {
+        return SAPLING_DISALLOWED_SKILLS.get();
     }
 }
 
