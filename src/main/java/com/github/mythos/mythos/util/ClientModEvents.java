@@ -5,6 +5,7 @@ import com.github.mythos.mythos.registry.MythosEntityTypes;
 import com.github.mythos.mythos.registry.menu.MythosMenuTypes;
 import com.github.mythos.mythos.renderers.DragonfireRenderer;
 import com.github.mythos.mythos.renderers.ThunderStormRenderer;
+import com.github.mythos.mythos.renderers.VajraBreathRenderer;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraftforge.api.distmarker.Dist;
@@ -35,5 +36,6 @@ public class ClientModEvents {
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(MythosEntityTypes.DRAGONFIRE.get(), DragonfireRenderer::new);
         event.registerEntityRenderer(MythosEntityTypes.THUNDER_STORM.get(), ThunderStormRenderer::new);
+        event.registerEntityRenderer(MythosEntityTypes.VAJRA_BREATH.get(), VajraBreathRenderer::new);
     }
 }

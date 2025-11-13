@@ -15,6 +15,8 @@ public class MythosDamageSources {
     public static final DamageSource DRAGONFIRE = (new TensuraDamageSource("trmythos.dragonfire")).setIsFire().bypassEnchantments().setMagic().setNoAggro();
     public static final DamageSource ROT = (new TensuraDamageSource("trmythos.rot")).setNotTensuraMagic().bypassArmor().bypassEnchantments().setMagic();
     public static final DamageSource OVERPRESSURE_BURST_WIND = (new TensuraDamageSource("trmythos.overpressure_burst_wind")).bypassArmor();
+    public static final DamageSource VAJRA_SPEAR = (new TensuraDamageSource("trmythos.vajra_spear_lightning")).bypassArmor().bypassMagic().bypassInvul();
+
 
 
 
@@ -37,6 +39,9 @@ public class MythosDamageSources {
     }
     public static DamageSource overpressureBurstWind() {
         return (new TensuraDamageSource("trmythos.overpressure_burst_wind")).bypassArmor();
+    }
+    public static DamageSource vajraSpear() {
+        return (new TensuraDamageSource("trmythos.vajra_spear_lightning")).bypassArmor().bypassMagic().bypassInvul();
     }
 
 }

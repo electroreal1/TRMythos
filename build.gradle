@@ -177,7 +177,7 @@ dependencies {
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
     implementation fg.deobf("com.github.manasmods:ManasCore:${minecraft_version}-${manasCoreVersion}")
     implementation fg.deobf("com.github.manasmods:tensura:${minecraft_version}-${tensuraVersion}")
-    implementation fg.deobf("com.github.lucifel:virtuoso:${virtuosoVersion}")
+    compileOnly fg.deobf("com.github.lucifel:virtuoso:${virtuosoVersion}")
     implementation fg.deobf("io.github.memoires:trmysticism:${mysticismVersion}")
    // implementation fg.deobf("com.github.hvnbael:trnightmare:${minecraft_version}-${nightmareVersion}")
     implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.19:3.1.40')

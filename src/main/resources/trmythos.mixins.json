@@ -5,10 +5,8 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "trmythos.refmap.json",
   "mixins": [
-    "MixinHormeSkill",
-    "MixinResistSkill",
+    "MagicUtilsMixin",
     "MixinRobotnicSkill",
-    "NullBypass",
     "SkillUtilsMixin",
     "VampireRaceMixin"
   ],

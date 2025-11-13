@@ -34,7 +34,7 @@ public class HeavensWrathSkill extends Skill {
 
     public void onDamageEntity(ManasSkillInstance instance, LivingEntity living, LivingHurtEvent e) {
         if (instance.isToggled()) {
-            if (DamageSourceHelper.isWindDamage(e.getSource())) {
+            if (DamageSourceHelper.isLightningDamage(e.getSource())) {
                 if (instance.isMastered(living)) {
                     e.setAmount(e.getAmount() * 6.0F);
                 } else {
@@ -96,7 +96,7 @@ public class HeavensWrathSkill extends Skill {
     }
 
     public void onPressed(ManasSkillInstance instance, @NotNull LivingEntity entity) {
-        if (instance.getMode() == 1) return;
+        if (instance.getMode() == 2) {
 
         boolean hasStorm = !entity.getLevel().getEntitiesOfClass(ThunderStorm.class, entity.getBoundingBox(),
                 thunderStorm -> thunderStorm.getOwner() == entity).isEmpty();
@@ -135,6 +135,7 @@ public class HeavensWrathSkill extends Skill {
             }
         }
         instance.markDirty();
+        }
     }
 
     private boolean hasStorm(LivingEntity owner) {

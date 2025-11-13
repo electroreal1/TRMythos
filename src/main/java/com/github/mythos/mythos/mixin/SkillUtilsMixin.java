@@ -118,7 +118,6 @@ public class SkillUtilsMixin {
                 isSkillInSlot(entity, (ManasSkill)Skills.ORUNMILA.get()) ||
                 isSkillInSlot(entity, (ManasSkill)Skills.CHILD_OF_THE_PLANE.get()) ||
                 entity.hasEffect(MythosMobEffects.BLOOD_COAT.get());
-
     }
 
 

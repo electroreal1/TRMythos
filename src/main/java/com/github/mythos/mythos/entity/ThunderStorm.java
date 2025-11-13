@@ -2,16 +2,13 @@ package com.github.mythos.mythos.entity;
 
 import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.entity.magic.barrier.BarrierEntity;
-import com.github.manasmods.tensura.event.SkillGriefEvent;
 import com.github.manasmods.tensura.network.TensuraNetwork;
 import com.github.manasmods.tensura.network.play2client.RequestFxSpawningPacket;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSources;
 import com.github.manasmods.tensura.world.TensuraGameRules;
 import com.github.mythos.mythos.registry.MythosEntityTypes;
-import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -19,9 +16,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.network.PacketDistributor;
 
 import java.util.Iterator;
@@ -80,25 +75,6 @@ public class ThunderStorm extends BarrierEntity {
                 if (!this.level.isAreaLoaded(this.blockPosition(), 5)) {
                     return;
                 }
-
-                BlockPos.betweenClosedStream((new AABB(this.blockPosition())).inflate((double)this.getRadius())).forEach((pos) -> {
-                    if (!(this.distanceToSqr((double)pos.getX(), (double)pos.getY(), (double)pos.getZ()) > (double)(this.getRadius() * this.getRadius()))) {
-                        if (this.level.getBlockState(pos).is(Blocks.WATER)) {
-                            if (this.level.getFluidState(pos).isSource()) {
-                                if (!this.level.getBlockState(pos.above()).is(Blocks.WATER)) {
-                                    if (!(this.random.nextFloat() > 0.2F)) {
-                                        SkillGriefEvent.Pre preGrief = new SkillGriefEvent.Pre(owner, this.getSkill(), pos);
-                                        if (!MinecraftForge.EVENT_BUS.post(preGrief)) {
-                                            this.level.setBlockAndUpdate(pos, Blocks.FROSTED_ICE.defaultBlockState());
-                                            this.level.scheduleTick(pos, Blocks.FROSTED_ICE, Mth.nextInt(this.random, 200, 400));
-                                            MinecraftForge.EVENT_BUS.post(new SkillGriefEvent.Post(owner, this.getSkill(), pos));
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
             }
 
         }

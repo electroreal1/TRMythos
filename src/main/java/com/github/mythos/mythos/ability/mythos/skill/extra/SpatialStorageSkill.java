@@ -43,7 +43,7 @@ public class SpatialStorageSkill extends Skill implements ISpatialStorage {
     }
 
     public @NotNull SpatialStorageContainer getSpatialStorage(ManasSkillInstance instance) {
-        SpatialStorageContainer container = new SpatialStorageContainer(67, 99);
+        SpatialStorageContainer container = new SpatialStorageContainer(63, 99);
         container.fromTag(instance.getOrCreateTag().getList("SpatialStorage", 10));
         return container;
     }

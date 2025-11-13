@@ -2,6 +2,7 @@ package com.github.mythos.mythos.registry;
 
 import com.github.mythos.mythos.entity.ThunderStorm;
 import com.github.mythos.mythos.entity.projectile.DragonFireBreathProjectile;
+import com.github.mythos.mythos.entity.projectile.VajraBreathProjectile;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EntityType.Builder;
@@ -17,6 +18,7 @@ public class MythosEntityTypes {
     private static final DeferredRegister<EntityType<?>> registry;
     public static final RegistryObject<EntityType<DragonFireBreathProjectile>> DRAGONFIRE;
     public static final RegistryObject<EntityType<ThunderStorm>> THUNDER_STORM;
+    public static final RegistryObject<EntityType<VajraBreathProjectile>> VAJRA_BREATH;
 
     //    public static final RegistryObject<EntityType<JusticeLightArrow>> JUSTICE_LIGHT_ARROW = ENTITY_TYPES.register("justice_light_arrow",
 //            () -> EntityType.Builder.<JusticeLightArrow>of(JusticeLightArrow::new, MobCategory.MISC)
@@ -38,6 +40,15 @@ public class MythosEntityTypes {
                     .sized(1.0F, 1.0F).clientTrackingRange(64)
                     .build((new ResourceLocation("trmythos", "dragonfire")).toString());
         });
+       VAJRA_BREATH = registry.register("vajra_breath",
+                () -> EntityType.Builder.<VajraBreathProjectile>of(
+                                (entityType, level) -> new VajraBreathProjectile(entityType, level),
+                                MobCategory.MISC
+                        )
+                        .sized(1.0f, 1.0f)
+                        .clientTrackingRange(64)
+                        .build(new ResourceLocation("trmythos", "vajra_breath").toString())
+        );
         THUNDER_STORM = registry.register("thunder_storm", () -> {
             return EntityType.Builder.of((EntityType<ThunderStorm> type, Level level) -> new ThunderStorm(type, level), MobCategory.MISC)
                     .sized(0.1F, 0.1F)

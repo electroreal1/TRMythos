@@ -6,10 +6,7 @@ import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.mythos.mythos.ability.mythos.skill.extra.AutomaticHakiCoatSkill;
 import com.github.mythos.mythos.ability.mythos.skill.extra.SpatialStorageSkill;
 import com.github.mythos.mythos.ability.mythos.skill.extra.ThunderRainSkill;
-import com.github.mythos.mythos.ability.mythos.skill.ultimate.EternalSkill;
-import com.github.mythos.mythos.ability.mythos.skill.ultimate.ImmortalSkill;
-import com.github.mythos.mythos.ability.mythos.skill.ultimate.OrunmilaSkill;
-import com.github.mythos.mythos.ability.mythos.skill.ultimate.ZepiaSkill;
+import com.github.mythos.mythos.ability.mythos.skill.ultimate.*;
 import com.github.mythos.mythos.ability.mythos.skill.unique.*;
 import com.github.mythos.mythos.ability.mythos.skill.unique.evolved.CarnageSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.evolved.TheWorldSkill;
@@ -27,7 +24,8 @@ public class Skills {
     public static final RegistryObject<OrunmilaSkill> ORUNMILA;
     public static final RegistryObject<EternalSkill> ETERNAL;
     public static final RegistryObject<ImmortalSkill> IMMORTAL;
-
+    public static final RegistryObject<ZepiaSkill> ZEPIA;
+    public static final RegistryObject<IndraSkill> INDRA;
     // uniques
     public static final RegistryObject<FakerSkill> FAKER;
     public static final RegistryObject<OmniscientEyeSkill> OMNISCIENT_EYE;
@@ -38,7 +36,6 @@ public class Skills {
     public static final RegistryObject<ProfanitySkill> PROFANITY;
     public static final RegistryObject<OpportunistSkill> OPPORTUNIST_SKILL;
     public static final RegistryObject<EltnamSkill> ELTNAM;
-    public static final RegistryObject<ZepiaSkill> ZEPIA;
     public static final RegistryObject<BloodsuckerSkill> BLOODSUCKER;
 //    public static final RegistryObject<DullahanSkill> DULLAHAN;
     public static final RegistryObject<TheWorldSkill> THE_WORLD;
@@ -69,6 +66,7 @@ public class Skills {
         ZEPIA = registery.register("zepia", ZepiaSkill::new);
         ETERNAL = registery.register("eternal", () -> new EternalSkill(Skill.SkillType.ULTIMATE));
         IMMORTAL = registery.register("immortal", () -> new ImmortalSkill(Skill.SkillType.ULTIMATE));
+        INDRA = registery.register("indra", () -> new IndraSkill(Skill.SkillType.ULTIMATE));
 
         // uniques
         FAKER = registery.register("faker", FakerSkill::new);
@@ -96,6 +94,5 @@ public class Skills {
         AUTOMATIC_HAKI_COAT = registery.register("automatic_haki_coat", () -> new AutomaticHakiCoatSkill(Skill.SkillType.EXTRA));
         SPATIAL_STORAGE_SKILL = registery.register("spatial_storage", () -> new SpatialStorageSkill(Skill.SkillType.EXTRA));
         THUNDER_RAIN = registery.register("thunder_rain", () -> new ThunderRainSkill(Skill.SkillType.EXTRA));
-        // magic
     }
 }

@@ -19,7 +19,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.registries.RegistryObject;
 
 public class ChildOfThePlaneEffect extends SkillMobEffect implements Transformation {
     protected static final String CHILD_OF_THE_PLANE = "0f94bbda-31e5-4ecf-a497-a7ac6c78ece8";
