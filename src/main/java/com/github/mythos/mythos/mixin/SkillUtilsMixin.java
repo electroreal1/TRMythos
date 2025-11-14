@@ -4,6 +4,7 @@ import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.mythos.mythos.ability.confluence.skill.unique.ConfluenceUniques;
+import com.github.mythos.mythos.ability.mythos.skill.unique.BibliomaniaSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.ChildOfThePlaneSkill;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.registry.skill.Skills;
@@ -131,7 +132,7 @@ public class SkillUtilsMixin {
     private static float MythosMagiculeGain(float original, Player player, boolean majin) {
 
         original += ChildOfThePlaneSkill.getChildOfThePlaneBoost(player, true, majin);
-
+        original += BibliomaniaSkill.getBibliomaniaBoost(player, true, majin);
         return original;
     }
 
@@ -143,7 +144,7 @@ public class SkillUtilsMixin {
     private static float MythosAuraGain(float original, Player player, boolean majin) {
 
         original += ChildOfThePlaneSkill.getChildOfThePlaneBoost(player, false, majin);
-
+        original += BibliomaniaSkill.getBibliomaniaBoost(player, true, majin);
         return original;
     }
     
