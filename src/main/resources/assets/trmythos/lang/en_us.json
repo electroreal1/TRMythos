@@ -49,6 +49,10 @@
   "trmythos.skill.mode.bloodsucker.blood_drain": "Blood Drain",
   "trmythos.skill.mode.bloodsucker.flesh_bud": "Flesh Bud",
 
+  "trmythos.skill.bibliomania": "Bibliomania",
+  "trmythos.skill.bibliomania.description": "You'll live forever, within my records... this is the greatest honor I can grant with my own two hands.",
+
+
   "trmythos.skill.eltnam": "§5Eltnam",
   "trmythos.skill.eltnam.description": "Cut! There are no second chances for actors that fall to the abyss...",
   "trmythos.skill.mode.eltnam.Scry_proficiency: Analysis" : "§5Scry Proficiency: Analysis",

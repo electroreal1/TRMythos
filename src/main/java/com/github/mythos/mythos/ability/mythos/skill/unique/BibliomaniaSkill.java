@@ -1,7 +1,9 @@
 package com.github.mythos.mythos.ability.mythos.skill.unique;
 
+import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
+import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
 import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
 import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.TensuraSkill;
@@ -10,18 +12,24 @@ import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.network.TensuraNetwork;
 import com.github.manasmods.tensura.network.play2client.RequestFxSpawningPacket;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
+import com.github.manasmods.tensura.registry.skill.UniqueSkills;
 import com.github.manasmods.tensura.util.TensuraAdvancementsHelper;
 import com.github.mythos.mythos.registry.skill.Skills;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
@@ -38,7 +46,7 @@ public class BibliomaniaSkill extends Skill {
     @Nullable
     @Override
     public double getObtainingEpCost() {
-        return 0.0;
+        return 6666.0;
     }
 
     public boolean canBeToggled(ManasSkillInstance instance, LivingEntity living) {
@@ -64,6 +72,30 @@ public class BibliomaniaSkill extends Skill {
     public int getMaxMastery() {
         return 1500;
     }
+
+    public boolean meetEPRequirement(Player player, double newEP, LivingEntity entity) {
+        int eatenSpiderEyes = 0;
+        if (player.level.isClientSide) {
+            if (player instanceof LocalPlayer localPlayer) {
+                eatenSpiderEyes = localPlayer.getStats()
+                        .getValue(Stats.ITEM_USED.get(Items.SPIDER_EYE));
+            }
+        }
+        else if (player instanceof ServerPlayer serverPlayer) {
+            eatenSpiderEyes = serverPlayer.getStats()
+                    .getValue(Stats.ITEM_USED.get(Items.SPIDER_EYE));
+        }
+        if (eatenSpiderEyes >= 10) {
+                player.displayClientMessage(
+                        Component.literal("You teeter at the precipice. One articulation of the word suffices.")
+                                .withStyle(ChatFormatting.DARK_PURPLE),
+                        false
+                );
+            return true;
+        }
+        return false;
+        }
+
 
     public void onToggleOff(ManasSkillInstance instance, LivingEntity entity) {
 
