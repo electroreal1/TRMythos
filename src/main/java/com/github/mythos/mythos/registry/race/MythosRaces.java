@@ -71,6 +71,46 @@ public class MythosRaces {
     public static final ResourceLocation VAMPIRE_ARCHDUKE = new ResourceLocation(Mythos.MOD_ID, "vampire_archduke");
     public static final ResourceLocation VAMPIRE_PRINCE = new ResourceLocation(Mythos.MOD_ID, "vampire_prince");
     public static final ResourceLocation VAMPIRE_TRUE_ANCESTOR = new ResourceLocation(Mythos.MOD_ID, "vampire_true_ancestor");
+
+    //Divinity Races
+    public static final ResourceLocation NAMELESS_DIVINITY_RACE = new ResourceLocation(Mythos.MOD_ID, "nameless_divinity");
+    public static final ResourceLocation NAMELESS_DIVINITY_V = new ResourceLocation(Mythos.MOD_ID, "nameless_divinity_v");
+    public static final ResourceLocation LESSER_DIVINITY = new ResourceLocation(Mythos.MOD_ID, "lesser_divinity");
+    public static final ResourceLocation MIDDLE_DIVINITY = new ResourceLocation(Mythos.MOD_ID, "middle_divinity");
+    public static final ResourceLocation GREATER_DIVINITY = new ResourceLocation(Mythos.MOD_ID, "greater_divinity");
+    public static final ResourceLocation LESSER_TITAN = new ResourceLocation(Mythos.MOD_ID, "lesser_titan");
+    public static final ResourceLocation TITAN = new ResourceLocation(Mythos.MOD_ID, "titan");
+    public static final ResourceLocation GREATER_TITAN = new ResourceLocation(Mythos.MOD_ID, "greater_titan");
+    public static final ResourceLocation KING_OF_DIVINITY = new ResourceLocation(Mythos.MOD_ID, "king_of_divinity");
+    //Flame God
+    public static final ResourceLocation LESSER_GOD_OF_FLAME = new ResourceLocation(Mythos.MOD_ID, "lesser_god_of_flame");
+    public static final ResourceLocation GOD_OF_FLAME = new ResourceLocation(Mythos.MOD_ID, "god_of_flame");
+    public static final ResourceLocation GREATER_GOD_OF_FLAME = new ResourceLocation(Mythos.MOD_ID, "greater_god_of_flame");
+    //Earth God
+    public static final ResourceLocation LESSER_GOD_OF_EARTH = new ResourceLocation(Mythos.MOD_ID, "lesser_god_of_earth");
+    public static final ResourceLocation GOD_OF_EARTH = new ResourceLocation(Mythos.MOD_ID, "god_of_earth");
+    public static final ResourceLocation GREATER_GOD_OF_EARTH = new ResourceLocation(Mythos.MOD_ID, "greater_god_of_earth");
+    //Water God
+    public static final ResourceLocation LESSER_GOD_OF_WATER = new ResourceLocation(Mythos.MOD_ID, "lesser_god_of_water");
+    public static final ResourceLocation GOD_OF_WATER = new ResourceLocation(Mythos.MOD_ID, "god_of_water");
+    public static final ResourceLocation GREATER_GOD_OF_WATER = new ResourceLocation(Mythos.MOD_ID, "greater_god_of_water");
+    //Wind God
+    public static final ResourceLocation LESSER_GOD_OF_WIND = new ResourceLocation(Mythos.MOD_ID, "lesser_god_of_wind");
+    public static final ResourceLocation GOD_OF_WIND = new ResourceLocation(Mythos.MOD_ID, "god_of_wind");
+    public static final ResourceLocation GREATER_GOD_OF_WIND = new ResourceLocation(Mythos.MOD_ID, "greater_god_of_wind");
+    //Space God
+    public static final ResourceLocation LESSER_GOD_OF_SPACE = new ResourceLocation(Mythos.MOD_ID, "lesser_god_of_space");
+    public static final ResourceLocation GOD_OF_SPACE = new ResourceLocation(Mythos.MOD_ID, "god_of_space");
+    public static final ResourceLocation GREATER_GOD_OF_SPACE = new ResourceLocation(Mythos.MOD_ID, "greater_god_of_space");
+    //Light God
+    public static final ResourceLocation LESSER_GOD_OF_LIGHT = new ResourceLocation(Mythos.MOD_ID, "lesser_god_of_light");
+    public static final ResourceLocation GOD_OF_LIGHT = new ResourceLocation(Mythos.MOD_ID, "god_of_light");
+    public static final ResourceLocation GREATER_GOD_OF_LIGHT = new ResourceLocation(Mythos.MOD_ID, "greater_god_of_light");
+    //Darkness God
+    public static final ResourceLocation LESSER_GOD_OF_DARKNESS = new ResourceLocation(Mythos.MOD_ID, "lesser_god_of_darkness");
+    public static final ResourceLocation GOD_OF_DARKNESS = new ResourceLocation(Mythos.MOD_ID, "god_of_darkness");
+    public static final ResourceLocation GREATER_GOD_OF_DARKNESS = new ResourceLocation(Mythos.MOD_ID, "greater_god_of_darkness");
+    
     /**
      * Make sure that you register the race, otherwise it will not show up correctly in the selection menu
      * @param event
@@ -151,6 +191,7 @@ public class MythosRaces {
             helper.register("divine_host", new DivineHostRace());
         });
 
+        // Vampire Races
         event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
             helper.register("vampire_baron", new VampireBaron());
         });
@@ -176,8 +217,104 @@ public class MythosRaces {
             helper.register("vampire_true_ancestor", new VampireTrueAncestor());
         });
 
-
-
+        // Divinity Races
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("nameless_divinity", new NamelessDivinityRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("nameless_divinity_v", new ValkNamelessDivinityRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("lesser_divinity", new LesserDivinityRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("middle_divinity", new MiddleDivinityRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("greater_divinity", new GreaterDivinityRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("lesser_titan", new LesserTitanRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("titan", new TitanRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("greater_titan", new GreaterTitanRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("king_of_divinity", new KingOfDivinityRace());
+        });
+        //Flame God
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("lesser_god_of_flame", new LesserGodOfFlameRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("god_of_flame", new GodOfFlameRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("greater_god_of_flame", new GreaterGodOfFlameRace());
+        });
+        //Earth God
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("lesser_god_of_earth", new LesserGodOfEarthRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("god_of_earth", new GodOfEarthRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("greater_god_of_earth", new GreaterGodOfEarthRace());
+        });
+        //Water God
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("lesser_god_of_water", new LesserGodOfWaterRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("god_of_water", new GodOfWaterRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("greater_god_of_water", new GreaterGodOfWaterRace());
+        });
+        //Wind God
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("lesser_god_of_wind", new LesserGodOfWindRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("god_of_wind", new GodOfWindRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("greater_god_of_wind", new GreaterGodOfWindRace());
+        });
+        //Space God
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("lesser_god_of_space", new LesserGodOfSpaceRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("god_of_space", new GodOfSpaceRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("greater_god_of_space", new GreaterGodOfSpaceRace());
+        });
+        //Light God
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("lesser_god_of_light", new LesserGodOfLightRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("god_of_light", new GodOfLightRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("greater_god_of_light", new GreaterGodOfLightRace());
+        });
+        //Darkness God
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("lesser_god_of_darkness", new LesserGodOfDarknessRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("god_of_darkness", new GodOfDarknessRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("greater_god_of_darkness", new GreaterGodOfDarknessRace());
+        });
     }
 
 }
