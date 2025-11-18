@@ -27,6 +27,7 @@ public class Skills {
     public static final RegistryObject<ZepiaSkill> ZEPIA;
     public static final RegistryObject<IndraSkill> INDRA;
     public static final RegistryObject<VayuSkill> VAYU;
+    public static final RegistryObject<ElementalQueenSkill> ELEMENTAL_QUEEN;
     // uniques
     public static final RegistryObject<FakerSkill> FAKER;
     public static final RegistryObject<OmniscientEyeSkill> OMNISCIENT_EYE;
@@ -70,6 +71,8 @@ public class Skills {
         IMMORTAL = registery.register("immortal", () -> new ImmortalSkill(Skill.SkillType.ULTIMATE));
         INDRA = registery.register("indra", () -> new IndraSkill(Skill.SkillType.ULTIMATE));
         VAYU = registery.register("vayu", () -> new VayuSkill(Skill.SkillType.ULTIMATE));
+        ELEMENTAL_QUEEN = registery.register("elemental_queen", () -> new ElementalQueenSkill(Skill.SkillType.ULTIMATE));
+        
 
         // uniques
         FAKER = registery.register("faker", FakerSkill::new);
