@@ -10,9 +10,11 @@ import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
+import com.github.mythos.mythos.ability.mythos.skill.unique.CrimsonTyrantSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.EltnamSkill;
 import com.github.mythos.mythos.registry.skill.Skills;
 import io.github.Memoires.trmysticism.registry.skill.UniqueSkills;
+import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -67,6 +69,15 @@ public class MythosUtils extends SkillUtils {
                     noCost.getOrCreateTag().putBoolean("NoMagiculeCost", true);
                     if (SkillAPI.getSkillsFrom((Entity)player).learnSkill((ManasSkillInstance)noCost)) {
                         serverPlayer.sendSystemMessage(Component.translatable("trmythos.skill.eltnam.obtained"));
+                    }
+                }
+                if (TensuraPlayerCapability.getRace((LivingEntity)player) == TensuraRaces.WIGHT.get() && (
+                        new Random()).nextInt(100) < 10) {
+                    CrimsonTyrantSkill crimson = (CrimsonTyrantSkill) Skills.CRIMSON_TYRANT.get();
+                    TensuraSkillInstance noCost = new TensuraSkillInstance((ManasSkill)crimson);
+                    noCost.getOrCreateTag().putBoolean("NoMagiculeCost", true);
+                    if (SkillAPI.getSkillsFrom((Entity)player).learnSkill((ManasSkillInstance)noCost)) {
+                        serverPlayer.sendSystemMessage(Component.literal("The Crimson Moon Far Away Extends It's Bloody Blessing, Let the Carnage Begin!").withStyle(ChatFormatting.DARK_RED));
                     }
                 }
             }
