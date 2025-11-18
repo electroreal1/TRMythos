@@ -70,6 +70,13 @@ public class BloodsuckerSkill extends Skill {
             entity.addEffect(new MobEffectInstance((MobEffect) TensuraMobEffects.AUDITORY_SENSE.get(), 200, 0, false, false, false));
             entity.addEffect(new MobEffectInstance((MobEffect) TensuraMobEffects.PRESENCE_SENSE.get(), 200, 0, false, false, false));
         }
+        if (entity instanceof LivingEntity) {
+            if (entity.hasEffect(MythosMobEffects.RAPID_REGENERATION.get())) {
+                return;
+            } else {
+                entity.addEffect(new MobEffectInstance((MobEffect) MythosMobEffects.RAPID_REGENERATION.get(), 1200, 1, false, false, false));
+            }
+        }
     }
 
     public void onToggleOff(ManasSkillInstance instance, LivingEntity entity) {
@@ -217,6 +224,7 @@ public class BloodsuckerSkill extends Skill {
 
     public void onTick(ManasSkillInstance instance, LivingEntity entity) {
         if (instance.isToggled()) {
+            entity.addEffect(new MobEffectInstance((MobEffect) MythosMobEffects.RAPID_REGENERATION.get(), 1200, 1, false, false, false));
             entity.addEffect(new MobEffectInstance((MobEffect) TensuraMobEffects.HEAT_SENSE.get(), 200, 0, false, false, false));
             entity.addEffect(new MobEffectInstance((MobEffect) TensuraMobEffects.AUDITORY_SENSE.get(), 200, 0, false, false, false));
             entity.addEffect(new MobEffectInstance((MobEffect) TensuraMobEffects.PRESENCE_SENSE.get(), 200, 0, false, false, false));

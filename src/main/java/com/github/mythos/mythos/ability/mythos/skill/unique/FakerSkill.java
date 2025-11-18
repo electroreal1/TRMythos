@@ -93,6 +93,9 @@ public class FakerSkill extends Skill {
 
     public void onTick(ManasSkillInstance instance, LivingEntity entity) { // in a tick
         grantSevererIfMastered(instance, entity);
+        if (instance.isToggled()) {
+            entity.addEffect(new MobEffectInstance((MobEffect) MythosMobEffects.AVALON_REGENERATION.get(), 1200, 1, false, false, false));
+        }
         return;
     }
 

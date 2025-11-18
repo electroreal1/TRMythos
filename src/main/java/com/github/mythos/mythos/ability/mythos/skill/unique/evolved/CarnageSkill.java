@@ -110,18 +110,19 @@ public class CarnageSkill extends Skill {
         };
     }
 
-    @Override
+
+
     public int nextMode(LivingEntity entity, TensuraSkillInstance instance, boolean reverse) {
         return instance.getMode() == 1 ? 2 : 1;
     }
 
-    public void onPressed(ServerPlayer player, TensuraSkillInstance instance) {
+    public void onPressed(ServerPlayer player, ManasSkillInstance instance) {
         int mode = instance.getMode();
         if (mode == 1) BloodDominion(player, instance);
         else if (mode == 2) AbsoluteBloodlord(player, instance);
     }
 
-    private void BloodDominion(ServerPlayer player, TensuraSkillInstance instance) {
+    private void BloodDominion(ServerPlayer player, ManasSkillInstance instance) {
         double range = 15.0;
         float casterEP = (float) TensuraEPCapability.getCurrentEP(player);
 
@@ -161,7 +162,7 @@ public class CarnageSkill extends Skill {
         }
     }
 
-    private void AbsoluteBloodlord(ServerPlayer player, TensuraSkillInstance instance) {
+    private void AbsoluteBloodlord(ServerPlayer player, ManasSkillInstance instance) {
         player.getLevel().playSound(null, player.blockPosition(), SoundEvents.WITHER_DEATH, SoundSource.PLAYERS, 2.0f, 0.9f);
 
         player.addEffect(new MobEffectInstance(MythosMobEffects.BLOOD_COAT.get(), 1200, 1, false, false, false));
