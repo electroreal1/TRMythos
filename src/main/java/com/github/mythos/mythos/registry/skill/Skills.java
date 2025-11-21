@@ -28,6 +28,7 @@ public class Skills {
     public static final RegistryObject<IndraSkill> INDRA;
     public static final RegistryObject<VayuSkill> VAYU;
     public static final RegistryObject<ElementalQueenSkill> ELEMENTAL_QUEEN;
+    public static final RegistryObject<OriginDao> ORIGIN_DAO;
     // uniques
     public static final RegistryObject<FakerSkill> FAKER;
     public static final RegistryObject<OmniscientEyeSkill> OMNISCIENT_EYE;
@@ -48,6 +49,9 @@ public class Skills {
     public static final RegistryObject<ZephyrosSkill> ZEPHYROS;
     public static final RegistryObject<HeavensWrathSkill> HEAVENS_WRATH;
     public static final RegistryObject<IntrovertSkill> INTROVERT;
+    public static final RegistryObject<NascentDao> NASCENT_DAO;
+    public static final RegistryObject<AwakenedDao> AWAKENED_DAO;
+    public static final RegistryObject<TrueDao> TRUE_DAO;
 
     // evolved uniques
     public static final RegistryObject<CarnageSkill> CARNAGE;
@@ -73,7 +77,7 @@ public class Skills {
         INDRA = registery.register("indra", () -> new IndraSkill(Skill.SkillType.ULTIMATE));
         VAYU = registery.register("vayu", () -> new VayuSkill(Skill.SkillType.ULTIMATE));
         ELEMENTAL_QUEEN = registery.register("elemental_queen", () -> new ElementalQueenSkill(Skill.SkillType.ULTIMATE));
-        
+        ORIGIN_DAO = registery.register("origin_dao", () -> new OriginDao(Skill.SkillType.ULTIMATE));
 
         // uniques
         FAKER = registery.register("faker", FakerSkill::new);
@@ -94,6 +98,9 @@ public class Skills {
         ZEPHYROS = registery.register("zephyros", () -> new ZephyrosSkill(Skill.SkillType.UNIQUE));
         HEAVENS_WRATH = registery.register("heavens_wrath", () -> new HeavensWrathSkill(Skill.SkillType.UNIQUE));
         INTROVERT = registery.register("introvert", () -> new IntrovertSkill(Skill.SkillType.UNIQUE));
+        NASCENT_DAO = registery.register("nascent_dao", () -> new NascentDao(Skill.SkillType.UNIQUE));
+        AWAKENED_DAO = registery.register("awakened_dao", () -> new AwakenedDao(Skill.SkillType.UNIQUE));
+        TRUE_DAO = registery.register("true_dao", () -> new TrueDao(Skill.SkillType.UNIQUE));
 
         // evolved uniques
         CARNAGE = registery.register("carnage", () -> new CarnageSkill(Skill.SkillType.UNIQUE));

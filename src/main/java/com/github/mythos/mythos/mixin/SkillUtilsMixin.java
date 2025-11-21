@@ -42,19 +42,22 @@ public class SkillUtilsMixin {
     private static int trmythos$modifyEarningLearnPoint(int original, ManasSkillInstance instance, LivingEntity entity, boolean isMode) {
         int point = original;
 
-        if (isSkillToggled(entity, (ManasSkill)Skills.ORUNMILA.get())) {
+        if (hasSkill(entity, (ManasSkill)Skills.ORUNMILA.get())) {
             point = original + 20;
         }
-
         if (hasSkill(entity, (ManasSkill)Skills.ELTNAM.get())) {
             point += 6;
         }
-
         if (hasSkill(entity, (ManasSkill)Skills.ZEPIA.get())) {
             point += 9;
         }
-
         if (hasSkill(entity, (ManasSkill)Skills.OMNISCIENT_EYE.get())) {
+            point += 10;
+        }
+        if (hasSkill(entity, (ManasSkill)Skills.TRUE_DAO.get())) {
+            point += 5;
+        }
+        if (hasSkill(entity, (ManasSkill)Skills.ORIGIN_DAO.get())) {
             point += 10;
         }
 
@@ -83,6 +86,12 @@ public class SkillUtilsMixin {
         }
         if (hasSkill(entity, (ManasSkill)Skills.OMNISCIENT_EYE.get()) && instance.getSkill() instanceof com.github.manasmods.tensura.ability.magic.Magic) {
             point += 999;
+        }
+        if (hasSkill(entity, (ManasSkill)Skills.TRUE_DAO.get())) {
+            point += 5;
+        }
+        if (hasSkill(entity, (ManasSkill)Skills.ORIGIN_DAO.get())) {
+            point += 10;
         }
 
 
@@ -118,6 +127,8 @@ public class SkillUtilsMixin {
         return original ||
                 isSkillInSlot(entity, (ManasSkill)Skills.ORUNMILA.get()) ||
                 isSkillInSlot(entity, (ManasSkill)Skills.CHILD_OF_THE_PLANE.get()) ||
+                isSkillInSlot(entity, (ManasSkill)Skills.TRUE_DAO.get()) ||
+                isSkillInSlot(entity, (ManasSkill)Skills.ORIGIN_DAO.get()) ||
                 entity.hasEffect(MythosMobEffects.BLOOD_COAT.get());
     }
 
@@ -139,11 +150,16 @@ public class SkillUtilsMixin {
             remap = false
     )
     private static float MythosAuraGain(float original, Player player, boolean majin) {
-
+        if (hasSkill(player, (ManasSkill) Skills.NASCENT_DAO.get())) {
+            original = 0;
+        }
+        if (hasSkill(player, (ManasSkill) Skills.AWAKENED_DAO.get())) {
+            original = 0;
+        }
         original += ChildOfThePlaneSkill.getChildOfThePlaneBoost(player, false, majin);
         original += BibliomaniaSkill.getBibliomaniaBoost(player, true, majin);
         return original;
     }
-    
+
 }
 
