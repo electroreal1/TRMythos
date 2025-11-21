@@ -47,6 +47,7 @@ public class Skills {
     public static final RegistryObject<MonsterCreatorSkill> MONSTER_CREATOR;
     public static final RegistryObject<ZephyrosSkill> ZEPHYROS;
     public static final RegistryObject<HeavensWrathSkill> HEAVENS_WRATH;
+    public static final RegistryObject<IntrovertSkill> INTROVERT;
 
     // evolved uniques
     public static final RegistryObject<CarnageSkill> CARNAGE;
@@ -92,6 +93,7 @@ public class Skills {
         MONSTER_CREATOR = registery.register("monster_creator", () -> new MonsterCreatorSkill(Skill.SkillType.UNIQUE));
         ZEPHYROS = registery.register("zephyros", () -> new ZephyrosSkill(Skill.SkillType.UNIQUE));
         HEAVENS_WRATH = registery.register("heavens_wrath", () -> new HeavensWrathSkill(Skill.SkillType.UNIQUE));
+        INTROVERT = registery.register("introvert", () -> new IntrovertSkill(Skill.SkillType.UNIQUE));
 
         // evolved uniques
         CARNAGE = registery.register("carnage", () -> new CarnageSkill(Skill.SkillType.UNIQUE));

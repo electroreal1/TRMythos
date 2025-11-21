@@ -1,5 +1,6 @@
 package com.github.mythos.mythos.registry;
 
+import com.github.mythos.mythos.entity.IntrovertBarrier;
 import com.github.mythos.mythos.entity.ThunderStorm;
 import com.github.mythos.mythos.entity.projectile.DragonFireBreathProjectile;
 import com.github.mythos.mythos.entity.projectile.VajraBreathProjectile;
@@ -19,6 +20,7 @@ public class MythosEntityTypes {
     public static final RegistryObject<EntityType<DragonFireBreathProjectile>> DRAGONFIRE;
     public static final RegistryObject<EntityType<ThunderStorm>> THUNDER_STORM;
     public static final RegistryObject<EntityType<VajraBreathProjectile>> VAJRA_BREATH;
+    public static final RegistryObject<EntityType<IntrovertBarrier>> INTROVERT_BARRIER;
 
     //    public static final RegistryObject<EntityType<JusticeLightArrow>> JUSTICE_LIGHT_ARROW = ENTITY_TYPES.register("justice_light_arrow",
 //            () -> EntityType.Builder.<JusticeLightArrow>of(JusticeLightArrow::new, MobCategory.MISC)
@@ -56,5 +58,14 @@ public class MythosEntityTypes {
                     .updateInterval(Integer.MAX_VALUE)
                     .build(new ResourceLocation("tensura", "thunder_storm").toString());
         });
+        INTROVERT_BARRIER = registry.register("introvert_barrier",
+                        () -> EntityType.Builder.<IntrovertBarrier>of(
+                                        (entityType, level) -> new IntrovertBarrier(entityType, level),
+                                        MobCategory.MISC
+                                )
+                                .sized(1.0f, 1.0f)
+                                .clientTrackingRange(64)
+                                .build(new ResourceLocation("trmythos", "vajra_breath").toString())
+        );
     }
 }

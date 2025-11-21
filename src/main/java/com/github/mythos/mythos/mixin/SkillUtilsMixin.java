@@ -121,9 +121,6 @@ public class SkillUtilsMixin {
                 entity.hasEffect(MythosMobEffects.BLOOD_COAT.get());
     }
 
-
-
-
     @ModifyReturnValue(
             method = {"getMagiculeGain"},
             at = {@At("RETURN")},
