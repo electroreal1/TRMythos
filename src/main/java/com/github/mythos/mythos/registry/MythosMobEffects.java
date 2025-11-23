@@ -45,6 +45,10 @@ public class MythosMobEffects {
             new RotEffect(MobEffectCategory.HARMFUL, (new Color(255, 0, 0))));
     public static final RegistryObject<MobEffect> EXCALIBUR_REGENERATION = registry.register("excalibur_regeneration", () ->
             new ExcaliburRegeneration(MobEffectCategory.BENEFICIAL, (new Color(15, 100, 100))));
+    public static final RegistryObject<MobEffect> ENERGIZED_REGENERATION = registry.register("energized_regeneration", () ->
+            new EnergizedRegenerationEffect(MobEffectCategory.BENEFICIAL, (new Color(255, 166, 4)).getRGB()));
+    public static final RegistryObject<MobEffect> EMPOWERMENT_REGENERATION = registry.register("empowerment_regeneration", () ->
+            new EmpowermentRegenerationEffect(MobEffectCategory.BENEFICIAL, (new Color(255, 166, 4)).getRGB()));
     public static final RegistryObject<MobEffect> LIGHTNING_COAT = registry.register("lightning_coat", () ->
             new LightningCoatEffect(MobEffectCategory.BENEFICIAL, (new Color(15,100, 125))));
     public static final RegistryObject<MobEffect> THUNDER_GOD = registry.register("thunder_god", () ->
