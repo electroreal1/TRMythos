@@ -9,17 +9,12 @@ import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
 import com.github.manasmods.tensura.race.Race;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
-import com.github.manasmods.tensura.registry.particle.TensuraParticles;
 import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.registry.race.MythosRaces;
-import com.github.mythos.mythos.registry.race.MythosSecretRaces;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -108,7 +103,7 @@ public class CarnageSkill extends Skill {
         if (!(entity instanceof Player player)) return;
 
         TensuraPlayerCapability.getFrom(player).ifPresent(cap -> {
-            Race baron = TensuraRaces.RACE_REGISTRY.get().getValue(MythosSecretRaces.VAMPIRE_BARON);
+            Race baron = TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.VAMPIRE_BARON);
             if (cap.getRace() != baron) {
                 cap.setRace(player, baron, true);
                 player.displayClientMessage(Component.literal("A strange urge gnaws at your sanity. With altered senses, the scent of blood seems evermore mouthwatering.")

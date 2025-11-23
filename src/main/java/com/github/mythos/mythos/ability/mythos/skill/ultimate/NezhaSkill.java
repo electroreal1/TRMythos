@@ -10,9 +10,6 @@ import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
-import com.github.manasmods.tensura.entity.magic.breath.BreathEntity;
-import com.github.manasmods.tensura.registry.entity.TensuraEntityTypes;
-import com.github.mythos.mythos.registry.MythosEntityTypes;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.registry.skill.Skills;
 import net.minecraft.ChatFormatting;
@@ -25,14 +22,12 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.Objects;
 
 public class NezhaSkill extends Skill {
@@ -196,7 +191,7 @@ public class NezhaSkill extends Skill {
             }
 
             float damage = instance.isMastered(entity) ? 1500.0F : 1000.0F;
-            BreathEntity.spawnBreathEntity((EntityType) MythosEntityTypes.ZOMBIE_BREATH.get(), entity, instance, magiculeCost(entity, instance));
+           // BreathEntity.spawnBreathEntity((EntityType) MythosEntityTypes.ZOMBIE_BREATH.get(), entity, instance, magiculeCost(entity, instance));
             entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.WITHER_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F);
             return true;
         }
