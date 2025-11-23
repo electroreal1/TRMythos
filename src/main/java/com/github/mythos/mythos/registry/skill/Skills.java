@@ -7,8 +7,8 @@ import com.github.mythos.mythos.ability.mythos.skill.extra.AutomaticHakiCoatSkil
 import com.github.mythos.mythos.ability.mythos.skill.extra.SpatialStorageSkill;
 import com.github.mythos.mythos.ability.mythos.skill.extra.ThunderRainSkill;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.*;
-import com.github.mythos.mythos.ability.mythos.skill.unique.*;
 import com.github.mythos.mythos.ability.mythos.skill.unique.evolved.*;
+import com.github.mythos.mythos.ability.mythos.skill.unique.normal.*;
 import com.github.mythos.mythos.ability.mythos.skill.unique.vassal_line.EvolutionSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.vassal_line.FoundationSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.vassal_line.UnitySkill;
@@ -51,6 +51,7 @@ public class Skills {
     public static final RegistryObject<NascentDao> NASCENT_DAO;
     public static final RegistryObject<StargazerSkill> STARGAZER;
     public static final RegistryObject<TenaciousSkill> TENACIOUS;
+    public static final RegistryObject<MirrorImageSkill> MIRROR_IMAGE;
 
     // evolved uniques
     public static final RegistryObject<CarnageSkill> CARNAGE;
@@ -103,13 +104,14 @@ public class Skills {
         NASCENT_DAO = registery.register("nascent_dao", () -> new NascentDao(Skill.SkillType.UNIQUE));
         STARGAZER = registery.register("stargazer", () -> new StargazerSkill(Skill.SkillType.UNIQUE));
         TENACIOUS = registery.register("tenacious", () -> new TenaciousSkill(Skill.SkillType.UNIQUE));
-        PERSEVERANCE = registery.register("perseverance", () -> new PerseveranceSkill(Skill.SkillType.UNIQUE));
+        MIRROR_IMAGE = registery.register("mirror_image", () -> new MirrorImageSkill(Skill.SkillType.UNIQUE));
 
         // evolved uniques
         CARNAGE = registery.register("carnage", () -> new CarnageSkill(Skill.SkillType.UNIQUE));
         THE_WORLD = registery.register("the_world", () -> new TheWorldSkill(Skill.SkillType.UNIQUE));
         AWAKENED_DAO = registery.register("awakened_dao", () -> new AwakenedDao(Skill.SkillType.UNIQUE));
         TRUE_DAO = registery.register("true_dao", () -> new TrueDao(Skill.SkillType.UNIQUE));
+        PERSEVERANCE = registery.register("perseverance", () -> new PerseveranceSkill(Skill.SkillType.UNIQUE));
 
         // extra
         AUTOMATIC_HAKI_COAT = registery.register("automatic_haki_coat", () -> new AutomaticHakiCoatSkill(Skill.SkillType.EXTRA));

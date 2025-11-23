@@ -1,4 +1,4 @@
-package com.github.mythos.mythos.ability.mythos.skill.unique;
+package com.github.mythos.mythos.ability.mythos.skill.unique.normal;
 
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
