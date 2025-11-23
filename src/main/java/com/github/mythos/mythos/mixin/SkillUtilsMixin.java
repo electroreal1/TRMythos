@@ -162,7 +162,9 @@ public class SkillUtilsMixin {
         if (hasSkill(player, (ManasSkill) Skills.ORIGIN_DAO.get())) {
             original = 0;
         }
-
+        if (hasSkill(player, (ManasSkill) Skills.STARGAZER.get())) {
+            original *= 2.0F;
+        }
 
         original += ChildOfThePlaneSkill.getChildOfThePlaneBoost(player, false, majin);
         original += BibliomaniaSkill.getBibliomaniaBoost(player, true, majin);

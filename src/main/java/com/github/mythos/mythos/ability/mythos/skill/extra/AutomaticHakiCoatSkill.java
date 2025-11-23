@@ -37,6 +37,16 @@ public class AutomaticHakiCoatSkill extends Skill {
         return 500.0;
     }
 
+    @Override
+    public double getObtainingEpCost() {
+        return 1000;
+    }
+
+    @Override
+    public boolean canLearnSkill(ManasSkillInstance instance, LivingEntity entity) {
+        return true;
+    }
+
     public boolean canBeToggled(ManasSkillInstance instance, LivingEntity living) {
         return true;
     }

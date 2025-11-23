@@ -1,4 +1,4 @@
-package com.github.mythos.mythos.ability.mythos.skill.unique;
+package com.github.mythos.mythos.ability.mythos.skill.unique.evolved;
 
 import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
@@ -15,21 +15,23 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public class AwakenedDao extends Skill {
-    protected static final UUID ACCELERATION1 = UUID.fromString("189e6684-8b53-4abf-9156-07a1c6b1563b");
-    protected static final UUID ACCELERATION2 = UUID.fromString("81112168-ecb2-4686-b91d-387f363843a8");
+public class TrueDao extends Skill {
+    protected static final UUID ACCELERATION1 = UUID.fromString("60a06181-8cf6-45e1-b1df-2e69f3544ace");
+    protected static final UUID ACCELERATION2 = UUID.fromString("ba91c840-3ea9-497a-93b7-75216523344e");
 
-    public AwakenedDao(SkillType type) {
+    public TrueDao(SkillType type) {
         super(SkillType.UNIQUE);
     }
 
     @Override
     public double getObtainingEpCost() {
-        return 50000;
+        return 1000000;
     }
 
     public boolean meetEPRequirement(Player player, double newEP) {
@@ -38,12 +40,12 @@ public class AwakenedDao extends Skill {
         if (currentEP < getObtainingEpCost()) {
             return false; // not enough EP
         }
-        return SkillUtils.isSkillMastered(player, (ManasSkill) Skills.NASCENT_DAO.get());
+        return SkillUtils.isSkillMastered(player, (ManasSkill) Skills.AWAKENED_DAO.get());
     }
 
     @Override
     public int getMaxMastery() {
-        return 4000;
+        return 5000;
     }
 
     @Override
@@ -70,14 +72,21 @@ public class AwakenedDao extends Skill {
         TensuraPlayerCapability.getFrom(player).ifPresent(cap -> {
             double maxMP = player.getAttributeValue(TensuraAttributeRegistry.MAX_MAGICULE.get());
             double maxAP = player.getAttributeValue(TensuraAttributeRegistry.MAX_AURA.get());
-            double regenMPPerTick = (maxMP / 100);
-            double regenAPPerTick = (maxAP / 100);
+            double regenMPPerTick = (maxMP / 20);
+            double regenAPPerTick = (maxAP / 20);
 
             cap.setAura(Math.min(cap.getAura() + regenAPPerTick, maxAP));
             cap.setMagicule(Math.min(cap.getMagicule() + regenMPPerTick, maxMP));
         });
 
         TensuraPlayerCapability.sync(player);
+    }
+    @SubscribeEvent
+    public static void onLivingHurt(LivingHurtEvent event, ManasSkillInstance instance) {
+        if (!(event.getSource().getEntity() instanceof Player player)) return;
+
+        float originalDamage = event.getAmount();
+        event.setAmount(originalDamage * 1.4f);
     }
 
     @Override
@@ -89,15 +98,15 @@ public class AwakenedDao extends Skill {
         int epGained = 0;
 
         if (item == TensuraMobDropItems.LOW_QUALITY_MAGIC_CRYSTAL.get()) {
-            epGained = 20;
+            epGained = 40;
             this.addMasteryPoint(instance, entity);
             held.shrink(1);
         } else if (item == TensuraMobDropItems.MEDIUM_QUALITY_MAGIC_CRYSTAL.get()) {
-            epGained = 60;
+            epGained = 120;
             this.addMasteryPoint(instance, entity);
             held.shrink(1);
         } else if (item == TensuraMobDropItems.HIGH_QUALITY_MAGIC_CRYSTAL.get()) {
-            epGained = 120;
+            epGained = 240;
             this.addMasteryPoint(instance, entity);
             held.shrink(1);
         } else {
