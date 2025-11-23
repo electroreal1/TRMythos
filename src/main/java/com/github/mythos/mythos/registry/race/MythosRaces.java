@@ -41,6 +41,7 @@ import com.github.mythos.mythos.race.ValkyrieRaceLine.EnvoyOfValhallaRace;
 import com.github.mythos.mythos.race.ValkyrieRaceLine.MaidenRace;
 import com.github.mythos.mythos.race.ValkyrieRaceLine.ValkyrieRace;
 import com.github.mythos.mythos.race.VampireEvoLine.*;
+import com.github.mythos.mythos.race.HydraLine.*;
 import com.github.trmythos.trmythos.race.ValkyrieRaceLine.SoulCourierRace;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -132,7 +133,13 @@ public class MythosRaces {
     public static final ResourceLocation LESSER_GOD_OF_DARKNESS = new ResourceLocation(Mythos.MOD_ID, "lesser_god_of_darkness");
     public static final ResourceLocation GOD_OF_DARKNESS = new ResourceLocation(Mythos.MOD_ID, "god_of_darkness");
     public static final ResourceLocation GREATER_GOD_OF_DARKNESS = new ResourceLocation(Mythos.MOD_ID, "greater_god_of_darkness");
-    
+
+    // Hydra Races
+    public static final ResourceLocation SEA_BEAST = new ResourceLocation(Mythos.MOD_ID, "sea_beast");
+    public static final ResourceLocation SEA_SERPENT = new ResourceLocation(Mythos.MOD_ID, "sea_serpent");
+    public static final ResourceLocation DARK_SEA_STALKER = new ResourceLocation(Mythos.MOD_ID, "dark_sea_stalker");
+    public static final ResourceLocation DARK_SEA_TYRANT = new ResourceLocation(Mythos.MOD_ID, "dark_sea_tyrant");
+    public static final ResourceLocation HYDRA = new ResourceLocation(Mythos.MOD_ID, "hydra");
     /**
      * Make sure that you register the race, otherwise it will not show up correctly in the selection menu
      * @param event
@@ -336,6 +343,23 @@ public class MythosRaces {
         });
         event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
             helper.register("greater_god_of_darkness", new GreaterGodOfDarknessRace());
+        });
+
+        // Hydra Races
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("sea_beast", new SeaBeastRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("sea_serpent", new SeaSerpentRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("dark_sea_stalker", new DarkSeaStalkerRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("dark_sea_tyrant", new DarkSeaTyrantRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("hydra", new HydraRace());
         });
     }
 
