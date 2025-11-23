@@ -135,6 +135,7 @@ public abstract class SkillUtilsMixin {
                 isSkillInSlot(entity, (ManasSkill)Skills.TRUE_DAO.get()) ||
                 isSkillInSlot(entity, (ManasSkill)Skills.ORIGIN_DAO.get()) ||
                 isSkillInSlot(entity, (ManasSkill)Skills.PERSEVERANCE.get()) ||
+                isSkillInSlot(entity, (ManasSkill)Skills.BALANCE.get()) ||
                 entity.hasEffect(MythosMobEffects.BLOOD_COAT.get());
     }
 

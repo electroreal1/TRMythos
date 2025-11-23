@@ -4,11 +4,12 @@ import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
 import com.github.manasmods.tensura.ability.skill.Skill;
+import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
 import com.github.mythos.mythos.registry.skill.Skills;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Random;
@@ -41,8 +42,8 @@ public class FoundationSkill extends Skill {
         return 2000;
     }
 
-    @Override
-    public void onBeingDamaged(ManasSkillInstance instance, LivingAttackEvent event) {
+
+    public void onBeingDamaged(ManasSkillInstance instance, LivingHurtEvent event) {
         if (event.isCanceled()) return;
 
         LivingEntity entity = event.getEntity();
@@ -56,25 +57,27 @@ public class FoundationSkill extends Skill {
         double chance = vassalAssemblyChance.get();
         if (RANDOM.nextDouble() > chance) return;
 
+
         RegistryObject<? extends Skill> vassalSkill = null;
-        String msgId = source.msgId == null ? "" : source.msgId.toLowerCase();
 
         // Determine which Vassal skill to grant
-        if (msgId.contains("spiritual")) {
+        if (DamageSourceHelper.isSpiritual(event.getSource())) {
         //    vassalSkill = UniqueSkills.VASSAL_CYCLE;
-        } else if (msgId.contains("holy") || msgId.contains("magic")) {
-     //       vassalSkill = UniqueSkills.VASSAL_BALANCE;
-        } else {
+        } else if (DamageSourceHelper.isHoly(event.getSource())) {
+            vassalSkill = Skills.BALANCE;
+        } else if (event.getSource().isMagic()) {
+            vassalSkill = Skills.BALANCE;
+        } else if (!event.getSource().isMagic() && !DamageSourceHelper.isHoly(event.getSource()) && !DamageSourceHelper.isSpiritual(event.getSource())){
             vassalSkill = RANDOM.nextBoolean()
                     ? Skills.UNITY :
                      Skills.EVOLUTION;
         }
 
         if (vassalSkill != null) {
-            Skill skill = vassalSkill.get(); // <-- Get the actual Skill instance
+            Skill skill = vassalSkill.get();
             if (storage.getSkill(skill).isEmpty()) {
-                storage.learnSkill(skill);    // Now works
-                instance.setCoolDown(200);    // 10s cooldown
+                storage.learnSkill(skill);
+                instance.setCoolDown(200);
             }
         }
     }

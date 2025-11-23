@@ -9,6 +9,7 @@ import com.github.mythos.mythos.ability.mythos.skill.extra.ThunderRainSkill;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.*;
 import com.github.mythos.mythos.ability.mythos.skill.unique.evolved.*;
 import com.github.mythos.mythos.ability.mythos.skill.unique.normal.*;
+import com.github.mythos.mythos.ability.mythos.skill.unique.vassal_line.BalanceSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.vassal_line.EvolutionSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.vassal_line.FoundationSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.vassal_line.UnitySkill;
@@ -31,15 +32,12 @@ public class Skills {
     // uniques
     public static final RegistryObject<FakerSkill> FAKER;
     public static final RegistryObject<OmniscientEyeSkill> OMNISCIENT_EYE;
-    public static final RegistryObject<FoundationSkill> FOUNDATION;
-    public static final RegistryObject<UnitySkill> UNITY;
-    public static final RegistryObject<EvolutionSkill> EVOLUTION;
     public static final RegistryObject<PuritySkill> PURITY_SKILL;
     public static final RegistryObject<ProfanitySkill> PROFANITY;
     public static final RegistryObject<OpportunistSkill> OPPORTUNIST_SKILL;
     public static final RegistryObject<EltnamSkill> ELTNAM;
     public static final RegistryObject<BloodsuckerSkill> BLOODSUCKER;
-//    public static final RegistryObject<DullahanSkill> DULLAHAN;
+    //    public static final RegistryObject<DullahanSkill> DULLAHAN;
     public static final RegistryObject<TheWorldSkill> THE_WORLD;
     public static final RegistryObject<BibliomaniaSkill> BIBLIOMANIA;
     public static final RegistryObject<ChildOfThePlaneSkill> CHILD_OF_THE_PLANE;
@@ -52,6 +50,12 @@ public class Skills {
     public static final RegistryObject<StargazerSkill> STARGAZER;
     public static final RegistryObject<TenaciousSkill> TENACIOUS;
     public static final RegistryObject<MirrorImageSkill> MIRROR_IMAGE;
+    // vassal
+    public static final RegistryObject<FoundationSkill> FOUNDATION;
+    public static final RegistryObject<UnitySkill> UNITY;
+    public static final RegistryObject<EvolutionSkill> EVOLUTION;
+    public static final RegistryObject<BalanceSkill> BALANCE;
+
 
     // evolved uniques
     public static final RegistryObject<CarnageSkill> CARNAGE;
@@ -89,9 +93,6 @@ public class Skills {
 //        DULLAHAN = registery.register("dullahan", DullahanSkill::new);
         OMNISCIENT_EYE = registery.register("omniscient_eye", OmniscientEyeSkill::new);
         PURITY_SKILL = registery.register("purity", () -> new PuritySkill(Skill.SkillType.UNIQUE));
-        UNITY = registery.register("unity", () -> new UnitySkill(Skill.SkillType.UNIQUE));
-        FOUNDATION = registery.register("foundation", () -> new FoundationSkill(Skill.SkillType.UNIQUE));
-        EVOLUTION = registery.register("evolution", () -> new EvolutionSkill(Skill.SkillType.UNIQUE));
         OPPORTUNIST_SKILL = registery.register("opportunist", () -> new OpportunistSkill(Skill.SkillType.UNIQUE));
         PROFANITY = registery.register("profanity", () -> new ProfanitySkill(Skill.SkillType.UNIQUE));
         BLOODSUCKER = registery.register("bloodsucker", () -> new BloodsuckerSkill(Skill.SkillType.UNIQUE));
@@ -105,6 +106,12 @@ public class Skills {
         STARGAZER = registery.register("stargazer", () -> new StargazerSkill(Skill.SkillType.UNIQUE));
         TENACIOUS = registery.register("tenacious", () -> new TenaciousSkill(Skill.SkillType.UNIQUE));
         MIRROR_IMAGE = registery.register("mirror_image", () -> new MirrorImageSkill(Skill.SkillType.UNIQUE));
+
+        // vassal series
+        UNITY = registery.register("unity", () -> new UnitySkill(Skill.SkillType.UNIQUE));
+        FOUNDATION = registery.register("foundation", () -> new FoundationSkill(Skill.SkillType.UNIQUE));
+        EVOLUTION = registery.register("evolution", () -> new EvolutionSkill(Skill.SkillType.UNIQUE));
+        BALANCE = registery.register("balance", () -> new BalanceSkill(Skill.SkillType.UNIQUE));
 
         // evolved uniques
         CARNAGE = registery.register("carnage", () -> new CarnageSkill(Skill.SkillType.UNIQUE));
