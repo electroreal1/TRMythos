@@ -3,6 +3,7 @@ package com.github.mythos.mythos.mixin;
 import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.tensura.ability.SkillUtils;
+import com.github.manasmods.tensura.ability.magic.Magic;
 import com.github.mythos.mythos.ability.confluence.skill.unique.ConfluenceUniques;
 import com.github.mythos.mythos.ability.mythos.skill.unique.normal.BibliomaniaSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.normal.ChildOfThePlaneSkill;
@@ -89,7 +90,7 @@ public abstract class SkillUtilsMixin {
         if (hasSkill(entity, (ManasSkill)Skills.OMNISCIENT_EYE.get())) {
             point += 10;
         }
-        if (hasSkill(entity, (ManasSkill)Skills.OMNISCIENT_EYE.get()) && instance.getSkill() instanceof com.github.manasmods.tensura.ability.magic.Magic) {
+        if (hasSkill(entity, (ManasSkill)Skills.OMNISCIENT_EYE.get()) && instance.getSkill() instanceof Magic) {
             point += 999;
         }
         if (hasSkill(entity, (ManasSkill)Skills.TRUE_DAO.get())) {
@@ -129,14 +130,30 @@ public abstract class SkillUtilsMixin {
             remap = false
     )
     private static boolean NullToResistAndResistToNothing(boolean original, LivingEntity entity) {
-        return original ||
-                isSkillInSlot(entity, (ManasSkill)Skills.ORUNMILA.get()) ||
-                isSkillInSlot(entity, (ManasSkill)Skills.CHILD_OF_THE_PLANE.get()) ||
-                isSkillInSlot(entity, (ManasSkill)Skills.TRUE_DAO.get()) ||
-                isSkillInSlot(entity, (ManasSkill)Skills.ORIGIN_DAO.get()) ||
-                isSkillInSlot(entity, (ManasSkill)Skills.PERSEVERANCE.get()) ||
-                isSkillInSlot(entity, (ManasSkill)Skills.BALANCE.get()) ||
-                entity.hasEffect(MythosMobEffects.BLOOD_COAT.get());
+        original = false;
+        ManasSkillInstance instance;
+               if (entity.hasEffect(MythosMobEffects.BLOOD_COAT.get())) {
+                   original = true;
+               }
+               if (isSkillInSlot(entity, (ManasSkill)Skills.ORUNMILA.get())) {
+                   original = true;
+               }
+               if (isSkillInSlot(entity, (ManasSkill)Skills.CHILD_OF_THE_PLANE.get())) {
+                   original = true;
+               }
+               if (isSkillInSlot(entity, (ManasSkill)Skills.TRUE_DAO.get())) {
+                   original = true;
+               }
+               if (isSkillInSlot(entity, (ManasSkill)Skills.PERSEVERANCE.get())) {
+                   original = true;
+               }
+               if (isSkillInSlot(entity, (ManasSkill)Skills.BALANCE.get())) {
+                   original = true;
+               }
+
+
+
+        return original;
     }
 
     @ModifyReturnValue(

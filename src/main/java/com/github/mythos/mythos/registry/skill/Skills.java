@@ -29,6 +29,7 @@ public class Skills {
     public static final RegistryObject<VayuSkill> VAYU;
     public static final RegistryObject<ElementalQueenSkill> ELEMENTAL_QUEEN;
     public static final RegistryObject<OriginDao> ORIGIN_DAO;
+    public static final RegistryObject<AresSkill> ARES;
     // uniques
     public static final RegistryObject<FakerSkill> FAKER;
     public static final RegistryObject<OmniscientEyeSkill> OMNISCIENT_EYE;
@@ -42,7 +43,6 @@ public class Skills {
     public static final RegistryObject<BibliomaniaSkill> BIBLIOMANIA;
     public static final RegistryObject<ChildOfThePlaneSkill> CHILD_OF_THE_PLANE;
     public static final RegistryObject<CrimsonTyrantSkill> CRIMSON_TYRANT;
-    public static final RegistryObject<MonsterCreatorSkill> MONSTER_CREATOR;
     public static final RegistryObject<ZephyrosSkill> ZEPHYROS;
     public static final RegistryObject<HeavensWrathSkill> HEAVENS_WRATH;
     public static final RegistryObject<IntrovertSkill> INTROVERT;
@@ -85,6 +85,7 @@ public class Skills {
         VAYU = registery.register("vayu", () -> new VayuSkill(Skill.SkillType.ULTIMATE));
         ELEMENTAL_QUEEN = registery.register("elemental_queen", () -> new ElementalQueenSkill(Skill.SkillType.ULTIMATE));
         ORIGIN_DAO = registery.register("origin_dao", () -> new OriginDao(Skill.SkillType.ULTIMATE));
+        ARES = registery.register("ares", () -> new AresSkill(Skill.SkillType.ULTIMATE));
 
         // uniques
         FAKER = registery.register("faker", FakerSkill::new);
@@ -98,7 +99,6 @@ public class Skills {
         BLOODSUCKER = registery.register("bloodsucker", () -> new BloodsuckerSkill(Skill.SkillType.UNIQUE));
         CHILD_OF_THE_PLANE = registery.register("child_of_the_plane", () -> new ChildOfThePlaneSkill(Skill.SkillType.UNIQUE));
         CRIMSON_TYRANT = registery.register("crimson_tyrant", () -> new CrimsonTyrantSkill(Skill.SkillType.UNIQUE));
-        MONSTER_CREATOR = registery.register("monster_creator", () -> new MonsterCreatorSkill(Skill.SkillType.UNIQUE));
         ZEPHYROS = registery.register("zephyros", () -> new ZephyrosSkill(Skill.SkillType.UNIQUE));
         HEAVENS_WRATH = registery.register("heavens_wrath", () -> new HeavensWrathSkill(Skill.SkillType.UNIQUE));
         INTROVERT = registery.register("introvert", () -> new IntrovertSkill(Skill.SkillType.UNIQUE));
