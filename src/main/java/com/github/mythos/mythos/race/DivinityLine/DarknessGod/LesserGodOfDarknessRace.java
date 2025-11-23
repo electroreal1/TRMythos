@@ -11,10 +11,9 @@ import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
 import com.github.mythos.mythos.registry.race.MythosRaces;
 import com.mojang.datafixers.util.Pair;
 import io.github.Memoires.trmysticism.registry.skill.ExtraSkills;
-import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -107,7 +106,7 @@ public class LesserGodOfDarknessRace extends Race {
         list.add(ResistanceSkills.DARKNESS_ATTACK_RESISTANCE.get());
         list.add(IntrinsicSkills.DARKNESS_TRANSFORM.get());
         list.add(ExtraSkills.MANA_MANIPULATION.get());
-        list.add(com.github.lucifel.virtuoso.registry.skill.ExtraSkills.CONCENTRATOR.get());
+        list.add(com.github.lucifel.virtuoso.registry.skill.VExtraSkills.CONCENTRATOR.get());
         return list;
     }
 

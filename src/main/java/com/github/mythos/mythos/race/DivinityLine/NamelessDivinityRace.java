@@ -138,6 +138,8 @@ public class NamelessDivinityRace extends Race {
         list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_DRAGON.get().getRegistryName()));
         list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_BOAR.get().getRegistryName()));
         list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_BEAST.get().getRegistryName()));
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_BEAST.get().getRegistryName()));
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_BEAST.get().getRegistryName()));
 
         return list;
     }

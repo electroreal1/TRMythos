@@ -106,7 +106,7 @@ public class LesserGodOfWindRace extends Race {
         list.add(ResistanceSkills.WIND_ATTACK_RESISTANCE.get());
         list.add(IntrinsicSkills.WIND_TRANSFORM.get());
         list.add(ExtraSkills.MANA_MANIPULATION.get());
-        list.add(com.github.lucifel.virtuoso.registry.skill.ExtraSkills.CONCENTRATOR.get());
+        list.add(com.github.lucifel.virtuoso.registry.skill.VExtraSkills.CONCENTRATOR.get());
         return list;
     }
 

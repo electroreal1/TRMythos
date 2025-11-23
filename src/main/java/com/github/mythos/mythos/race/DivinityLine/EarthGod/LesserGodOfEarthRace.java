@@ -10,7 +10,6 @@ import com.github.manasmods.tensura.registry.skill.IntrinsicSkills;
 import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
 import com.github.mythos.mythos.registry.race.MythosRaces;
 import com.mojang.datafixers.util.Pair;
-import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -106,7 +105,7 @@ public class LesserGodOfEarthRace extends Race {
         list.add(ResistanceSkills.EARTH_ATTACK_RESISTANCE.get());
         list.add(IntrinsicSkills.EARTH_TRANSFORM.get());
         list.add(io.github.Memoires.trmysticism.registry.skill.ExtraSkills.MANA_MANIPULATION.get());
-        list.add(com.github.lucifel.virtuoso.registry.skill.ExtraSkills.CONCENTRATOR.get());
+        list.add(com.github.lucifel.virtuoso.registry.skill.VExtraSkills.CONCENTRATOR.get());
         return list;
     }
 

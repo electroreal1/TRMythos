@@ -106,7 +106,7 @@ public class LesserGodOfSpaceRace extends Race {
         list.add(ResistanceSkills.SPATIAL_ATTACK_RESISTANCE.get());
         list.add(IntrinsicSkills.SPACE_TRANSFORM.get());
         list.add(ExtraSkills.MANA_MANIPULATION.get());
-        list.add(com.github.lucifel.virtuoso.registry.skill.ExtraSkills.CONCENTRATOR.get());
+        list.add(com.github.lucifel.virtuoso.registry.skill.VExtraSkills.CONCENTRATOR.get());
         return list;
     }
 
