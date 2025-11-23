@@ -26,7 +26,8 @@
   "trmythos.skill.learn_failed":  "Failed to learn due to lack of magicules",
   "trmythos.skill.martial_master.obtainment":  "Your proficiency in martial arts grows. With this advancement in your growth, the world has seen it necessary to reward you. Martial Master has been engraved into your soul.",
   "trmythos.skill.cook.obtainment": "Your creations have become known to create miracles. A new power has awakened within you in acknowledgement of this. Cook has been engraved into your soul.",
-
+  "trmythos.evolution_menu.true_demon_lord": "Awaken as a True Demon Lord",
+  
   "trmythos.skill.omniscient_eye": "Omniscient Eye",
   "trmythos.skill.omniscient_eye.description": "See all, comprehend all, able to peer into the souls of others and mimic that which makes up their being.",
 
@@ -257,4 +258,10 @@
   "trmythos.race.king_of_divinity": "King of Divinity",
   "trmythos.race.elemental_queen.mastered": "Master Elemental Queen",
   "trmythos.race.greater_god.egg_or_seed": "Possess a Hero's Egg or Demon Lord Seed"
+
+  "trmythos.race.sea_beast": "Sea Beast",
+  "trmythos.race.sea_serpent": "Sea Serpent",
+  "trmythos.race.dark_sea_stalker": "Dark Sea Stalker",
+  "trmythos.race.dark_sea_tyrant": "Dark Sea Tyrant",
+  "trmythos.race.hydra": "Hydra"
 }
