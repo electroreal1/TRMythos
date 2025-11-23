@@ -164,6 +164,14 @@
   "trmythos.skill.elemental_queen": "Elemental Queen",
   "trmythos.skill.elemental_queen.description": "With a total of 8 lines of code, this skill does fuck all nothing right now :D",
 
+  "trmythos.skill.tenacious": "Tenacious",
+  "trmythos.skill.tenacious.description": "Defined by your ability to push forward despite what blocks your path, growing stronger the harder the odds stack against you.",
+
+  "trmythos.skill.perseverance": "Perseverance",
+  "trmythos.skill.perseverance.description": "Persevere through even the most daunting of trials, overcoming the odds and even fate to see your ideals through to the end.",
+  "trmythos.skill.mode.perseverance.willpower": "Willpower",
+  "trmythos.skill.mode.perseverance.persistent": "Persistent",
+
   "trmythos.race.serpent": "Serpent",
   "trmythos.race.lesser_serpent": "Lesser Serpent",
   "trmythos.race.lesser_serpent.notes": "You emerge in the world as a lowly, fragile serpent. Your scales provide some protection, but not enough to stave off most, if not all that inhabits this land. \n You know you can be so much more, so will you wallow in the dirt forever, or live up to your potential?",
