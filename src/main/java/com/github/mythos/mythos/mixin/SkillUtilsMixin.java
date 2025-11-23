@@ -24,13 +24,18 @@ import static com.github.manasmods.tensura.capability.skill.TensuraSkillCapabili
         value = {SkillUtils.class},
         priority = 8
 )
-public class SkillUtilsMixin {
+public abstract class SkillUtilsMixin {
 
     public SkillUtilsMixin() {
     }
 
     @Shadow
     public static boolean hasSkill(Entity entity, ManasSkill manasSkill) {
+        return false;
+    }
+
+    @Shadow
+    public static boolean isSkillMastered(LivingEntity entity, ManasSkill manasSkill) {
         return false;
     }
 
@@ -129,6 +134,7 @@ public class SkillUtilsMixin {
                 isSkillInSlot(entity, (ManasSkill)Skills.CHILD_OF_THE_PLANE.get()) ||
                 isSkillInSlot(entity, (ManasSkill)Skills.TRUE_DAO.get()) ||
                 isSkillInSlot(entity, (ManasSkill)Skills.ORIGIN_DAO.get()) ||
+                isSkillInSlot(entity, (ManasSkill)Skills.PERSEVERANCE.get()) ||
                 entity.hasEffect(MythosMobEffects.BLOOD_COAT.get());
     }
 
@@ -138,6 +144,36 @@ public class SkillUtilsMixin {
             remap = false
     )
     private static float MythosMagiculeGain(float original, Player player, boolean majin) {
+        if (hasSkill(player, (ManasSkill) Skills.NASCENT_DAO.get())) {
+            original = 0;
+        }
+        if (hasSkill(player, (ManasSkill) Skills.AWAKENED_DAO.get())) {
+            original = 0;
+        }
+        if (hasSkill(player, (ManasSkill) Skills.TRUE_DAO.get())) {
+            original = 0;
+        }
+        if (hasSkill(player, (ManasSkill) Skills.ORIGIN_DAO.get())) {
+            original = 0;
+        }
+        if (hasSkill(player, (ManasSkill) Skills.STARGAZER.get())) {
+            original *= 2.0F;
+        }
+        if (hasSkill(player, (ManasSkill) Skills.TENACIOUS.get())) {
+            if (isSkillMastered(player, (ManasSkill) Skills.TENACIOUS.get())) {
+                original *= 3;
+            } else {
+                original *= 2;
+            }
+        }
+        if (hasSkill(player, (ManasSkill) Skills.PERSEVERANCE.get())) {
+            if (isSkillMastered(player, (ManasSkill) Skills.PERSEVERANCE.get())) {
+                original *= 6;
+            } else {
+                original *= 4;
+            }
+        }
+
 
         original += ChildOfThePlaneSkill.getChildOfThePlaneBoost(player, true, majin);
         original += BibliomaniaSkill.getBibliomaniaBoost(player, true, majin);

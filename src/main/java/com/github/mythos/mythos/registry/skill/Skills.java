@@ -50,11 +50,13 @@ public class Skills {
     public static final RegistryObject<IntrovertSkill> INTROVERT;
     public static final RegistryObject<NascentDao> NASCENT_DAO;
     public static final RegistryObject<StargazerSkill> STARGAZER;
+    public static final RegistryObject<TenaciousSkill> TENACIOUS;
 
     // evolved uniques
     public static final RegistryObject<CarnageSkill> CARNAGE;
     public static final RegistryObject<AwakenedDao> AWAKENED_DAO;
     public static final RegistryObject<TrueDao> TRUE_DAO;
+    public static final RegistryObject<PerseveranceSkill> PERSEVERANCE;
     // extra
     public static final RegistryObject<AutomaticHakiCoatSkill> AUTOMATIC_HAKI_COAT;
     public static final RegistryObject<SpatialStorageSkill> SPATIAL_STORAGE_SKILL;
@@ -100,6 +102,8 @@ public class Skills {
         INTROVERT = registery.register("introvert", () -> new IntrovertSkill(Skill.SkillType.UNIQUE));
         NASCENT_DAO = registery.register("nascent_dao", () -> new NascentDao(Skill.SkillType.UNIQUE));
         STARGAZER = registery.register("stargazer", () -> new StargazerSkill(Skill.SkillType.UNIQUE));
+        TENACIOUS = registery.register("tenacious", () -> new TenaciousSkill(Skill.SkillType.UNIQUE));
+        PERSEVERANCE = registery.register("perseverance", () -> new PerseveranceSkill(Skill.SkillType.UNIQUE));
 
         // evolved uniques
         CARNAGE = registery.register("carnage", () -> new CarnageSkill(Skill.SkillType.UNIQUE));
