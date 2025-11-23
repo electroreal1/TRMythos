@@ -12,6 +12,7 @@ import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.mythos.mythos.ability.mythos.skill.unique.normal.CrimsonTyrantSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.normal.EltnamSkill;
+import com.github.mythos.mythos.ability.mythos.skill.unique.normal.UnderworldPrince;
 import com.github.mythos.mythos.registry.skill.Skills;
 import io.github.Memoires.trmysticism.registry.skill.UniqueSkills;
 import net.minecraft.ChatFormatting;
@@ -68,7 +69,7 @@ public class MythosUtils extends SkillUtils {
                     TensuraSkillInstance noCost = new TensuraSkillInstance((ManasSkill)eltnam);
                     noCost.getOrCreateTag().putBoolean("NoMagiculeCost", true);
                     if (SkillAPI.getSkillsFrom((Entity)player).learnSkill((ManasSkillInstance)noCost)) {
-                        serverPlayer.sendSystemMessage(Component.translatable("trmythos.skill.eltnam.obtained"));
+                        serverPlayer.sendSystemMessage(Component.translatable("trmythos.skill.eltnam.obtained").withStyle(ChatFormatting.RED));
                     }
                 }
                 if (TensuraPlayerCapability.getRace((LivingEntity)player) == TensuraRaces.WIGHT.get() && (
@@ -78,6 +79,15 @@ public class MythosUtils extends SkillUtils {
                     noCost.getOrCreateTag().putBoolean("NoMagiculeCost", true);
                     if (SkillAPI.getSkillsFrom((Entity)player).learnSkill((ManasSkillInstance)noCost)) {
                         serverPlayer.sendSystemMessage(Component.literal("The Crimson Moon Far Away Extends It's Bloody Blessing, Let the Carnage Begin!").withStyle(ChatFormatting.DARK_RED));
+                    }
+                }
+                if (TensuraPlayerCapability.getRace((LivingEntity)player) == TensuraRaces.WIGHT.get() && (
+                        new Random()).nextInt(100) < 10) {
+                    UnderworldPrince underworld = (UnderworldPrince) Skills.UNDERWORLD_PRINCE.get();
+                    TensuraSkillInstance noCost = new TensuraSkillInstance((ManasSkill)underworld);
+                    noCost.getOrCreateTag().putBoolean("NoMagiculeCost", true);
+                    if (SkillAPI.getSkillsFrom((Entity)player).learnSkill((ManasSkillInstance)noCost)) {
+                        serverPlayer.sendSystemMessage(Component.literal("The Underworld Beckons you to embrace souls of the damned!").withStyle(ChatFormatting.BLACK));
                     }
                 }
             }

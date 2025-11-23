@@ -50,6 +50,7 @@ public class Skills {
     public static final RegistryObject<StargazerSkill> STARGAZER;
     public static final RegistryObject<TenaciousSkill> TENACIOUS;
     public static final RegistryObject<MirrorImageSkill> MIRROR_IMAGE;
+    public static final RegistryObject<UnderworldPrince> UNDERWORLD_PRINCE;
     // vassal
     public static final RegistryObject<FoundationSkill> FOUNDATION;
     public static final RegistryObject<UnitySkill> UNITY;
@@ -106,6 +107,7 @@ public class Skills {
         STARGAZER = registery.register("stargazer", () -> new StargazerSkill(Skill.SkillType.UNIQUE));
         TENACIOUS = registery.register("tenacious", () -> new TenaciousSkill(Skill.SkillType.UNIQUE));
         MIRROR_IMAGE = registery.register("mirror_image", () -> new MirrorImageSkill(Skill.SkillType.UNIQUE));
+        UNDERWORLD_PRINCE = registery.register("underworld_prince", () -> new UnderworldPrince(Skill.SkillType.UNIQUE));
 
         // vassal series
         UNITY = registery.register("unity", () -> new UnitySkill(Skill.SkillType.UNIQUE));

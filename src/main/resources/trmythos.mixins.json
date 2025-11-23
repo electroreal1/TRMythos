@@ -8,6 +8,7 @@
     "MagicUtilsMixin",
     "MixinRobotnicSkill",
     "SkillUtilsMixin",
+    "TensuraPlayerCapabilityMixin",
     "VampireRaceMixin"
   ],
   "client": [],
