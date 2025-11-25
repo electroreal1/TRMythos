@@ -31,11 +31,17 @@ public class MythosSkillsConfig {
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> summonBlacklistedEntities;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> SAPLING_ENGRAVE_LIST;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> SAPLING_DISALLOWED_SKILLS;
-
+    public static ForgeConfigSpec.DoubleValue waterMultiplier;
+    public static ForgeConfigSpec.DoubleValue waterMultiplier2;
 
 
     public MythosSkillsConfig(ForgeConfigSpec.Builder builder) {
 
+        builder.push("SaintElementalMultipliers");
+        waterMultiplier = builder
+                .comment("Saint Water Elemental Damage Multiplier")
+                .defineInRange("waterDamage", 2.0D, 1.0D, 100.0D);
+        builder.pop();
 
         builder.push("SkillsConfig");
 

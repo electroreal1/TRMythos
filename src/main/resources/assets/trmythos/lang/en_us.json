@@ -97,6 +97,12 @@
   "trmythos.skill.purity.purification": "Purification",
   "trmythos.skill.purity.justice": "Justice",
 
+  "trmythos.skill.saint": "Saint",
+  "trmythos.skill.saint.description": "Ho Ho Ho merry christmas",
+  "trmythos.skill.mode.saint.gift_giving": "Gift Giving",
+  "trmythos.skill.mode.saint.gift_receiving": "Gift Receiving",
+  "trmythos.skill.mode.saint.blizzard_null_cast_time": "Blizzard",
+
   "trmythos.skill.child_of_the_plane": "Child of the Plane",
   "trmythos.skill.child_of_the_plane.description": "When the plane itself takes notice, even gods must bow.",
   "trmythos.skill.child_of_the_plane.mode": "default",
