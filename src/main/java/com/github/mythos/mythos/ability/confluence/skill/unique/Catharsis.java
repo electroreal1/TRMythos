@@ -6,7 +6,7 @@ import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.enchantment.EngravingEnchantment;
 import com.github.manasmods.tensura.registry.attribute.TensuraAttributeRegistry;
 import com.github.manasmods.tensura.registry.enchantment.TensuraEnchantments;
-import com.github.mythos.mythos.registry.MythosWeapons;
+import com.github.mythos.mythos.registry.MythosItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -142,7 +142,7 @@ public class Catharsis extends Skill {
             spawnDummySword(instance, entity, InteractionHand.OFF_HAND);
             given = true;
         } else if (entity instanceof Player player) {
-            ItemStack blade = new ItemStack(MythosWeapons.FRAGARACH.get());
+            ItemStack blade = new ItemStack(MythosItems.FRAGARACH.get());
             if (player.getInventory().add(blade)) {
                 player.inventoryMenu.broadcastChanges();
                 player.swing(InteractionHand.MAIN_HAND, true);
@@ -168,7 +168,7 @@ public class Catharsis extends Skill {
         if (entity.level.isClientSide) return;
         if (SkillHelper.outOfMagicule(entity, instance)) return;
 
-        ItemStack blade = new ItemStack(MythosWeapons.CATHARSIS.get());
+        ItemStack blade = new ItemStack(MythosItems.CATHARSIS.get());
 
         Enchantment tsuku = TensuraEnchantments.TSUKUMOGAMI.get();
         EngravingEnchantment.engrave(blade, tsuku, 1);
@@ -187,7 +187,7 @@ public class Catharsis extends Skill {
         ItemStack main = player.getMainHandItem();
         ItemStack off = player.getOffhandItem();
 
-        return main.getItem() == MythosWeapons.CATHARSIS.get() || off.getItem() == MythosWeapons.CATHARSIS.get();
+        return main.getItem() == MythosItems.CATHARSIS.get() || off.getItem() == MythosItems.CATHARSIS.get();
     }
 
 }

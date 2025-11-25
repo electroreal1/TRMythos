@@ -8,8 +8,8 @@ import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.registry.enchantment.TensuraEnchantments;
 import com.github.manasmods.tensura.registry.particle.TensuraParticles;
 import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
+import com.github.mythos.mythos.registry.MythosItems;
 import com.github.mythos.mythos.registry.MythosMobEffects;
-import com.github.mythos.mythos.registry.MythosWeapons;
 import com.github.mythos.mythos.util.MythosDamageSourceHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -164,7 +164,7 @@ public class Sporeblood extends Skill {
             spawnDummySword(instance, entity, InteractionHand.OFF_HAND);
             given = true;
         } else if (entity instanceof Player player) {
-            ItemStack blade = new ItemStack(MythosWeapons.UNDECEMBER.get());
+            ItemStack blade = new ItemStack(MythosItems.UNDECEMBER.get());
             if (player.getInventory().add(blade)) {
                 player.inventoryMenu.broadcastChanges();
                 player.swing(InteractionHand.MAIN_HAND, true);
@@ -190,7 +190,7 @@ public class Sporeblood extends Skill {
         if (entity.level.isClientSide) return;
         if (SkillHelper.outOfMagicule(entity, instance)) return;
 
-        ItemStack blade = new ItemStack(MythosWeapons.UNDECEMBER.get());
+        ItemStack blade = new ItemStack(MythosItems.UNDECEMBER.get());
 
         Enchantment tsuku = TensuraEnchantments.TSUKUMOGAMI.get();
         EngravingEnchantment.engrave(blade, tsuku, 1);

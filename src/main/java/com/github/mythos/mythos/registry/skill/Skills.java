@@ -7,6 +7,8 @@ import com.github.mythos.mythos.ability.mythos.skill.extra.AutomaticHakiCoatSkil
 import com.github.mythos.mythos.ability.mythos.skill.extra.SpatialStorageSkill;
 import com.github.mythos.mythos.ability.mythos.skill.extra.ThunderRainSkill;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.*;
+import com.github.mythos.mythos.ability.mythos.skill.unique.TenaciousSkill;
+import com.github.mythos.mythos.ability.mythos.skill.unique.TestSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.evolved.*;
 import com.github.mythos.mythos.ability.mythos.skill.unique.normal.*;
 import com.github.mythos.mythos.ability.mythos.skill.unique.vassal_line.BalanceSkill;
@@ -30,6 +32,7 @@ public class Skills {
     public static final RegistryObject<ElementalQueenSkill> ELEMENTAL_QUEEN;
     public static final RegistryObject<OriginDao> ORIGIN_DAO;
     public static final RegistryObject<AresSkill> ARES;
+    public static final RegistryObject<TestSkill> TEST_SKILL;
     // uniques
     public static final RegistryObject<FakerSkill> FAKER;
     public static final RegistryObject<OmniscientEyeSkill> OMNISCIENT_EYE;
@@ -51,6 +54,7 @@ public class Skills {
     public static final RegistryObject<TenaciousSkill> TENACIOUS;
     public static final RegistryObject<MirrorImageSkill> MIRROR_IMAGE;
     public static final RegistryObject<UnderworldPrince> UNDERWORLD_PRINCE;
+    public static final RegistryObject<Demonologist> DEMONOLOGIST;
     // vassal
     public static final RegistryObject<FoundationSkill> FOUNDATION;
     public static final RegistryObject<UnitySkill> UNITY;
@@ -87,6 +91,7 @@ public class Skills {
         ELEMENTAL_QUEEN = registery.register("elemental_queen", () -> new ElementalQueenSkill(Skill.SkillType.ULTIMATE));
         ORIGIN_DAO = registery.register("origin_dao", () -> new OriginDao(Skill.SkillType.ULTIMATE));
         ARES = registery.register("ares", () -> new AresSkill(Skill.SkillType.ULTIMATE));
+        TEST_SKILL = registery.register("test_skill", () -> new TestSkill(Skill.SkillType.ULTIMATE));
 
         // uniques
         FAKER = registery.register("faker", FakerSkill::new);
@@ -108,6 +113,7 @@ public class Skills {
         TENACIOUS = registery.register("tenacious", () -> new TenaciousSkill(Skill.SkillType.UNIQUE));
         MIRROR_IMAGE = registery.register("mirror_image", () -> new MirrorImageSkill(Skill.SkillType.UNIQUE));
         UNDERWORLD_PRINCE = registery.register("underworld_prince", () -> new UnderworldPrince(Skill.SkillType.UNIQUE));
+        DEMONOLOGIST = registery.register("demonologist", () -> new Demonologist(Skill.SkillType.UNIQUE));
 
         // vassal series
         UNITY = registery.register("unity", () -> new UnitySkill(Skill.SkillType.UNIQUE));

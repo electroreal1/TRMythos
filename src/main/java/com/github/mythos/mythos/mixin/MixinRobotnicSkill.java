@@ -2,7 +2,7 @@ package com.github.mythos.mythos.mixin;
 
 import com.github.lucifel.virtuoso.ability.skill.unique.RobotnicSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
-import com.github.mythos.mythos.registry.MythosWeapons;
+import com.github.mythos.mythos.registry.MythosItems;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -21,9 +21,9 @@ public class MixinRobotnicSkill {
 
     @Unique
     private static final Set<Item> CUSTOM_BLACKLIST = Set.of(
-            MythosWeapons.CATHARSIS.get(),
-            MythosWeapons.UNDECEMBER.get(),
-            MythosWeapons.FRAGARACH.get()
+            MythosItems.CATHARSIS.get(),
+            MythosItems.UNDECEMBER.get(),
+            MythosItems.FRAGARACH.get()
     );
 
 

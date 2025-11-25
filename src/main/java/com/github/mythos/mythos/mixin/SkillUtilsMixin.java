@@ -66,6 +66,9 @@ public abstract class SkillUtilsMixin {
         if (hasSkill(entity, (ManasSkill)Skills.ORIGIN_DAO.get())) {
             point += 10;
         }
+        if (hasSkill(entity, (ManasSkill)Skills.DEMONOLOGIST.get())) {
+            point += 5;
+        }
 
         return point;
     }
@@ -98,6 +101,9 @@ public abstract class SkillUtilsMixin {
         }
         if (hasSkill(entity, (ManasSkill)Skills.ORIGIN_DAO.get())) {
             point += 10;
+        }
+        if (hasSkill(entity, (ManasSkill)Skills.DEMONOLOGIST.get())) {
+            point += 5;
         }
 
 

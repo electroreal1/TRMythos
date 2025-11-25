@@ -1,7 +1,10 @@
 package com.github.mythos.mythos.mixin;
 
+import com.github.manasmods.manascore.api.skills.ManasSkill;
+import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.magic.MagicUltils;
 import com.github.mythos.mythos.registry.MythosMobEffects;
+import com.github.mythos.mythos.registry.skill.Skills;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -28,7 +31,7 @@ public class MagicUtilsMixin {
             remap = false
     )
     private static boolean trmythos$hasUniqueThoughtAcceleration(boolean original, LivingEntity entity) {
-        return original || entity.hasEffect(MythosMobEffects.THUNDER_GOD.get());
+        return original || entity.hasEffect(MythosMobEffects.THUNDER_GOD.get()) || SkillUtils.hasSkill(entity, (ManasSkill)Skills.DEMONOLOGIST.get());
     }
 
     @ModifyReturnValue(
@@ -40,6 +43,7 @@ public class MagicUtilsMixin {
         if (entity.hasEffect(MythosMobEffects.THUNDER_GOD.get())) {
             original += 5000;
         }
+
         return 1.0F / original;
     }
 }

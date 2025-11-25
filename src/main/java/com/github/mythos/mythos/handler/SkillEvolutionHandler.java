@@ -11,16 +11,6 @@ public class SkillEvolutionHandler {
 
     @SubscribeEvent
     public static void onSkillUnlocked(UnlockSkillEvent event) {
-        SkillEvolutionMechanics.onFighterMastered(
-                event.getSkillInstance(),
-                (LivingEntity) event.getEntity(), // <-- correct method to get LivingEntity
-                event
-        );
-        SkillEvolutionMechanics.onChefMastered(
-                event.getSkillInstance(),
-                (LivingEntity) event.getEntity(),
-                event
-        );
         SkillEvolutionMechanics.onCrimsonTyrantMastered(
                 event.getSkillInstance(),
                 (LivingEntity) event.getEntity(),
