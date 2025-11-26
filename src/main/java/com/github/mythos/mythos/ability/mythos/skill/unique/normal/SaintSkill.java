@@ -55,7 +55,7 @@ public class SaintSkill extends Skill {
 
     public void onTick(ManasSkillInstance instance, LivingEntity entity) {
         if (instance.getMastery() >= 0 && !instance.isTemporarySkill()) {
-            entity.addEffect(new MobEffectInstance(MobEffects.HERO_OF_THE_VILLAGE, 240, 2, false, false, true));
+            entity.addEffect(new MobEffectInstance(MobEffects.HERO_OF_THE_VILLAGE, 240, 2, false, false, false));
         }
     }
 
