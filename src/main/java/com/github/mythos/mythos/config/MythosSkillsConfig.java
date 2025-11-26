@@ -33,12 +33,6 @@ public class MythosSkillsConfig {
 
     public MythosSkillsConfig(ForgeConfigSpec.Builder builder) {
 
-        builder.push("SaintElementalMultipliers");
-        waterMultiplier = builder
-                .comment("Saint Water Elemental Damage Multiplier")
-                .defineInRange("waterDamage", 2.0D, 1.0D, 100.0D);
-        builder.pop();
-
         builder.push("SkillsConfig");
 
         // FakerSkill restricted items

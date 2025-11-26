@@ -40,6 +40,7 @@ public class Skills {
     public static final RegistryObject<EltnamSkill> ELTNAM;
     public static final RegistryObject<BloodsuckerSkill> BLOODSUCKER;
     public static final RegistryObject<SaintSkill> SAINT;
+    public static final RegistryObject<Demonologist> DEMONOLOGIST;
     //    public static final RegistryObject<DullahanSkill> DULLAHAN;
     public static final RegistryObject<TheWorldSkill> THE_WORLD;
     public static final RegistryObject<BibliomaniaSkill> BIBLIOMANIA;
@@ -95,6 +96,7 @@ public class Skills {
         ELTNAM = registery.register("eltnam", EltnamSkill::new);
         BIBLIOMANIA = registery.register("bibliomania", BibliomaniaSkill::new);
         SAINT = registery.register("saint", SaintSkill::new);
+        DEMONOLOGIST = registery.register("demonologist", () -> new Demonologist(Skill.SkillType.UNIQUE));
 //        DULLAHAN = registery.register("dullahan", DullahanSkill::new);
         OMNISCIENT_EYE = registery.register("omniscient_eye", OmniscientEyeSkill::new);
         PURITY_SKILL = registery.register("purity", () -> new PuritySkill(Skill.SkillType.UNIQUE));
