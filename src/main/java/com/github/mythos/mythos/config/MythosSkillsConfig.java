@@ -16,10 +16,6 @@ public class MythosSkillsConfig {
     public static ForgeConfigSpec.DoubleValue vassalAssemblyChance;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> purityImmuneEffects;
     public static ForgeConfigSpec.DoubleValue purityDamageCap;
-    public static ForgeConfigSpec.BooleanValue enableFighterEvolution;
-    public static ForgeConfigSpec.BooleanValue loseSkillOnFighterEvolution;
-    public static ForgeConfigSpec.BooleanValue enableChefEvolution;
-    public static ForgeConfigSpec.BooleanValue loseSkillOnChefEvolution;
     public static ForgeConfigSpec.BooleanValue VampireAncestor;
     public static ForgeConfigSpec.BooleanValue DeadApostleAncestor;
     public static ForgeConfigSpec.BooleanValue VampireCarnage;
@@ -128,23 +124,6 @@ public class MythosSkillsConfig {
         vassalAssemblyChance = builder
                 .comment("Chance (0.0–1.0) for [True Passive] Vassal Assembly to trigger when damaged.")
                 .defineInRange("vassalAssemblyChance", 0.2, 0.0, 1.0);
-
-        enableFighterEvolution = builder
-                .comment("Enable or disable Fighter -> Martial Master evolution.")
-                .define("enableFighterEvolution", true);
-
-        loseSkillOnFighterEvolution = builder
-                .comment("If true, the Fighter skill is lost when evolving to Martial Master.")
-                .define("loseSkillOnFighterEvolution", true);
-
-        enableChefEvolution = builder
-                .comment("Enable or disable Chef -> Cook evolution.")
-                .define("enableChefEvolution", true);
-
-        loseSkillOnChefEvolution = builder
-                .comment("If true, the Chef skill is lost when evolving to Cook.")
-                .define("loseSkillOnChefEvolution", true);
-
         DeadApostleAncestor = builder
                 .comment("if true, then on evolving eltnam you will be set to the vampire prince race.")
                 .define("DeadApostleAncestor", true);
@@ -171,7 +150,7 @@ public class MythosSkillsConfig {
 
         racesThatCanCompeteForChildOfThePlane = builder
                 .comment("List of races that can compete for Child of the Plane.")
-                .defineList("eligibleRaces",
+                .defineList("racesThatCanCompeteForChildOfThePlane",
                         List.of("herald_of_ragnarok", "hound_of_hades", "jormungandr", "envoy_of_valhalla"),
                         obj -> obj instanceof String
                 );
@@ -236,22 +215,6 @@ public class MythosSkillsConfig {
                 .map(id -> Registry.MOB_EFFECT.getOptional(new ResourceLocation((String) id)).orElse(null))
                 .filter(e -> e != null)
                 .collect(Collectors.toList());
-    }
-
-    public static boolean isFighterEvolutionEnabled() {
-        return enableFighterEvolution.get();
-    }
-
-    public static boolean loseFighterOnEvolution() {
-        return loseSkillOnFighterEvolution.get();
-    }
-
-    public static boolean isChefEvolutionEnabled() {
-        return enableChefEvolution.get();
-    }
-
-    public static boolean loseChefOnEvolution() {
-        return loseSkillOnChefEvolution.get();
     }
     public static boolean VampireAncestor() {
         return VampireAncestor.get();

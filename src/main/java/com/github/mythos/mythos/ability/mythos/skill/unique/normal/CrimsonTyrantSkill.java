@@ -3,6 +3,7 @@ package com.github.mythos.mythos.ability.mythos.skill.unique.normal;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
 import com.github.manasmods.tensura.ability.SkillHelper;
+import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.ability.skill.extra.HakiSkill;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
@@ -92,7 +93,7 @@ public class CrimsonTyrantSkill extends Skill {
         return 2;
     }
 
-    public int nextMode(LivingEntity entity, com.github.manasmods.tensura.ability.TensuraSkillInstance instance, boolean reverse) {
+    public int nextMode(LivingEntity entity, TensuraSkillInstance instance, boolean reverse) {
         return instance.getMode() == 1 ? 2 : 1;
     }
 

@@ -14,9 +14,9 @@
  import java.util.List;
 
  @Mixin(VampireRace.class)
-public abstract class VampireRaceMixin {
+public abstract class VampireEvoMixin {
 
-  public VampireRaceMixin() {
+  public VampireEvoMixin() {
   }
 
   @Inject(

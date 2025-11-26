@@ -65,7 +65,7 @@ public class CrimsonTyrantHandler {
                     .withStyle(ChatFormatting.DARK_RED));
         }
 
-//        // --- Kill streak messages ---
+//        // Kill streak messages
 //        switch (streak) {
 //            case 2 -> send(player, "streak", Component.literal(
 //                    "LET THE CARNAGE BEGIN!").withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD));

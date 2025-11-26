@@ -10,7 +10,7 @@ import com.github.manasmods.tensura.capability.skill.TensuraSkillCapability;
 import com.github.manasmods.tensura.enchantment.EngravingEnchantment;
 import com.github.manasmods.tensura.registry.enchantment.TensuraEnchantments;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
-import com.github.mythos.mythos.registry.MythosWeapons;
+import com.github.mythos.mythos.registry.MythosItems;
 import com.github.mythos.mythos.util.damage.MythosDamageSources;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
@@ -40,6 +40,19 @@ public class Fragarach extends Skill {
     private static final double SPEED_MULTIPLIER = 1.5;
     public Fragarach(SkillType type) {
         super(type);
+    }
+
+    public void onTouchEntity(ManasSkillInstance instance, LivingEntity attacker, LivingHurtEvent event) {
+        if (this.isInSlot(attacker)) {
+            float chance = instance.isMastered(attacker) ? 0.75F : 0.5F;
+            if (!(attacker.getRandom().nextFloat() > chance)) {
+                if (SkillHelper.drainMP(event.getEntity(), attacker, 0.01, true) && attacker instanceof Player) {
+                    Player player = (Player)attacker;
+                    player.playNotifySound(SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1.0F, 1.0F);
+                }
+
+            }
+        }
     }
 
     @Override
@@ -153,7 +166,7 @@ public class Fragarach extends Skill {
             spawnDummySword(instance, entity, InteractionHand.OFF_HAND);
             given = true;
         } else if (entity instanceof Player player) {
-            ItemStack blade = new ItemStack(MythosWeapons.FRAGARACH.get());
+            ItemStack blade = new ItemStack(MythosItems.FRAGARACH.get());
             if (player.getInventory().add(blade)) {
                 player.inventoryMenu.broadcastChanges();
                 player.swing(InteractionHand.MAIN_HAND, true);
@@ -179,7 +192,7 @@ public class Fragarach extends Skill {
         if (entity.level.isClientSide) return;
         if (SkillHelper.outOfMagicule(entity, instance)) return;
 
-        ItemStack blade = new ItemStack(MythosWeapons.FRAGARACH.get());
+        ItemStack blade = new ItemStack(MythosItems.FRAGARACH.get());
 
         Enchantment tsuku = TensuraEnchantments.TSUKUMOGAMI.get();
         EngravingEnchantment.engrave(blade, tsuku, 1);
@@ -198,6 +211,6 @@ public class Fragarach extends Skill {
         ItemStack main = player.getMainHandItem();
         ItemStack off = player.getOffhandItem();
 
-        return main.getItem() == MythosWeapons.FRAGARACH.get() || off.getItem() == MythosWeapons.FRAGARACH.get();
+        return main.getItem() == MythosItems.FRAGARACH.get() || off.getItem() == MythosItems.FRAGARACH.get();
     }
 }
