@@ -50,7 +50,7 @@ public class SaintSkill extends Skill {
     }
 
     public double learningCost() {
-        return 12250.0; //same as obtaining cost i mean why not?
+        return 12250.0; //same as obtaining cost i , why not?
     }
 
     public void onTick(ManasSkillInstance instance, LivingEntity entity) {

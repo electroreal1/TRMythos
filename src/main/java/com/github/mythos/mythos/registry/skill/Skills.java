@@ -80,7 +80,7 @@ public class Skills {
 
     static {
 
-        // ultimates
+        // Ultimates
         ORUNMILA = registery.register("orunmila", () -> new OrunmilaSkill(Skill.SkillType.ULTIMATE));
         ZEPIA = registery.register("zepia", ZepiaSkill::new);
         ETERNAL = registery.register("eternal", () -> new EternalSkill(Skill.SkillType.ULTIMATE));

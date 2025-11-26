@@ -35,7 +35,7 @@ public class MythosSkillsConfig {
 
         builder.push("SkillsConfig");
 
-        // FakerSkill restricted items
+        // FakerSkill restricted item
         fakerSkillRestrictedItems = builder
                 .comment("Items that Faker cannot copy via projection.")
                 .comment("Use item registry IDs, e.g., 'tensura:bronze_coin'.")
