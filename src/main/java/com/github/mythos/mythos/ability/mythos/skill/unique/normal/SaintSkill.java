@@ -13,13 +13,11 @@ import com.github.manasmods.tensura.entity.magic.projectile.IceLanceProjectile;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
 import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
-import com.github.mythos.mythos.config.MythosSkillsConfig;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -81,9 +79,7 @@ public class SaintSkill extends Skill {
     @Override
     public void onDamageEntity(ManasSkillInstance instance, LivingEntity attacker, LivingHurtEvent event) {
         if (DamageSourceHelper.isWaterDamage(event.getSource())) {
-
             float multiplier = 2.0f;
-
             event.setAmount(event.getAmount() * multiplier);
         }
     }
@@ -110,7 +106,7 @@ public class SaintSkill extends Skill {
                 name = Component.translatable("trmythos.skill.mode.saint.gift_receiving");
                 break;
             case 3:
-                name = Component.translatable("trmythos.skill.mode.saint.blizzard_null_cast_time");
+                name = Component.translatable("trmythos.skill.mode.saint.blizzard");
                 break;
             default:
                 name = Component.empty();
@@ -131,7 +127,6 @@ public class SaintSkill extends Skill {
         }
 
         if (instance.getMode() == 3) {
-
             if (entity.isShiftKeyDown()) {
                 var blizzards = entity.getLevel().getEntitiesOfClass(
                         BlizzardEntity.class,
