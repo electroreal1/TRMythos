@@ -9,6 +9,7 @@ import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSources;
 import com.github.mythos.mythos.entity.projectile.StarFallProjectile;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -38,6 +39,11 @@ public class StargazerSkill extends Skill {
 
     public StargazerSkill(SkillType type) {
         super(SkillType.UNIQUE);
+    }
+
+    @Override
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/unique/stargazer.png");
     }
 
     @Override
