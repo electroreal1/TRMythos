@@ -36,6 +36,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
@@ -128,22 +129,16 @@ public class IndraSkill extends Skill implements Transformation {
 
     @Override
     public void onTick(ManasSkillInstance instance, @NotNull LivingEntity entity) {
-        if (!instance.isToggled()) return;
-
-        if (!(entity instanceof Player player)) return;
-
-        TensuraPlayerCapability.getFrom(player).ifPresent(cap -> {
-            double maxMP = player.getAttributeValue(TensuraAttributeRegistry.MAX_MAGICULE.get());
-            double regenPerTick = (maxMP * 0.05);
-
-            if (instance.isMastered(entity)) {
-                regenPerTick *= 2;
+        if (instance.isToggled()) {
+            if (entity instanceof Player player) {
+                TensuraPlayerCapability.getFrom(player).ifPresent((cap) -> {
+                    double maxMP = player.getAttributeValue((Attribute) TensuraAttributeRegistry.MAX_MAGICULE.get());
+                    double regen = instance.isMastered(entity) ? 280000.0 : 140000.0;
+                    cap.setMagicule(Math.min(cap.getMagicule() + regen, maxMP));
+                });
+                TensuraPlayerCapability.sync(player);
             }
-
-            cap.setMagicule(Math.min(cap.getMagicule() + regenPerTick, maxMP));
-        });
-
-        TensuraPlayerCapability.sync(player);
+        }
     }
 
     public int modes() {
