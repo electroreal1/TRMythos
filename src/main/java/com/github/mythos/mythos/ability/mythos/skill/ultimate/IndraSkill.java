@@ -39,11 +39,12 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -71,34 +72,29 @@ public class IndraSkill extends Skill implements Transformation {
     }
 
 
-    public void onDamageEntity(ManasSkillInstance instance, @NotNull LivingEntity living, @NotNull LivingHurtEvent e, Player player) {
+    public void onDamageEntity(ManasSkillInstance instance, @NotNull LivingEntity living, @NotNull LivingHurtEvent event, Player player) {
         if (instance.isToggled()) {
-            if (DamageSourceHelper.isLightningDamage(e.getSource())) {
+            if (DamageSourceHelper.isLightningDamage(event.getSource())) {
                 if (instance.isMastered(living)) {
-                    e.setAmount(e.getAmount() * 15.0F);
+                    event.setAmount(event.getAmount() * 15.0F);
                 } else {
-                    e.setAmount(e.getAmount() * 10.0F);
+                    event.setAmount(event.getAmount() * 10.0F);
                 }
             }
-            Entity sourceEntity = e.getSource().getEntity();
-            Entity targetEntity = e.getEntity();
-
-
-            if (!(sourceEntity instanceof LivingEntity) || !(targetEntity instanceof LivingEntity)) return;
-
-            LivingEntity attacker = (LivingEntity) sourceEntity;
-            LivingEntity target = (LivingEntity) targetEntity;
-
+            Entity sourceEntity = event.getSource().getEntity();
+            Entity targetEntity = event.getEntity();
+            if (!(sourceEntity instanceof LivingEntity attacker)) return;
+            if (!(targetEntity instanceof LivingEntity target)) return;
             SkillStorage storage = SkillAPI.getSkillsFrom(attacker);
             Skill blackLightning = ExtraSkills.BLACK_LIGHTNING.get();
-
             if (storage.getSkill(blackLightning).isPresent()) {
                 target.hurt(TensuraDamageSources.blackLightning(attacker), 8.0F);
-
                 if (attacker.level instanceof ServerLevel serverLevel) {
-                    serverLevel.sendParticles(TensuraParticles.BLACK_LIGHTNING_SPARK.get(),
+                    serverLevel.sendParticles(
+                            TensuraParticles.BLACK_LIGHTNING_SPARK.get(),
                             target.getX(), target.getY() + 1.0, target.getZ(),
-                            15, 0.3, 0.5, 0.3, 0.05);
+                            15, 0.3, 0.5, 0.3, 0.05
+                    );
                 }
             }
         }
@@ -210,7 +206,7 @@ public class IndraSkill extends Skill implements Transformation {
     public String modeLearningId(int mode) {
         String var10000;
         switch (mode) {
-            case 3:
+            case 4:
                 var10000 = "Thunder";
                 break;
             default:
@@ -282,12 +278,25 @@ public class IndraSkill extends Skill implements Transformation {
             Level level = entity.getLevel();
             if (SkillHelper.outOfMagicule(entity, instance)) return;
 
-            this.addMasteryPoint(instance, entity);
-
-            BlockHitResult hitResult = (BlockHitResult) entity.pick(50, 0, false);
+            double reach = 100.0;
             Vec3 start = entity.position().add(0, entity.getEyeHeight(), 0);
             Vec3 lookVec = entity.getLookAngle();
-            Vec3 targetPos = start.add(lookVec.scale(50));
+            Vec3 end = start.add(lookVec.scale(reach));
+
+            HitResult hitResult = entity.pick(reach, 0, false);
+
+            Vec3 targetPos;
+
+            if (hitResult.getType() == HitResult.Type.BLOCK) {
+                BlockHitResult blockHit = (BlockHitResult) hitResult;
+                targetPos = blockHit.getLocation();
+            } else if (hitResult.getType() == HitResult.Type.ENTITY) {
+                EntityHitResult entityHit = (EntityHitResult) hitResult;
+                targetPos = entityHit.getLocation();
+            } else {
+                targetPos = end;
+            }
+
 
             int numBolts = 20;
             float totalDamage = instance.isMastered(entity) ? 6000.0F : 3000.0F;
@@ -301,7 +310,7 @@ public class IndraSkill extends Skill implements Transformation {
                 bolt.setAdditionalVisual(3);
                 bolt.setRadius(3.0F);
                 bolt.setSkill(instance);
-                bolt.setPos(targetPos);
+                bolt.setPos(targetPos.x, targetPos.y, targetPos.z);
                 level.addFreshEntity(bolt);
 
                 List<LivingEntity> entities = level.getEntitiesOfClass(
@@ -319,6 +328,7 @@ public class IndraSkill extends Skill implements Transformation {
                     SoundEvents.LIGHTNING_BOLT_IMPACT, SoundSource.PLAYERS, 1.0F, 1.0F);
 
             instance.setCoolDown(500);
+            instance.addMasteryPoint(entity);
         } else if (instance.getMode() == 3) {
             if (!this.failedToActivate(entity, (MobEffect) MythosMobEffects.THUNDER_GOD.get())) {
                 if (!entity.hasEffect((MobEffect)MythosMobEffects.THUNDER_GOD.get())) {
