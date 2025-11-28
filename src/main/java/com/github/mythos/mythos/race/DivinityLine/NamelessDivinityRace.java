@@ -127,19 +127,17 @@ public class NamelessDivinityRace extends Race {
         list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(MysticismRaces.DIVINE_EMPRESS_WASP));
         list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(MysticismRaces.DIVINE_YELLOW_CENTIPEDE));
         list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(MysticismRaces.DIVINE_PURPLE_CENTIPEDE));
-        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_VAMPIRE.get().getRegistryName()));
-        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_SKELETON.get().getRegistryName()));
-        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_ONI.get().getRegistryName()));
-        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_HUMAN.get().getRegistryName()));
-        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_FISH.get().getRegistryName()));
-        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_FIGHTER.get().getRegistryName()));
-        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_ELF.get().getRegistryName()));
-        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_DWARF.get().getRegistryName()));
-        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_DRAGON.get().getRegistryName()));
-        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_BOAR.get().getRegistryName()));
-        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_BEAST.get().getRegistryName()));
-        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_BEAST.get().getRegistryName()));
-        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_BEAST.get().getRegistryName()));
+//        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_VAMPIRE.get().getRegistryName()));
+//        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_SKELETON.get().getRegistryName()));
+//        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_ONI.get().getRegistryName()));
+//        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_HUMAN.get().getRegistryName()));
+//        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_FISH.get().getRegistryName()));
+//        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_FIGHTER.get().getRegistryName()));
+//        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_ELF.get().getRegistryName()));
+//        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_DWARF.get().getRegistryName()));
+//        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_DRAGON.get().getRegistryName()));
+//        list.add((Race)((IForgeRegistry) TensuraRaces.DIVINE_BOAR.get()));
+//        list.add((Race)((IForgeRegistry) TensuraRaces.DIVINE_BEAST.get()));
         return list;
     }
 

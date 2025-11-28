@@ -29,7 +29,7 @@ public class OriginDao extends Skill {
     protected static final UUID ACCELERATION2 = UUID.fromString("ba91c840-3ea9-497a-93b7-75216523344e");
 
     public OriginDao(SkillType type) {
-        super(SkillType.UNIQUE);
+        super(SkillType.ULTIMATE);
     }
 
     @Override

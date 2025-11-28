@@ -24,10 +24,12 @@
   "trmythos.effect.child_of_the_plane_effect": "Child of the Plane Effect",
 
   "trmythos.skill.learn_failed":  "Failed to learn due to lack of magicules",
-  "trmythos.skill.martial_master.obtainment":  "Your proficiency in martial arts grows. With this advancement in your growth, the world has seen it necessary to reward you. Martial Master has been engraved into your soul.",
-  "trmythos.skill.cook.obtainment": "Your creations have become known to create miracles. A new power has awakened within you in acknowledgement of this. Cook has been engraved into your soul.",
   "trmythos.evolution_menu.true_demon_lord": "Awaken as a True Demon Lord",
-  
+  "trmythos.skill.balance": "Balance",
+  "trmythos.skill.evolution": "Evolution",
+  "trmythos.skill.foundation": "Foundation",
+  "trmythos.skill.unity": "Unity",
+
   "trmythos.skill.omniscient_eye": "Omniscient Eye",
   "trmythos.skill.omniscient_eye.description": "See all, comprehend all, able to peer into the souls of others and mimic that which makes up their being.",
 
@@ -52,7 +54,10 @@
 
   "trmythos.skill.bibliomania": "Bibliomania",
   "trmythos.skill.bibliomania.description": "You'll live forever, within my records... this is the greatest honor I can grant with my own two hands.",
-
+  "trmythos.skill.bibliomania.glossary": "Glossary",
+  "trmythos.skill.bibliomania.bookmark": "Bookmark",
+  "trmythos.skill.bibliomania.bird_in_the_window": "Bird In The Window",
+  "trmythos.skill.bibliomania.for_my_happiness": "For My Happiness",
 
   "trmythos.skill.eltnam": "§5Eltnam",
   "trmythos.skill.eltnam.description": "Cut! There are no second chances for actors that fall to the abyss...",
@@ -103,6 +108,31 @@
   "trmythos.skill.mode.saint.gift_receiving": "Gift Receiving",
   "trmythos.skill.mode.saint.blizzard_null_cast_time": "Blizzard",
 
+  "trmythos.skill.demonologist": "Demonologist",
+  "trmythos.skill.demonologist.description": "You have studied it, Demonology the research of demons and you believe you have found a breakthrough.",
+  "trmythos.skill.demonologist.possession": "Mimic Possession",
+  "trmythos.skill.demonologist.abyss": "Abyss Gate",
+
+  "trmythos.skill.awakened_dao": "Awakened Dao",
+  "trmythos.skill.awakened_dao.description": "Your Dao has stabilized and deepened, allowing you to draw more power from the world around you.",
+
+  "trmythos.skill.nascent_dao": "Nascent Dao",
+  "trmythos.skill.nascent_dao.description": "The first stirrings of a personal Dao takes form within you.",
+
+  "trmythos.skill.origion_dao": "Origin Dao",
+  "trmythos.skill.origin_dao.description": "Your Dao has reached its ultimate form, fusing completely with the flow of Magicules and the world around you. ",
+
+  "trmythos.skill.true_dao": "True Dao",
+  "trmythos.skill.true_dao.description": "Your Dao has matured, allowing you to harmonize fully with the flow of Magicules and absorb power effortlessly. ",
+
+  "trmythos.skill.underworld_prince": "Underworld Prince",
+  "trmythos.skill.underworld_prince.description": "The Underworld, it beckons you, calls to you, begging for your attention and for you to give it souls to feast on.",
+
+  "trmythos.skill.stargazer": "Stargazer",
+  "tmrythos.skill.stargazer.description": "The night sky calls to you like nothing else; the moon calls to you in a voice only you can hear.",
+  "trmythos.skill.stargazer.starlight": "Starlight",
+  "trmythos.skill.stargazer.starfall": "Starfall",
+
   "trmythos.skill.child_of_the_plane": "Child of the Plane",
   "trmythos.skill.child_of_the_plane.description": "When the plane itself takes notice, even gods must bow.",
   "trmythos.skill.child_of_the_plane.mode": "default",
@@ -139,6 +169,18 @@
   "trmythos.skill.excalibur": "Excalibur",
   "trmythos.skill.excalibur.description": "The blade of kings, knights and monarchs, lead your army into battle.",
 
+  "trmythos.skill.gram": "Gram",
+  "trmythos.skill.description": "The blade that has slain dragons, the Dragon Slayer, they call you, for having killed a creature hundreds of times your size and power.",
+
+  "trmythos.skill.indra": "Indra",
+  "trmythos.skill.indra.description": "When the heavens roar, all beneath the sky shall kneel.",
+
+  "trmythos.skill.vayu": "Vayu",
+  "trmythos.skill.vayu.description": "",
+
+  "trmythos.skill.introvert": "Introvert",
+  "trmythos.skill.introvert.description": "leave me alone. get away from me.. get away, just leave me be!",
+
   "trmythos.skill.the_world": "The World",
   "trmythos.skill.the_world.the_world": "The World",
   "trmythos.skill.the_world.knife_throw": "Knife Throw",
@@ -161,6 +203,8 @@
 
   "trmythos.skill.immortal": "Immortal",
   "trmythos.skill.immortal.description": "Immortality and eternal youth through regeneration, reminding the world that you will remain as flawless as marble at the end of any conflict.",
+
+  "trmythos.skill.ares": "Ares",
 
   "trmythos.skill.opportunist": "Opportunist",
   "trmythos.skill.opportunist.description": "Take advantage of the odds to exploit the opportunities presented to you. Although, who knows if others might be able to do the same...",

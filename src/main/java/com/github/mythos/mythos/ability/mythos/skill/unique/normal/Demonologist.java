@@ -33,6 +33,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -68,6 +69,11 @@ public class Demonologist extends Skill {
 
     public int nextMode(LivingEntity entity, TensuraSkillInstance instance, boolean reverse) {
         return instance.getMode() == 1 ? 2 : 1;
+    }
+
+    @Override
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/unique/demonologist.png");
     }
 
     public Component getModeName(int mode) {

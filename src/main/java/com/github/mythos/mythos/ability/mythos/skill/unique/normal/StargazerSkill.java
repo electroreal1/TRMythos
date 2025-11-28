@@ -2,6 +2,7 @@ package com.github.mythos.mythos.ability.mythos.skill.unique.normal;
 
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.tensura.ability.SkillHelper;
+import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
 import com.github.manasmods.tensura.registry.particle.TensuraParticles;
@@ -9,6 +10,8 @@ import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSources;
 import com.github.mythos.mythos.entity.projectile.StarFallProjectile;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -137,6 +140,24 @@ public class StargazerSkill extends Skill {
         return 2;
     }
 
+    public int nextMode(LivingEntity entity, TensuraSkillInstance instance, boolean reverse) {
+        return instance.getMode() == 1 ? 2 : 1;
+    }
+
+    public Component getModeName(int mode) {
+        MutableComponent var10000;
+        switch (mode) {
+            case 1:
+                var10000 = Component.translatable("trmythos.skill.stargazer.starlight");
+                break;
+            case 2:
+                var10000 = Component.translatable("trmythos.skill.stargazer.starfall");
+                break;
+            default:
+                var10000 = Component.empty();
+        }
+        return var10000;
+    }
     @Override
     public int getMaxMastery() {
         return 3000;
@@ -233,6 +254,7 @@ public class StargazerSkill extends Skill {
             arrow.setSkill(instance);
             entity.getLevel().addFreshEntity(arrow);
         }
+
 
     }
 }
