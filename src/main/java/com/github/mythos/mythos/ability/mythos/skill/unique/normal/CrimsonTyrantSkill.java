@@ -257,6 +257,7 @@ public class CrimsonTyrantSkill extends Skill {
                     HakiSkill.hakiPush(target, entity, fearLevel);
                 }
             }
+
         }
     }
 }

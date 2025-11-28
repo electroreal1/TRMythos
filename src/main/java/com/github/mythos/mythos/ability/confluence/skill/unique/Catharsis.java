@@ -28,7 +28,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import java.util.UUID;
 
 public class Catharsis extends Skill {
-    public static final UUID CATHARSIS = UUID.fromString("db72dacd-39c1-4539-8816-11536820d3ec");
+    public static final UUID COOK = UUID.fromString("6cb9493c-7b20-11ee-b962-0242ac120002");
 
     public Catharsis(SkillType type) {
         super(type);
@@ -57,10 +57,10 @@ public class Catharsis extends Skill {
 
     private boolean activatedCatharsisSeverance(ManasSkillInstance instance, LivingEntity entity) {
         CompoundTag tag = instance.getOrCreateTag();
-        if (tag.getInt("CathSev") < 100) {
+        if (tag.getInt("ChaoticFate") < 100) {
             return false;
         } else {
-            return instance.isMastered(entity) && instance.isToggled() ? true : tag.getBoolean("CathSevActivated");
+            return instance.isMastered(entity) && instance.isToggled() ? true : tag.getBoolean("ChaoticFateActivated");
         }
     }
 
@@ -79,16 +79,16 @@ public class Catharsis extends Skill {
             if (instance.isMastered(entity)) {
                 if (soulHealth != null) {
                     double amount = baseAmount * shpSeverPercent;
-                    catharsisModifier = soulHealth.getModifier(CATHARSIS);
+                    catharsisModifier = soulHealth.getModifier(COOK);
                     if (catharsisModifier != null) {
                         amount -= catharsisModifier.getAmount();
                     }
 
-                    catharsisModifier = new AttributeModifier(CATHARSIS, "Catharsis", amount * -1.0, AttributeModifier.Operation.ADDITION);
+                    catharsisModifier = new AttributeModifier(COOK, "Cook", amount * -1.0, AttributeModifier.Operation.ADDITION);
                     soulHealth.removeModifier(catharsisModifier);
                     soulHealth.addPermanentModifier(catharsisModifier);
                     if (!instance.isMastered(entity) || !instance.isToggled()) {
-                        tag.putBoolean("CathSevActivated", false);
+                        tag.putBoolean("ChaoticFateActivated", false);
                     }
 
                     this.addMasteryPoint(instance, entity);
@@ -98,16 +98,16 @@ public class Catharsis extends Skill {
             AttributeInstance health = target.getAttribute(Attributes.MAX_HEALTH);
             if (health != null) {
                 double amount = baseAmount * hpSeverPercent;
-                catharsisModifier = health.getModifier(CATHARSIS);
+                catharsisModifier = health.getModifier(COOK);
                 if (catharsisModifier != null) {
                     amount -= catharsisModifier.getAmount();
                 }
 
-                AttributeModifier attributemodifier = new AttributeModifier(CATHARSIS, "Catharsis", amount * -1.0, AttributeModifier.Operation.ADDITION);
+                AttributeModifier attributemodifier = new AttributeModifier(COOK, "Cook", amount * -1.0, AttributeModifier.Operation.ADDITION);
                 health.removeModifier(attributemodifier);
                 health.addPermanentModifier(attributemodifier);
                 if (!instance.isMastered(entity) || !instance.isToggled()) {
-                    tag.putBoolean("CathSevActivated", false);
+                    tag.putBoolean("ChaoticFateActivated", false);
                 }
 
                 this.addMasteryPoint(instance, entity);
