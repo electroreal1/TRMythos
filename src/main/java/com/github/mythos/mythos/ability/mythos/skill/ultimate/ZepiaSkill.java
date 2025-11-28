@@ -86,10 +86,9 @@ public class ZepiaSkill extends Skill {
     }
 
     public boolean meetEPRequirement(Player player, double newEP) {
-        // Check EP using Tensura capability
         double currentEP = TensuraEPCapability.getCurrentEP(player);
         if (currentEP < getObtainingEpCost()) {
-            return false; // not enough EP
+            return false;
         }
         return SkillUtils.isSkillMastered(player, (ManasSkill) Skills.ELTNAM.get());
 
@@ -130,11 +129,11 @@ public class ZepiaSkill extends Skill {
             MinecraftServer server = player.getServer();
             PlayerList playerList = server.getPlayerList();
 
-            // Create a packet to remove the player from the player info (tab list)
+
             ClientboundPlayerInfoPacket removePacket =
                     new ClientboundPlayerInfoPacket(ClientboundPlayerInfoPacket.Action.REMOVE_PLAYER, player);
 
-            // Create the "player left the game" message in yellow
+
             MutableComponent leaveMessage = Component.translatable(
                     "multiplayer.player.left", player.getDisplayName()
             ).setStyle(Style.EMPTY.withColor(ChatFormatting.YELLOW));

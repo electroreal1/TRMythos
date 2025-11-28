@@ -43,5 +43,7 @@ public class MythosDamageSources {
     public static DamageSource vajraSpear() {
         return (new TensuraDamageSource("trmythos.vajra_spear_lightning")).bypassArmor().bypassMagic().bypassInvul();
     }
+    public static DamageSource BadNewsDamage =
+            new TensuraDamageSource("trmythos.bad_news").bypassArmor().bypassMagic().setMagic().bypassArmor().bypassInvul().bypassEnchantments().setExplosion();
 
 }

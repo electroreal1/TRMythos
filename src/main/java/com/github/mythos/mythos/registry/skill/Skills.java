@@ -26,6 +26,7 @@ public class Skills {
     public static final RegistryObject<EternalSkill> ETERNAL;
     public static final RegistryObject<ImmortalSkill> IMMORTAL;
     public static final RegistryObject<ZepiaSkill> ZEPIA;
+    public static final RegistryObject<TatariSkill> TATARI;
     public static final RegistryObject<IndraSkill> INDRA;
     public static final RegistryObject<VayuSkill> VAYU;
     public static final RegistryObject<ElementalQueenSkill> ELEMENTAL_QUEEN;
@@ -83,6 +84,7 @@ public class Skills {
         // Ultimates
         ORUNMILA = registery.register("orunmila", () -> new OrunmilaSkill(Skill.SkillType.ULTIMATE));
         ZEPIA = registery.register("zepia", ZepiaSkill::new);
+        TATARI = registery.register("tatari", TatariSkill::new);
         ETERNAL = registery.register("eternal", () -> new EternalSkill(Skill.SkillType.ULTIMATE));
         IMMORTAL = registery.register("immortal", () -> new ImmortalSkill(Skill.SkillType.ULTIMATE));
         INDRA = registery.register("indra", () -> new IndraSkill(Skill.SkillType.ULTIMATE));
