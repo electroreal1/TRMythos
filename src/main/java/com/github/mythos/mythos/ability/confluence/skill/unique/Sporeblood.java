@@ -83,6 +83,11 @@ public class Sporeblood extends Skill {
                             SkillHelper.checkThenAddEffectSource(nearby, attacker, poison, 200, 1);
                             SkillHelper.checkThenAddEffectSource(nearby, attacker, corrosion, 200, 1);
                             SkillHelper.checkThenAddEffectSource(nearby, attacker, rot, 200, 1);
+                            if (attacker.hasEffect(rot) || attacker.hasEffect(corrosion) || attacker.hasEffect(poison)) {
+                                attacker.removeEffect(rot);
+                                attacker.removeEffect(poison);
+                                attacker.removeEffect(corrosion);
+                            }
                         }
                     }
 
@@ -91,7 +96,7 @@ public class Sporeblood extends Skill {
                     ((ServerLevel)level).sendParticles((SimpleParticleType) TensuraParticles.ACID_BUBBLE.get(), target.position().x, target.position().y + (double)target.getBbHeight() / 2.0, target.position().z, 20, 0.08, 0.08, 0.08, 0.15);
                     CompoundTag tag = instance.getOrCreateTag();
                     int time = tag.getInt("activatedTimes");
-                    if (time % 10 == 0) {
+                    if (time % 12 == 0) {
                         this.addMasteryPoint(instance, attacker);
                     }
 
