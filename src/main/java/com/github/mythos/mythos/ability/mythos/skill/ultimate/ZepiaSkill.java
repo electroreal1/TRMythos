@@ -10,6 +10,7 @@ import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.ability.skill.extra.ThoughtAccelerationSkill;
 import com.github.manasmods.tensura.ability.skill.unique.CookSkill;
+import com.github.manasmods.tensura.ability.skill.unique.WrathSkill;
 import com.github.manasmods.tensura.capability.effects.TensuraEffectsCapability;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
@@ -50,12 +51,11 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.github.manasmods.tensura.ability.skill.unique.WrathSkill;
+
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -68,7 +68,7 @@ public class ZepiaSkill extends Skill {
     public static boolean DeadApostleAncestor = true;
 
     public ResourceLocation getSkillIcon() {
-        return new ResourceLocation("trmythos", "textures/skill/ultimate/ZepiaIconBIG.png");
+        return new ResourceLocation("trmythos", "textures/skill/ultimate/zepia.png");
     }
 
     public ZepiaSkill() {

@@ -25,9 +25,7 @@ import com.github.manasmods.tensura.registry.entity.TensuraEntityTypes;
 import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
 import com.github.manasmods.tensura.util.attribute.TensuraAttributeModifierIds;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSources;
-import com.mojang.math.Vector3f;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -94,77 +92,6 @@ public class Demonologist extends Skill {
     @Override
     public double getObtainingEpCost() {
         return 100000;
-    }
-
-    @Override
-    public boolean canTick(ManasSkillInstance instance, LivingEntity entity) {
-        return true;
-    }
-
-    @Override
-    public void onTick(ManasSkillInstance instance, LivingEntity living) {
-        if (!(living instanceof Player player)) return;
-        Level level = living.level;
-        if (!(level instanceof ServerLevel server)) return;
-
-//        CompoundTag tag = instance.getOrCreateTag();
-        RandomSource rand = level.random;
-
-//        float rotation = tag.contains("pentagram_rotation") ? tag.getFloat("pentagram_rotation") : 0f;
-//        rotation += 0.015f;
-//        tag.putFloat("pentagram_rotation", rotation);
-
-        int points = 5;
-        double radius = 0.8;
-        int segments = 40;
-        double y = living.getY() + 2.05;
-        double tilt = Math.toRadians(30);
-
-
-        for (int i = 0; i < points; i++) {
-            double angle = i * 2 * Math.PI / points; // rotation + i * 2 * Math.PI / points;
-            double px = living.getX() + Math.cos(angle) * radius;
-            double pz = living.getZ() + Math.sin(angle) * radius;
-            double py = y + Math.sin(tilt) * radius;
-
-
-            int count = 1 + rand.nextInt(3);
-            for (int c = 0; c < count; c++) {
-                server.sendParticles(
-                        new DustParticleOptions(new Vector3f(1f, 0f, 0f), 1f),
-                        px, py + (rand.nextDouble() - 0.5) * 0.02, pz,
-                        1, 0, 0, 0, 0
-                );
-            }
-        }
-
-
-        for (int i = 0; i < points; i++) {
-            int next = (i + 2) % points;
-            for (int s = 0; s < segments; s++) {
-                double t = s / (double) segments;
-                double angle1 =  i * 2 * Math.PI / points;
-                double angle2 =  next * 2 * Math.PI / points;
-                //                 double angle1 = rotation + i * 2 * Math.PI / points;
-                //                double angle2 = rotation + next * 2 * Math.PI / points;
-
-                double x = living.getX() +
-                        (Math.cos(angle1) * (1 - t) + Math.cos(angle2) * t) * radius;
-                double z = living.getZ() +
-                        (Math.sin(angle1) * (1 - t) + Math.sin(angle2) * t) * radius;
-                double py = y + Math.sin(tilt) * radius;
-
-
-                int count = 1 + rand.nextInt(2);
-                for (int c = 0; c < count; c++) {
-                    server.sendParticles(
-                            new DustParticleOptions(new Vector3f(1f, 0f, 0f), 0.8f),
-                            x, py + (rand.nextDouble() - 0.5) * 0.02, z,
-                            1, 0, 0, 0, 0
-                    );
-                }
-            }
-        }
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.github.trmythos.trmythos.race.ValkyrieRaceLine;
+package com.github.mythos.mythos.race.ValkyrieRaceLine;
 
 import com.github.manasmods.tensura.ability.TensuraSkill;
 import com.github.manasmods.tensura.race.Race;

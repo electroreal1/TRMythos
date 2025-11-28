@@ -1,16 +1,13 @@
 package com.github.mythos.mythos.race.ValkyrieRaceLine;
 
-import com.github.manasmods.manascore.api.skills.SkillAPI;
-import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
 import com.github.manasmods.tensura.ability.TensuraSkill;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.config.TensuraConfig;
 import com.github.manasmods.tensura.race.Race;
-import com.github.manasmods.tensura.race.human.HumanSaintRace;
 import com.github.manasmods.tensura.registry.TensuraStats;
 import com.github.manasmods.tensura.registry.race.TensuraRaces;
-import com.github.manasmods.tensura.registry.skill.*;
-import com.github.mythos.mythos.registry.race.MythosRaces;
+import com.github.manasmods.tensura.registry.skill.ExtraSkills;
+import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
 import com.github.mythos.mythos.registry.race.MythosRaces;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.chat.Component;
@@ -116,6 +113,7 @@ public class ValkyrieRace extends Race {
     public List<Race> getNextEvolutions(Player player) {
         List<Race> list = new ArrayList<>();
         list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(MythosRaces.ENVOY_OF_VALHALLA));
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(MythosRaces.NAMELESS_DIVINITY_V));
         return list;
     }
 

@@ -53,11 +53,11 @@
   "trmythos.skill.mode.bloodsucker.flesh_bud": "Flesh Bud",
 
   "trmythos.skill.bibliomania": "Bibliomania",
-  "trmythos.skill.bibliomania.description": "You'll live forever, within my records... this is the greatest honor I can grant with my own two hands.",
-  "trmythos.skill.bibliomania.glossary": "Glossary",
-  "trmythos.skill.bibliomania.bookmark": "Bookmark",
-  "trmythos.skill.bibliomania.bird_in_the_window": "Bird In The Window",
-  "trmythos.skill.bibliomania.for_my_happiness": "For My Happiness",
+  "trmythos.skill.mode.bibliomania.description": "You'll live forever, within my records... this is the greatest honor I can grant with my own two hands.",
+  "trmythos.skill.mode.bibliomania.glossary": "Glossary",
+  "trmythos.skill.mode.bibliomania.bookmark": "Bookmark",
+  "trmythos.skill.mode.bibliomania.bird_in_the_window": "Bird In The Window",
+  "trmythos.skill.mode.bibliomania.for_my_happiness": "For My Happiness",
 
   "trmythos.skill.eltnam": "§5Eltnam",
   "trmythos.skill.eltnam.description": "Cut! There are no second chances for actors that fall to the abyss...",
@@ -119,7 +119,7 @@
   "trmythos.skill.nascent_dao": "Nascent Dao",
   "trmythos.skill.nascent_dao.description": "The first stirrings of a personal Dao takes form within you.",
 
-  "trmythos.skill.origion_dao": "Origin Dao",
+  "trmythos.skill.origin_dao": "Origin Dao",
   "trmythos.skill.origin_dao.description": "Your Dao has reached its ultimate form, fusing completely with the flow of Magicules and the world around you. ",
 
   "trmythos.skill.true_dao": "True Dao",
@@ -272,7 +272,7 @@
   "trmythos.race.vampire_duke": "Vampire Duke",
   "trmythos.race.vampire_archduke": "Vampire Archduke",
   "trmythos.race.vampire_prince": "Vampire Prince",
-  "trmythos.race.vampire_true_ancestor": "True Ancestor",
+  "trmythos.race.vampire_true_ancestor": "Vampire True Ancestor",
 
   "trmythos.race.nameless_divinity": "Nameless Divinity",
   "trmythos.race.nameless_divinity_v": "Nameless Divinity",

@@ -36,13 +36,13 @@ import com.github.mythos.mythos.race.GodlingLines.EgyptianPantheon.DivineHostRac
 import com.github.mythos.mythos.race.GodlingLines.GodlingRace;
 import com.github.mythos.mythos.race.GodlingLines.GreekPantheon.SemideusRace;
 import com.github.mythos.mythos.race.GodlingLines.NorsePantheon.UulbornRace;
+import com.github.mythos.mythos.race.HydraLine.*;
 import com.github.mythos.mythos.race.JormungandrRaceLine.*;
 import com.github.mythos.mythos.race.ValkyrieRaceLine.EnvoyOfValhallaRace;
 import com.github.mythos.mythos.race.ValkyrieRaceLine.MaidenRace;
+import com.github.mythos.mythos.race.ValkyrieRaceLine.SoulCourierRace;
 import com.github.mythos.mythos.race.ValkyrieRaceLine.ValkyrieRace;
 import com.github.mythos.mythos.race.VampireEvoLine.*;
-import com.github.mythos.mythos.race.HydraLine.*;
-import com.github.trmythos.trmythos.race.ValkyrieRaceLine.SoulCourierRace;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
