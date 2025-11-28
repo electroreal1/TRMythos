@@ -251,7 +251,9 @@ public class CrimsonTyrantSkill extends Skill {
                     int fearLevel = (int) (difference * 0.5 - 1.0);
                     fearLevel = Math.min(fearLevel, TensuraConfig.INSTANCE.mobEffectConfig.maxFear.get());
                     SkillHelper.checkThenAddEffectSource(target, entity, (MobEffect) TensuraMobEffects.FEAR.get(), 200, fearLevel);
-                    entity.addEffect(new MobEffectInstance(TensuraMobEffects.FRAGILITY.get(), 1200, 1, false, false, false));
+                    SkillHelper.checkThenAddEffectSource(target, entity, (MobEffect) TensuraMobEffects.MOVEMENT_INTERFERENCE.get(), 200, 1);
+                    SkillHelper.checkThenAddEffectSource(target, entity, (MobEffect) TensuraMobEffects.CURSE.get(), 200, 1);
+                    SkillHelper.checkThenAddEffectSource(target, entity, (MobEffect) TensuraMobEffects.FRAGILITY.get(), 1200, 1, false, false, false);
                     HakiSkill.hakiPush(target, entity, fearLevel);
                 }
             }
