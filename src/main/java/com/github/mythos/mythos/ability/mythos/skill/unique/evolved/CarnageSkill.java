@@ -2,11 +2,16 @@ package com.github.mythos.mythos.ability.mythos.skill.unique.evolved;
 
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
+import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
+import com.github.manasmods.tensura.ability.skill.extra.HakiSkill;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
+import com.github.manasmods.tensura.config.TensuraConfig;
+import com.github.manasmods.tensura.network.TensuraNetwork;
+import com.github.manasmods.tensura.network.play2client.RequestFxSpawningPacket;
 import com.github.manasmods.tensura.race.Race;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.registry.race.TensuraRaces;
@@ -14,7 +19,9 @@ import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.registry.race.MythosRaces;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -30,6 +37,7 @@ import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.network.PacketDistributor;
 
 import java.util.HashMap;
 import java.util.List;
@@ -93,7 +101,7 @@ public class CarnageSkill extends Skill {
         if (!(event.getSource().getEntity() instanceof Player player)) return;
         if (player.level.isClientSide) return;
 
-        float heal = event.getAmount() * 0.15f; // 15% lifesteal
+        float heal = event.getAmount() * 0.15f;
         player.heal(heal);
     }
 
@@ -120,7 +128,7 @@ public class CarnageSkill extends Skill {
     @Override
     public Component getModeName(int mode) {
         return switch (mode) {
-            case 1 -> Component.translatable("trmythos.skill.carnage.blood");
+            case 1 -> Component.translatable("trmythos.skill.carnage.crimson");
             case 2 -> Component.translatable("trmythos.skill.carnage.absolute");
             default -> Component.empty();
         };
@@ -131,62 +139,66 @@ public class CarnageSkill extends Skill {
         return instance.getMode() == 1 ? 2 : 1;
     }
 
-    @Override
-    public void onPressed(ManasSkillInstance instance, LivingEntity entity) {
-        if (!(entity instanceof ServerPlayer player)) return;
+    public boolean onHeld(ManasSkillInstance instance, LivingEntity entity, int heldTicks) {
+        if (instance.getMode() == 1) {
 
-        TensuraSkillInstance tsi = (TensuraSkillInstance) instance;
+            if (heldTicks % 20 == 0 && SkillHelper.outOfMagicule(entity, instance)) return false;
 
-        if (tsi.getMode() == 1) {
-            BloodDominion(player, tsi);
-        } else if (tsi.getMode() == 2) {
-            AbsoluteBloodlord(player, tsi);
+            if (heldTicks % 100 == 0 && heldTicks > 0) this.addMasteryPoint(instance, entity);
+
+            CrimsonDesolation(instance, entity, heldTicks);
+
+        }
+        return true;
+    }
+
+    public void onRelease(ManasSkillInstance instance, LivingEntity entity, int heldTicks) {
+        if (instance.getMode() == 1) {
+            instance.setCoolDown(instance.isMastered(entity) ? 3 : 5);
         }
     }
 
-    private void BloodDominion(ServerPlayer player, TensuraSkillInstance instance) {
-        if (!CarnageBloodDominion) return;
+    public static void CrimsonDesolation(ManasSkillInstance instance, LivingEntity entity, int heldTicks) {
+        if (instance.getMode() == 1) {
+        if (heldTicks % 20 == 0) {
+            entity.getLevel().playSound(null, entity.blockPosition(), SoundEvents.BEEHIVE_DRIP, SoundSource.PLAYERS, 1.0F, 1.0F);
+            entity.getLevel().playSound(null, entity.blockPosition(), SoundEvents.BEEHIVE_DRIP, SoundSource.PLAYERS, 1.0F, 1.0F);
+            entity.getLevel().playSound(null, entity.blockPosition(), SoundEvents.BEEHIVE_DRIP, SoundSource.PLAYERS, 1.0F, 1.0F);
+            entity.getLevel().playSound(null, entity.blockPosition(), SoundEvents.BEEHIVE_DRIP, SoundSource.PLAYERS, 1.0F, 1.0F);
+            entity.getLevel().playSound(null, entity.blockPosition(), SoundEvents.BEEHIVE_DRIP, SoundSource.PLAYERS, 1.0F, 1.0F);
+        }
+        if (heldTicks % 2 == 0) {
+            TensuraNetwork.INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity),
+                    new RequestFxSpawningPacket(new ResourceLocation("tensura:demon_lord_haki"), entity.getId(), 0.0, 1.0, 0.0, true));
+        }
+        List<LivingEntity> list = entity.getLevel().getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(15.0),
+                (living) -> !living.is(entity) && living.isAlive() && !living.isAlliedTo(entity));
 
-        Level level = player.level;
-        double range = 15.0;
-        float casterEP = (float) TensuraEPCapability.getCurrentEP(player);
+        if (!list.isEmpty()) {
+            double scale = instance.getTag() == null ? 0.0 : instance.getTag().getDouble("scale");
+            double multiplier = scale == 0.0 ? 1.0 : Math.min(scale, 1.0);
+            double ownerEP = TensuraEPCapability.getEP(entity) * multiplier;
 
-        List<LivingEntity> targets =
-                level.getEntitiesOfClass(LivingEntity.class,
-                        player.getBoundingBox().inflate(range),
-                        e -> e != player && e.isAlive() && !e.isAlliedTo(player)
-                );
+            for (LivingEntity target : list) {
+                if (target instanceof Player player && player.getAbilities().invulnerable) continue;
 
-        level.playSound(null, player.blockPosition(), net.minecraft.sounds.SoundEvents.EVOKER_CAST_SPELL,
-                SoundSource.PLAYERS, 1f, 1.2f);
+                double targetEP = TensuraEPCapability.getEP(target);
+                double difference = ownerEP / targetEP;
 
-        TensuraParticleHelper.addServerParticlesAroundSelf(player, net.minecraft.core.particles.ParticleTypes.CRIMSON_SPORE);
-
-        for (LivingEntity target : targets) {
-            if (target instanceof Player t && t.getAbilities().invulnerable) continue;
-
-            float targetEP = target instanceof Player p ?
-                    (float) TensuraEPCapability.getCurrentEP(p) : 0f;
-
-            if (targetEP > casterEP * 0.85f) continue;
-
-            // Turn players into vampires
-            if (target instanceof Player p) {
-                TensuraPlayerCapability.getFrom(p).ifPresent(cap -> {
-                    Race vamp = TensuraRaces.VAMPIRE.get();
-                    if (cap.getRace() != vamp) cap.setRace(p, vamp, true);
-                });
+                if (difference > 2.0) {
+                    int fearLevel = (int) (difference * 0.5 - 1.0);
+                    fearLevel = Math.min(fearLevel, TensuraConfig.INSTANCE.mobEffectConfig.maxFear.get());
+                    SkillHelper.checkThenAddEffectSource(target, entity, (MobEffect) TensuraMobEffects.FEAR.get(), 200, fearLevel);
+                    entity.addEffect(new MobEffectInstance(TensuraMobEffects.FRAGILITY.get(), 1200, 1, false, false, false));
+                    HakiSkill.hakiPush(target, entity, fearLevel);
+                    }
+                }
             }
-
-            TensuraParticleHelper.spawnServerParticles(
-                    player.level, net.minecraft.core.particles.ParticleTypes.DAMAGE_INDICATOR,
-                    target.getX(), target.getY() + 1.0, target.getZ(),
-                    8, 0.1, 0.1, 0.1, 0.2, true
-            );
         }
     }
 
-    private void AbsoluteBloodlord(ServerPlayer player, TensuraSkillInstance instance) {
+    public void onPressed(ServerPlayer player, ManasSkillInstance instance) {
+        if (!(instance.getMode() == 2)) return;
         Level level = player.level;
 
         level.playSound(null, player.blockPosition(), net.minecraft.sounds.SoundEvents.WITHER_DEATH,
