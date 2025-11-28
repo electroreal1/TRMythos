@@ -40,8 +40,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -68,7 +70,8 @@ public class IndraSkill extends Skill implements Transformation {
         return true;
     }
 
-    public void onEntityHit(ManasSkillInstance instance, @NotNull LivingEntity living, @NotNull LivingHurtEvent e, Player player) {
+
+    public void onDamageEntity(ManasSkillInstance instance, @NotNull LivingEntity living, @NotNull LivingHurtEvent e, Player player) {
         if (instance.isToggled()) {
             if (DamageSourceHelper.isLightningDamage(e.getSource())) {
                 if (instance.isMastered(living)) {
@@ -101,8 +104,8 @@ public class IndraSkill extends Skill implements Transformation {
         }
     }
 
-
-    public void onEntityHurt(LivingHurtEvent event, ManasSkillInstance instance) {
+    @Override
+    public void onBeingDamaged(ManasSkillInstance instance, LivingAttackEvent event) {
         if (instance.isToggled()) {
             LivingEntity target = event.getEntity();
             DamageSource source = event.getSource();
@@ -119,6 +122,7 @@ public class IndraSkill extends Skill implements Transformation {
     private static void applyHealth(LivingEntity entity, float amount) {
         float currentAbsorption = entity.getAbsorptionAmount();
         entity.setAbsorptionAmount(currentAbsorption + amount);
+
     }
 
     @Override
@@ -134,7 +138,7 @@ public class IndraSkill extends Skill implements Transformation {
 
         TensuraPlayerCapability.getFrom(player).ifPresent(cap -> {
             double maxMP = player.getAttributeValue(TensuraAttributeRegistry.MAX_MAGICULE.get());
-            double regenPerTick = (maxMP * 0.05) / 20.0;
+            double regenPerTick = (maxMP * 0.05);
 
             if (instance.isMastered(entity)) {
                 regenPerTick *= 2;
