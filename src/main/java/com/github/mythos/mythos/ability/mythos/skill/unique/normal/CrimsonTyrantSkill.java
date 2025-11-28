@@ -178,7 +178,7 @@ public class CrimsonTyrantSkill extends Skill {
         if (!(event.getSource().getEntity() instanceof Player player)) return;
         if (player.level.isClientSide) return;
 
-        float heal = event.getAmount() * 0.15f;
+        float heal = event.getAmount() * 0.05f;
         player.heal(heal);
     }
 
