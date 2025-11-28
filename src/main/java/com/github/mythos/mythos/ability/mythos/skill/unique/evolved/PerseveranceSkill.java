@@ -185,65 +185,16 @@ public class PerseveranceSkill extends Skill {
         }
         // Persistent
         if (instance.getMode() == 2) {
-            if (entity.isUsingItem()) {
-                LivingEntity target = SkillHelper.getTargetingEntity(entity, 6.0D, false);
-                if (target == null || !target.isAlive())
-                    target = entity;
-                removeCookedHP(target, instance);
-            } else {
-                boolean activated = tag.getBoolean("ChaoticFateActivated");
-                tag.putBoolean("ChaoticFateActivated", !activated);
-                entity.swing(InteractionHand.MAIN_HAND, true);
-                entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
-                        activated ? SoundEvents.WEEPING_VINES_BREAK : SoundEvents.SOUL_ESCAPE, SoundSource.PLAYERS, 1.0F, 1.0F);
-            }
+            if (entity.hasEffect((MobEffect)TensuraMobEffects.SEVERANCE_BLADE.get()))
+                return;
+            entity.swing(InteractionHand.MAIN_HAND, true);
+            entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
+            severance = instance.isMastered(entity) ? 19 : 4;
+            entity.addEffect(new MobEffectInstance((MobEffect)TensuraMobEffects.SEVERANCE_BLADE.get(), 2400, severance, false, false, false));
         }
-    }
-
-    public static void removeCookedHP(LivingEntity entity, @Nullable ManasSkillInstance instance) {
-        AttributeInstance health = entity.getAttribute(Attributes.MAX_HEALTH);
-        if (health == null)
-            return;
-        if (health.getModifier(PERSISTENT) != null) {
-            health.removeModifier(PERSISTENT);
-            if (instance != null)
-                instance.setCoolDown(1);
-            entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.GENERIC_BURN, SoundSource.PLAYERS, 1.0F, 1.0F);
-            TensuraParticleHelper.addServerParticlesAroundSelf((Entity)entity, (ParticleOptions)ParticleTypes.SMOKE);
-        }
-    }
-
-    private boolean activatedChaoticFate(ManasSkillInstance instance, LivingEntity entity) {
-        CompoundTag tag = instance.getOrCreateTag();
-        if (tag.getInt("ChaoticFate") < 100)
-            return false;
-        if (instance.isMastered(entity) && instance.isToggled())
-            return true;
-        return tag.getBoolean("ChaoticFateActivated");
     }
 
     public void onTouchEntity(ManasSkillInstance instance, LivingEntity entity, LivingHurtEvent event) {
-        CompoundTag tag = instance.getOrCreateTag();
-        if (!activatedChaoticFate(instance, entity))
-            return;
-        if (instance.onCoolDown())
-            return;
-        LivingEntity target = event.getEntity();
-        AttributeInstance health = target.getAttribute(Attributes.MAX_HEALTH);
-        if (health == null)
-            return;
-        double amount = event.getAmount();
-        AttributeModifier chefModifier = health.getModifier(PERSISTENT);
-        if (chefModifier != null)
-            amount -= chefModifier.getAmount();
-        AttributeModifier attributemodifier = new AttributeModifier(PERSISTENT, "Cook", amount * -1.0D, AttributeModifier.Operation.ADDITION);
-        health.addTransientModifier(attributemodifier);
-        health.addPermanentModifier(attributemodifier);
-        if (!instance.isMastered(entity) || !instance.isToggled())
-            tag.putBoolean("ChaoticFateActivated", false);
-        addMasteryPoint(instance, entity);
-        instance.setCoolDown(1);
-        entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ANVIL_LAND, SoundSource.AMBIENT, 1.0F, 1.0F);
         if (!isInSlot(entity))
             return;
         if (event.getSource().getEntity() == entity && DamageSourceHelper.isPhysicalAttack(event.getSource())) {
@@ -346,3 +297,4 @@ public class PerseveranceSkill extends Skill {
         }
     }
 }
+
