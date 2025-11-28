@@ -4,14 +4,11 @@ import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
 import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
-import com.github.manasmods.tensura.ability.magic.Magic;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
-import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
 import com.github.manasmods.tensura.entity.projectile.LightArrowProjectile;
 import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
-import com.github.manasmods.tensura.util.damage.TensuraDamageSource;
 import com.github.mythos.mythos.config.MythosSkillsConfig;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
@@ -32,7 +29,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.List;
 
@@ -79,7 +75,6 @@ public class PuritySkill extends Skill {
 
     @Override
     public void onToggleOn(ManasSkillInstance instance, LivingEntity entity) {
-        active = true;
         MinecraftForge.EVENT_BUS.register(this);
         List<MobEffect> immune = MythosSkillsConfig.getPurityImmuneEffects();
 
@@ -94,20 +89,7 @@ public class PuritySkill extends Skill {
 
     @Override
     public void onToggleOff(ManasSkillInstance instance, LivingEntity entity) {
-        active = false;
         MinecraftForge.EVENT_BUS.unregister(this);
-    }
-
-    @SubscribeEvent
-    public void onEntityHurt(LivingHurtEvent event) {
-        if (!active) return;
-        if (!(event.getSource() instanceof TensuraDamageSource source)) return;
-
-        ManasSkillInstance causingSkill = source.getSkill();
-        boolean isMagic = causingSkill != null && causingSkill.getSkill() instanceof Magic;
-        if (!isMagic) return;
-
-        event.setAmount(event.getAmount() / 2f);
     }
 
     public void PurityDamageCap(LivingHurtEvent event) {
@@ -126,7 +108,7 @@ public class PuritySkill extends Skill {
 
     private void spawnLightArrows(ManasSkillInstance instance, LivingEntity entity, Vec3 pos, int arrowAmount, double distance) {
         int arrowRot = 360 / arrowAmount;
-        int souls = TensuraPlayerCapability.getSoulPoints((Player) entity) / 1000;
+//        int souls = TensuraPlayerCapability.getSoulPoints((Player) entity) / 1000;
 
         for(int i = 0; i < arrowAmount; ++i) {
             Vec3 arrowPos = entity.getEyePosition().add((new Vec3(0.0, distance, 0.0)).zRot(((float)(arrowRot * i) - (float)arrowRot / 2.0F) * 0.017453292F).xRot(-entity.getXRot() * 0.017453292F).yRot(-entity.getYRot() * 0.017453292F));
@@ -136,14 +118,14 @@ public class PuritySkill extends Skill {
             arrow.shootFromRot(pos.subtract(arrowPos).normalize());
             arrow.setLife(50);
             if (instance.isMastered(entity)) {
-                arrow.setDamage(12.5f + souls);
-            } else arrow.setDamage(6.25f + souls);
+                arrow.setDamage(12.5f);
+            } else arrow.setDamage(6.25f);
 
-            final double cap = MythosSkillsConfig.purityDamageCap.get();
-
-            if (arrow.getDamage() >= cap) {
-                arrow.setDamage((float) cap);
-            }
+//            final double cap = MythosSkillsConfig.purityDamageCap.get();
+//
+//            if (arrow.getDamage() >= cap) {
+//                arrow.setDamage((float) cap);
+//            }
 
             arrow.setMpCost(this.magiculeCost(entity, instance) / (double)arrowAmount);
             arrow.setSpiritAttack(false);

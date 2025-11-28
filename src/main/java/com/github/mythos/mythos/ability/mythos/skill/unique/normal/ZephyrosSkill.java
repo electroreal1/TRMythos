@@ -49,6 +49,11 @@ public class ZephyrosSkill extends Skill {
         }
     }
 
+    @Override
+    public boolean canBeToggled(ManasSkillInstance instance, LivingEntity entity) {
+        return true;
+    }
+
     public void onLearnSkill(ManasSkillInstance instance, Player player, UnlockSkillEvent event) {
         SkillStorage storage = SkillAPI.getSkillsFrom(player);
         Skill windManip = ExtraSkills.WIND_MANIPULATION.get();
@@ -72,11 +77,7 @@ public class ZephyrosSkill extends Skill {
     }
 
     public int nextMode(@NotNull LivingEntity entity, TensuraSkillInstance instance, boolean reverse) {
-        if (instance.isMastered(entity)) {
-            return instance.getMode() == 3 ? 1 : instance.getMode() + 1;
-        } else {
             return instance.getMode() == 1 ? 2 : 1;
-        }
     }
 
     public boolean onHeld(@NotNull ManasSkillInstance instance, LivingEntity entity, int heldTicks) {

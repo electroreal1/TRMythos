@@ -255,7 +255,7 @@ public class ParanoiaSkill extends Skill {
 
 
     public void onPressed(ManasSkillInstance instance, @NotNull LivingEntity entity) {
-        if (instance.getMode() == 2) return;
+        if (instance.getMode() == 1) return;
 
         boolean hasBlizzard = !entity.getLevel().getEntitiesOfClass(BlizzardEntity.class, entity.getBoundingBox(),
                 blizzard -> blizzard.getOwner() == entity).isEmpty();

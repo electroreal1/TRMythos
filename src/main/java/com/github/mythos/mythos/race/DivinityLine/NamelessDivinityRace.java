@@ -9,6 +9,7 @@ import com.github.manasmods.tensura.registry.skill.IntrinsicSkills;
 import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
 import com.github.mythos.mythos.registry.race.MythosRaces;
 import com.mojang.datafixers.util.Pair;
+import io.github.Memoires.trmysticism.registry.race.MysticismRaces;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
@@ -110,7 +111,35 @@ public class NamelessDivinityRace extends Race {
     @Override
     public List<Race> getPreviousEvolutions(Player player) {
         List<Race> list = new ArrayList<>();
-
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(MysticismRaces.DIVINE_ARMY_WASP));
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(MysticismRaces.DIVINE_BLACK_SPIDER));
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(MysticismRaces.DIVINE_BLUE_CENTIPEDE));
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(MysticismRaces.DIVINE_FOLIARIS));
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(MysticismRaces.DIVINE_WOLF));
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(MysticismRaces.DIVINE_TENGU));
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(MysticismRaces.DIVINE_DEATHSTALKER_SCORPION));
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(MysticismRaces.DIVINE_FIRE_ANT));
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(MysticismRaces.DIVINE_HARDSHELL_ANT));
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(MysticismRaces.DIVINE_STAG_BEETLE));
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(MysticismRaces.DIVINE_EMPEROR_SCORPION));
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(MysticismRaces.DIVINE_KNIGHT_SPIDER));
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(MysticismRaces.DIVINE_DRONE_BEETLE));
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(MysticismRaces.DIVINE_EMPRESS_WASP));
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(MysticismRaces.DIVINE_YELLOW_CENTIPEDE));
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(MysticismRaces.DIVINE_PURPLE_CENTIPEDE));
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_VAMPIRE.get().getRegistryName()));
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_SKELETON.get().getRegistryName()));
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_ONI.get().getRegistryName()));
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_HUMAN.get().getRegistryName()));
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_FISH.get().getRegistryName()));
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_FIGHTER.get().getRegistryName()));
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_ELF.get().getRegistryName()));
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_DWARF.get().getRegistryName()));
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_DRAGON.get().getRegistryName()));
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_BOAR.get().getRegistryName()));
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_BEAST.get().getRegistryName()));
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_BEAST.get().getRegistryName()));
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(TensuraRaces.DIVINE_BEAST.get().getRegistryName()));
         return list;
     }
 

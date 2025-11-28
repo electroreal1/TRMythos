@@ -194,7 +194,7 @@ public class IndraSkill extends Skill implements Transformation {
                     var10000 = 4;
                     break;
                 case 4:
-                    var10000 = this.isMastered(instance, entity) ? 3 : 1;
+                    var10000 = this.isMastered(instance, entity) ? 4 : 1;
                     break;
                 default:
                     var10000 = 1;

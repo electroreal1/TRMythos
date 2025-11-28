@@ -164,7 +164,7 @@ public class StargazerSkill extends Skill {
                     return !living.is(entity) && living.isAlive() && !living.isAlliedTo(entity);
                 });
                 if (!list.isEmpty()) {
-                    int duration = 10;
+
                     int amount = instance.isMastered(entity) ? 250 : 100;
                     Iterator var6 = list.iterator();
 
@@ -185,9 +185,9 @@ public class StargazerSkill extends Skill {
                         } while (player.getAbilities().invulnerable);
 
                         target.hurt(TensuraDamageSources.elementalAttack("tensura.light_attack", entity, true), amount);
-                        target.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 10, duration, false, false, false));
-                        target.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 10, duration, false, false, false));
-                        target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, duration, false, false, false));
+                        target.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 10, 1, false, false, false));
+                        target.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 10, 1, false, false, false));
+                        target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, 1, false, false, false));
                     }
                 }
             }

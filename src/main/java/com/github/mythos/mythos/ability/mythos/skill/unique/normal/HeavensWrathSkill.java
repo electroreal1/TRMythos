@@ -4,7 +4,6 @@ import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
-import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
 import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
@@ -47,7 +46,7 @@ public class HeavensWrathSkill extends Skill {
         }
     }
 
-    public void onLearnSkill(ManasSkillInstance instance, Player player, UnlockSkillEvent event) {
+    public void onTick(ManasSkillInstance instance, Player player) {
         SkillStorage storage = SkillAPI.getSkillsFrom(player);
         Skill darkManip = ExtraSkills.DARKNESS_MANIPULATION.get();
         Skill blackLightning = com.github.manasmods.tensura.registry.skill.ExtraSkills.BLACK_LIGHTNING.get();
@@ -57,6 +56,8 @@ public class HeavensWrathSkill extends Skill {
             return;
         }
     }
+
+
 
     @Override
     public int modes() {
@@ -91,6 +92,7 @@ public class HeavensWrathSkill extends Skill {
                 entity.getLevel().playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.LIGHTNING_BOLT_IMPACT, SoundSource.PLAYERS, 1.0F, 1.0F);
                 float damage = instance.isMastered(entity) ? 100.0F : 50.0F;
                 BreathEntity.spawnBreathEntity((EntityType) TensuraEntityTypes.THUNDER_BREATH.get(), entity, instance, damage, this.magiculeCost(entity, instance));
+
             }
         }     return true;
     }
@@ -124,11 +126,8 @@ public class HeavensWrathSkill extends Skill {
                 entity.getLevel().playSound(null, entity.getX(), entity.getY(), entity.getZ(),
                         SoundEvents.ILLUSIONER_CAST_SPELL, SoundSource.PLAYERS, 1.0F, 1.0F);
 
-
                 this.addMasteryPoint(instance, entity);
                 instance.setCoolDown(100);
-
-
                 instance.getOrCreateTag().putInt("HeldTicks", 0);
                 instance.markDirty();
                 instance.setCoolDown(50);

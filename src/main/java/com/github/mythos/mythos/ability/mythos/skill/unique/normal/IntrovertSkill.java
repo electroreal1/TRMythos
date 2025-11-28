@@ -2,8 +2,10 @@ package com.github.mythos.mythos.ability.mythos.skill.unique.normal;
 
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
-import io.github.Memoires.trmysticism.entity.skill.LimitlessBarrierEntity;
+import com.github.mythos.mythos.entity.IntrovertBarrier;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -25,9 +27,20 @@ public class IntrovertSkill extends Skill {
 
     @Override
     public void onToggleOn(ManasSkillInstance instance, LivingEntity entity) {
+        if (!isInSlot(entity)) return;
         Level level = entity.getLevel();
-        LimitlessBarrierEntity barrier = new LimitlessBarrierEntity(level, entity);
+        IntrovertBarrier barrier = new IntrovertBarrier(level, entity);
         level.addFreshEntity(barrier);
+    }
+
+    @Override
+    public void onToggleOff(ManasSkillInstance instance, LivingEntity entity) {
+        Level var4 = entity.level;
+        if (var4 instanceof ServerLevel serverLevel) {
+            serverLevel.getEntitiesOfClass(IntrovertBarrier.class, entity.getBoundingBox().inflate(50.0)).stream().filter((barrier) -> {
+                return barrier.getOwner() != null && barrier.getOwner().equals(entity);
+            }).forEach(Entity::discard);
+        }
     }
 
     @Override
