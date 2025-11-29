@@ -2,7 +2,7 @@ package com.github.mythos.mythos.race.MetalloidRaceLine;
 
 import com.github.manasmods.tensura.ability.TensuraSkill;
 import com.github.manasmods.tensura.race.Race;
-import com.github.manasmods.tensura.registry.skill.ExtraSkills;
+import com.github.manasmods.tensura.registry.skill.IntrinsicSkills;
 import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.world.entity.player.Player;
@@ -87,14 +87,10 @@ public class DeusExMachinaRace extends Race {
     @Override
     public List<TensuraSkill> getIntrinsicSkills(Player player) {
         List<TensuraSkill> list = new ArrayList<>();
-        list.add(ExtraSkills.INFINITE_REGENERATION.get());
-        list.add(ResistanceSkills.ABNORMAL_CONDITION_RESISTANCE.get());
-        list.add(ResistanceSkills.PARALYSIS_RESISTANCE.get());
-        list.add(ResistanceSkills.POISON_RESISTANCE.get());
-        list.add(ResistanceSkills.THERMAL_FLUCTUATION_RESISTANCE.get());
-        list.add(ResistanceSkills.HEAT_RESISTANCE.get());
-        list.add(ResistanceSkills.COLD_RESISTANCE.get());
-        list.add(ResistanceSkills.CORROSION_RESISTANCE.get());
+        list.add(ResistanceSkills.SPIRITUAL_ATTACK_RESISTANCE.get());
+        list.add(ResistanceSkills.HOLY_ATTACK_RESISTANCE.get());
+        list.add(ResistanceSkills.DARKNESS_ATTACK_RESISTANCE.get());
+        list.add(IntrinsicSkills.DIVINE_KI_RELEASE.get());
         return list;
     }
 
