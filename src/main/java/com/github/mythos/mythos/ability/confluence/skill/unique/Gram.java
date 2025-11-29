@@ -6,12 +6,14 @@ import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.capability.skill.TensuraSkillCapability;
 import com.github.mythos.mythos.config.MythosSkillsConfig;
+import com.github.mythos.mythos.registry.MythosItems;
 import com.mojang.math.Vector3f;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -26,11 +28,17 @@ public class Gram extends Skill {
         return 250000;
     }
 
+    private static boolean isHoldingGram(Player player) {
+        ItemStack main = player.getMainHandItem();
+        ItemStack off = player.getOffhandItem();
 
+        return main.getItem() == MythosItems.GRAM.get() || off.getItem() == MythosItems.GRAM.get();
+    }
     @SubscribeEvent
     public static void onHurt(LivingHurtEvent event, ManasSkillInstance instance, LivingEntity living) {
         if (!(event.getSource().getEntity() instanceof Player player)) return;
         if (TensuraSkillCapability.isSkillInSlot(living, (ManasSkill) ConfluenceUniques.GRAM.get())) {
+            if (!isHoldingGram(player)) return;
             LivingEntity target = event.getEntity();
             double playerEP = TensuraPlayerCapability.getCurrentEP(player);
 

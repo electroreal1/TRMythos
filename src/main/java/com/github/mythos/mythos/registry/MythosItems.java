@@ -1,9 +1,7 @@
 package com.github.mythos.mythos.registry;
 
 import com.github.manasmods.manascore.api.data.gen.annotation.GenerateItemModels;
-import com.github.mythos.mythos.item.catharsis;
-import com.github.mythos.mythos.item.fragarach;
-import com.github.mythos.mythos.item.undecember;
+import com.github.mythos.mythos.item.*;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -18,6 +16,8 @@ public class MythosItems {
     public static final RegistryObject<Item> UNDECEMBER;
     public static final RegistryObject<Item> CATHARSIS;
     public static final RegistryObject<Item> FRAGARACH;
+    public static final RegistryObject<Item> GRAM;
+    public static final RegistryObject<Item> EXCALIBUR;
 
     public MythosItems() {
     }
@@ -34,6 +34,8 @@ public class MythosItems {
         UNDECEMBER = registry.register("undecember", undecember::new);
         CATHARSIS = registry.register("catharsis", catharsis::new);
         FRAGARACH = registry.register("fragarach", fragarach::new);
+        GRAM = registry.register("gram", gram::new);
+        EXCALIBUR = registry.register("excalibur", excalibur::new);
     }
 
 
