@@ -8,13 +8,12 @@ import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
+import com.github.manasmods.tensura.race.Race;
 import com.github.manasmods.tensura.registry.race.TensuraRaces;
-import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.mythos.mythos.ability.mythos.skill.unique.normal.CrimsonTyrantSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.normal.EltnamSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.normal.UnderworldPrince;
 import com.github.mythos.mythos.registry.skill.Skills;
-import io.github.Memoires.trmysticism.registry.skill.UniqueSkills;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -35,16 +34,8 @@ public class MythosUtils extends SkillUtils {
     public MythosUtils() {
     }
 
-    public static boolean hasGravityDominationAndSpatialDomination(ServerPlayer serverPlayer) {
-        return SkillUtils.isSkillMastered(serverPlayer, ExtraSkills.SPATIAL_DOMINATION.get()) && isSkillMastered(serverPlayer, ExtraSkills.GRAVITY_DOMINATION.get());
-    }
-
-    public static boolean hasDreamer(ServerPlayer serverPlayer) {
-        return SkillUtils.isSkillMastered(serverPlayer, UniqueSkills.DREAMER.get());
-    }
-
-    public static boolean hasProfanity(ServerPlayer serverPlayer) {
-        return  SkillUtils.isSkillMastered(serverPlayer, Skills.PROFANITY.get());
+    public static boolean isRace(Entity entity, Race race) {
+        return false;
     }
     @SubscribeEvent
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {

@@ -38,6 +38,7 @@ import com.github.mythos.mythos.race.GodlingLines.GreekPantheon.SemideusRace;
 import com.github.mythos.mythos.race.GodlingLines.NorsePantheon.UulbornRace;
 import com.github.mythos.mythos.race.HydraLine.*;
 import com.github.mythos.mythos.race.JormungandrRaceLine.*;
+import com.github.mythos.mythos.race.MetalloidRaceLine.*;
 import com.github.mythos.mythos.race.ValkyrieRaceLine.EnvoyOfValhallaRace;
 import com.github.mythos.mythos.race.ValkyrieRaceLine.MaidenRace;
 import com.github.mythos.mythos.race.ValkyrieRaceLine.SoulCourierRace;
@@ -140,6 +141,15 @@ public class MythosRaces {
     public static final ResourceLocation DARK_SEA_STALKER = new ResourceLocation(Mythos.MOD_ID, "dark_sea_stalker");
     public static final ResourceLocation DARK_SEA_TYRANT = new ResourceLocation(Mythos.MOD_ID, "dark_sea_tyrant");
     public static final ResourceLocation HYDRA = new ResourceLocation(Mythos.MOD_ID, "hydra");
+
+    // Metalloid Races
+    public static final ResourceLocation METALLOID = new ResourceLocation(Mythos.MOD_ID, "metalloid");
+    public static final ResourceLocation METALLOID_PROTO = new ResourceLocation(Mythos.MOD_ID, "metalloid_proto");
+    public static final ResourceLocation METALLOID_EXPERIMENTER = new ResourceLocation(Mythos.MOD_ID, "metalloid_experimenter");
+    public static final ResourceLocation METALLOID_OVERSEER = new ResourceLocation(Mythos.MOD_ID, "metalloid_overseer");
+    public static final ResourceLocation METALLOID_VANGUARD = new ResourceLocation(Mythos.MOD_ID, "metalloid_vanguard");
+    public static final ResourceLocation METALLOID_SUPREME = new ResourceLocation(Mythos.MOD_ID, "metalloid_supreme");
+    public static final ResourceLocation DEUS_EX_MACHINA = new ResourceLocation(Mythos.MOD_ID, "deus_ex_machina");
     /**
      * Make sure that you register the race, otherwise it will not show up correctly in the selection menu
      * @param event
@@ -361,6 +371,27 @@ public class MythosRaces {
         event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
             helper.register("hydra", new HydraRace());
         });
+
+        // Metalloid races
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("metalloid", new MetalloidRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("metalloid_proto", new MetalloidProtoRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("metalloid_experimenter", new MetalloidExperimenterRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("metalloid_overseer", new MetalloidOverseerRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("metalloid_supreme", new MetalloidSupremeRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("deus_ex_machina", new DeusExMachinaRace());
+        });
+
     }
 
 }

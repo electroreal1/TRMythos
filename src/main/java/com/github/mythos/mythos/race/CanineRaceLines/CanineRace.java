@@ -1,7 +1,5 @@
 package com.github.mythos.mythos.race.CanineRaceLines;
 
-import com.github.manasmods.manascore.api.skills.SkillAPI;
-import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
 import com.github.manasmods.tensura.ability.TensuraSkill;
 import com.github.manasmods.tensura.race.Race;
 import com.github.manasmods.tensura.registry.race.TensuraRaces;
@@ -25,7 +23,6 @@ public class CanineRace extends Race {
     public double getBaseHealth() {
         return 30;
     }
-
 
     @Override
     public double getSpiritualHealthMultiplier() {
@@ -92,7 +89,6 @@ public class CanineRace extends Race {
     }
     public List<Race> getNextEvolutions(Player player) {
         List<Race> list = new ArrayList<>();
-        SkillStorage storage = SkillAPI.getSkillsFrom(player);
             list.add((Race)((IForgeRegistry)TensuraRaces.RACE_REGISTRY.get()).getValue(MythosRaces.DREAD_BEAST_RACE));
             list.add((Race)((IForgeRegistry)TensuraRaces.RACE_REGISTRY.get()).getValue(MythosRaces.HELL_HOUND_RACE));
         return list;

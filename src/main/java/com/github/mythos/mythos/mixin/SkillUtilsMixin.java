@@ -4,16 +4,21 @@ import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.magic.Magic;
+import com.github.manasmods.tensura.race.Race;
+import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.mythos.mythos.ability.confluence.skill.unique.ConfluenceUniques;
 import com.github.mythos.mythos.ability.mythos.skill.unique.normal.BibliomaniaSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.normal.ChildOfThePlaneSkill;
 import com.github.mythos.mythos.registry.MythosMobEffects;
+import com.github.mythos.mythos.registry.race.MythosRaces;
 import com.github.mythos.mythos.registry.skill.Skills;
+import com.github.mythos.mythos.util.MythosUtils;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.registries.IForgeRegistry;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -69,6 +74,28 @@ public abstract class SkillUtilsMixin {
         if (hasSkill(entity, (ManasSkill)Skills.DEMONOLOGIST.get())) {
             point += 5;
         }
+        if (MythosUtils.isRace(entity, (Race)(IForgeRegistry) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.METALLOID))) {
+            point =+ 2;
+        }
+        if (MythosUtils.isRace(entity, (Race)(IForgeRegistry) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.METALLOID_PROTO))) {
+            point =+ 2;
+        }
+        if (MythosUtils.isRace(entity, (Race)(IForgeRegistry) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.METALLOID_EXPERIMENTER))) {
+            point =+ 2;
+        }
+        if (MythosUtils.isRace(entity, (Race)(IForgeRegistry) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.METALLOID_OVERSEER))) {
+            point =+ 2;
+        }
+        if (MythosUtils.isRace(entity, (Race)(IForgeRegistry) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.METALLOID_VANGUARD))) {
+            point =+ 2;
+        }
+        if (MythosUtils.isRace(entity, (Race)(IForgeRegistry) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.METALLOID_SUPREME))) {
+            point =+ 2;
+        }
+        if (MythosUtils.isRace(entity, (Race)(IForgeRegistry) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.DEUS_EX_MACHINA))) {
+            point =+ 2;
+        }
+
 
         return point;
     }
@@ -104,6 +131,27 @@ public abstract class SkillUtilsMixin {
         }
         if (hasSkill(entity, (ManasSkill)Skills.DEMONOLOGIST.get())) {
             point += 5;
+        }
+        if (MythosUtils.isRace(entity, (Race)(IForgeRegistry) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.METALLOID))) {
+            point =+ 2;
+        }
+        if (MythosUtils.isRace(entity, (Race)(IForgeRegistry) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.METALLOID_PROTO))) {
+            point =+ 2;
+        }
+        if (MythosUtils.isRace(entity, (Race)(IForgeRegistry) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.METALLOID_EXPERIMENTER))) {
+            point =+ 2;
+        }
+        if (MythosUtils.isRace(entity, (Race)(IForgeRegistry) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.METALLOID_OVERSEER))) {
+            point =+ 2;
+        }
+        if (MythosUtils.isRace(entity, (Race)(IForgeRegistry) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.METALLOID_VANGUARD))) {
+            point =+ 2;
+        }
+        if (MythosUtils.isRace(entity, (Race)(IForgeRegistry) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.METALLOID_SUPREME))) {
+            point =+ 2;
+        }
+        if (MythosUtils.isRace(entity, (Race)(IForgeRegistry) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.DEUS_EX_MACHINA))) {
+            point =+ 2;
         }
 
 
