@@ -75,25 +75,25 @@ public abstract class SkillUtilsMixin {
             point += 5;
         }
         if (MythosUtils.isRace(entity, (Race)(IForgeRegistry) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.METALLOID))) {
-            point =+ 2;
+            point += 2;
         }
         if (MythosUtils.isRace(entity, (Race)(IForgeRegistry) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.METALLOID_PROTO))) {
-            point =+ 2;
+            point += 2;
         }
         if (MythosUtils.isRace(entity, (Race)(IForgeRegistry) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.METALLOID_EXPERIMENTER))) {
-            point =+ 2;
+            point += 2;
         }
         if (MythosUtils.isRace(entity, (Race)(IForgeRegistry) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.METALLOID_OVERSEER))) {
-            point =+ 2;
+            point += 2;
         }
         if (MythosUtils.isRace(entity, (Race)(IForgeRegistry) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.METALLOID_VANGUARD))) {
-            point =+ 2;
+            point += 2;
         }
         if (MythosUtils.isRace(entity, (Race)(IForgeRegistry) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.METALLOID_SUPREME))) {
-            point =+ 2;
+            point += 2;
         }
         if (MythosUtils.isRace(entity, (Race)(IForgeRegistry) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.DEUS_EX_MACHINA))) {
-            point =+ 2;
+            point += 2;
         }
 
 
@@ -133,25 +133,25 @@ public abstract class SkillUtilsMixin {
             point += 5;
         }
         if (MythosUtils.isRace(entity, (Race)(IForgeRegistry) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.METALLOID))) {
-            point =+ 2;
+            point += 2;
         }
         if (MythosUtils.isRace(entity, (Race)(IForgeRegistry) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.METALLOID_PROTO))) {
-            point =+ 2;
+            point += 2;
         }
         if (MythosUtils.isRace(entity, (Race)(IForgeRegistry) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.METALLOID_EXPERIMENTER))) {
-            point =+ 2;
+            point += 2;
         }
         if (MythosUtils.isRace(entity, (Race)(IForgeRegistry) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.METALLOID_OVERSEER))) {
-            point =+ 2;
+            point += 2;
         }
         if (MythosUtils.isRace(entity, (Race)(IForgeRegistry) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.METALLOID_VANGUARD))) {
-            point =+ 2;
+            point += 2;
         }
         if (MythosUtils.isRace(entity, (Race)(IForgeRegistry) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.METALLOID_SUPREME))) {
-            point =+ 2;
+            point += 2;
         }
         if (MythosUtils.isRace(entity, (Race)(IForgeRegistry) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.DEUS_EX_MACHINA))) {
-            point =+ 2;
+            point += 2;
         }
 
 

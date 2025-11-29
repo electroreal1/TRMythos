@@ -318,5 +318,13 @@
   "trmythos.race.sea_serpent": "Sea Serpent",
   "trmythos.race.dark_sea_stalker": "Dark Sea Stalker",
   "trmythos.race.dark_sea_tyrant": "Dark Sea Tyrant",
-  "trmythos.race.hydra": "Hydra"
+  "trmythos.race.hydra": "Hydra",
+
+  "trmythos.race.metalloid": "Metalloid",
+  "trmythos.race.metalloid.notes": "A mind honed beyond humanity, a body modified to endure extremes, both the experimenter and the experiment.",
+  "trmythos.race.metalloid_proto": "Metalloid Prototype",
+  "trmythos.race.metalloid_experimenter": "Metalloid Experimenter",
+  "trmythos.race.metalloid_overseer": "Metalloid Overseer",
+  "trmythos.race.metalloid_supreme": "Metalloid Supreme",
+  "trmythos.race.deus_ex_machina": "Deus Ex Machina"
 }
