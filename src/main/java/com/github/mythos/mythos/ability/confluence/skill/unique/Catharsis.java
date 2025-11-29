@@ -7,13 +7,17 @@ import com.github.manasmods.tensura.enchantment.EngravingEnchantment;
 import com.github.manasmods.tensura.registry.attribute.TensuraAttributeRegistry;
 import com.github.manasmods.tensura.registry.enchantment.TensuraEnchantments;
 import com.github.mythos.mythos.registry.MythosItems;
+import com.mojang.math.Vector3f;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -23,6 +27,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 import java.util.UUID;
@@ -54,6 +59,49 @@ public class Catharsis extends Skill {
         return Component.translatable("trmythos.skill.catharsis.catharsis");
     }
 
+    @Override
+    public boolean canTick(ManasSkillInstance instance, LivingEntity entity) {
+        return true;
+    }
+
+    @Override
+    public void onTick(ManasSkillInstance instance, LivingEntity entity) {
+        if (!(entity instanceof Player player)) return;
+        Level level = entity.level;
+        if (!(level instanceof ServerLevel server)) return;
+        RandomSource rand = player.level.random;
+        int shards = 20;
+        double yOffset = 1.2;
+
+        for (int i = 0; i < shards; i++) {
+            double angle = rand.nextDouble() * 2 * Math.PI;
+            double distance = 0.2 + rand.nextDouble();
+            double px = player.getX() + Math.cos(angle) * distance;
+            double pz = player.getZ() + Math.sin(angle) * distance;
+            double py = player.getY() + yOffset + (rand.nextDouble() - 0.5) * 0.4;
+
+            float size = 0.5f + rand.nextFloat() * 0.3f;
+
+            double rShade = 0.4 + rand.nextDouble() * 0.3; // darker reds
+            double gShade = 0.0;
+            double bShade = 0.0;
+
+            Vector3f color = new Vector3f((float) rShade, (float) gShade, (float) bShade);
+
+            double offsetX = (rand.nextDouble() - 0.5) * 0.2;
+            double offsetZ = (rand.nextDouble() - 0.5) * 0.2;
+            double offsetY = (rand.nextDouble() - 0.5) * 0.2;
+
+            server.sendParticles(new DustParticleOptions(color, size), px + offsetX, py + offsetY, pz + offsetZ, 1, 0, 0, 0, 0);
+
+            if (rand.nextDouble() < 0.2) {
+                double streakLength = 0.5 + rand.nextDouble() * 0.5;
+                server.sendParticles(new DustParticleOptions(color, size),
+                        px + Math.cos(angle) * streakLength, py + offsetY, pz + Math.sin(angle) * streakLength,
+                        1, 0, 0, 0, 0);
+            }
+        }
+    }
 
     private boolean activatedCatharsisSeverance(ManasSkillInstance instance, LivingEntity entity) {
         CompoundTag tag = instance.getOrCreateTag();

@@ -10,14 +10,18 @@ import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
 import com.github.manasmods.tensura.entity.projectile.LightArrowProjectile;
 import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
 import com.github.mythos.mythos.config.MythosSkillsConfig;
+import com.mojang.math.Vector3f;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
@@ -59,12 +63,42 @@ public class PuritySkill extends Skill {
         });
     }
 
+    @Override
+    public boolean canTick(ManasSkillInstance instance, LivingEntity entity) {
+        return true;
+    }
+
+    private static double rotation = 0;
+
     public void onTick(ManasSkillInstance instance, LivingEntity entity) {
         TensuraEPCapability.getFrom(entity).ifPresent((cap) -> {
             if (!cap.isChaos() || cap.isMajin()) {
                 cap.setMajin(false);
             }
         });
+
+        if (!(entity instanceof Player player)) return;
+        Level level = entity.level;
+        if (!(level instanceof ServerLevel server)) return;
+        RandomSource rand = player.level.random;
+        int points = 30;
+        double radius = 1.5;
+        double yOffset = 1.8;
+        for (int i = 0; i < points; i++) {
+            if (rand.nextDouble() > 0.4) continue;
+            double angle = i * 2 * Math.PI / points + rotation;
+            double px = player.getX() - Math.cos(angle) * radius;
+            double pz = player.getZ() - Math.sin(angle) * radius;
+            double py = player.getY() + yOffset + (rand.nextDouble() - 0.5) * 0.2;
+            float size = 1f;
+            Vector3f color;
+            double r = rand.nextDouble();
+            if (r < 0.5) color = new Vector3f(1f, 0.9f, 0f);
+            else if (r < 0.8) color = new Vector3f(1f, 0.6f, 0f);
+            else if (r < 0.95) color = new Vector3f(1f, 0.3f, 0f);
+            else color = new Vector3f(1f, 1f, 1f);
+            server.sendParticles(new DustParticleOptions(color, size), px, py, pz, 1, 0, 0, 0, 0);
+        }
     }
 
 

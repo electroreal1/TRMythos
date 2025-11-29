@@ -17,14 +17,18 @@ import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
 import com.github.mythos.mythos.registry.skill.Skills;
 import com.github.mythos.mythos.util.MythosUtils;
 import com.github.mythos.mythos.util.damage.MythosDamageSources;
+import com.mojang.math.Vector3f;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import org.jetbrains.annotations.NotNull;
@@ -61,6 +65,33 @@ public class ZephyrosSkill extends Skill {
             return;
         } else {
             storage.learnSkill(windManip);
+        }
+    }
+
+    @Override
+    public boolean canTick(ManasSkillInstance instance, LivingEntity entity) {
+        return true;
+    }
+    private static double rotation = 0;
+    @Override
+    public void onTick(ManasSkillInstance instance, LivingEntity entity) {
+        if (!(entity instanceof Player player)) return;
+        Level level = entity.level;
+        if (!(level instanceof ServerLevel server)) return;
+        RandomSource rand = player.level.random;
+        int streams = 8;
+        double yOffset = 1.2;
+
+        for (int i = 0; i < streams; i++) {
+            double angle = rotation + i * 2 * Math.PI / streams;
+            double radius = 0.7 + Math.sin(rotation * 2 + i) * 0.1;
+            double px = player.getX() + Math.cos(angle) * radius;
+            double pz = player.getZ() + Math.sin(angle) * radius;
+            double py = player.getY() + yOffset + Math.sin(rotation * 2 + i) * 0.2;
+
+            float size = 0.6f + rand.nextFloat() * 0.3f;
+            Vector3f color = rand.nextDouble() < 0.5 ? new Vector3f(0.7f, 0.9f, 1f) : new Vector3f(0.9f, 0.9f, 1f);
+            server.sendParticles(new DustParticleOptions(color, size), px, py, pz, 1, 0, 0, 0, 0);
         }
     }
 

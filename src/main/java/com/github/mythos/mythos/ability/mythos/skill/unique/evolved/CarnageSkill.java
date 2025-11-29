@@ -17,12 +17,16 @@ import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.registry.race.MythosRaces;
+import com.mojang.math.Vector3f;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
@@ -132,6 +136,46 @@ public class CarnageSkill extends Skill {
             case 2 -> Component.translatable("trmythos.skill.carnage.absolute");
             default -> Component.empty();
         };
+    }
+
+    @Override
+    public boolean canTick(ManasSkillInstance instance, LivingEntity entity) {
+        return true;
+    }
+
+    private static double rotation = 0;
+
+    @Override
+    public void onTick(ManasSkillInstance instance, LivingEntity living) {
+        if (!(living instanceof Player player)) return;
+        Level level = living.level;
+        if (!(level instanceof ServerLevel server)) return;
+        RandomSource rand = player.level.random;
+        int tendrils = 6 + rand.nextInt(4);
+        int segments = 6;
+        double maxHeight = 1.5;
+        double baseRadius = 0.5;
+
+        for (int i = 0; i < tendrils; i++) {
+            double angle = rand.nextDouble() * 2 * Math.PI;
+            double dx = Math.cos(angle);
+            double dz = Math.sin(angle);
+            double startX = player.getX() + dx * (0.2 + rand.nextDouble() * 0.3);
+            double startZ = player.getZ() + dz * (0.2 + rand.nextDouble() * 0.3);
+            for (int j = 1; j <= segments; j++) {
+                double t = j / (double) segments;
+                double px = startX + Math.sin(rotation + j) * 0.05;
+                double pz = startZ + Math.cos(rotation + j) * 0.05;
+                double py = player.getY() + t * maxHeight + (rand.nextDouble() - 0.5) * 0.1;
+                if (rand.nextDouble() < 0.3) continue;
+                Vector3f color;
+                double r = rand.nextDouble();
+                if (r < 0.5) color = new Vector3f(0.6f, 0f, 0f);
+                else if (r < 0.85) color = new Vector3f(0.8f, 0f, 0f);
+                else color = new Vector3f(0.4f, 0f, 0f);
+                server.sendParticles(new DustParticleOptions(color, 0.8f + rand.nextFloat() * 0.2f), px, py, pz, 1, 0, 0, 0, 0);
+            }
+        }
     }
 
     @Override

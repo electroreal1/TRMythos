@@ -12,14 +12,18 @@ import com.github.manasmods.tensura.registry.enchantment.TensuraEnchantments;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.mythos.mythos.registry.MythosItems;
 import com.github.mythos.mythos.util.damage.MythosDamageSources;
+import com.mojang.math.Vector3f;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -27,6 +31,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.jetbrains.annotations.NotNull;
@@ -212,5 +217,52 @@ public class Fragarach extends Skill {
         ItemStack off = player.getOffhandItem();
 
         return main.getItem() == MythosItems.FRAGARACH.get() || off.getItem() == MythosItems.FRAGARACH.get();
+    }
+
+    @Override
+    public boolean canTick(ManasSkillInstance instance, LivingEntity entity) {
+        return true;
+    }
+    private static double rotation = 0;
+    @Override
+    public void onTick(ManasSkillInstance instance, LivingEntity entity) {
+        if (!(entity instanceof Player player)) return;
+        Level level = entity.level;
+        if (!(level instanceof ServerLevel server)) return;
+        RandomSource rand = player.level.random;
+        double yOffset = 1.2;
+
+        for (int i = 0; i < 5; i++) {
+            if (rand.nextDouble() < 0.3) continue;
+            double angle = rand.nextDouble() * 2 * Math.PI;
+            double radius = 0.5 + rand.nextDouble() * 0.5;
+            double px = player.getX() + Math.cos(angle) * radius;
+            double pz = player.getZ() + Math.sin(angle) * radius;
+            double py = player.getY() + yOffset + rand.nextDouble() * 0.5;
+            float size = 0.6f + rand.nextFloat() * 0.3f;
+            server.sendParticles(new DustParticleOptions(new Vector3f(0.7f, 0.9f, 1f), size), px, py, pz, 1, 0, 0.03, 0, 0.01);
+        }
+
+        for (int i = 0; i < 8; i++) {
+            if (rand.nextDouble() < 0.5) continue;
+            double angle = rand.nextDouble() * 2 * Math.PI;
+            double radius = 0.3 + rand.nextDouble() * 0.7;
+            double px = player.getX() + Math.cos(angle) * radius;
+            double pz = player.getZ() + Math.sin(angle) * radius;
+            double py = player.getY() + yOffset + (rand.nextDouble() - 0.5) * 0.3;
+            float size = 0.5f + rand.nextFloat() * 0.3f;
+            server.sendParticles(new DustParticleOptions(new Vector3f(0.8f, 1f, 1f), size), px, py, pz, 1, 0, 0, 0, 0);
+        }
+
+        for (int i = 0; i < 10; i++) {
+            if (rand.nextDouble() < 0.4) continue;
+            double angle = i * 2 * Math.PI / 10 + player.level.random.nextDouble() * 0.5;
+            double radius = 0.4 + Math.sin(rotation * 2 + i) * 0.2;
+            double px = player.getX() + Math.cos(angle) * radius;
+            double pz = player.getZ() + Math.sin(angle) * radius;
+            double py = player.getY() + yOffset + Math.sin(rotation * 3 + i) * 0.15;
+            float size = 0.4f + rand.nextFloat() * 0.2f;
+            server.sendParticles(new DustParticleOptions(new Vector3f(0.6f, 0.85f, 1f), size), px, py, pz, 1, 0, 0, 0, 0);
+        }
     }
 }

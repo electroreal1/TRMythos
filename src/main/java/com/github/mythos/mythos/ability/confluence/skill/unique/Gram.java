@@ -6,8 +6,13 @@ import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.capability.skill.TensuraSkillCapability;
 import com.github.mythos.mythos.config.MythosSkillsConfig;
+import com.mojang.math.Vector3f;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -50,6 +55,46 @@ public class Gram extends Skill {
             float newDamage = (float) (event.getAmount() * damageMultiplier);
             event.setAmount(newDamage);
             instance.addMasteryPoint(player);
+        }
+    }
+
+    @Override
+    public boolean canTick(ManasSkillInstance instance, LivingEntity entity) {
+        return true;
+    }
+    private static double rotation = 0;
+    @Override
+    public void onTick(ManasSkillInstance instance, LivingEntity entity) {
+        if (!(entity instanceof Player player)) return;
+        Level level = entity.level;
+        if (!(level instanceof ServerLevel server)) return;
+        RandomSource rand = player.level.random;
+        int shards = 12;
+        int streaks = 8;
+        double yOffset = 1.2;
+
+        for (int i = 0; i < shards; i++) {
+            double angle = i * 2 * Math.PI / shards + rotation;
+            double radius = 0.7 + Math.sin(rotation * 2 + i) * 0.15;
+            double px = player.getX() + Math.cos(angle) * radius;
+            double pz = player.getZ() + Math.sin(angle) * radius;
+            double py = player.getY() + yOffset + Math.sin(rotation * 2 + i) * 0.2;
+            float size = 0.7f + rand.nextFloat() * 0.2f;
+            Vector3f color = rand.nextDouble() < 0.7 ? new Vector3f(0f, 0.8f, 0f) : new Vector3f(0.3f, 1f, 0.5f);
+            server.sendParticles(new DustParticleOptions(color, size), px, py, pz, 1, 0, 0, 0, 0);
+        }
+
+        for (int i = 0; i < streaks; i++) {
+            double px = player.getX() + (rand.nextDouble() - 0.5) * 1.2;
+            double pz = player.getZ() + (rand.nextDouble() - 0.5) * 1.2;
+            double py = player.getY() + yOffset;
+            double length = 0.5 + rand.nextDouble() * 0.7;
+            float size = 0.6f + rand.nextFloat() * 0.3f;
+            Vector3f color = new Vector3f(0f, 0.6f + (float)rand.nextDouble() * 0.4f, 0f);
+            for (int j = 0; j < 3; j++) {
+                server.sendParticles(new DustParticleOptions(color, size),
+                        px, py + j * 0.15, pz, 1, 0, 0, 0, 0);
+            }
         }
     }
 

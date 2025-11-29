@@ -14,14 +14,19 @@ import com.github.manasmods.tensura.registry.entity.TensuraEntityTypes;
 import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
 import com.github.mythos.mythos.entity.ThunderStorm;
 import com.github.mythos.mythos.registry.skill.Skills;
+import com.mojang.math.Vector3f;
 import io.github.Memoires.trmysticism.registry.skill.ExtraSkills;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -46,7 +51,8 @@ public class HeavensWrathSkill extends Skill {
         }
     }
 
-    public void onTick(ManasSkillInstance instance, Player player) {
+    public void onTick(ManasSkillInstance instance, LivingEntity entity) {
+        if (!(entity instanceof Player player)) return;
         SkillStorage storage = SkillAPI.getSkillsFrom(player);
         Skill darkManip = ExtraSkills.DARKNESS_MANIPULATION.get();
         Skill blackLightning = com.github.manasmods.tensura.registry.skill.ExtraSkills.BLACK_LIGHTNING.get();
@@ -54,6 +60,36 @@ public class HeavensWrathSkill extends Skill {
             storage.learnSkill(blackLightning);
         } else {
             return;
+        }
+
+        Level level = entity.level;
+        if (!(level instanceof ServerLevel server)) return;
+
+        RandomSource rand = player.level.random;
+        int arcs = 6;
+        double maxDistance = 3.0;
+        double yOffset = 1.5;
+
+        for (int i = 0; i < arcs; i++) {
+            double targetX = player.getX() + (rand.nextDouble() - 0.5) * maxDistance * 2;
+            double targetZ = player.getZ() + (rand.nextDouble() - 0.5) * maxDistance * 2;
+            double targetY = player.getY() + yOffset + (rand.nextDouble() - 0.5);
+
+            double px = player.getX();
+            double py = player.getY() + yOffset;
+            double pz = player.getZ();
+
+            int segments = 5 + rand.nextInt(3);
+            for (int s = 0; s < segments; s++) {
+                double t = s / (double) segments;
+                double dx = px + (targetX - px) * t + (rand.nextDouble() - 0.5) * 0.2;
+                double dy = py + (targetY - py) * t + (rand.nextDouble() - 0.5) * 0.2;
+                double dz = pz + (targetZ - pz) * t + (rand.nextDouble() - 0.5) * 0.2;
+
+                float size = 0.8f + rand.nextFloat() * 0.2f;
+                Vector3f color = new Vector3f(1f, 1f, 0.7f);
+                server.sendParticles(new DustParticleOptions(color, size), dx, dy, dz, 1, 0, 0, 0, 0);
+            }
         }
     }
 

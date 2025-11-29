@@ -11,14 +11,19 @@ import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.registry.attribute.TensuraAttributeRegistry;
 import com.github.manasmods.tensura.registry.items.TensuraMobDropItems;
 import com.github.mythos.mythos.registry.skill.Skills;
+import com.mojang.math.Vector3f;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -49,6 +54,11 @@ public class OriginDao extends Skill {
             return false; // not enough EP
         }
         return SkillUtils.isSkillMastered(player, (ManasSkill) Skills.TRUE_DAO.get());
+    }
+
+    @Override
+    public boolean canTick(ManasSkillInstance instance, LivingEntity entity) {
+        return true;
     }
 
     @Override
@@ -83,6 +93,33 @@ public class OriginDao extends Skill {
         });
 
         TensuraPlayerCapability.sync(player);
+
+        RandomSource rand = player.level.random;
+        int particles = 50;
+        double yOffset = 1.2;
+        Level level = entity.level;
+        if (!(level instanceof ServerLevel server)) return;
+
+        for (int i = 0; i < particles; i++) {
+            double radius = 1.5 + rand.nextDouble() * 2.0;
+            double angle = rand.nextDouble() * 2 * Math.PI;
+            double px = player.getX() + Math.cos(angle) * radius;
+            double pz = player.getZ() + Math.sin(angle) * radius;
+            double py = player.getY() + yOffset + (rand.nextDouble() - 0.5);
+
+            float size = 0.9f + rand.nextFloat() * 0.2f;
+            Vector3f color;
+            double r = rand.nextDouble();
+            if (r < 0.5) color = new Vector3f(1f, 1f, 0.8f);
+            else if (r < 0.8) color = new Vector3f(1f, 1f, 1f);
+            else color = new Vector3f(0.6f, 1f, 1f);
+
+            double motionX = (player.getX() - px) * 0.15;
+            double motionY = (player.getY() + yOffset - py) * 0.15;
+            double motionZ = (player.getZ() - pz) * 0.15;
+
+            server.sendParticles(new DustParticleOptions(color, size), px, py, pz, 1, motionX, motionY, motionZ, 0);
+        }
     }
 
     public void onBeingDamaged(ManasSkillInstance instance, LivingAttackEvent event) {

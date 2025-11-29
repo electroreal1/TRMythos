@@ -23,6 +23,8 @@ import com.github.mythos.mythos.entity.projectile.VajraBreathProjectile;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.registry.skill.Skills;
 import com.github.mythos.mythos.util.damage.MythosDamageSources;
+import com.mojang.math.Vector3f;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -30,6 +32,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
@@ -137,6 +140,38 @@ public class IndraSkill extends Skill implements Transformation {
                     cap.setMagicule(Math.min(cap.getMagicule() + regen, maxMP));
                 });
                 TensuraPlayerCapability.sync(player);
+            }
+        }
+        if (!(entity instanceof Player player)) return;
+        Level level = entity.level;
+        if (!(level instanceof ServerLevel server)) return;
+
+        RandomSource rand = player.level.random;
+        int cloudParticles = 20;
+        double yOffset = 2.2;
+        double behindOffset = 0.5;
+
+        for (int i = 0; i < cloudParticles; i++) {
+            double angle = rand.nextDouble() * 2 * Math.PI;
+            double radius = 0.3 + rand.nextDouble() * 0.4;
+            double px = player.getX() + Math.cos(angle) * radius;
+            double pz = player.getZ() + Math.sin(angle) * radius - behindOffset;
+            double py = player.getY() + yOffset + (rand.nextDouble() - 0.5) * 0.2;
+
+            if (rand.nextDouble() < 0.2) {
+
+                int segments = 3 + rand.nextInt(3);
+                for (int j = 0; j < segments; j++) {
+                    double lx = px + (rand.nextDouble() - 0.5) * 0.2;
+                    double lz = pz + (rand.nextDouble() - 0.5) * 0.2;
+                    double ly = py - j * 0.5;
+                    server.sendParticles(new DustParticleOptions(new Vector3f(0.8f, 0.8f, 1f), 0.6f), lx, ly, lz, 1, 0, 0, 0, 0);
+                }
+            } else {
+
+                float size = 0.5f + rand.nextFloat() * 0.3f;
+                Vector3f color = new Vector3f(0.5f, 0.5f, 0.5f);
+                server.sendParticles(new DustParticleOptions(color, size), px, py, pz, 1, 0, 0, 0, 0);
             }
         }
     }

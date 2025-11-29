@@ -11,7 +11,9 @@ import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
 import com.github.mythos.mythos.registry.MythosItems;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.util.MythosDamageSourceHelper;
+import com.mojang.math.Vector3f;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -22,6 +24,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
@@ -49,6 +52,61 @@ public class Sporeblood extends Skill {
     @Override
     public ResourceLocation getSkillIcon() {
         return new ResourceLocation("trmythos", "textures/skill/unique/sporeblood.png");
+    }
+
+    @Override
+    public boolean canTick(ManasSkillInstance instance, LivingEntity entity) {
+        return true;
+    }
+    private static double rotation = 0;
+    @Override
+    public void onTick(ManasSkillInstance instance, LivingEntity entity) {
+        if (!(entity instanceof Player player)) return;
+        Level level = entity.level;
+        if (!(level instanceof ServerLevel server)) return;
+        RandomSource rand = player.level.random;
+        int clusters = 8;
+        double yOffset = 1.2;
+
+        for (int i = 0; i < clusters; i++) {
+            double angle = rand.nextDouble() * 2 * Math.PI;
+            double radius = 0.3 + rand.nextDouble();
+            double px = player.getX() + Math.cos(angle) * radius;
+            double pz = player.getZ() + Math.sin(angle) * radius;
+            double py = player.getY() + yOffset + Math.sin(rotation * 2 + i) * 0.2;
+
+            float size = 0.5f + (float)(Math.sin(rotation * 3 + i) * 0.2 + 0.2);
+
+            double r = rand.nextDouble();
+            Vector3f color;
+            if (r < 0.33) color = new Vector3f(0.5f, 0f, 0.5f);
+            else if (r < 0.66) color = new Vector3f(0.6f, 0f, 0.7f);
+            else color = new Vector3f(0.3f, 0f, 0.4f);
+
+            server.sendParticles(new DustParticleOptions(color, size), px, py, pz, 1, 0, 0, 0, 0);
+
+            if (rand.nextDouble() < 0.2) {
+                int burstParticles = 6 + rand.nextInt(4);
+                for (int b = 0; b < burstParticles; b++) {
+                    double burstRadius = 0.1 + rand.nextDouble() * 0.5;
+                    double burstAngle = rand.nextDouble() * 2 * Math.PI;
+                    double bx = px + Math.cos(burstAngle) * burstRadius;
+                    double bz = pz + Math.sin(burstAngle) * burstRadius;
+                    double by = py + (rand.nextDouble() - 0.5) * 0.3;
+
+                    float burstSize = 0.3f + rand.nextFloat() * 0.3f;
+                    Vector3f burstColor;
+                    double rc = rand.nextDouble();
+                    if (rc < 0.33) burstColor = new Vector3f(0.5f, 0f, 0.5f);
+                    else if (rc < 0.66) burstColor = new Vector3f(0.6f, 0f, 0.7f);
+                    else burstColor = new Vector3f(0.3f, 0f, 0.4f);
+
+                    double rise = rand.nextDouble() * 0.15;
+
+                    server.sendParticles(new DustParticleOptions(burstColor, burstSize), bx, by + rise, bz, 1, 0, 0, 0, 0);
+                }
+            }
+        }
     }
 
     @Override

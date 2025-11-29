@@ -20,13 +20,16 @@ import com.github.manasmods.tensura.util.damage.TensuraDamageSource;
 import com.github.mythos.mythos.registry.MythosEntityTypes;
 import com.github.mythos.mythos.registry.skill.FusedSkills;
 import com.github.mythos.mythos.registry.skill.Skills;
+import com.mojang.math.Vector3f;
 import io.github.Memoires.trmysticism.registry.skill.UniqueSkills;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
@@ -34,6 +37,7 @@ import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -95,6 +99,11 @@ public class ParanoiaSkill extends Skill {
                 }
             }
         }
+    }
+
+    @Override
+    public boolean canTick(ManasSkillInstance instance, LivingEntity entity) {
+        return true;
     }
 
     public void onDeath(@NotNull ManasSkillInstance instance, LivingDeathEvent event) {
@@ -180,10 +189,30 @@ public class ParanoiaSkill extends Skill {
         return 2;
     }
 
-    public void onTick(ManasSkillInstance instance, @NotNull LivingEntity entity) {
-        CompoundTag tag = instance.getOrCreateTag();
-        tag.remove("target");
-        tag.putInt("heldSeconds", 0);
+    public void onTick(ManasSkillInstance instance, LivingEntity entity) {
+        if (!(entity instanceof Player player)) return;
+        Level level = entity.level;
+        if (!(level instanceof ServerLevel server)) return;
+        RandomSource rand = player.level.random;
+        int particles = 20;
+        double yOffset = 1.2;
+
+        for (int i = 0; i < particles; i++) {
+            double angle = rand.nextDouble() * 2 * Math.PI;
+            double radius = 0.3 + rand.nextDouble() * 1.2;
+            double px = player.getX() + Math.cos(angle) * radius;
+            double pz = player.getZ() + Math.sin(angle) * radius;
+            double py = player.getY() + yOffset + (rand.nextDouble() - 0.5) * 0.6;
+
+            float size = 0.5f + rand.nextFloat() * 0.4f;
+            Vector3f color = rand.nextDouble() < 0.5 ? new Vector3f(0.4f, 0f, 0.5f) : new Vector3f(0.3f, 0f, 0.3f);
+
+            double motionX = (rand.nextDouble() - 0.5) * 0.02;
+            double motionY = (rand.nextDouble() - 0.5) * 0.02;
+            double motionZ = (rand.nextDouble() - 0.5) * 0.02;
+
+            server.sendParticles(new DustParticleOptions(color, size), px, py, pz, 1, motionX, motionY, motionZ, 0);
+        }
     }
 
 
@@ -261,35 +290,27 @@ public class ParanoiaSkill extends Skill {
                 blizzard -> blizzard.getOwner() == entity).isEmpty();
 
         if (entity.isShiftKeyDown()) {
-            // Remove all existing blizzards
             for (BlizzardEntity blizzard : entity.getLevel().getEntitiesOfClass(BlizzardEntity.class, entity.getBoundingBox(),
                     b -> b.getOwner() == entity)) {
                 blizzard.discard();
             }
         } else {
-            // Only spawn if none exists and enough magicule
             if (!hasBlizzard && !SkillHelper.outOfMagicule(entity, 2000.0F)) {
-                // Consume magicule
                 SkillHelper.outOfMagicule(entity, 2000.0F);
 
-                // Spawn the Blizzard entity
                 BlizzardEntity blizzard = new BlizzardEntity(entity.getLevel(), entity);
                 blizzard.setOwner(entity);
                 float damage = instance.isMastered(entity) ? 500.0F : 250.0f;
                 blizzard.setDamage(damage);
                 entity.getLevel().addFreshEntity(blizzard);
                 blizzard.applyEffect(entity);
-                // Swing and play sound
                 entity.swing(InteractionHand.MAIN_HAND, true);
                 entity.getLevel().playSound(null, entity.getX(), entity.getY(), entity.getZ(),
                         SoundEvents.ILLUSIONER_CAST_SPELL, SoundSource.PLAYERS, 1.0F, 1.0F);
 
-                // Mastery and cooldown
                 this.addMasteryPoint(instance, entity);
                 instance.setCoolDown(100);
 
-                // Reset held ticks
-                instance.getOrCreateTag().putInt("HeldTicks", 0);
                 instance.markDirty();
             }
         }

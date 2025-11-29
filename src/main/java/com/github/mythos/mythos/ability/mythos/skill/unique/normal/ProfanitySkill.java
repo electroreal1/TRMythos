@@ -11,10 +11,13 @@ import com.github.manasmods.tensura.network.TensuraNetwork;
 import com.github.manasmods.tensura.network.play2client.RequestFxSpawningPacket;
 import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
 import com.github.mythos.mythos.config.MythosSkillsConfig;
+import com.mojang.math.Vector3f;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -91,6 +94,41 @@ public class ProfanitySkill extends Skill {
                 cap.setMajin(true);
             }
         });
+    }
+
+    @Override
+    public boolean canTick(ManasSkillInstance instance, LivingEntity entity) {
+        return true;
+    }
+
+    @Override
+    public void onTick(ManasSkillInstance instance, LivingEntity entity) {
+        if (!(entity instanceof Player player)) return;
+        Level level = entity.level;
+        if (!(level instanceof ServerLevel server)) return;
+        RandomSource rand = player.level.random;
+        int clusters = 8;
+        double yBase = 1.2;
+        for (int i = 0; i < clusters; i++) {
+            double angle = rand.nextDouble() * 2 * Math.PI;
+            double radius = 0.3 + rand.nextDouble() * 0.7;
+            double px = player.getX() + Math.cos(angle) * radius;
+            double pz = player.getZ() + Math.sin(angle) * radius;
+            double py = player.getY() + yBase + (rand.nextDouble() - 0.5) * 0.5;
+            int strokes = 2 + rand.nextInt(3);
+            for (int s = 0; s < strokes; s++) {
+                double offsetX = (rand.nextDouble() - 0.5) * 0.15;
+                double offsetY = (rand.nextDouble() - 0.5) * 0.3;
+                double offsetZ = (rand.nextDouble() - 0.5) * 0.15;
+                float size = 0.6f + rand.nextFloat() * 0.3f;
+                Vector3f color;
+                double r = rand.nextDouble();
+                if (r < 0.4) color = new Vector3f(0.5f, 0f, 0.5f);
+                else if (r < 0.7) color = new Vector3f(0.6f, 0f, 0.8f);
+                else color = new Vector3f(0.3f, 0.6f, 0.2f);
+                server.sendParticles(new DustParticleOptions(color, size), px + offsetX, py + offsetY, pz + offsetZ, 1, 0, 0, 0, 0);
+            }
+        }
     }
 
     public int modes() {

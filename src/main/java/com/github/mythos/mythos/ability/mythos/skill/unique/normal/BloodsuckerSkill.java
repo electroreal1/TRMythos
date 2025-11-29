@@ -12,22 +12,27 @@ import com.github.manasmods.tensura.registry.entity.TensuraEntityTypes;
 import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
 import com.github.mythos.mythos.mob_effect.debuff.CurseOfLightEffect;
 import com.github.mythos.mythos.registry.MythosMobEffects;
+import com.mojang.math.Vector3f;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.network.chat.Style;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 public class BloodsuckerSkill extends Skill {
@@ -221,7 +226,7 @@ public class BloodsuckerSkill extends Skill {
                 break;
         }
     }
-
+    private static double rotation = 0;
     public void onTick(ManasSkillInstance instance, LivingEntity entity) {
         if (instance.isToggled()) {
             entity.addEffect(new MobEffectInstance((MobEffect) MythosMobEffects.RAPID_REGENERATION.get(), 1200, 1, false, false, false));
@@ -229,9 +234,44 @@ public class BloodsuckerSkill extends Skill {
             entity.addEffect(new MobEffectInstance((MobEffect) TensuraMobEffects.AUDITORY_SENSE.get(), 200, 0, false, false, false));
             entity.addEffect(new MobEffectInstance((MobEffect) TensuraMobEffects.PRESENCE_SENSE.get(), 200, 0, false, false, false));
         }
-        if (!(entity instanceof Player player))
+        if (!(entity instanceof Player player)) {
             return;
+        }
         CurseOfLightEffect.tick(instance, player);
-        return;
+
+        Level level = entity.level;
+        if (!(level instanceof ServerLevel server)) return;
+
+        RandomSource rand = player.level.random;
+        int droplets = 10;
+        int orbs = 6;
+        double yOffset = 1.2;
+        double radius = 0.6;
+
+        for (int i = 0; i < droplets; i++) {
+            double angle = i * 2 * Math.PI / droplets + rotation;
+            double px = player.getX() + Math.cos(angle) * radius;
+            double pz = player.getZ() + Math.sin(angle) * radius;
+            double py = player.getY() + yOffset + Math.sin(rotation * 2 + i) * 0.15;
+            float size = 0.6f + rand.nextFloat() * 0.3f;
+            Vector3f color = new Vector3f(0.5f + rand.nextFloat() * 0.5f, 0f, 0f);
+            if (rand.nextDouble() < 0.3) continue;
+            server.sendParticles(new DustParticleOptions(color, size), px, py, pz, 1, 0, 0, 0, 0);
+        }
+
+        for (int i = 0; i < orbs; i++) {
+            double angle = rand.nextDouble() * 2 * Math.PI;
+            double r = 0.3 + rand.nextDouble() * 0.7;
+            double px = player.getX() + Math.cos(angle + rotation) * r;
+            double pz = player.getZ() + Math.sin(angle + rotation) * r;
+            double py = player.getY() + yOffset + (rand.nextDouble() - 0.5) * 0.3;
+            float size = 0.8f - (float) (rand.nextDouble() * 0.5f);
+            Vector3f color = new Vector3f(0.7f + rand.nextFloat() * 0.3f, 0f, 0f); // deep red
+            if (rand.nextDouble() < 0.4) continue; // flicker
+            server.sendParticles(new DustParticleOptions(color, size), px, py, pz, 1, 0, 0, 0, 0);
+        }
+
+
+
     }
 }

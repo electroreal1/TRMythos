@@ -11,16 +11,21 @@ import com.github.manasmods.tensura.effect.template.Transformation;
 import com.github.manasmods.tensura.registry.particle.TensuraParticles;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.registry.skill.Skills;
+import com.mojang.math.Vector3f;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -56,6 +61,34 @@ public class ChildOfThePlaneSkill extends Skill implements Transformation {
     public void onToggleOff(ManasSkillInstance instance, LivingEntity entity) {
         if (this.canTick(instance, entity)) {
             entity.removeEffect((MobEffect) MythosMobEffects.CHILD_OF_THE_PLANE.get());
+        }
+    }
+    private static double rotation = 0;
+    @Override
+    public void onTick(ManasSkillInstance instance, LivingEntity entity) {
+        if (!(entity instanceof Player player)) return;
+        Level level = entity.level;
+        if (!(level instanceof ServerLevel server)) return;
+        RandomSource rand = player.level.random;
+        int portals = 10;
+        double yBase = 1.5;
+        for (int i = 0; i < portals; i++) {
+            double angle = i * 2 * Math.PI / portals + rotation;
+            double radius = 0.5 + rand.nextDouble() * 0.7;
+            double px = player.getX() + Math.cos(angle) * radius;
+            double pz = player.getZ() + Math.sin(angle) * radius;
+            double py = player.getY() + yBase + Math.sin(rotation * 2 + i) * 0.2;
+            double vx = (rand.nextDouble() - 0.5) * 0.05;
+            double vy = (rand.nextDouble() - 0.5) * 0.05;
+            double vz = (rand.nextDouble() - 0.5) * 0.05;
+            server.sendParticles(
+                    net.minecraft.core.particles.ParticleTypes.PORTAL, px, py, pz, 1, vx, vy, vz, 0.0);
+            float r = rand.nextFloat();
+            float g = rand.nextFloat();
+            float b = rand.nextFloat();
+            float size = 0.6f + rand.nextFloat() * 0.3f;
+            server.sendParticles(
+                    new DustParticleOptions(new Vector3f(r, g, b), size), px, py, pz, 1, 0, 0, 0, 0);
         }
     }
 
