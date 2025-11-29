@@ -41,8 +41,6 @@ public class ProfanitySkill extends Skill {
     public ResourceLocation getSkillIcon() {
         return new ResourceLocation("trmythos", "textures/skill/unique/profanity.png");
     }
-
-
     public ProfanitySkill(SkillType type) {
         super(SkillType.UNIQUE);
     }
