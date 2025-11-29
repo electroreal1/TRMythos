@@ -24,7 +24,6 @@ public class MythosSkillsConfig {
     public static ForgeConfigSpec.BooleanValue loseUniqueOnEvolution;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> racesThatCanCompeteForChildOfThePlane;
     public static ForgeConfigSpec.ConfigValue<List<? extends  String>> GRAM_EXTRA_DAMAGE_RACES;
-    public static ForgeConfigSpec.ConfigValue<List<? extends String>> summonBlacklistedEntities;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> SAPLING_ENGRAVE_LIST;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> SAPLING_DISALLOWED_SKILLS;
     public static ForgeConfigSpec.DoubleValue waterMultiplier;
@@ -145,25 +144,13 @@ public class MythosSkillsConfig {
         racesThatCanCompeteForChildOfThePlane = builder
                 .comment("List of races that can compete for Child of the Plane.")
                 .defineList("racesThatCanCompeteForChildOfThePlane",
-                        List.of("herald_of_ragnarok", "hound_of_hades", "jormungandr", "envoy_of_valhalla"),
+                        List.of("trmythos:herald_of_ragnarok", "trmythos:hound_of_hades", "trmythos:jormungandr", "trmythos:king_of_divinity","trmythos:deus_ex_machina","trmythos:hydra"),
                         obj -> obj instanceof String
                 );
         GRAM_EXTRA_DAMAGE_RACES = builder
                 .comment("List of races, registry names that take bonus damage from Gram's in-slot passive")
                 .defineList("GRAM_EXTRA_DAMAGE_RACES",
                         List.of("trmysticism:dragonoid"),
-                        obj -> obj instanceof String
-                );
-        summonBlacklistedEntities = builder
-                .comment("List of entity IDs that cannot be summoned via Monster Creator.")
-                .comment("Use full registry IDs, e.g., 'minecraft:wither', 'minecraft:ender_dragon'")
-                .defineList(
-                        "summonBlacklistedEntities",
-                        Arrays.asList(
-                                "minecraft:ender_dragon",
-                                "minecraft:wither",
-                                "minecraft:player"
-                        ),
                         obj -> obj instanceof String
                 );
         SAPLING_ENGRAVE_LIST = builder
@@ -235,9 +222,6 @@ public class MythosSkillsConfig {
         return GRAM_EXTRA_DAMAGE_RACES.get();
     }
 
-    public static List<? extends String> getSummonBlacklistedEntities() {
-        return summonBlacklistedEntities.get();
-    }
     public static List<? extends String> SAPLING_ENGRAVE_LIST() {
         return SAPLING_ENGRAVE_LIST.get();
     }
