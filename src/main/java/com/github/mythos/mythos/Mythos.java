@@ -139,6 +139,7 @@ public class Mythos {
             return;
         }
 
+
         String content = contentBuilder.toString();
         String[] newStarting = new String[]{"trmythos:canine", "trmythos:maiden", "trmythos:lesser_serpent","trmythos:godling","trmythos:metalloid"};
         String[] newRandom = new String[]{"trmythos:canine", "trmythos:maiden", "trmythos:lesser_serpent","trmythos:godling","trmythos:metalloid"};
@@ -213,7 +214,7 @@ public class Mythos {
      //   String[] uncommonEngraveNew = new String[0];
    //     String[] rareEngraveNew = new String[0];
     //    String[] veryRareEngraveNew = new String[0];
-     //   String[] blacklistedEngraveNew = new String[]{"trmysticism:genesis"};
+     //   String[] blacklistedEngraveNew = new String[]{""};
      //   String commonKey = "enchantments.commonEngrave";
        // String uncommonKey = "enchantments.uncommonEngrave";
      //   String rareKey = "enchantments.rareEngrave";

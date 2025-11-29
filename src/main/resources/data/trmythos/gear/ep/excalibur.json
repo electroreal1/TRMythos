@@ -1,0 +1,7 @@
+{
+  "evolvingItem": "minecraft:air",
+  "gainEP": 0.04,
+  "item": "trmythos:excalibur",
+  "maxEP": 6000000,
+  "minEP": 1000
+}
