@@ -17,6 +17,7 @@ import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.capability.skill.TensuraSkillCapability;
 import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
 import com.github.manasmods.tensura.entity.magic.TensuraProjectile;
+import net.minecraft.world.item.ItemStack;
 import com.github.manasmods.tensura.entity.magic.projectile.SeveranceCutterProjectile;
 import com.github.manasmods.tensura.event.SkillPlunderEvent;
 import com.github.manasmods.tensura.network.TensuraNetwork;
@@ -273,8 +274,9 @@ public class ZepiaSkill extends Skill {
                 break;
 
             case 2:
-                if (entity instanceof Player) {
-                    processScrying(instance, (Player) entity);
+                if (entity instanceof Player targetPlayer) {
+                    targetPlayer.displayClientMessage(Component.literal("§5You see them..."), true);
+                    processScrying(instance, (Player) entity, entity);
                 }
                 break;
 
@@ -417,8 +419,40 @@ public class ZepiaSkill extends Skill {
         }
     }
 
-    private void processScrying(ManasSkillInstance instance, Player player) {
-       //TBD
+    private void processScrying(ManasSkillInstance instance, Player player, LivingEntity entity) {
+        if (entity instanceof Player targetPlayer) {
+            ItemStack held = player.getMainHandItem();
+            if (held.hasCustomHoverName()) {
+                String name = held.getHoverName().getString().trim();
+                ServerLevel level = (ServerLevel) player.getLevel();
+                LivingEntity target = level.getEntitiesOfClass(LivingEntity.class,
+                        player.getBoundingBox().inflate(5000),
+                        e -> e.getName().getString().equalsIgnoreCase(name)
+                ).stream().findFirst().orElse(null);
+
+                if (target != null) {
+                    if (!SkillHelper.outOfMagicule(player, instance)) {
+
+                        // Instead of teleporting → send location message
+                        player.displayClientMessage(
+                                Component.literal("Target '" + name + "' found at: "
+                                                + "X=" + target.getX() + ", "
+                                                + "Y=" + target.getY() + ", "
+                                                + "Z=" + target.getZ())
+                                        .withStyle(ChatFormatting.AQUA),
+                                true
+                        );
+
+                        TensuraParticleHelper.addServerParticlesAroundSelf(player, ParticleTypes.PORTAL, 1.0D);
+                        addMasteryPoint(instance, player);
+                        instance.setCoolDown(100);
+                        return;
+                    }
+                }
+            }
+        }
+
+
     }
 
     private Player getPlayerByName(String itemName, Player player) {

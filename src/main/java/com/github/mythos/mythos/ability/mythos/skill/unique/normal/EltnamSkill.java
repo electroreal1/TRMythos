@@ -31,6 +31,7 @@ import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -191,9 +192,10 @@ public class EltnamSkill extends Skill {
                 break;
 
             case 2:
-                // call scrying logic when in mode 2 and player pressed
-                if (entity instanceof Player) {
-                    processScrying(instance, (Player) entity);
+
+                if (entity instanceof Player targetPlayer) {
+                    targetPlayer.displayClientMessage(Component.literal("§5You see them..."), true);
+                    processScrying(instance, (Player) entity, entity);
                 }
                 break;
 
@@ -231,8 +233,40 @@ public class EltnamSkill extends Skill {
         }
     }
 
-    private void processScrying(ManasSkillInstance instance, Player player) {
-        //TBD
+    private void processScrying(ManasSkillInstance instance, Player player, LivingEntity entity) {
+        if (entity instanceof Player targetPlayer) {
+            ItemStack held = player.getMainHandItem();
+            if (held.hasCustomHoverName()) {
+                String name = held.getHoverName().getString().trim();
+                ServerLevel level = (ServerLevel) player.getLevel();
+                LivingEntity target = level.getEntitiesOfClass(LivingEntity.class,
+                        player.getBoundingBox().inflate(5000),
+                        e -> e.getName().getString().equalsIgnoreCase(name)
+                ).stream().findFirst().orElse(null);
+
+                if (target != null) {
+                    if (!SkillHelper.outOfMagicule(player, instance)) {
+
+                        // Instead of teleporting → send location message
+                        player.displayClientMessage(
+                                Component.literal("Target '" + name + "' found at: "
+                                                + "X=" + target.getX() + ", "
+                                                + "Y=" + target.getY() + ", "
+                                                + "Z=" + target.getZ())
+                                        .withStyle(ChatFormatting.AQUA),
+                                true
+                        );
+
+                        TensuraParticleHelper.addServerParticlesAroundSelf(player, ParticleTypes.PORTAL, 1.0D);
+                        addMasteryPoint(instance, player);
+                        instance.setCoolDown(100);
+                        return;
+                    }
+                }
+            }
+        }
+
+
     }
     private Player getPlayerByName(String itemName, Player player) {
         ServerLevel world = (ServerLevel) player.getLevel();

@@ -28,9 +28,7 @@ public class AutomaticHakiCoatSkill extends Skill {
 
         if (!SkillUtils.isSkillMastered(entity, HeroHaki) || !SkillUtils.isSkillMastered(entity, DemonLordHaki)) {
             return false;
-        } else if (SkillUtils.isSkillMastered(entity, HeroHaki) || SkillUtils.isSkillMastered(entity, DemonLordHaki)) {
-            return true;
-        } else return false;
+        } else return true;
     }
 
     public double learningCost() {

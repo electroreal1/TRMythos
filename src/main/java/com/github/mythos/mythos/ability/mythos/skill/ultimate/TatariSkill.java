@@ -83,16 +83,15 @@ public class TatariSkill extends Skill {
         }
 
         public double getObtainingEpCost() {
-            return 8000000.0;
+            return 27000000.0;
         }
 
         public boolean meetEPRequirement(Player player, double newEP) {
-            // Check EP using Tensura capability
             double currentEP = TensuraEPCapability.getCurrentEP(player);
             if (currentEP < getObtainingEpCost()) {
-                return false; // not enough EP
+                return false;
             }
-            return SkillUtils.isSkillMastered(player, (ManasSkill) Skills.ELTNAM.get());
+            return SkillUtils.isSkillMastered(player, (ManasSkill) Skills.ZEPIA.get());
 
         }
 
@@ -394,7 +393,7 @@ public class TatariSkill extends Skill {
                             entity.getX(),
                             entity.getY(),
                             entity.getZ(),
-                            SoundEvents.BLAZE_SHOOT,     // formerly f_11896_
+                            SoundEvents.BLAZE_SHOOT,
                             SoundSource.PLAYERS,
                             1.0f,
                             1.0f
@@ -579,13 +578,6 @@ public class TatariSkill extends Skill {
                     if (target instanceof Player player && player.getAbilities().instabuild)
                         continue;
 
-                    SkillHelper.checkThenAddEffectSource(
-                            target,
-                            entity,
-                            TensuraMobEffects..get(),
-                            200,
-                            1
-                    );
                     SkillHelper.checkThenAddEffectSource(
                             target,
                             entity,
