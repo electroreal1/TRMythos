@@ -32,6 +32,8 @@ public class Skills {
     public static final RegistryObject<ElementalQueenSkill> ELEMENTAL_QUEEN;
     public static final RegistryObject<OriginDao> ORIGIN_DAO;
     public static final RegistryObject<AresSkill> ARES;
+    public static final RegistryObject<ApophisSkill> APOPHIS;
+    public static final RegistryObject<DikeSkill> DIKE;
     // uniques
     public static final RegistryObject<FakerSkill> FAKER;
     public static final RegistryObject<OmniscientEyeSkill> OMNISCIENT_EYE;
@@ -92,6 +94,8 @@ public class Skills {
         ELEMENTAL_QUEEN = registery.register("elemental_queen", () -> new ElementalQueenSkill(Skill.SkillType.ULTIMATE));
         ORIGIN_DAO = registery.register("origin_dao", () -> new OriginDao(Skill.SkillType.ULTIMATE));
         ARES = registery.register("ares", () -> new AresSkill(Skill.SkillType.ULTIMATE));
+        APOPHIS = registery.register("apophis", () -> new ApophisSkill(Skill.SkillType.ULTIMATE));
+        DIKE = registery.register("dike", () -> new DikeSkill(Skill.SkillType.ULTIMATE));
 
         // uniques
         FAKER = registery.register("faker", FakerSkill::new);
