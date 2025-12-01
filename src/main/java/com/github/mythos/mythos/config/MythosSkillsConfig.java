@@ -157,7 +157,7 @@ public class MythosSkillsConfig {
                 .comment("List of enchantments that can be engraved with min and max levels.")
                 .comment("Format: 'modid:enchantment_name:min:max', e.g., 'tensura:holy_weapon:1:2'")
                 .defineList(
-                        "SAPLING_ENGRAVE_LISt",
+                        "SAPLING_ENGRAVE_LIST",
                         Arrays.asList(
                                 "tensura:severance:1:2",
                                 "tensura:holy_coat:1:2",
