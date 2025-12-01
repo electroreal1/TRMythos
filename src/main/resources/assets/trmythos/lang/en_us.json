@@ -102,6 +102,13 @@
   "trmythos.skill.purity.purification": "Purification",
   "trmythos.skill.purity.justice": "Justice",
 
+  "trmythos.skill.dike": "Dike",
+  "trmythos.skill.dike.description": "Protect the just, and purge the wicked through annihilation. Bathe the world in divine light in order to drown out all its sins, coming closer to Heaven.",
+  "trmythos.skill.mode.dike.invite_to_righteousness": "Invite to Righteousness",
+  "trmythos.skill.mode.dike.annihilation_ray": "Annihilation Ray",
+  "trmythos.skill.mode.dike.glimpse_of_heaven": "Glimpse of Heaven",
+  "trmythos.skill.dike.awakening": "Drenched in purity, cleansed by light, you feel your spirit elevate to a level unfamiliar to you... You've become a True Hero.",
+
   "trmythos.skill.saint": "Saint",
   "trmythos.skill.saint.description": "Ho Ho Ho merry christmas.",
   "trmythos.skill.mode.saint.gift_giving": "Gift Giving,",
@@ -154,6 +161,14 @@
   "trmythos.skill.profanity.description": "§0Embody the malice of the world, blotting out the light with the darkness of sin and depravity.",
   "trmythos.skill.profanity.tainted_soul": "§0Tainted Soul",
   "trmythos.skill.profanity.baneful_essence": "§0Baneful Essence",
+
+  "trmythos.skill.apophis": "Apophis",
+  "trmythos.skill.apophis.description": "The true embodiment of that which infects humanity like a sickness, you have come to represent all the world's evils, serving as a root for all the other seeds of evil to grow and spread across the lands. What a horrid existence you are...",
+  "trmythos.skill.mode.apophis.indoctrination": "Indoctrination",
+  "trmythos.skill.mode.apophis.capitulate_to_heresy": "Capitulate to Heresy",
+  "trmythos.skill.mode.apophis.envoy": "Envoy",
+  "trmythos.skill.mode.apophis.embodiment_of_sin": "Embodiment of Sin",
+  "trmythos.skill.apophis.awakening": "You feel yourself sinking ever deeper into the abyssal depths of depravity, yet something in you still hungers for more... You've awakened as a True Demon Lord.",
 
   "trmythos.skill.paranoia": "§0Paranoia",
   "trmythos.skill.paranoia.description": "A shift in your mind has turned your pleasant, comforting dreams into horrible nightmares. Your paranoia manages to bring these horrors into reality.",
