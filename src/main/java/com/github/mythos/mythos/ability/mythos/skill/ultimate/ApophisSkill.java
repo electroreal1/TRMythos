@@ -1,0 +1,221 @@
+package com.github.mythos.mythos.ability.mythos.skill.ultimate;
+
+import com.github.manasmods.manascore.api.skills.ManasSkill;
+import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
+import com.github.manasmods.manascore.api.skills.SkillAPI;
+import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
+import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
+import com.github.manasmods.tensura.ability.SkillHelper;
+import com.github.manasmods.tensura.ability.SkillUtils;
+import com.github.manasmods.tensura.ability.TensuraSkillInstance;
+import com.github.manasmods.tensura.ability.skill.Skill;
+import com.github.manasmods.tensura.ability.skill.intrinsic.CharmSkill;
+import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
+import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
+import com.github.manasmods.tensura.network.TensuraNetwork;
+import com.github.manasmods.tensura.network.play2client.RequestFxSpawningPacket;
+import com.github.manasmods.tensura.registry.skill.UniqueSkills;
+import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
+import com.github.mythos.mythos.registry.skill.Skills;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.event.entity.living.LivingDamageEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.network.PacketDistributor;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
+import java.util.Objects;
+
+public class ApophisSkill extends Skill {
+    public ApophisSkill(SkillType type) {super(SkillType.ULTIMATE);}
+
+    @Override
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/unique/apophis.png");
+    }
+
+    @Override
+    public double getObtainingEpCost() {return 5000000;}
+
+    public boolean canBeToggled(ManasSkillInstance instance, LivingEntity entity) {
+        return true;
+    }
+
+    public boolean canTick(ManasSkillInstance instance, LivingEntity entity) {return true;}
+
+    public boolean canBeSlotted(ManasSkillInstance instance, LivingEntity entity) {return true;}
+
+    public int getMaxMastery() {return 3000;}
+
+    public boolean meetEPRequirement(@NotNull Player player, double newEP) {
+        double currentEP = TensuraEPCapability.getCurrentEP(player);
+        if (currentEP < getObtainingEpCost()) {
+            return false;
+        }
+        return SkillUtils.isSkillMastered(player, (ManasSkill) Skills.PROFANITY.get());
+    }
+
+    @Override
+    public void onLearnSkill(ManasSkillInstance instance, LivingEntity entity, UnlockSkillEvent event) {
+        TensuraEPCapability.getFrom(entity).ifPresent((cap) -> {
+            if (!cap.isChaos() || !cap.isMajin()) {
+                cap.setMajin(true);
+            }
+        });
+        if (instance.getMastery() >= 0 && !instance.isTemporarySkill() && entity instanceof Player player) {
+            SkillStorage storage = SkillAPI.getSkillsFrom(player);
+            Skill previousSkill = (Skill) Skills.PROFANITY.get();
+            Objects.requireNonNull(storage);
+            storage.forgetSkill(previousSkill);
+        }
+    }
+
+    public int modes() {
+        return 4;
+    }
+
+    public int nextMode(LivingEntity entity, TensuraSkillInstance instance, boolean reverse) {
+        if (reverse)
+            return (instance.getMode() == 1) ? 4 : (instance.getMode() - 1);
+        else
+            return (instance.getMode() == 4) ? 1 : (instance.getMode() + 1);
+    }
+
+    public Component getModeName(int mode) {
+        MutableComponent name;
+        switch (mode) {
+            case 1:
+                name = Component.translatable("trmythos.skill.mode.apophis.indoctrination");
+                break;
+            case 2:
+                name = Component.translatable("trmythos.skill.mode.apophis.capitulate_to_heresy");
+                break;
+            case 3:
+                name = Component.translatable("trmythos.skill.mode.apophis.envoy");
+                break;
+            case 4:
+                name = Component.translatable("trmythos.skill.mode.apophis.embodiment_of_sin");
+                break;
+            default:
+                name = Component.empty();
+        }
+        return name;
+    }
+
+    public void onPressed(ManasSkillInstance instance, LivingEntity entity) {
+        // Indoctrination
+        if (instance.getMode() == 1) {
+            CharmSkill.charm(instance, entity);
+        }
+
+        // Capitulate to Heresy
+        if (instance.getMode() == 2) {
+
+        }
+
+        // Embodiment of Sin
+        if (instance.getMode() == 4) {
+
+        }
+    }
+
+    @Override
+    public boolean onHeld(ManasSkillInstance instance, LivingEntity entity, int heldTicks) {
+        Level level = entity.level;
+        if (level.isClientSide) return true;
+        if (instance.getMode() == 3) {
+
+            // Every second
+            if (heldTicks % 20 == 0) {
+                if (SkillHelper.outOfMagicule(entity, instance)) return false;
+
+                // Play aura sound & spawn FX
+                level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
+                        SoundEvents.WARDEN_HEARTBEAT, SoundSource.PLAYERS, 1.0F, 0.8F);
+
+                TensuraNetwork.INSTANCE.send(
+                        PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity),
+                        new RequestFxSpawningPacket(
+                                new ResourceLocation("tensura:strength_sap"),
+                                entity.getId(), 0.0, 1.0, 0.0, true)
+                );
+
+                // Find targets in a 10-block radius
+                List<LivingEntity> targets = level.getEntitiesOfClass(
+                        LivingEntity.class,
+                        entity.getBoundingBox().inflate(10.0),
+                        e -> e.isAlive() && !e.is(entity) && !entity.isAlliedTo(e)
+                );
+
+                if (!targets.isEmpty()) {
+                    double ep = TensuraEPCapability.getEP(entity);
+                    if (ep <= 0) return true;
+
+                    // Damage = 1 point per 10000 EP
+                    float damagePerSecond = (float) (ep / 5000.0);
+
+                    for (LivingEntity target : targets) {
+                        if (target instanceof Player p && p.getAbilities().invulnerable) continue;
+
+                        // Apply void damage
+                        target.hurt(DamageSource.OUT_OF_WORLD, damagePerSecond);
+
+                        TensuraParticleHelper.addServerParticlesAroundSelf(target, ParticleTypes.SMOKE, 1.0);
+                    }
+                }
+            }
+
+            // Add mastery every 3 seconds
+            if (heldTicks % 60 == 0 && heldTicks > 0) {
+                this.addMasteryPoint(instance, entity);
+            }
+
+            return true;
+        }
+        return false;
+    }
+
+    public void onDamageEntity(ManasSkillInstance instance, LivingEntity living, LivingHurtEvent e) {
+        if (instance.isToggled()) {
+            if (DamageSourceHelper.isDarkDamage(e.getSource()) || DamageSourceHelper.isTensuraMagic(e.getSource()) || DamageSourceHelper.isSpiritual(e.getSource())) {
+                if (instance.isMastered(living)) {
+                    e.setAmount(e.getAmount() * 5.0F);
+                } else {
+                    e.setAmount(e.getAmount() * 4.0F);
+                }
+            }
+        }
+    }
+
+    public void onTakenDamage(ManasSkillInstance instance, LivingDamageEvent event) {
+        if (event.isCanceled())
+            return;
+
+        DamageSource source = event.getSource();
+        LivingEntity target = event.getEntity();
+
+        boolean isMagic = DamageSourceHelper.isTensuraMagic(source);
+        boolean isDarkness = DamageSourceHelper.isDarkDamage(source);
+
+        float incoming = event.getAmount();
+        if (incoming <= 0f) return;
+
+        if (isMagic || isDarkness) {
+            float overheal = incoming * 0.5f;
+            float currentAbs = target.getAbsorptionAmount();
+            float newAbs = currentAbs + overheal;
+            target.setAbsorptionAmount(newAbs);
+        }
+    }
+
+
+}
