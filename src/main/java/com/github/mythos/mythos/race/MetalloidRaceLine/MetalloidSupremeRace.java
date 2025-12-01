@@ -1,12 +1,14 @@
 package com.github.mythos.mythos.race.MetalloidRaceLine;
 
 import com.github.manasmods.tensura.ability.TensuraSkill;
+import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.race.Race;
 import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
 import com.github.mythos.mythos.registry.race.MythosRaces;
 import com.mojang.datafixers.util.Pair;
+import io.github.Memoires.trmysticism.registry.race.MysticismRaces;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.registries.IForgeRegistry;
 
@@ -117,6 +119,9 @@ public class MetalloidSupremeRace extends Race {
     public List<Race> getNextEvolutions(Player player) {
         List<Race> list = new ArrayList<>();
         list.add((Race)(IForgeRegistry) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.DEUS_EX_MACHINA));
+        if (TensuraEPCapability.isChaos(player)) {
+            list.add((Race)(IForgeRegistry) TensuraRaces.RACE_REGISTRY.get().getValue(MysticismRaces.CHAOS_METALLOID));
+        }
         return list;
     }
 }
