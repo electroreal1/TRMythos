@@ -14,6 +14,7 @@ public class ConfluenceUniques {
     // Spores.
     public static final RegistryObject<Sporeblood> SPOREBLOOD;
     public static final RegistryObject<Catharsis> CATHARSIS;
+    public static final RegistryObject<Convergence> CONVERGENCE;
 
     // Hero blades.
     public static final RegistryObject<Excalibur> EXCALIBUR;
@@ -32,6 +33,7 @@ public class ConfluenceUniques {
     static {
         SPOREBLOOD = registery.register("sporeblood", () -> new Sporeblood(Skill.SkillType.UNIQUE));
         CATHARSIS = registery.register("catharsis", () -> new Catharsis(Skill.SkillType.UNIQUE));
+        CONVERGENCE = registery.register("convergence", () -> new Convergence(Skill.SkillType.UNIQUE));
         EXCALIBUR = registery.register("excalibur", () -> new Excalibur(Skill.SkillType.UNIQUE));
         GRAM = registery.register("gram", () -> new Gram(Skill.SkillType.UNIQUE));
         FRAGARACH = registery.register("fragarach", () -> new Fragarach(Skill.SkillType.UNIQUE));
