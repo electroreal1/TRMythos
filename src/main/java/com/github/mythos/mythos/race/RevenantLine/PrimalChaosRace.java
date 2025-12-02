@@ -130,10 +130,11 @@ public class PrimalChaosRace extends Race {
         return list;
     }
 
-    public boolean isMajin() {return true;}
+    public boolean isMajin() {
+        return true;
+    }
     public boolean isSpiritual() {return true;}
-    public boolean isDivine() {return true;}
-    
+
     public void raceAbility(Player entity) {
         if (!entity.isSpectator() && !entity.isCreative()) {
             Level level = entity.level;
@@ -167,4 +168,3 @@ public class PrimalChaosRace extends Race {
         return list;
     }
 }
-

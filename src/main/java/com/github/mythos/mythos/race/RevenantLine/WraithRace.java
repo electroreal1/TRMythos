@@ -4,6 +4,7 @@ import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
 import com.github.manasmods.tensura.ability.TensuraSkill;
 import com.github.manasmods.tensura.race.Race;
+import com.github.manasmods.tensura.registry.dimensions.TensuraDimensions;
 import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.manasmods.tensura.registry.skill.CommonSkills;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
@@ -11,6 +12,7 @@ import com.github.manasmods.tensura.registry.skill.IntrinsicSkills;
 import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
 import com.github.mythos.mythos.registry.race.MythosRaces;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
@@ -102,6 +104,10 @@ public class WraithRace extends Race {
     public Pair<Double, Double> getBaseMagiculeRange() {
         // The range of values that the Max Magicules could be. So between 80 and 120
         return Pair.of(startingMagiculeMin, startingMagiculeMax);
+    }
+
+    public ResourceKey<Level> getRespawnDimension() {
+        return TensuraDimensions.HELL;
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
 import com.github.manasmods.tensura.ability.TensuraSkill;
 import com.github.manasmods.tensura.race.Race;
+import com.github.manasmods.tensura.registry.dimensions.TensuraDimensions;
 import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.manasmods.tensura.registry.skill.CommonSkills;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
@@ -11,6 +12,7 @@ import com.github.manasmods.tensura.registry.skill.IntrinsicSkills;
 import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
 import com.github.mythos.mythos.registry.race.MythosRaces;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
@@ -96,6 +98,10 @@ public class RevenantRace extends Race {
         list.add(CommonSkills.COERCION.get());
         list.add(IntrinsicSkills.POSSESSION.get());
         return list;
+    }
+
+    public ResourceKey<Level> getRespawnDimension() {
+        return TensuraDimensions.HELL;
     }
 
     public List<Race> getNextEvolutions(Player player) {
