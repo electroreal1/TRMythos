@@ -25,6 +25,8 @@
 
   "trmythos.skill.learn_failed":  "Failed to learn due to lack of magicules",
   "trmythos.evolution_menu.true_demon_lord": "Awaken as a True Demon Lord",
+  "trmythos.evolution_menu.true_hero": "Awaken as a True Hero",
+  
   "trmythos.skill.balance": "Balance",
   "trmythos.skill.evolution": "Evolution",
   "trmythos.skill.foundation": "Foundation",
@@ -51,6 +53,13 @@
   "trmythos.skill.mode.bloodsucker.vaporization_freezing_technique": "Vaporization Freezing Technique",
   "trmythos.skill.mode.bloodsucker.blood_drain": "Blood Drain",
   "trmythos.skill.mode.bloodsucker.flesh_bud": "Flesh Bud",
+
+  "trmythos.skill.the_world": "The World",
+  "trmythos.skill.the_world.the_world": "The World",
+  "trmythos.skill.the_world.knife_throw": "Knife Throw",
+  "trmythos.skill.the_world.the_passion": "The Passion",
+  "trmythos.skill.the_world.menacing_pose": "Menacing Pose",
+  "trmythos.skill.the_world.description": "Your power continues to grow, surging in ways you could have never perceived. Now a strange, ghostly companion stands at your side, granting you control over the hands of time, if only for a few precious moments.",
 
   "trmythos.skill.bibliomania": "Bibliomania",
   "trmythos.skill.mode.bibliomania.description": "You'll live forever, within my records... this is the greatest honor I can grant with my own two hands.",
@@ -200,13 +209,6 @@
   "trmythos.skill.introvert": "Introvert",
   "trmythos.skill.introvert.description": "leave me alone. get away from me.. get away, just leave me be!",
 
-  "trmythos.skill.the_world": "The World",
-  "trmythos.skill.the_world.the_world": "The World",
-  "trmythos.skill.the_world.knife_throw": "Knife Throw",
-  "trmythos.skill.the_world.the_passion": "The Passion",
-  "trmythos.skill.the_world.menacing_pose": "Menacing Pose",
-  "trmythos.skill.the_world.description": "Your power continues to grow, surging in ways you could have never perceived. Now a strange, ghostly companion stands at your side, granting you control over the hands of time, if only for a few precious moments.",
-
   "item.trmythos.catharsis": "§4Catharsis",
   "trmythos.skill.catharsis": "§4Catharsis",
   "item.trmythos.skill.catharsis.catharsis": "§4Catharsis",
@@ -284,6 +286,9 @@
   "trmythos.race.require.demon_lord_seed": "Demon Lord Seed",
   "trmythos.race.uul_born.no_egg_seed": "Must not be a Hero Egg/Demon Lord Seed",
   "trmythos.evolution_menu.pre_awakening": "Become a",
+  "trmythos.race.aesir": "Aesir",
+  "trmythos.race.eusebia": "Eusebia",
+  "trmythos.race.netjeru": "Netjeru",
 
   "trmythos.race.vampire_baron": "Vampire Baron",
   "trmythos.race.vampire_viscount": "Vampire Viscount",
