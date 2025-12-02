@@ -150,6 +150,14 @@ public class MythosRaces {
     public static final ResourceLocation METALLOID_VANGUARD = new ResourceLocation(Mythos.MOD_ID, "metalloid_vanguard");
     public static final ResourceLocation METALLOID_SUPREME = new ResourceLocation(Mythos.MOD_ID, "metalloid_supreme");
     public static final ResourceLocation DEUS_EX_MACHINA = new ResourceLocation(Mythos.MOD_ID, "deus_ex_machina");
+
+    // Revenant Races
+    public static final ResourceLocation REVENANT = new ResourceLocation(Mythos.MOD_ID, "revenant");
+    public static final ResourceLocation WRAITH = new ResourceLocation(Mythos.MOD_ID, "wraith");
+    public static final ResourceLocation FORGOTTEN = new ResourceLocation(Mythos.MOD_ID, "forgotten");
+    public static final ResourceLocation CHAOTIC_SPRITE = new ResourceLocation(Mythos.MOD_ID, "chaotic_sprite");
+    public static final ResourceLocation VOID_APOSTLE = new ResourceLocation(Mythos.MOD_ID, "void_apostle");
+    public static final ResourceLocation PRIMAL_CHAOS = new ResourceLocation(Mythos.MOD_ID, "primal_chaos");
     /**
      * Make sure that you register the race, otherwise it will not show up correctly in the selection menu
      * @param event
@@ -390,6 +398,26 @@ public class MythosRaces {
         });
         event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
             helper.register("deus_ex_machina", new DeusExMachinaRace());
+        });
+
+        // Revenant Races
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("revenant", new RevenantRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("wraith", new WraithRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("forgotten", new ForgottenRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("chaotic_sprite", new ChaoticSpriteRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("void_apostle", new VoidApostleRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("primal_chaos", new PrimalChaosRace());
         });
 
     }
