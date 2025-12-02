@@ -84,6 +84,9 @@ public class MythosRaces {
     public static final ResourceLocation SEMIDEUS = new ResourceLocation(Mythos.MOD_ID, "semideus");
     public static final ResourceLocation UUL_BORN = new ResourceLocation(Mythos.MOD_ID, "uul_born");
     public static final ResourceLocation DIVINE_HOST = new ResourceLocation(Mythos.MOD_ID, "divine_host");
+    public static final ResourceLocation AESIR = new ResourceLocation(Mythos.MOD_ID, "aesir");
+    public static final ResourceLocation EUSEBIA = new ResourceLocation(Mythos.MOD_ID, "eusebia");
+    public static final ResourceLocation NETJERU = new ResourceLocation(Mythos.MOD_ID, "netjeru");
 
     // Vampires
 
@@ -236,6 +239,15 @@ public class MythosRaces {
         });
         event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
             helper.register("divine_host", new DivineHostRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("aesir", new AesirRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("netjeru", new NetjeruRace());
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("eusebia", new EusebiaRace());
         });
 
         // Vampire Races
