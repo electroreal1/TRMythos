@@ -185,6 +185,9 @@ public class PuritySkill extends Skill {
                     e.setAmount(e.getAmount() * 3.0F);
                 }
             }
+            if (e.getSource().isMagic()) {
+                e.setAmount(e.getAmount() * 0.5f);
+            }
         }
     }
 
