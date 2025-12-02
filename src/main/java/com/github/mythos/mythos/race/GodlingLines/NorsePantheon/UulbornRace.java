@@ -36,7 +36,7 @@ public class UulbornRace extends Race {
 
     @Override
     public float getPlayerSize() {
-        return 1.2f;
+        return 2.2f;
     }
 
     @Override
@@ -110,10 +110,6 @@ public class UulbornRace extends Race {
         return list;
     }
     @Override
-    // public double getEvolutionPercentage(Player player) {
-    //  double minimalEP = this.getMinBaseAura() + this.getMaxBaseMagicule();
-    //   return TensuraPlayerCapability.getBaseEP(player) * 50;
-    //  }
     public double getEvolutionPercentage(Player player) {
 
         // Base evolution percentage
@@ -137,25 +133,12 @@ public class UulbornRace extends Race {
         return evolutionPercentage;
     }
 
-//    public List<Race> getNextEvolutions(Player player) {
-//        List<Race> list = new ArrayList<>();
-//        SkillStorage storage = SkillAPI.getSkillsFrom(player);
-//        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(MythosRaces.FENRIS_WOLF_RACE));
-//        return list;
-//
-//    }
-//
-//    public @Nullable Race getDefaultEvolution(Player player) {
-//        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(MythosRaces.FENRIS_WOLF_RACE));
-//    }
-//
-//    public @Nullable Race getAwakeningEvolution(Player player) {
-//        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(MythosRaces.FENRIS_WOLF_RACE));
-//    }
-//
-//    public @Nullable Race getHarvestFestivalEvolution(Player player) {
-//        return ((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(MythosRaces.FENRIS_WOLF_RACE));
-//    }
+    public List<Race> getNextEvolutions(Player player) {
+        List<Race> list = new ArrayList<>();
+        SkillStorage storage = SkillAPI.getSkillsFrom(player);
+        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(MythosRaces.AESIR));
+        return list;
+    }
 
     public List<Component> getRequirementsForRendering(Player player) {
         List<Component> list = new ArrayList();
