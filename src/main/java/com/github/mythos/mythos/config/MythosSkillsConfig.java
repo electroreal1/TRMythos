@@ -22,6 +22,7 @@ public class MythosSkillsConfig {
     public static ForgeConfigSpec.BooleanValue CarnageBloodDominion;
     public static ForgeConfigSpec.BooleanValue enableUniqueEvolution;
     public static ForgeConfigSpec.BooleanValue loseUniqueOnEvolution;
+    public static ForgeConfigSpec.BooleanValue ApophisEmbodiment;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> racesThatCanCompeteForChildOfThePlane;
     public static ForgeConfigSpec.ConfigValue<List<? extends  String>> GRAM_EXTRA_DAMAGE_RACES;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> SAPLING_ENGRAVE_LIST;
@@ -141,6 +142,10 @@ public class MythosSkillsConfig {
                 .comment("If true then on evolving a unique skill into a higher form you will lose the previous version of it.")
                 .define("loseUniqueOnEvolution", true);
 
+        ApophisEmbodiment = builder
+                .comment("if True Apophis, Lord of Sin will be capable of creating Sin Series Unique Skills once per Mastery.")
+                .define("ApophisEmbodiment", true);
+
         racesThatCanCompeteForChildOfThePlane = builder
                 .comment("List of races that can compete for Child of the Plane.")
                 .defineList("racesThatCanCompeteForChildOfThePlane",
@@ -214,6 +219,9 @@ public class MythosSkillsConfig {
     }
     public static boolean loseUniqueOnEvolution() {
         return loseUniqueOnEvolution.get();
+    }
+    public static boolean ApophisEmbodiment() {
+        return ApophisEmbodiment.get();
     }
     public static List<? extends String> getRacesThatCanCompeteForChildOfThePlane() {
         return racesThatCanCompeteForChildOfThePlane.get();

@@ -32,8 +32,11 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+
+import static com.github.mythos.mythos.config.MythosSkillsConfig.ApophisEmbodiment;
 
 public class ApophisSkill extends Skill {
     public ApophisSkill(SkillType type) {super(SkillType.ULTIMATE);}
@@ -124,7 +127,25 @@ public class ApophisSkill extends Skill {
 
         // Embodiment of Sin
         if (instance.getMode() == 4) {
+            if (instance.isMastered(entity)) {
+                if (ApophisEmbodiment()) {
+                    SkillStorage storage = SkillAPI.getSkillsFrom(entity);
+                    List<Skill> sinSkill = Arrays.asList(
+                            UniqueSkills.WRATH.get(), UniqueSkills.ENVY.get(), UniqueSkills.GREED.get(),
+                            UniqueSkills.PRIDE.get(), UniqueSkills.LUST.get(), UniqueSkills.GLUTTONY.get(),
+                            UniqueSkills.SLOTH.get(), Skills.CARNAGE.get());
 
+                    Skill chosenSkill = sinSkill.get(new java.util.Random().nextInt(sinSkill.size()));
+                    storage.learnSkill(chosenSkill);
+                    entity.sendSystemMessage(Component.literal("You have acquired the Sin Series Skill: " + chosenSkill));
+
+                    instance.setMastery(0);;
+                    storage.syncAll();
+
+                } else {
+                    entity.sendSystemMessage(Component.literal("The World Is Suppressing Your Power."));
+                }
+            }
         }
     }
 
