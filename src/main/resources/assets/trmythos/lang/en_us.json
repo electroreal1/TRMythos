@@ -346,5 +346,13 @@
   "trmythos.race.metalloid_experimenter": "Metalloid Experimenter",
   "trmythos.race.metalloid_overseer": "Metalloid Overseer",
   "trmythos.race.metalloid_supreme": "Metalloid Supreme",
-  "trmythos.race.deus_ex_machina": "Deus Ex Machina"
+  "trmythos.race.deus_ex_machina": "Deus Ex Machina",
+
+  "trmythos.race.revenant": "Revenant",
+  "trmythos.race.revenant.notes": "What remains of a world that never was, given form by means beyond what you can currently comprehend...",
+  "trmythos.race.wraith": "Wraith",
+  "trmythos.race.forgotten": "Forgotten",
+  "trmythos.race.chaotic_sprite": "Chaotic Sprite",
+  "trmythos.race.void_apostle": "Void Apostle",
+  "trmythos.race.primal_chaos": "Primal Chaos"
 }
