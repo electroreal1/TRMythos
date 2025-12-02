@@ -33,6 +33,12 @@ public class ImmortalSkill extends Skill {
     public ImmortalSkill(SkillType type) {super(SkillType.ULTIMATE);}
     protected static final UUID ACCELERATION = UUID.fromString("46dc5eee-34e9-4a6c-ad3d-58048cb06c6f");
 
+    @Nullable
+    @Override
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/ultimate/Immortal.png");
+    }
+
     public double getObtainingEpCost() {return 1000000;}
 
     public double learningCost() {return 1000000;}
