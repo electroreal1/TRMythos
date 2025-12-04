@@ -48,7 +48,7 @@ public class MetalloidRace extends Race {
 
     @Override
     public double getJumpHeight() {
-        return 0;
+        return 1;
     }
 
     @Override
