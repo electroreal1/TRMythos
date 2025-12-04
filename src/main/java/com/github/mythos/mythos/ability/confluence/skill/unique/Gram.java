@@ -52,7 +52,7 @@ public class Gram extends Skill {
             if (targetEP <= playerEP) return;
 
             double epDifferencePercent = ((targetEP - playerEP) / playerEP) * 100.0;
-            double damageMultiplier = 1.0 + (epDifferencePercent / 100.0);
+            double damageMultiplier = 1.0 + (epDifferencePercent / 1000.0);
 
             String targetRace = String.valueOf(TensuraPlayerCapability.getRace(target));
             if (targetRace != null && MythosSkillsConfig.GRAM_EXTRA_DAMAGE_RACES.get().contains(targetRace)) {
