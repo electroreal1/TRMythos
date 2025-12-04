@@ -8,7 +8,6 @@ import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
 import com.github.mythos.mythos.registry.race.MythosRaces;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,7 +87,8 @@ public class MetalloidRace extends Race {
     @Override
     public List<Race> getNextEvolutions(Player player) {
         List<Race> list = new ArrayList<>();
-        list.add((Race)(IForgeRegistry) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.METALLOID_PROTO));
+        list.add((Race) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.METALLOID_PROTO));
         return list;
     }
+
 }

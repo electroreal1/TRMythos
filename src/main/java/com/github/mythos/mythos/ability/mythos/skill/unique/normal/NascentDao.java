@@ -5,15 +5,10 @@ import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.ability.skill.extra.ThoughtAccelerationSkill;
 import com.github.manasmods.tensura.registry.items.TensuraMobDropItems;
-import com.mojang.math.Vector3f;
-import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 
 import java.util.UUID;
 
@@ -53,38 +48,6 @@ public class NascentDao extends Skill {
     @Override
     public boolean canTick(ManasSkillInstance instance, LivingEntity entity) {
         return true;
-    }
-
-    @Override
-    public void onTick(ManasSkillInstance instance, LivingEntity entity) {
-        if (!(entity instanceof Player player)) return;
-        Level level = entity.level;
-        if (!(level instanceof ServerLevel server)) return;
-        RandomSource rand = player.level.random;
-        int particles = 25;
-        double maxRadius = 3.0;
-        double yOffset = 1.2;
-
-        for (int i = 0; i < particles; i++) {
-            double angle = rand.nextDouble() * 2 * Math.PI;
-            double radius = rand.nextDouble() * maxRadius;
-            double px = player.getX() + Math.cos(angle) * radius;
-            double pz = player.getZ() + Math.sin(angle) * radius;
-            double py = player.getY() + yOffset + (rand.nextDouble() - 0.5);
-
-            double dx = (player.getX() - px) * 0.05;
-            double dz = (player.getZ() - pz) * 0.05;
-            double dy = (player.getY() + yOffset - py) * 0.05;
-
-            float size = 0.6f + rand.nextFloat() * 0.3f;
-            Vector3f color = new Vector3f(0.6f + rand.nextFloat() * 0.4f, 1f, 0.3f);
-
-            server.sendParticles(
-                    new DustParticleOptions(color, size),
-                    px, py, pz,
-                    1, dx, dy, dz, 0.01
-            );
-        }
     }
 
     @Override

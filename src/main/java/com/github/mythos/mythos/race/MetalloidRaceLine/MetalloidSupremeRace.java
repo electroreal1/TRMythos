@@ -10,7 +10,6 @@ import com.github.mythos.mythos.registry.race.MythosRaces;
 import com.mojang.datafixers.util.Pair;
 import io.github.Memoires.trmysticism.registry.race.MysticismRaces;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -118,9 +117,9 @@ public class MetalloidSupremeRace extends Race {
     @Override
     public List<Race> getNextEvolutions(Player player) {
         List<Race> list = new ArrayList<>();
-        list.add((Race)(IForgeRegistry) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.DEUS_EX_MACHINA));
+        list.add((Race) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.DEUS_EX_MACHINA));
         if (TensuraEPCapability.isChaos(player)) {
-            list.add((Race)(IForgeRegistry) TensuraRaces.RACE_REGISTRY.get().getValue(MysticismRaces.CHAOS_METALLOID));
+            list.add((Race) TensuraRaces.RACE_REGISTRY.get().getValue(MysticismRaces.CHAOS_METALLOID));
         }
         return list;
     }

@@ -124,7 +124,7 @@ public class ProfanitySkill extends Skill {
                 if (r < 0.4) color = new Vector3f(0.5f, 0f, 0.5f);
                 else if (r < 0.7) color = new Vector3f(0.6f, 0f, 0.8f);
                 else color = new Vector3f(0.3f, 0.6f, 0.2f);
-                server.sendParticles(new DustParticleOptions(color, size), px + offsetX, py + offsetY, pz + offsetZ, 1, 0, 0, 0, 0);
+                server.sendParticles(new DustParticleOptions(color, size), px + offsetX, py + offsetY, pz + offsetZ, 5, 0, 0, 0, 0);
             }
         }
     }

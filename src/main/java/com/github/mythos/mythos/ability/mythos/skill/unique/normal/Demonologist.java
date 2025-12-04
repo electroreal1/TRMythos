@@ -111,7 +111,7 @@ public class Demonologist extends Skill {
 
         int points = 5;
         double radius = 0.8;
-        int segments = 40;
+        int segments = 50;
         double y = living.getY() + 2.05;
         double tilt = Math.toRadians(30);
 
@@ -128,7 +128,7 @@ public class Demonologist extends Skill {
                 server.sendParticles(
                         new DustParticleOptions(new Vector3f(1f, 0f, 0f), 1f),
                         px, py + (rand.nextDouble() - 0.5) * 0.02, pz,
-                        1, 0, 0, 0, 0
+                        10, 0, 0, 0, 0
                 );
             }
         }

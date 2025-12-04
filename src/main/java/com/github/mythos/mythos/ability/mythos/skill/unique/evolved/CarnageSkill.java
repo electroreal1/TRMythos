@@ -1,8 +1,10 @@
 package com.github.mythos.mythos.ability.mythos.skill.unique.evolved;
 
+import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
 import com.github.manasmods.tensura.ability.SkillHelper;
+import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.ability.skill.extra.HakiSkill;
@@ -17,6 +19,7 @@ import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.registry.race.MythosRaces;
+import com.github.mythos.mythos.registry.skill.Skills;
 import com.mojang.math.Vector3f;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -62,6 +65,15 @@ public class CarnageSkill extends Skill {
     public CarnageSkill(SkillType type) {
         super(SkillType.UNIQUE);
         MinecraftForge.EVENT_BUS.register(this);
+    }
+
+    public boolean meetEPRequirement(Player player, double newEP) {
+        // Check EP using Tensura capability
+        double currentEP = TensuraEPCapability.getCurrentEP(player);
+        if (currentEP < getObtainingEpCost()) {
+            return false; // not enough EP
+        }
+        return SkillUtils.isSkillMastered(player, (ManasSkill) Skills.CRIMSON_TYRANT.get());
     }
 
     @Override

@@ -82,7 +82,7 @@ public class PuritySkill extends Skill {
         if (!(level instanceof ServerLevel server)) return;
         RandomSource rand = player.level.random;
         int points = 30;
-        double radius = 1.5;
+        double radius = 1;
         double yOffset = 1.8;
         for (int i = 0; i < points; i++) {
             if (rand.nextDouble() > 0.4) continue;
@@ -97,7 +97,7 @@ public class PuritySkill extends Skill {
             else if (r < 0.8) color = new Vector3f(1f, 0.6f, 0f);
             else if (r < 0.95) color = new Vector3f(1f, 0.3f, 0f);
             else color = new Vector3f(1f, 1f, 1f);
-            server.sendParticles(new DustParticleOptions(color, size), px, py, pz, 1, 0, 0, 0, 0);
+            server.sendParticles(new DustParticleOptions(color, size), px, py, pz, 10, 0, 0, 0, 0);
         }
     }
 

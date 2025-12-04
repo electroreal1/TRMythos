@@ -165,13 +165,13 @@ public class IndraSkill extends Skill implements Transformation {
                     double lx = px + (rand.nextDouble() - 0.5) * 0.2;
                     double lz = pz + (rand.nextDouble() - 0.5) * 0.2;
                     double ly = py - j * 0.5;
-                    server.sendParticles(new DustParticleOptions(new Vector3f(0.8f, 0.8f, 1f), 0.6f), lx, ly, lz, 1, 0, 0, 0, 0);
+                    server.sendParticles(new DustParticleOptions(new Vector3f(0.8f, 0.8f, 1f), 0.6f), lx, ly, lz, 10, 0, 0, 0, 0);
                 }
             } else {
 
                 float size = 0.5f + rand.nextFloat() * 0.3f;
                 Vector3f color = new Vector3f(0.5f, 0.5f, 0.5f);
-                server.sendParticles(new DustParticleOptions(color, size), px, py, pz, 1, 0, 0, 0, 0);
+                server.sendParticles(new DustParticleOptions(color, size), px, py, pz, 10, 0, 0, 0, 0);
             }
         }
     }

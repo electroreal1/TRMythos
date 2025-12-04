@@ -106,7 +106,7 @@ public class MetalloidOverseerRace extends Race {
     @Override
     public List<Race> getNextEvolutions(Player player) {
         List<Race> list = new ArrayList<>();
-        list.add((Race)(IForgeRegistry) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.METALLOID_SUPREME));
+        list.add((Race) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.METALLOID_SUPREME));
         return list;
     }
 }

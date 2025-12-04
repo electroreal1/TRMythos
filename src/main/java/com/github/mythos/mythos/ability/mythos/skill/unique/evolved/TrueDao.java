@@ -11,15 +11,10 @@ import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.registry.attribute.TensuraAttributeRegistry;
 import com.github.manasmods.tensura.registry.items.TensuraMobDropItems;
 import com.github.mythos.mythos.registry.skill.Skills;
-import com.mojang.math.Vector3f;
-import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.jetbrains.annotations.NotNull;
@@ -85,29 +80,6 @@ public class TrueDao extends Skill {
         });
 
         TensuraPlayerCapability.sync(player);
-
-        RandomSource rand = player.level.random;
-        int particles = 35;
-        double yOffset = 1.2;
-        Level level = entity.level;
-        if (!(level instanceof ServerLevel server)) return;
-
-        for (int i = 0; i < particles; i++) {
-            double radius = 1.0 + rand.nextDouble();
-            double angle = rand.nextDouble() * 2 * Math.PI;
-            double px = player.getX() + Math.cos(angle) * radius;
-            double pz = player.getZ() + Math.sin(angle) * radius;
-            double py = player.getY() + yOffset + (rand.nextDouble() - 0.5) * 0.7;
-
-            float size = 0.8f + rand.nextFloat() * 0.2f;
-            Vector3f color = rand.nextDouble() < 0.5 ? new Vector3f(1f, 1f, 0.6f) : new Vector3f(1f, 1f, 1f);
-
-            double motionX = (player.getX() - px) * 0.07;
-            double motionY = (player.getY() + yOffset - py) * 0.07;
-            double motionZ = (player.getZ() - pz) * 0.07;
-
-            server.sendParticles(new DustParticleOptions(color, size), px, py, pz, 1, motionX, motionY, motionZ, 0);
-            }
     }
     @SubscribeEvent
     public static void onLivingHurt(LivingHurtEvent event, ManasSkillInstance instance) {
