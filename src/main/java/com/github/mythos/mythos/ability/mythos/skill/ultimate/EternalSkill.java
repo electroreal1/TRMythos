@@ -38,10 +38,8 @@ public class EternalSkill extends Skill {
     public EternalSkill(SkillType type) {super(SkillType.ULTIMATE);}
     protected static final UUID ACCELERATION = UUID.fromString("46dc5eee-34e9-4a6c-ad3d-58048cb06c6f");
 
-    @Nullable
-    @Override
     public ResourceLocation getSkillIcon() {
-        return new ResourceLocation("trmythos", "textures/skill/ultimate/Eternal.png");
+        return new ResourceLocation("trmythos", "textures/skill/ultimate/eternal.png");
     }
 
     public double getObtainingEpCost() {return 1000000;}
