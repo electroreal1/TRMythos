@@ -136,10 +136,16 @@ public class ApophisSkill extends Skill {
                             UniqueSkills.SLOTH.get(), Skills.CARNAGE.get());
 
                     Skill chosenSkill = sinSkill.get(new java.util.Random().nextInt(sinSkill.size()));
-                    storage.learnSkill(chosenSkill);
+
+                    TensuraSkillInstance newInstance = new TensuraSkillInstance(chosenSkill);
+
+                    newInstance.setMastery(0);
+                    if (storage.learnSkill(newInstance)) {
+                        instance.setMastery(0);
+                    }
+
                     entity.sendSystemMessage(Component.literal("You have acquired the Sin Series Skill: " + chosenSkill));
 
-                    instance.setMastery(0);;
                     storage.syncAll();
 
                 } else {
