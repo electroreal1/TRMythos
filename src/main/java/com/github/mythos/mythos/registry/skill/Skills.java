@@ -34,6 +34,7 @@ public class Skills {
     public static final RegistryObject<AresSkill> ARES;
     public static final RegistryObject<ApophisSkill> APOPHIS;
     public static final RegistryObject<DikeSkill> DIKE;
+    
     // uniques
     public static final RegistryObject<FakerSkill> FAKER;
     public static final RegistryObject<OmniscientEyeSkill> OMNISCIENT_EYE;
@@ -57,6 +58,8 @@ public class Skills {
     public static final RegistryObject<TenaciousSkill> TENACIOUS;
     public static final RegistryObject<MirrorImageSkill> MIRROR_IMAGE;
     public static final RegistryObject<UnderworldPrince> UNDERWORLD_PRINCE;
+    public static final RegistryObject<CommonSenseSkill> COMMON_SENSE;
+    
     // vassal
     public static final RegistryObject<FoundationSkill> FOUNDATION;
     public static final RegistryObject<UnitySkill> UNITY;
@@ -119,6 +122,7 @@ public class Skills {
         TENACIOUS = registery.register("tenacious", () -> new TenaciousSkill(Skill.SkillType.UNIQUE));
         MIRROR_IMAGE = registery.register("mirror_image", () -> new MirrorImageSkill(Skill.SkillType.UNIQUE));
         UNDERWORLD_PRINCE = registery.register("underworld_prince", () -> new UnderworldPrince(Skill.SkillType.UNIQUE));
+        COMMON_SENSE = registery.register("common_sense", () -> new CommonSenseSkill(Skill.SkillType.UNIQUE));
 
         // vassal series
         UNITY = registery.register("unity", () -> new UnitySkill(Skill.SkillType.UNIQUE));
