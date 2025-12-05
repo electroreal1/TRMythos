@@ -8,7 +8,6 @@ import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
-import com.github.manasmods.tensura.race.Race;
 import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.mythos.mythos.ability.mythos.skill.unique.normal.CrimsonTyrantSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.normal.EltnamSkill;
@@ -32,10 +31,6 @@ import java.util.Random;
 public class MythosUtils extends SkillUtils {
 
     public MythosUtils() {
-    }
-
-    public static boolean isRace(Entity entity, Race race) {
-        return false;
     }
     @SubscribeEvent
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
