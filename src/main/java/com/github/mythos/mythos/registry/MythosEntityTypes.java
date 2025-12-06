@@ -23,14 +23,6 @@ public class MythosEntityTypes {
     public static final RegistryObject<EntityType<VajraBreathProjectile>> VAJRA_BREATH;
     public static final RegistryObject<EntityType<IntrovertBarrier>> INTROVERT_BARRIER;
     public static final RegistryObject<EntityType<StarFallProjectile>> STARFALL;
-
-    //    public static final RegistryObject<EntityType<JusticeLightArrow>> JUSTICE_LIGHT_ARROW = ENTITY_TYPES.register("justice_light_arrow",
-//            () -> EntityType.Builder.<JusticeLightArrow>of(JusticeLightArrow::new, MobCategory.MISC)
-//                    .sized(0.5f, 0.5f)
-//                    .clientTrackingRange(4)
-//                    .updateInterval(20)
-//                    .build("justice_light_arrow")
-//    );
     public static void register(IEventBus modEventBus) {
     registry.register(modEventBus);
 }

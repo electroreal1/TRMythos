@@ -11,7 +11,12 @@ public class DragonfireRenderer extends EntityRenderer<DragonFireBreathProjectil
     }
 
     @Override
-    public ResourceLocation getTextureLocation(DragonFireBreathProjectile entity) {
-        return new ResourceLocation("trmythos", "textures/entity/dragonfire.png");
+    public ResourceLocation getTextureLocation(DragonFireBreathProjectile dragonFireBreathProjectile) {
+        return null;
     }
+
+//    @Override
+//    public ResourceLocation getTextureLocation(DragonFireBreathProjectile entity) {
+//        return new ResourceLocation("trmythos", "textures/entity/dragonfire.png");
+//    }
 }
