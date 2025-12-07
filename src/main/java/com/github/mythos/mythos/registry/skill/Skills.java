@@ -7,6 +7,7 @@ import com.github.mythos.mythos.ability.mythos.skill.extra.AutomaticHakiCoatSkil
 import com.github.mythos.mythos.ability.mythos.skill.extra.SpatialStorageSkill;
 import com.github.mythos.mythos.ability.mythos.skill.extra.ThunderRainSkill;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.*;
+import com.github.mythos.mythos.ability.mythos.skill.unique.DominateSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.TenaciousSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.evolved.*;
 import com.github.mythos.mythos.ability.mythos.skill.unique.normal.*;
@@ -59,6 +60,7 @@ public class Skills {
     public static final RegistryObject<MirrorImageSkill> MIRROR_IMAGE;
     public static final RegistryObject<UnderworldPrince> UNDERWORLD_PRINCE;
     public static final RegistryObject<CommonSenseSkill> COMMON_SENSE;
+    public static final RegistryObject<DominateSkill> DOMINATE;
     
     // vassal
     public static final RegistryObject<FoundationSkill> FOUNDATION;
@@ -123,6 +125,7 @@ public class Skills {
         MIRROR_IMAGE = registery.register("mirror_image", () -> new MirrorImageSkill(Skill.SkillType.UNIQUE));
         UNDERWORLD_PRINCE = registery.register("underworld_prince", () -> new UnderworldPrince(Skill.SkillType.UNIQUE));
         COMMON_SENSE = registery.register("common_sense", () -> new CommonSenseSkill(Skill.SkillType.UNIQUE));
+        DOMINATE = registery.register("dominate", () -> new DominateSkill(Skill.SkillType.UNIQUE));
 
         // vassal series
         UNITY = registery.register("unity", () -> new UnitySkill(Skill.SkillType.UNIQUE));

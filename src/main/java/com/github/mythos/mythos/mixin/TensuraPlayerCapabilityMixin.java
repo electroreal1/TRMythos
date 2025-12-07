@@ -32,6 +32,4 @@ public abstract class TensuraPlayerCapabilityMixin implements ICapabilityHasOwne
 
         return original;
     }
-
-
 }

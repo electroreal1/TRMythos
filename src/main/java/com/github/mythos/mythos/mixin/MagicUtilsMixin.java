@@ -7,6 +7,7 @@ import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.registry.skill.Skills;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -42,6 +43,11 @@ public class MagicUtilsMixin {
     private static float trmythos$castingSpeedMultiplier(float original, LivingEntity entity) {
         if (entity.hasEffect(MythosMobEffects.THUNDER_GOD.get())) {
             original += 5000;
+        }
+        if (entity instanceof Player player) {
+            if (SkillUtils.isSkillToggled(player, (ManasSkill) Skills.DOMINATE.get())) {
+                original *= 2;
+            }
         }
 
         return 1.0F / original;
