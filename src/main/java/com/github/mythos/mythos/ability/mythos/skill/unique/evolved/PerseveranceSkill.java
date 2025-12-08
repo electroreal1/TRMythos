@@ -58,10 +58,10 @@ public class PerseveranceSkill extends Skill {
     public static final UUID PERSISTENT = UUID.fromString("8d2fe5e0-4bb1-3f7e-8a4a-2d1d889f4241");
     public static final UUID WILLPOWER = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
 
-    //@Override
-    //public ResourceLocation getSkillIcon() {
-    //    return new ResourceLocation("trmythos", "textures/skill/unique/perseverance.png");
-    //}
+    @Override
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/unique/perseverance.png");
+    }
 
     public int getMaxMastery() {return 5000;}
 
@@ -298,4 +298,5 @@ public class PerseveranceSkill extends Skill {
         }
     }
 }
+
 
