@@ -31,10 +31,10 @@ import java.util.function.Predicate;
 public class TenaciousSkill extends Skill {
     public TenaciousSkill(SkillType type) {super(SkillType.UNIQUE);}
 
-    //@Override
-    //public ResourceLocation getSkillIcon() {
-    //    return new ResourceLocation("trmythos", "textures/skill/unique/tenacious.png");
-    //}
+    @Override
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/unique/tenacious.png");
+    }
 
     public int getMaxMastery() {return 500;}
 
@@ -125,3 +125,4 @@ public class TenaciousSkill extends Skill {
         }
     }
 }
+
