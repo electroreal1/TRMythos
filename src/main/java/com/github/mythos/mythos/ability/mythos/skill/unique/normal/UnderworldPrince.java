@@ -43,6 +43,11 @@ public class UnderworldPrince extends Skill {
     }
 
     @Override
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/unique/underworld_prince.png");
+    }
+
+    @Override
     public boolean canTick(ManasSkillInstance instance, LivingEntity entity) {
         return true;
     }
