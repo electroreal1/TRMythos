@@ -17,6 +17,11 @@ public class IntrovertSkill extends Skill {
         super(SkillType.UNIQUE);
     }
 
+    @Override
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/unique/introvert.png");
+    }
+
     public boolean canTick(ManasSkillInstance instance, LivingEntity entity) {
         return instance.isToggled();
     }
