@@ -63,6 +63,11 @@ public class Convergence extends Skill {
     }
 
     @Override
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/unique/convergence.png");
+    }
+
+    @Override
     public boolean canBeToggled(ManasSkillInstance instance, LivingEntity entity) {
         return true;
     }

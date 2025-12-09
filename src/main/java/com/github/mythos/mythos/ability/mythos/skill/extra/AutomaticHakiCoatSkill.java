@@ -20,6 +20,11 @@ public class AutomaticHakiCoatSkill extends Skill {
         super(SkillType.EXTRA);
     }
 
+    @Override
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/extra/automatic_haki_coat.png");
+    }
+
 
     public boolean meetEPRequirement(Player entity, double newEP) {
         SkillStorage storage = SkillAPI.getSkillsFrom(entity);

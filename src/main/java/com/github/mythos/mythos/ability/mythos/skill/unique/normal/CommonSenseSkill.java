@@ -52,9 +52,9 @@ public class CommonSenseSkill extends Skill {
 
     protected static final UUID ACCELERATION = UUID.fromString("46dc5eee-34e9-4a6c-ad3d-58048cb06c6f");
 
-    //public ResourceLocation getSkillIcon() {
-    //    return new ResourceLocation("trmythos", "textures/skill/unique/common_sense.png");
-    //}
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/unique/common_sense.png");
+    }
 
     public boolean canBeToggled(ManasSkillInstance instance, LivingEntity entity) {
         return true;
@@ -262,3 +262,4 @@ public class CommonSenseSkill extends Skill {
         }
     }
 }
+

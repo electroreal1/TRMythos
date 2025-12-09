@@ -23,6 +23,11 @@ public class SpatialStorageSkill extends Skill implements ISpatialStorage {
         return 1;
     }
 
+    @Override
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/extra/spatial_storage.png");
+    }
+
     public boolean meetEPRequirement(Player player, double newEP) {
         double currentEP = TensuraEPCapability.getCurrentEP(player);
         if (currentEP < getObtainingEpCost()) {
