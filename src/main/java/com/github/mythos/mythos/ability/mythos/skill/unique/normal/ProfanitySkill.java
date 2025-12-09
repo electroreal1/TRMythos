@@ -175,7 +175,6 @@ public class ProfanitySkill extends Skill {
             boolean changed = false;
 
             if (canTurnMajin(target)) {
-                // Convert to Majin if possible
                 cap.setChaos(false);
                 cap.setMajin(true);
                 changed = true;
@@ -192,15 +191,10 @@ public class ProfanitySkill extends Skill {
                         1.2F
                 );
             }
-
-            // Always apply random effects, even if already Majin
             applyRandomEffects(target, level.random);
-
             TensuraEPCapability.sync(target);
             entity.swing(InteractionHand.MAIN_HAND, true);
         });
-
-        // Mastery points and cooldown
         instance.setCoolDown(30);
         this.addMasteryPoint(instance, entity);
     }
@@ -212,11 +206,9 @@ public class ProfanitySkill extends Skill {
         if (level.isClientSide) return true;
         if (instance.getMode() == 2) {
 
-            // Every second
             if (heldTicks % 20 == 0) {
                 if (SkillHelper.outOfMagicule(entity, instance)) return false;
 
-                // Play aura sound & spawn FX
                 level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
                         SoundEvents.WARDEN_HEARTBEAT, SoundSource.PLAYERS, 1.0F, 0.8F);
 
@@ -227,7 +219,6 @@ public class ProfanitySkill extends Skill {
                                 entity.getId(), 0.0, 1.0, 0.0, true)
                 );
 
-                // Find targets in a 10-block radius
                 List<LivingEntity> targets = level.getEntitiesOfClass(
                         LivingEntity.class,
                         entity.getBoundingBox().inflate(10.0),
@@ -238,22 +229,16 @@ public class ProfanitySkill extends Skill {
                     double ep = TensuraEPCapability.getEP(entity);
                     if (ep <= 0) return true;
 
-                    // Damage = 1 point per 10000 EP
-                    float damagePerSecond = (float) (ep / 1000.0);
+                    float damagePerSecond = (float) (ep / 10000.0);
 
 
-                    // Darkness DamageSource (custom). Adjust properties if needed.
                     DamageSource darknessSource = new DamageSource("tensura.dark_attack");
-                    // e.g. darknessSource = darknessSource.setMagic(); // not available on all mappings
-                    // or darknessSource = darknessSource.bypassArmor(); // if you want it to ignore armor
 
                     for (LivingEntity target : targets) {
                         if (target instanceof Player p && p.getAbilities().invulnerable) continue;
 
-                        // Apply vanilla magic damage
                         target.hurt(DamageSource.MAGIC, damagePerSecond);
 
-                        // Apply custom darkness damage
                         target.hurt(darknessSource, damagePerSecond);
 
                         TensuraParticleHelper.addServerParticlesAroundSelf(target, ParticleTypes.SMOKE, 1.0);

@@ -258,24 +258,9 @@ public class ParanoiaSkill extends Skill {
             }
 
             float damage = instance.isMastered(entity) ? 1000.0F : 500.0F;
-            BreathEntity.spawnBreathEntity(
-                    MythosEntityTypes.DRAGONFIRE.get(),
-                    entity,
-                    instance,
-                    damage,
-                    this.magiculeCost(entity, instance)
-            );
+            BreathEntity.spawnBreathEntity(MythosEntityTypes.DRAGONFIRE.get(), entity, instance, damage, this.magiculeCost(entity, instance));
 
-            entity.getLevel().playSound(
-                    null,
-                    entity.getX(),
-                    entity.getY(),
-                    entity.getZ(),
-                    SoundEvents.BLAZE_SHOOT,
-                    SoundSource.PLAYERS,
-                    1.0F,
-                    1.0F
-            );
+            entity.getLevel().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.BLAZE_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F);
 
             return true;
         } return true;
