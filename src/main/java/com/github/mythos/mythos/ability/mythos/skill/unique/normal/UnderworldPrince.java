@@ -188,9 +188,10 @@ public class UnderworldPrince extends Skill {
                         int fearLevel = (int) (difference * 0.5 - 1.0);
                         fearLevel = Math.min(fearLevel, TensuraConfig.INSTANCE.mobEffectConfig.maxFear.get());
                         SkillHelper.checkThenAddEffectSource(target, entity, (MobEffect) TensuraMobEffects.FEAR.get(), 200, fearLevel);
+                        SkillHelper.checkThenAddEffectSource(target, entity, (MobEffect) TensuraMobEffects.CHILL.get(), 200, fearLevel);
                         float damage = instance.isMastered(entity) ? 300 : 100;
-                        entity.hurt(DamageSource.FREEZE, damage);
-                        entity.hurt(TensuraDamageSources.CORROSION, damage);
+                        target.hurt(DamageSource.FREEZE, damage);
+                        target.hurt(TensuraDamageSources.CORROSION, damage);
                         HakiSkill.hakiPush(target, entity, fearLevel);
                     }
                 }

@@ -106,6 +106,8 @@ public class CrimsonOracleSkill extends Skill {
         }
     }
 
+
+
     public void onToggleOff(ManasSkillInstance instance, LivingEntity entity) {
         if (entity instanceof ServerPlayer player) {
             MinecraftServer server = player.getServer();
