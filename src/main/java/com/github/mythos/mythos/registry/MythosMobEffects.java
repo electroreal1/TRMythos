@@ -59,6 +59,8 @@ public class MythosMobEffects {
             new CostlessRegenerationEffect(MobEffectCategory.BENEFICIAL, (new Color(255, 0, 0)).getRGB()));
     public static final RegistryObject<MobEffect> YELLOW_SIGN = registry.register("yellow_sign", () ->
             new YellowSignEffect(MobEffectCategory.NEUTRAL, (new Color(255, 266, 125)).getRGB()));
+    public static final RegistryObject<MobEffect> ULTIMATE_VILLAIN = registry.register("ultimate_villain", () ->
+            new UltimateVillainEffect(MobEffectCategory.BENEFICIAL, (new Color(100, 0, 0)).getRGB()));
     public static void init(IEventBus modEventBus) {
         registry.register(modEventBus);
     }

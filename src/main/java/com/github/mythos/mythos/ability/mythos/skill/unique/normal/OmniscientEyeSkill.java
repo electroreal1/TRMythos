@@ -104,25 +104,19 @@ public class OmniscientEyeSkill extends Skill {
             return;
 
         DamageSource damageSource = event.getSource();
-        // Ignore magic, explosion, or unblockable sources
         if (damageSource.isMagic() || damageSource.isExplosion())
             return;
 
-        // Ignore indirect sources (e.g., arrows)
         if (damageSource.getEntity() == null || damageSource.getEntity() != damageSource.getDirectEntity())
             return;
 
-        // If entity is currently performing an action (e.g., mid-attack or moving fast)
         if (entity.getAttributes().getValue(Attributes.MOVEMENT_SPEED) > 0.25F)
             return;
 
-        // Play dodge sound
         entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.PLAYERS, 2.0F, 1.0F);
 
-        // Cancel the attack (successful dodge)
         event.setCanceled(true);
 
-        // But if the skill effect allows negating dodge, re-allow hit
         if (SkillUtils.canNegateDodge(entity, damageSource))
             event.setCanceled(false);
     }
@@ -133,14 +127,11 @@ public class OmniscientEyeSkill extends Skill {
         if (SkillUtils.isProjectileAlwaysHit(event.getProjectile()))
             return;
 
-        // If entity is in a fast state (not vulnerable)
         if (entity.getAttributes().getValue(Attributes.MOVEMENT_SPEED) > 0.25F)
             return;
 
-        // Play dodge sound
         entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.PLAYERS, 2.0F, 1.0F);
 
-        // Cancel projectile hit
         event.setCanceled(true);
     }
 
@@ -158,18 +149,14 @@ public class OmniscientEyeSkill extends Skill {
 
         LivingEntity target = e.getEntity();
 
-        // If the target has something that prevents crits, skip
         if (SkillUtils.canNegateCritChance(target))
             return;
 
-        // Apply critical hit multiplier
         double critMultiplier = attacker.getAttributeValue(ManasCoreAttributes.CRIT_MULTIPLIER.get());
         e.setAmount((float) (e.getAmount() * critMultiplier));
 
-        // Play critical hit sound
         target.level.playSound(null, target.getX(), target.getY(), target.getZ(), SoundEvents.PLAYER_ATTACK_CRIT, attacker.getSoundSource(), 1.0F, 1.0F);
 
-        // Send critical hit animation packet
         Level level = attacker.level;
         if (level instanceof ServerLevel serverLevel) {
             serverLevel.getServer().getPlayerList()

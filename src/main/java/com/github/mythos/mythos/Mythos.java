@@ -5,7 +5,6 @@ import com.github.mythos.mythos.config.MythosConfig;
 import com.github.mythos.mythos.handler.CarnageHandler;
 import com.github.mythos.mythos.handler.CatharsisHandler;
 import com.github.mythos.mythos.handler.CrimsonTyrantHandler;
-import com.github.mythos.mythos.handler.SkillEvolutionHandler;
 import com.github.mythos.mythos.networking.MythosNetwork;
 import com.github.mythos.mythos.registry.MythosRegistery;
 import com.github.mythos.mythos.registry.menu.MythosMenuTypes;
@@ -45,7 +44,6 @@ public class Mythos {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(this::onCommonSetup);
         MythosRegistery.register(modEventBus);
-        MinecraftForge.EVENT_BUS.register(SkillEvolutionHandler.class);
         MinecraftForge.EVENT_BUS.register(CrimsonTyrantHandler.class);
         MinecraftForge.EVENT_BUS.register(CarnageHandler.class);
         modEventBus.register(MythosRaces.class);
