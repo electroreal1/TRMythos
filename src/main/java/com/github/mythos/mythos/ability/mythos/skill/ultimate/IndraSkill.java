@@ -12,13 +12,13 @@ import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
 import com.github.manasmods.tensura.effect.template.Transformation;
+import com.github.manasmods.tensura.entity.magic.barrier.BlizzardEntity;
 import com.github.manasmods.tensura.entity.magic.lightning.LightningBolt;
 import com.github.manasmods.tensura.registry.attribute.TensuraAttributeRegistry;
 import com.github.manasmods.tensura.registry.particle.TensuraParticles;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSources;
-import com.github.mythos.mythos.entity.ThunderStorm;
 import com.github.mythos.mythos.entity.projectile.VajraBreathProjectile;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.registry.skill.Skills;
@@ -270,21 +270,21 @@ public class IndraSkill extends Skill implements Transformation {
     public void onPressed(ManasSkillInstance instance, @NotNull LivingEntity entity) {
         if (instance.getMode() == 2) {
 
-            boolean hasStorm = !entity.getLevel().getEntitiesOfClass(ThunderStorm.class, entity.getBoundingBox(),
+            boolean hasBlizzard = !entity.getLevel().getEntitiesOfClass(BlizzardEntity.class, entity.getBoundingBox(),
                     thunderStorm -> thunderStorm.getOwner() == entity).isEmpty();
 
             if (entity.isShiftKeyDown()) {
 
-                for (ThunderStorm thunderStorm : entity.getLevel().getEntitiesOfClass(ThunderStorm.class, entity.getBoundingBox(),
+                for (BlizzardEntity thunderStorm : entity.getLevel().getEntitiesOfClass(BlizzardEntity.class, entity.getBoundingBox(),
                         b -> b.getOwner() == entity)) {
                     thunderStorm.discard();
                 }
             } else {
 
-                if (!hasStorm && !SkillHelper.outOfMagicule(entity, 2000.0F)) {
+                if (!hasBlizzard && !SkillHelper.outOfMagicule(entity, 2000.0F)) {
 
                     SkillHelper.outOfMagicule(entity, 2000.0F);
-                    ThunderStorm thunderStorm = ThunderStorm.create(entity.getLevel(), entity);
+                    BlizzardEntity thunderStorm = new BlizzardEntity(entity.getLevel(), entity);
                     thunderStorm.setPos(entity.getX(), entity.getY(), entity.getZ());
                     thunderStorm.setOwner(entity);
                     thunderStorm.noCulling = true;
@@ -383,8 +383,8 @@ public class IndraSkill extends Skill implements Transformation {
         }
     }
 
-    private boolean hasStorm(LivingEntity owner) {
-        return !owner.getLevel().getEntitiesOfClass(ThunderStorm.class, owner.getBoundingBox(), (thunderStorm) -> {
+    private boolean hasBlizzard(LivingEntity owner) {
+        return !owner.getLevel().getEntitiesOfClass(BlizzardEntity.class, owner.getBoundingBox(), (thunderStorm) -> {
             return thunderStorm.getOwner() == owner;
         }).isEmpty();
     }

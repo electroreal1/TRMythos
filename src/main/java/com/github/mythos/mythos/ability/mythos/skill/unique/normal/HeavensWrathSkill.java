@@ -9,10 +9,10 @@ import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.capability.skill.TensuraSkillCapability;
+import com.github.manasmods.tensura.entity.magic.barrier.BlizzardEntity;
 import com.github.manasmods.tensura.entity.magic.breath.BreathEntity;
 import com.github.manasmods.tensura.registry.entity.TensuraEntityTypes;
 import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
-import com.github.mythos.mythos.entity.ThunderStorm;
 import com.github.mythos.mythos.registry.skill.Skills;
 import io.github.Memoires.trmysticism.registry.skill.ExtraSkills;
 import net.minecraft.network.chat.Component;
@@ -97,22 +97,22 @@ public class HeavensWrathSkill extends Skill {
     public void onPressed(ManasSkillInstance instance, @NotNull LivingEntity entity) {
         if (instance.getMode() == 2) {
 
-        boolean hasStorm = !entity.getLevel().getEntitiesOfClass(ThunderStorm.class, entity.getBoundingBox(),
+        boolean hasBlizzard = !entity.getLevel().getEntitiesOfClass(BlizzardEntity.class, entity.getBoundingBox(),
                 thunderStorm -> thunderStorm.getOwner() == entity).isEmpty();
 
         if (entity.isShiftKeyDown()) {
 
-            for (ThunderStorm thunderStorm : entity.getLevel().getEntitiesOfClass(ThunderStorm.class, entity.getBoundingBox(),
+            for (BlizzardEntity thunderStorm : entity.getLevel().getEntitiesOfClass(BlizzardEntity.class, entity.getBoundingBox(),
                     b -> b.getOwner() == entity)) {
                 thunderStorm.discard();
             }
         } else {
 
-            if (!hasStorm && !SkillHelper.outOfMagicule(entity, 2000.0F)) {
+            if (!hasBlizzard && !SkillHelper.outOfMagicule(entity, 2000.0F)) {
 
                 SkillHelper.outOfMagicule(entity, 2000.0F);
 
-                ThunderStorm thunderStorm = ThunderStorm.create(entity.getLevel(), entity);
+                BlizzardEntity thunderStorm = new BlizzardEntity(entity.getLevel(), entity);
                 thunderStorm.setOwner(entity);
                 float damage = instance.isMastered(entity) ? 500.0F : 250.0f;
                 thunderStorm.setDamage(damage);
@@ -125,7 +125,6 @@ public class HeavensWrathSkill extends Skill {
 
                 this.addMasteryPoint(instance, entity);
                 instance.setCoolDown(100);
-                instance.getOrCreateTag().putInt("HeldTicks", 0);
                 instance.markDirty();
                 instance.setCoolDown(50);
             }
@@ -134,8 +133,8 @@ public class HeavensWrathSkill extends Skill {
         }
     }
 
-    private boolean hasStorm(LivingEntity owner) {
-        return !owner.getLevel().getEntitiesOfClass(ThunderStorm.class, owner.getBoundingBox(), (thunderStorm) -> {
+    private boolean hasBlizzard(LivingEntity owner) {
+        return !owner.getLevel().getEntitiesOfClass(BlizzardEntity.class, owner.getBoundingBox(), (thunderStorm) -> {
             return thunderStorm.getOwner() == owner;
         }).isEmpty();
     }
