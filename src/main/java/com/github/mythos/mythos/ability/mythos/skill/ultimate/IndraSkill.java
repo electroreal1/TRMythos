@@ -284,9 +284,10 @@ public class IndraSkill extends Skill implements Transformation {
                 if (!hasStorm && !SkillHelper.outOfMagicule(entity, 2000.0F)) {
 
                     SkillHelper.outOfMagicule(entity, 2000.0F);
-
-                    ThunderStorm thunderStorm = new ThunderStorm(entity.getLevel(), entity);
+                    ThunderStorm thunderStorm = ThunderStorm.create(entity.getLevel(), entity);
+                    thunderStorm.setPos(entity.getX(), entity.getY(), entity.getZ());
                     thunderStorm.setOwner(entity);
+                    thunderStorm.noCulling = true;
                     float damage = instance.isMastered(entity) ? 1000.0F : 500.0f;
                     thunderStorm.setDamage(damage);
                     entity.getLevel().addFreshEntity(thunderStorm);

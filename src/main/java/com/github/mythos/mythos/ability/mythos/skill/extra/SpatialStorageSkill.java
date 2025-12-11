@@ -8,6 +8,7 @@ import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.menu.container.SpatialStorageContainer;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;

@@ -9,7 +9,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EntityType.Builder;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -50,19 +49,20 @@ public class MythosEntityTypes {
                         .clientTrackingRange(64)
                         .build(new ResourceLocation("trmythos", "starfall").toString())
         );
-        THUNDER_STORM = registry.register("thunder_storm", () -> {
-            return EntityType.Builder.of((EntityType<ThunderStorm> type, Level level) -> new ThunderStorm(type, level), MobCategory.MISC)
-                    .sized(0.1F, 0.1F)
-                    .clientTrackingRange(64)
-                    .updateInterval(Integer.MAX_VALUE)
-                    .build(new ResourceLocation("tensura", "thunder_storm").toString());
-        });
+        THUNDER_STORM = registry.register("thunder_storm", () ->
+                EntityType.Builder.<ThunderStorm>of(
+                                ThunderStorm::new, MobCategory.MISC)
+                        .sized(0.1f, 0.1f)
+                        .clientTrackingRange(64).updateInterval(Integer.MAX_VALUE)
+                        .build(new ResourceLocation("trmythos", "thunder_storm").toString())
+        );
+
         INTROVERT_BARRIER = registry.register("introvert_barrier",
                         () -> EntityType.Builder.<IntrovertBarrier>of(
                                         IntrovertBarrier::new, MobCategory.MISC)
                                 .sized(1.0f, 1.0f)
                                 .clientTrackingRange(64)
-                                .build(new ResourceLocation("trmythos", "vajra_breath").toString())
+                                .build(new ResourceLocation("trmythos", "introvert_barrier").toString())
         );
     }
 

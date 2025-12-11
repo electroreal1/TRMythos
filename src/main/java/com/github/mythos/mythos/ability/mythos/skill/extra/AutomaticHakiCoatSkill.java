@@ -8,6 +8,7 @@ import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffect;
@@ -31,9 +32,7 @@ public class AutomaticHakiCoatSkill extends Skill {
         Skill HeroHaki = ExtraSkills.HERO_HAKI.get();
         Skill DemonLordHaki = ExtraSkills.DEMON_LORD_HAKI.get();
 
-        if (!SkillUtils.isSkillMastered(entity, HeroHaki) || !SkillUtils.isSkillMastered(entity, DemonLordHaki)) {
-            return false;
-        } else return true;
+        return SkillUtils.isSkillMastered(entity, HeroHaki) || SkillUtils.isSkillMastered(entity, DemonLordHaki);
     }
 
     public double learningCost() {

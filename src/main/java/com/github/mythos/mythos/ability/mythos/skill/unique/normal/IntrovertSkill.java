@@ -3,6 +3,7 @@ package com.github.mythos.mythos.ability.mythos.skill.unique.normal;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.mythos.mythos.entity.IntrovertBarrier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;

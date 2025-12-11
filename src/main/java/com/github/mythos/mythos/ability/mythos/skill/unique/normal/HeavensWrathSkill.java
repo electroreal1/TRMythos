@@ -112,7 +112,7 @@ public class HeavensWrathSkill extends Skill {
 
                 SkillHelper.outOfMagicule(entity, 2000.0F);
 
-                ThunderStorm thunderStorm = new ThunderStorm(entity.getLevel(), entity);
+                ThunderStorm thunderStorm = ThunderStorm.create(entity.getLevel(), entity);
                 thunderStorm.setOwner(entity);
                 float damage = instance.isMastered(entity) ? 500.0F : 250.0f;
                 thunderStorm.setDamage(damage);
