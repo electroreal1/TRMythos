@@ -10,10 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
-@Mixin(
-        value = {SkillHelper.class},
-        priority = 917
-)
+@Mixin({SkillHelper.class})
 public abstract class SkillHelperMixin {
     public SkillHelperMixin() {
     }
