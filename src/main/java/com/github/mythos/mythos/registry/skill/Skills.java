@@ -61,6 +61,7 @@ public class Skills {
     public static final RegistryObject<UnderworldPrince> UNDERWORLD_PRINCE;
     public static final RegistryObject<CommonSenseSkill> COMMON_SENSE;
     public static final RegistryObject<DominateSkill> DOMINATE;
+    public static final RegistryObject<CrimsonOracleSkill> CRIMSON_ORACLE;
     
     // vassal
     public static final RegistryObject<FoundationSkill> FOUNDATION;
@@ -126,6 +127,7 @@ public class Skills {
         UNDERWORLD_PRINCE = registery.register("underworld_prince", () -> new UnderworldPrince(Skill.SkillType.UNIQUE));
         COMMON_SENSE = registery.register("common_sense", () -> new CommonSenseSkill(Skill.SkillType.UNIQUE));
         DOMINATE = registery.register("dominate", () -> new DominateSkill(Skill.SkillType.UNIQUE));
+        CRIMSON_ORACLE = registery.register("crimson_oracle", () -> new CrimsonOracleSkill(Skill.SkillType.UNIQUE));
 
         // vassal series
         UNITY = registery.register("unity", () -> new UnitySkill(Skill.SkillType.UNIQUE));

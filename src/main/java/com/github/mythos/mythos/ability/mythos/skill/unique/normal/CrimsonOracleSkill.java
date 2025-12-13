@@ -1,5 +1,6 @@
 package com.github.mythos.mythos.ability.mythos.skill.unique.normal;
 
+import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
@@ -8,9 +9,11 @@ import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.entity.magic.barrier.DarkCubeEntity;
+import com.github.manasmods.tensura.entity.magic.breath.PredatorMistProjectile;
 import com.github.manasmods.tensura.event.SkillPlunderEvent;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.mythos.mythos.registry.MythosMobEffects;
+import com.github.mythos.mythos.registry.skill.Skills;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -43,6 +46,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class CrimsonOracleSkill extends Skill {
     public CrimsonOracleSkill(SkillType type) {
@@ -143,7 +147,7 @@ public class CrimsonOracleSkill extends Skill {
 
 
     @SubscribeEvent
-    public static void onLivingDeath(LivingDeathEvent event) {
+    public void onLivingDeath(LivingDeathEvent event, LivingEntity entity) {
         LivingEntity target = event.getEntity();
         if (target.level.isClientSide) return;
 
@@ -176,7 +180,23 @@ public class CrimsonOracleSkill extends Skill {
                     world.addParticle(ParticleTypes.SQUID_INK, 0.7, 0.7, 0.7f, 0.7f, 0.2, 0.2);
                 }
             }
+            PredatorMistProjectile breath = new PredatorMistProjectile(entity.getLevel(), entity);
+            breath.setLength(3.0F);
+            ManasSkillInstance crimson = this.getCrimson(entity);
+            breath.setSkill(crimson != null ? crimson : instance);
+            breath.setPos(entity.position().add(0.0, (double) entity.getEyeHeight() * 0.7, 0.0));
+            entity.getLevel().addFreshEntity(breath);
+            entity.getLevel().playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.BLAZE_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F);
+            entity.swing(InteractionHand.MAIN_HAND, true);
+            this.addMasteryPoint(instance, entity);
+            instance.setCoolDown(instance.isMastered(entity) ? 3 : 5);
         }
+    }
+
+    private ManasSkillInstance getCrimson(LivingEntity entity) {
+        SkillStorage storage = SkillAPI.getSkillsFrom(entity);
+        Optional<ManasSkillInstance> CrimsonOptional = storage.getSkill((ManasSkill) Skills.CRIMSON_ORACLE.get());
+        return (ManasSkillInstance)CrimsonOptional.orElse((ManasSkillInstance) null);
     }
 
     @Override
