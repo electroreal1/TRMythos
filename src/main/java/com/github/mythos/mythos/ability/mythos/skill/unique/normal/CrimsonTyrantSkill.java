@@ -71,18 +71,24 @@ public class CrimsonTyrantSkill extends Skill {
         return 3000;
     }
 
-    public void onLearnSkill(ManasSkillInstance instance, LivingEntity entity, UnlockSkillEvent event, Player player) {
-        if (VAMPIRE_ANCESTOR) {
-            TensuraPlayerCapability.getFrom(player).ifPresent((cap) -> {
+    public void onLearnSkill(ManasSkillInstance instance, LivingEntity entity, UnlockSkillEvent event) {
+        if (!(entity instanceof Player player)) return;
+        if (instance.isTemporarySkill()) return;
+        if (!VAMPIRE_ANCESTOR) return;
+        TensuraPlayerCapability.getFrom(player).ifPresent((cap) -> {
+
+                double magicules =  TensuraPlayerCapability.getBaseMagicule(player);
+                double aura = TensuraPlayerCapability.getBaseAura(player);
 
                 Race vampireRace = TensuraRaces.VAMPIRE.get();
                 Race currentRace = cap.getRace();
 
                 if (currentRace != vampireRace) {
                     cap.setRace(player, vampireRace, true);
+                    TensuraPlayerCapability.setAura(player, aura);
+                    TensuraPlayerCapability.setMagicule(player, magicules);
                 }
             });
-        }
     }
 
     public int modes() {

@@ -125,13 +125,18 @@ public class CarnageSkill extends Skill {
     public void onLearnSkill(ManasSkillInstance instance, LivingEntity entity, UnlockSkillEvent event) {
         if (!VAMPIRE_CARNAGE) return;
         if (!(entity instanceof Player player)) return;
+        if (instance.isTemporarySkill()) return;
 
+        double magicules =  TensuraPlayerCapability.getBaseMagicule(player);
+        double aura = TensuraPlayerCapability.getBaseAura(player);
         TensuraPlayerCapability.getFrom(player).ifPresent(cap -> {
             Race baron = TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.VAMPIRE_BARON);
             if (cap.getRace() != baron) {
                 cap.setRace(player, baron, true);
                 player.displayClientMessage(Component.literal("A strange urge gnaws at your sanity. With altered senses, the scent of blood seems evermore mouthwatering.")
                         .withStyle(ChatFormatting.RED), false);
+                TensuraPlayerCapability.setAura(player, aura);
+                TensuraPlayerCapability.setMagicule(player, magicules);
             }
         });
     }
