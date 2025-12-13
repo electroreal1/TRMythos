@@ -30,7 +30,7 @@ import java.io.*;
 @Mod("trmythos")
 public class Mythos {
     public static final String MOD_ID = "trmythos";
-    public static final String MOD_VERSION = "v1.26";
+    public static final String MOD_VERSION = "v1.26.2";
     public static final Logger LOGGER = LogManager.getLogger("trmythos");
     public static final SimpleChannel NETWORK_CHANNEL = NetworkRegistry.newSimpleChannel(new ResourceLocation("trmythos", "network"), () -> {
         return "1.0";
