@@ -104,13 +104,13 @@ public class DikeSkill extends Skill {
         if (instance.getMode() == 3) {
             if (isMastered(instance, living)) {
 
-                if (heldTicks % 20 == 0 && heldTicks <= 100 && living instanceof ServerPlayer player) {
-
-                    int index = heldTicks / 20;
-                    if (index >= GLIMPSE_MESSAGES.length) index = GLIMPSE_MESSAGES.length - 1;
-
-                    player.sendSystemMessage(GLIMPSE_MESSAGES[index]);
-                }
+//                if (heldTicks % 20 == 0 && heldTicks <= 100 && living instanceof ServerPlayer player) {
+//
+//                    int index = heldTicks / 20;
+//                    if (index >= GLIMPSE_MESSAGES.length) index = GLIMPSE_MESSAGES.length - 1;
+//
+//                    player.sendSystemMessage(GLIMPSE_MESSAGES[index]);
+//                }
 
                 if (heldTicks >= 100) {
                     ServerLevel server = (ServerLevel) living.level;
