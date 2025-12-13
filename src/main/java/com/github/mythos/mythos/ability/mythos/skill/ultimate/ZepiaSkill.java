@@ -61,6 +61,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Predicate;
 
+import static com.github.mythos.mythos.config.MythosSkillsConfig.EnableUltimateSkillObtainment;
 
 
 public class ZepiaSkill extends Skill {
@@ -87,6 +88,7 @@ public class ZepiaSkill extends Skill {
     }
 
     public boolean meetEPRequirement(Player player, double newEP) {
+        if (!EnableUltimateSkillObtainment()) return false;
         double currentEP = TensuraEPCapability.getCurrentEP(player);
         if (currentEP < getObtainingEpCost()) {
             return false;

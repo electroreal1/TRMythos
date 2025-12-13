@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.github.mythos.mythos.config.MythosSkillsConfig.ApophisEmbodiment;
+import static com.github.mythos.mythos.config.MythosSkillsConfig.EnableUltimateSkillObtainment;
 
 public class ApophisSkill extends Skill {
     public ApophisSkill(SkillType type) {super(SkillType.ULTIMATE);}
@@ -60,6 +61,7 @@ public class ApophisSkill extends Skill {
     public int getMaxMastery() {return 3000;}
 
     public boolean meetEPRequirement(@NotNull Player player, double newEP) {
+        if (!EnableUltimateSkillObtainment()) return false;
         double currentEP = TensuraEPCapability.getCurrentEP(player);
         if (currentEP < getObtainingEpCost()) {
             return false;

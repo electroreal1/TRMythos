@@ -30,6 +30,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
+import static com.github.mythos.mythos.config.MythosSkillsConfig.EnableUltimateSkillObtainment;
+
 public class NezhaSkill extends Skill {
     public NezhaSkill(SkillType type) {super(SkillType.ULTIMATE);}
 
@@ -43,6 +45,7 @@ public class NezhaSkill extends Skill {
     public double learningCost() {return 2500000;}
 
     public boolean meetEPRequirement(Player entity, double newEP) {
+        if (!EnableUltimateSkillObtainment()) return false;
         return (SkillUtils.isSkillMastered(entity, (ManasSkill) Skills.ETERNAL.get()) && TensuraPlayerCapability.isTrueHero(entity));
     }
 

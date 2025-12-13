@@ -32,6 +32,8 @@ public class MythosUtils extends SkillUtils {
 
     public MythosUtils() {
     }
+
+
     @SubscribeEvent
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         Player player = event.getEntity();

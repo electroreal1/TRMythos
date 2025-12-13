@@ -2,7 +2,6 @@ package com.github.mythos.mythos.ability.mythos.skill.ultimate;
 
 import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
-import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
 import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.SkillUtils;
@@ -11,7 +10,7 @@ import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.ability.skill.extra.ThoughtAccelerationSkill;
 import com.github.manasmods.tensura.ability.skill.intrinsic.CharmSkill;
 import com.github.manasmods.tensura.ability.skill.unique.CookSkill;
-import com.github.manasmods.tensura.capability.effects.TensuraEffectsCapability;
+import com.github.manasmods.tensura.ability.skill.unique.WrathSkill;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.capability.skill.TensuraSkillCapability;
@@ -19,14 +18,11 @@ import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
 import com.github.manasmods.tensura.entity.magic.TensuraProjectile;
 import com.github.manasmods.tensura.entity.magic.barrier.FlareCircleEntity;
 import com.github.manasmods.tensura.entity.magic.projectile.SeveranceCutterProjectile;
-import com.github.manasmods.tensura.event.SkillPlunderEvent;
 import com.github.manasmods.tensura.network.TensuraNetwork;
 import com.github.manasmods.tensura.network.play2client.RequestFxSpawningPacket;
 import com.github.manasmods.tensura.race.Race;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.registry.race.TensuraRaces;
-import com.github.manasmods.tensura.registry.skill.ExtraSkills;
-import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.registry.race.MythosRaces;
 import com.github.mythos.mythos.registry.skill.Skills;
@@ -45,28 +41,22 @@ import net.minecraft.server.players.PlayerList;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.github.manasmods.tensura.ability.skill.unique.WrathSkill;
+
 import java.util.List;
-import java.util.UUID;
-import java.util.function.Predicate;
 
 import static com.github.mythos.mythos.ability.mythos.skill.ultimate.ZepiaSkill.ACCELERATION;
+import static com.github.mythos.mythos.config.MythosSkillsConfig.EnableUltimateSkillObtainment;
 
 public class TatariSkill extends Skill {
 
@@ -87,6 +77,7 @@ public class TatariSkill extends Skill {
         }
 
         public boolean meetEPRequirement(Player player, double newEP) {
+            if (!EnableUltimateSkillObtainment()) return false;
             double currentEP = TensuraEPCapability.getCurrentEP(player);
             if (currentEP < getObtainingEpCost()) {
                 return false;

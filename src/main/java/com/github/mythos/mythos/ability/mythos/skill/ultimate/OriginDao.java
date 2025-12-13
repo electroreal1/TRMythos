@@ -24,6 +24,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
+import static com.github.mythos.mythos.config.MythosSkillsConfig.EnableUltimateSkillObtainment;
+
 public class OriginDao extends Skill {
     protected static final UUID ACCELERATION1 = UUID.fromString("60a06181-8cf6-45e1-b1df-2e69f3544ace");
     protected static final UUID ACCELERATION2 = UUID.fromString("ba91c840-3ea9-497a-93b7-75216523344e");
@@ -43,10 +45,10 @@ public class OriginDao extends Skill {
     }
 
     public boolean meetEPRequirement(Player player, double newEP) {
-        // Check EP using Tensura capability
+        if (!EnableUltimateSkillObtainment()) return false;
         double currentEP = TensuraEPCapability.getCurrentEP(player);
         if (currentEP < getObtainingEpCost()) {
-            return false; // not enough EP
+            return false;
         }
         return SkillUtils.isSkillMastered(player, (ManasSkill) Skills.TRUE_DAO.get());
     }

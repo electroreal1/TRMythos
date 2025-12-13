@@ -22,6 +22,8 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import org.jetbrains.annotations.NotNull;
 
+import static com.github.mythos.mythos.config.MythosSkillsConfig.EnableUltimateSkillObtainment;
+
 public class AresSkill extends Skill {
     public AresSkill(SkillType type) {
         super(SkillType.ULTIMATE);
@@ -33,6 +35,7 @@ public class AresSkill extends Skill {
     }
 
     public boolean meetEPRequirement(@NotNull Player player, double newEP) {
+        if (!EnableUltimateSkillObtainment()) return false;
         double currentEP = TensuraEPCapability.getCurrentEP(player);
         if (currentEP < getObtainingEpCost()) {
             return false;

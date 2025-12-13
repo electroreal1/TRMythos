@@ -13,6 +13,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import org.jetbrains.annotations.NotNull;
 
+import static com.github.mythos.mythos.config.MythosSkillsConfig.EnableUltimateSkillObtainment;
+
 public class VayuSkill extends Skill {
     public VayuSkill(SkillType type) {
         super(SkillType.ULTIMATE);
@@ -23,6 +25,7 @@ public class VayuSkill extends Skill {
     }
 
     public boolean meetEPRequirement(@NotNull Player player, double newEP) {
+        if (!EnableUltimateSkillObtainment()) return false;
         double currentEP = TensuraEPCapability.getCurrentEP(player);
         if (currentEP < getObtainingEpCost()) {
             return false;

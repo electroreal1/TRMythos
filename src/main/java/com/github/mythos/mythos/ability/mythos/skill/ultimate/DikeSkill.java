@@ -30,6 +30,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+import static com.github.mythos.mythos.config.MythosSkillsConfig.EnableUltimateSkillObtainment;
+
 public class DikeSkill extends Skill {
     public DikeSkill(SkillType type) {super(SkillType.ULTIMATE);}
 
@@ -42,11 +44,12 @@ public class DikeSkill extends Skill {
     public double getObtainingEpCost() {return 5000000;}
 
     public boolean meetEPRequirement(@NotNull Player player, double newEP) {
+        if (!EnableUltimateSkillObtainment()) return false;
         double currentEP = TensuraEPCapability.getCurrentEP(player);
         if (currentEP < getObtainingEpCost()) {
             return false;
         }
-        return SkillUtils.isSkillMastered(player, (ManasSkill) Skills.HEAVENS_WRATH.get()) && TensuraPlayerCapability.isTrueHero(player);
+        return SkillUtils.isSkillMastered(player, (ManasSkill) Skills.PURITY_SKILL.get()) && TensuraPlayerCapability.isTrueHero(player);
     }
 
     public boolean canBeToggled(ManasSkillInstance instance, LivingEntity entity) {return true;}

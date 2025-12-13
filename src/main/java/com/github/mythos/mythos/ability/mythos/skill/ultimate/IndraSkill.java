@@ -52,6 +52,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+import static com.github.mythos.mythos.config.MythosSkillsConfig.EnableUltimateSkillObtainment;
+
 public class IndraSkill extends Skill implements Transformation {
     public IndraSkill(SkillType type) {
         super(SkillType.ULTIMATE);
@@ -62,6 +64,7 @@ public class IndraSkill extends Skill implements Transformation {
     }
 
     public boolean meetEPRequirement(@NotNull Player player, double newEP) {
+        if (!EnableUltimateSkillObtainment()) return false;
         double currentEP = TensuraEPCapability.getCurrentEP(player);
         if (currentEP < getObtainingEpCost()) {
             return false;

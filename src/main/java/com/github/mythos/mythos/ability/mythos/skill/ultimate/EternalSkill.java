@@ -11,28 +11,26 @@ import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.ability.skill.extra.ThoughtAccelerationSkill;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
-import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
-import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.manasmods.tensura.registry.skill.UniqueSkills;
 import com.github.mythos.mythos.registry.MythosMobEffects;
-import com.github.mythos.mythos.registry.skill.Skills;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Style;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
-import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.UUID;
+
+import static com.github.mythos.mythos.config.MythosSkillsConfig.EnableUltimateSkillObtainment;
 
 public class EternalSkill extends Skill {
     public EternalSkill(SkillType type) {super(SkillType.ULTIMATE);}
@@ -63,6 +61,7 @@ public class EternalSkill extends Skill {
     }
 
     public boolean meetEPRequirement(Player entity, double newEP) {
+        if (!EnableUltimateSkillObtainment()) return false;
         return (SkillUtils.isSkillMastered(entity, (ManasSkill) UniqueSkills.SURVIVOR.get()) && TensuraPlayerCapability.isTrueDemonLord(entity));
     }
 

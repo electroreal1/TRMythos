@@ -20,8 +20,7 @@ public class MythosSkillsConfig {
     public static ForgeConfigSpec.BooleanValue DeadApostleAncestor;
     public static ForgeConfigSpec.BooleanValue VampireCarnage;
     public static ForgeConfigSpec.BooleanValue CarnageBloodDominion;
-    public static ForgeConfigSpec.BooleanValue enableUniqueEvolution;
-    public static ForgeConfigSpec.BooleanValue loseUniqueOnEvolution;
+    public static ForgeConfigSpec.BooleanValue EnableUltimateSkillObtainment;
     public static ForgeConfigSpec.BooleanValue ApophisEmbodiment;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> racesThatCanCompeteForChildOfThePlane;
     public static ForgeConfigSpec.ConfigValue<List<? extends  String>> GRAM_EXTRA_DAMAGE_RACES;
@@ -134,17 +133,13 @@ public class MythosSkillsConfig {
                 .comment("if true, then carnage will be able to convert players and mobs into the vampire race.")
                 .define("CarnageBloodDominion", true);
 
-        enableUniqueEvolution = builder
-                .comment("if true unique skills from mythos will be able to evolve into their higher forms, i.e Crimson Tyrant into Carnage.")
-                .define("enableUniqueEvolution", true);
-
-        loseUniqueOnEvolution = builder
-                .comment("If true then on evolving a unique skill into a higher form you will lose the previous version of it.")
-                .define("loseUniqueOnEvolution", true);
-
         ApophisEmbodiment = builder
                 .comment("if True Apophis, Lord of Sin will be capable of creating Sin Series Unique Skills once per Mastery.")
                 .define("ApophisEmbodiment", true);
+
+        EnableUltimateSkillObtainment = builder
+                .comment("If true ultimate skill will be obtainable.")
+                .define("EnableUltimateSkillObtainment", true);
 
         racesThatCanCompeteForChildOfThePlane = builder
                 .comment("List of races that can compete for Child of the Plane.")
@@ -214,15 +209,13 @@ public class MythosSkillsConfig {
     public static boolean CarnageBloodDominion() {
         return CarnageBloodDominion.get();
     }
-    public static boolean enableUniqueEvolution() {
-        return enableUniqueEvolution.get();
-    }
-    public static boolean loseUniqueOnEvolution() {
-        return loseUniqueOnEvolution.get();
-    }
     public static boolean ApophisEmbodiment() {
         return ApophisEmbodiment.get();
     }
+    public static boolean EnableUltimateSkillObtainment() {
+        return EnableUltimateSkillObtainment.get();
+    }
+
     public static List<? extends String> getRacesThatCanCompeteForChildOfThePlane() {
         return racesThatCanCompeteForChildOfThePlane.get();
     }

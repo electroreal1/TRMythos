@@ -52,6 +52,7 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.github.mythos.mythos.config.MythosSkillsConfig.EnableUltimateSkillObtainment;
 import static com.github.mythos.mythos.util.damage.MythosDamageSources.DESTROY_RECORD;
 
 public class OrunmilaSkill extends Skill {
@@ -73,6 +74,7 @@ public class OrunmilaSkill extends Skill {
 //    }
 
     public boolean meetEPRequirement(@NotNull Player entity, double newEP) {
+        if (!EnableUltimateSkillObtainment()) return false;
         return SkillUtils.isSkillMastered(entity, (ManasSkill) Skills.OMNISCIENT_EYE.get())
                 && SkillUtils.isSkillMastered(entity, (ManasSkill) ExtraSkills.ALL_SEEING_EYE.get())
                 && SkillUtils.isSkillMastered(entity, (ManasSkill) ExtraSkills.UNIVERSAL_PERCEPTION.get())
