@@ -54,8 +54,6 @@ public class HeavensWrathSkill extends Skill {
         }
     }
 
-
-
     @Override
     public int modes() {
         return 2;

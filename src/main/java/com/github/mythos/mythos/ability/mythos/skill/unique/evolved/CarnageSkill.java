@@ -272,34 +272,18 @@ public class CarnageSkill extends Skill {
         instance.setCoolDown(1200);
     }
 
-    private static void applyModifier(Player player, Attribute attr,
-                                      UUID id, double amount) {
+    private static void applyModifier(Player player, Attribute attr, UUID id, double amount) {
         AttributeInstance inst = player.getAttribute(attr);
         if (inst == null) return;
-
         inst.removeModifier(id);
-
-        inst.addTransientModifier(new AttributeModifier(
-                id,
-                "carnage_bonus",
-                amount,
-                AttributeModifier.Operation.ADDITION
-        ));
+        inst.addTransientModifier(new AttributeModifier(id, "carnage_bonus", amount, AttributeModifier.Operation.ADDITION));
     }
 
     private static void extendOrAddEffect(LivingEntity entity, MobEffect effect, int extra) {
         if (entity == null || effect == null) return;
-
         MobEffectInstance current = entity.getEffect(effect);
         if (current != null) {
-            entity.addEffect(new MobEffectInstance(
-                    effect,
-                    current.getDuration() + extra,
-                    current.getAmplifier(),
-                    current.isAmbient(),
-                    current.isVisible(),
-                    current.showIcon()
-            ));
+            entity.addEffect(new MobEffectInstance(effect, current.getDuration() + extra, current.getAmplifier(), current.isAmbient(), current.isVisible(), current.showIcon()));
         } else {
             entity.addEffect(new MobEffectInstance(effect, extra, 0));
         }

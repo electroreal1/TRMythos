@@ -5,6 +5,7 @@ import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
 import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.SkillUtils;
+import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.entity.magic.barrier.DarkCubeEntity;
 import com.github.manasmods.tensura.event.SkillPlunderEvent;
@@ -52,6 +53,20 @@ public class CrimsonOracleSkill extends Skill {
     public double getObtainingEpCost() {
         return 666666;
     }
+
+    @Override
+    public int getMaxMastery() {
+        return 3000;
+    }
+
+    public int nextMode(LivingEntity entity, TensuraSkillInstance instance, boolean reverse) {
+        if (reverse)
+            return (instance.getMode() == 1) ? 3 : (instance.getMode() - 1);
+        else
+            return (instance.getMode() == 3) ? 1 : (instance.getMode() + 1);
+    }
+
+
 
     public ResourceLocation getSkillIcon() {
         return new ResourceLocation("trmythos", "textures/skill/unique/crimson_oracle.png");

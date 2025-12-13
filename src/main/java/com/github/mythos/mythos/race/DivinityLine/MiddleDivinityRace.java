@@ -3,7 +3,6 @@ package com.github.mythos.mythos.race.DivinityLine;
 import com.github.manasmods.tensura.ability.TensuraSkill;
 import com.github.manasmods.tensura.race.Race;
 import com.github.manasmods.tensura.registry.race.TensuraRaces;
-import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
 import com.github.mythos.mythos.registry.race.MythosRaces;
 import com.mojang.datafixers.util.Pair;
@@ -21,7 +20,7 @@ public class MiddleDivinityRace extends Race {
     public MiddleDivinityRace() {super(Difficulty.EASY);}
 
     @Override
-    public double getBaseHealth() {return 150;}
+    public double getBaseHealth() {return 300;}
 
     @Override
     public double getSpiritualHealthMultiplier() {
