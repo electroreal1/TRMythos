@@ -85,8 +85,8 @@ public class CrimsonTyrantSkill extends Skill {
 
                 if (currentRace != vampireRace) {
                     cap.setRace(player, vampireRace, true);
-                    TensuraPlayerCapability.setAura(player, aura);
-                    TensuraPlayerCapability.setMagicule(player, magicules);
+                    cap.setBaseAura(aura, player);
+                    cap.setBaseMagicule(magicules, player);
                 }
             });
     }

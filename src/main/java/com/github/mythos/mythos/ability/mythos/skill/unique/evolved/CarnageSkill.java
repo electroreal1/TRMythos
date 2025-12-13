@@ -135,8 +135,8 @@ public class CarnageSkill extends Skill {
                 cap.setRace(player, baron, true);
                 player.displayClientMessage(Component.literal("A strange urge gnaws at your sanity. With altered senses, the scent of blood seems evermore mouthwatering.")
                         .withStyle(ChatFormatting.RED), false);
-                TensuraPlayerCapability.setAura(player, aura);
-                TensuraPlayerCapability.setMagicule(player, magicules);
+                cap.setBaseAura(aura, player);
+                cap.setBaseMagicule(magicules, player);
             }
         });
     }
