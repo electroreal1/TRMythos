@@ -2,25 +2,41 @@ package com.github.mythos.mythos.ability.mythos.skill.ultimate;
 
 import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
+import com.github.manasmods.manascore.api.skills.SkillAPI;
+import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
+import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
+import com.github.manasmods.tensura.entity.DirewolfEntity;
+import com.github.manasmods.tensura.entity.magic.beam.BeamProjectile;
+import com.github.manasmods.tensura.entity.variant.DirewolfVariant;
+import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
+import com.github.manasmods.tensura.registry.entity.TensuraEntityTypes;
+import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSources;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.registry.skill.Skills;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -85,32 +101,58 @@ public class DikeSkill extends Skill {
     }
 
     public void onPressed(ManasSkillInstance instance, LivingEntity entity) {
+        Player player;
+        SkillStorage storage;
+        LivingEntity target;
+
         // Invite to Righteousness
         if (instance.getMode() == 1) {
+            if (entity instanceof Player) {
+                player = (Player)entity;
+            } else {
+                return;
+            }
+            target = (LivingEntity) SkillHelper.getTargetingEntity(LivingEntity.class, (LivingEntity)player, 20.0D, 0.0D, false);
+            if (TensuraEPCapability.getPermanentOwner(target) != entity.getUUID())
+                return;
 
+            awakeningSubordinate(target, (Player)entity);
         }
 
-
+        // Annihilation Ray
+        if (instance.getMode() == 2) {
+            CompoundTag tag = instance.getOrCreateTag();
+            instance.getOrCreateTag().putInt("BeamID", 0);
+            instance.markDirty();
+        }
     }
 
     @Override
     public boolean onHeld(ManasSkillInstance instance, LivingEntity living, int heldTicks) {
-
+        // Annihilation Ray
         if (instance.getMode() == 2) {
-
+            if (living instanceof Player) {
+                Player player = (Player)living;
+                if (heldTicks % 100 == 0 && heldTicks > 0)
+                    addMasteryPoint(instance, living);
+                double cost = magiculeCost(living, instance);
+                spawnSolarBeam(player, instance, cost);
+                living.level.playSound((Player)null, living.getX(), living.getY(), living.getZ(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.8F, 0.5F);
+            }
+            return true;
         }
 
         // Glimpse of Heaven
         if (instance.getMode() == 3) {
             if (isMastered(instance, living)) {
 
-//                if (heldTicks % 20 == 0 && heldTicks <= 100 && living instanceof ServerPlayer player) {
-//
-//                    int index = heldTicks / 20;
-//                    if (index >= GLIMPSE_MESSAGES.length) index = GLIMPSE_MESSAGES.length - 1;
-//
-//                    player.sendSystemMessage(GLIMPSE_MESSAGES[index]);
-//                }
+                if (heldTicks % 20 == 0 && heldTicks <= 100 && living instanceof ServerPlayer player) {
+
+                    int index = heldTicks / 20;
+                    if (index >= GLIMPSE_MESSAGES.length) index = GLIMPSE_MESSAGES.length - 1;
+
+                    player.sendSystemMessage(GLIMPSE_MESSAGES[index]);
+                }
 
                 if (heldTicks >= 100) {
                     ServerLevel server = (ServerLevel) living.level;
@@ -137,6 +179,13 @@ public class DikeSkill extends Skill {
         return false;
     }
 
+    public void onRelease(ManasSkillInstance instance, LivingEntity entity, int heldTicks) {
+        super.onRelease(instance, entity, heldTicks);
+        if (instance.getMode() == 2 && !instance.onCoolDown()) {
+            instance.setCoolDown(10);
+        }
+    }
+
     public void onTick(ManasSkillInstance instance, Player player) {
         if (instance.isToggled()) {
             boolean inLight = isInBrightLight(player);
@@ -147,6 +196,42 @@ public class DikeSkill extends Skill {
                 return;
             }
         }
+    }
+
+    private void awakeningSubordinate(LivingEntity target, Player owner) {
+        if (target instanceof Player) {
+            if (TensuraPlayerCapability.isTrueDemonLord((Player)target)) {
+                owner.sendSystemMessage(
+                        (Component)Component.translatable("tensura.evolve.demon_lord.already")
+                                .withStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
+                return;
+            }
+            if (TensuraPlayerCapability.isTrueHero(target)) {
+                owner.sendSystemMessage(
+                        (Component)Component.translatable("tensura.evolve.demon_lord.hero")
+                                .withStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
+                return;
+            }
+            TensuraPlayerCapability.getFrom(owner).ifPresent(ownerCap -> {
+                double ownerMp = ownerCap.getBaseMagicule();
+                double awakeningMpCost = 10000000.0;
+                if (ownerMp < awakeningMpCost) {
+                    owner.sendSystemMessage((Component)Component.translatable("trmythos.skill.mode.dike.not_enough_mp").withStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
+                    return;
+                }
+                TensuraPlayerCapability.getFrom((Player)target).ifPresent(());
+            });
+        }
+    }
+
+    private void spawnSolarBeam(Player player, ManasSkillInstance instance, double cost) {
+        if (player.hasEffect((MobEffect) TensuraMobEffects.MAGIC_INTERFERENCE.get())) {
+            player.displayClientMessage((Component)Component.translatable("tensura.skill.magic_interference")
+                    .withStyle(Style.EMPTY.withColor(ChatFormatting.GREEN)), true);
+            return;
+        }
+        BeamProjectile.spawnLastingBeam((EntityType) TensuraEntityTypes.SOLAR_BEAM.get(), 500.0F, 2.0F, (LivingEntity)player, instance, cost, cost, 0);
+
     }
 
     public static boolean isInBrightLight(Player player) {
@@ -199,7 +284,6 @@ public class DikeSkill extends Skill {
             }
         }
     }
-
 
     private void holyChargeParticles(LivingEntity living, int heldTicks) {
         Level level = living.level;

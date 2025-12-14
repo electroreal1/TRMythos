@@ -11,15 +11,18 @@ import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.ability.skill.intrinsic.CharmSkill;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
+import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
 import com.github.manasmods.tensura.network.TensuraNetwork;
 import com.github.manasmods.tensura.network.play2client.RequestFxSpawningPacket;
 import com.github.manasmods.tensura.registry.skill.UniqueSkills;
 import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
 import com.github.mythos.mythos.registry.skill.Skills;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -117,6 +120,8 @@ public class ApophisSkill extends Skill {
     }
 
     public void onPressed(ManasSkillInstance instance, LivingEntity entity) {
+        Player player;
+        LivingEntity target;
         // Indoctrination
         if (instance.getMode() == 1) {
             CharmSkill.charm(instance, entity);
@@ -124,7 +129,16 @@ public class ApophisSkill extends Skill {
 
         // Capitulate to Heresy
         if (instance.getMode() == 2) {
+            if (entity instanceof Player) {
+                player = (Player)entity;
+            } else {
+                return;
+            }
+            target = (LivingEntity)SkillHelper.getTargetingEntity(LivingEntity.class, (LivingEntity)player, 20.0D, 0.0D, false);
+            if (TensuraEPCapability.getPermanentOwner(target) != entity.getUUID())
+                return;
 
+            harvestFestivalSubordinate(target, (Player)entity);
         }
 
         // Embodiment of Sin
@@ -189,7 +203,7 @@ public class ApophisSkill extends Skill {
                     double ep = TensuraEPCapability.getEP(entity);
                     if (ep <= 0) return true;
 
-                    // Damage = 1 point per 10000 EP
+                    // Damage = 1 point per 5000 EP
                     float damagePerSecond = (float) (ep / 5000.0);
 
                     for (LivingEntity target : targets) {
@@ -225,26 +239,56 @@ public class ApophisSkill extends Skill {
         }
     }
 
-    public void onTakenDamage(ManasSkillInstance instance, LivingDamageEvent event) {
-        if (event.isCanceled())
-            return;
+    public void onEntityHurt(LivingHurtEvent event, ManasSkillInstance instance, Player player) {
+        if (isInSlot(player)) {
+            LivingEntity target = event.getEntity();
+            DamageSource source = event.getSource();
+            float amount = event.getAmount();
 
-        DamageSource source = event.getSource();
-        LivingEntity target = event.getEntity();
+            if ((DamageSourceHelper.isDarkDamage(source)) || (DamageSourceHelper.isTensuraMagic(source))) {
+                event.setCanceled(true);
 
-        boolean isMagic = DamageSourceHelper.isTensuraMagic(source);
-        boolean isDarkness = DamageSourceHelper.isDarkDamage(source);
+                applyHealth(target, amount);
+            }
 
-        float incoming = event.getAmount();
-        if (incoming <= 0f) return;
+            if ((DamageSourceHelper.isLightDamage(source)) || (DamageSourceHelper.isHoly(source))) {
+                amount = event.getAmount() * 2.0F;
+            }
 
-        if (isMagic || isDarkness) {
-            float overheal = incoming * 0.5f;
-            float currentAbs = target.getAbsorptionAmount();
-            float newAbs = currentAbs + overheal;
-            target.setAbsorptionAmount(newAbs);
+            if (event.getSource().isMagic()) {
+                event.setAmount(event.getAmount() * 0.25f);
+            }
         }
     }
 
+    private static void applyHealth(LivingEntity entity, float amount) {
+        float currentAbsorption = entity.getAbsorptionAmount();
+        entity.setAbsorptionAmount(currentAbsorption + amount);
+    }
 
+    private void harvestFestivalSubordinate(LivingEntity target, Player owner) {
+        if (target instanceof Player) {
+            if (TensuraPlayerCapability.isTrueDemonLord((Player)target)) {
+                owner.sendSystemMessage(
+                        (Component)Component.translatable("tensura.evolve.demon_lord.already")
+                                .withStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
+                return;
+            }
+            if (TensuraPlayerCapability.isTrueHero(target)) {
+                owner.sendSystemMessage(
+                        (Component)Component.translatable("tensura.evolve.demon_lord.hero")
+                                .withStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
+                return;
+            }
+            TensuraPlayerCapability.getFrom(owner).ifPresent(ownerCap -> {
+                int ownerSoulPoints = ownerCap.getSoulPoints();
+                int harvestFestivalCost = 100000;
+                if (ownerSoulPoints < harvestFestivalCost) {
+                    owner.sendSystemMessage((Component)Component.translatable("trmythos.skill.mode.apophis.not_enough_souls", new Object[] { Integer.valueOf(harvestFestivalCost / 1000) }).withStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
+                    return;
+                }
+                TensuraPlayerCapability.getFrom((Player)target).ifPresent(());
+            });
+        }
+    }
 }
