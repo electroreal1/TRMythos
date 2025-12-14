@@ -201,25 +201,26 @@ public class DikeSkill extends Skill {
     private void awakeningSubordinate(LivingEntity target, Player owner) {
         if (target instanceof Player) {
             if (TensuraPlayerCapability.isTrueDemonLord((Player)target)) {
-                owner.sendSystemMessage(
-                        (Component)Component.translatable("tensura.evolve.demon_lord.already")
-                                .withStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
+                owner.displayClientMessage(Component.translatable("tensura.evolve.demon_lord.already").setStyle(Style.EMPTY.withColor(ChatFormatting.RED)), false);
                 return;
             }
+
             if (TensuraPlayerCapability.isTrueHero(target)) {
-                owner.sendSystemMessage(
-                        (Component)Component.translatable("tensura.evolve.demon_lord.hero")
-                                .withStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
+                owner.displayClientMessage(Component.translatable("tensura.evolve.demon_lord.hero").setStyle(Style.EMPTY.withColor(ChatFormatting.RED)), false);
                 return;
             }
-            TensuraPlayerCapability.getFrom(owner).ifPresent(ownerCap -> {
-                double ownerMp = ownerCap.getBaseMagicule();
-                double awakeningMpCost = 10000000.0;
-                if (ownerMp < awakeningMpCost) {
-                    owner.sendSystemMessage((Component)Component.translatable("trmythos.skill.mode.dike.not_enough_mp").withStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
-                    return;
+
+            TensuraPlayerCapability.getFrom(owner).ifPresent((ownerCap) -> {
+                double ownerMaxMagicules = ownerCap.getBaseMagicule();
+                double awakeningMpCost = 10000000.0F;
+                if (ownerMaxMagicules < awakeningMpCost) {
+                    owner.displayClientMessage(Component.translatable("trmythos.skill.mode.dike.not_enough_mp", new Object[]{awakeningMpCost / 1000}).setStyle(Style.EMPTY.withColor(ChatFormatting.RED)), false);
+                } else {
+                    TensuraPlayerCapability.getFrom((Player)target).ifPresent((cap) -> {
+                            ownerCap.setMagicule(ownerCap.getBaseMagicule() - awakeningMpCost);
+                            RaceHelper.awakening((Player)target, true);
+                    });
                 }
-                TensuraPlayerCapability.getFrom((Player)target).ifPresent(());
             });
         }
     }
@@ -345,6 +346,7 @@ public class DikeSkill extends Skill {
             Component.literal("§bThe heavens unfold, revealing their boundless, radiant truth."),
             Component.literal("§dGlimpse of Heaven.")
     };
+
 
 
 }
