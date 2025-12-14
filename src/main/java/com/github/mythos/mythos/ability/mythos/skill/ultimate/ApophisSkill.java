@@ -269,26 +269,28 @@ public class ApophisSkill extends Skill {
     private void harvestFestivalSubordinate(LivingEntity target, Player owner) {
         if (target instanceof Player) {
             if (TensuraPlayerCapability.isTrueDemonLord((Player)target)) {
-                owner.sendSystemMessage(
-                        (Component)Component.translatable("tensura.evolve.demon_lord.already")
-                                .withStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
+                owner.displayClientMessage(Component.translatable("tensura.evolve.demon_lord.already").setStyle(Style.EMPTY.withColor(ChatFormatting.RED)), false);
                 return;
             }
+
             if (TensuraPlayerCapability.isTrueHero(target)) {
-                owner.sendSystemMessage(
-                        (Component)Component.translatable("tensura.evolve.demon_lord.hero")
-                                .withStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
+                owner.displayClientMessage(Component.translatable("tensura.evolve.demon_lord.hero").setStyle(Style.EMPTY.withColor(ChatFormatting.RED)), false);
                 return;
             }
-            TensuraPlayerCapability.getFrom(owner).ifPresent(ownerCap -> {
+
+            TensuraPlayerCapability.getFrom(owner).ifPresent((ownerCap) -> {
                 int ownerSoulPoints = ownerCap.getSoulPoints();
                 int harvestFestivalCost = 100000;
                 if (ownerSoulPoints < harvestFestivalCost) {
-                    owner.sendSystemMessage((Component)Component.translatable("trmythos.skill.mode.apophis.not_enough_souls", new Object[] { Integer.valueOf(harvestFestivalCost / 1000) }).withStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
-                    return;
+                    owner.displayClientMessage(Component.translatable("trmythos.skill.mode.apophis.not_enough_souls", new Object[]{harvestFestivalCost / 1000}).setStyle(Style.EMPTY.withColor(ChatFormatting.RED)), false);
+                } else {
+                    TensuraPlayerCapability.getFrom((Player)target).ifPresent((cap) -> {
+                        ownerCap.setSoulPoints(ownerCap.getSoulPoints() - harvestFestivalCost);
+                        RaceHelper.awakening((Player)target, false);
+                    });
                 }
-                TensuraPlayerCapability.getFrom((Player)target).ifPresent(());
             });
         }
     }
 }
+
