@@ -13,6 +13,7 @@ import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.entity.DirewolfEntity;
 import com.github.manasmods.tensura.entity.magic.beam.BeamProjectile;
 import com.github.manasmods.tensura.entity.variant.DirewolfVariant;
+import com.github.manasmods.tensura.race.RaceHelper;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.registry.entity.TensuraEntityTypes;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
@@ -350,3 +351,4 @@ public class DikeSkill extends Skill {
 
 
 }
+
