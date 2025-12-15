@@ -329,7 +329,7 @@ public class CrimsonOracleSkill extends Skill implements Transformation {
                         int amplifier = player.getServer().getPlayerList().getPlayerCount();
 
                         entity.addEffect(new MobEffectInstance(
-                                (MobEffect) MythosMobEffects.CHILD_OF_THE_PLANE.get(),
+                                (MobEffect) MythosMobEffects.ULTIMATE_VILLAIN.get(),
                                 this.isMastered(instance, entity) ? 7200 : 3600,
                                 amplifier,
                                 false,
