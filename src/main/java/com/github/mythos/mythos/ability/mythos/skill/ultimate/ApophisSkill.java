@@ -19,6 +19,7 @@ import com.github.manasmods.tensura.race.RaceHelper;
 import com.github.manasmods.tensura.registry.skill.UniqueSkills;
 import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
 import com.github.mythos.mythos.registry.skill.Skills;
+import io.github.Memoires.trmysticism.util.damage.MysticismDamageSources;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -31,7 +32,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
@@ -161,7 +161,7 @@ public class ApophisSkill extends Skill {
                         instance.setMastery(0);
                     }
 
-                    entity.sendSystemMessage(Component.literal("You have acquired the Sin Series Skill: " + chosenSkill));
+                    entity.sendSystemMessage(Component.literal("You have acquired the Sin Series Skill: " + chosenSkill.getName()));
 
                     storage.syncAll();
 
@@ -178,11 +178,9 @@ public class ApophisSkill extends Skill {
         if (level.isClientSide) return true;
         if (instance.getMode() == 3) {
 
-            // Every second
             if (heldTicks % 20 == 0) {
                 if (SkillHelper.outOfMagicule(entity, instance)) return false;
 
-                // Play aura sound & spawn FX
                 level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
                         SoundEvents.WARDEN_HEARTBEAT, SoundSource.PLAYERS, 1.0F, 0.8F);
 
@@ -193,7 +191,6 @@ public class ApophisSkill extends Skill {
                                 entity.getId(), 0.0, 1.0, 0.0, true)
                 );
 
-                // Find targets in a 10-block radius
                 List<LivingEntity> targets = level.getEntitiesOfClass(
                         LivingEntity.class,
                         entity.getBoundingBox().inflate(10.0),
@@ -204,21 +201,18 @@ public class ApophisSkill extends Skill {
                     double ep = TensuraEPCapability.getEP(entity);
                     if (ep <= 0) return true;
 
-                    // Damage = 1 point per 5000 EP
                     float damagePerSecond = (float) (ep / 5000.0);
 
                     for (LivingEntity target : targets) {
                         if (target instanceof Player p && p.getAbilities().invulnerable) continue;
 
-                        // Apply void damage
-                        target.hurt(DamageSource.OUT_OF_WORLD, damagePerSecond);
+                        target.hurt(MysticismDamageSources.destroyerHaki(entity), damagePerSecond);
 
                         TensuraParticleHelper.addServerParticlesAroundSelf(target, ParticleTypes.SMOKE, 1.0);
                     }
                 }
             }
 
-            // Add mastery every 3 seconds
             if (heldTicks % 60 == 0 && heldTicks > 0) {
                 this.addMasteryPoint(instance, entity);
             }
@@ -252,7 +246,7 @@ public class ApophisSkill extends Skill {
                 applyHealth(target, amount);
             }
 
-            if ((DamageSourceHelper.isLightDamage(source)) || (DamageSourceHelper.isHoly(source))) {
+            if ((DamageSourceHelper.isDarkDamage(source))) {
                 amount = event.getAmount() * 2.0F;
             }
 

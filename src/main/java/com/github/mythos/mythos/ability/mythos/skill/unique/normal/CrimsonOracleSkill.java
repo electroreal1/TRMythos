@@ -8,13 +8,18 @@ import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
+import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
+import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
+import com.github.manasmods.tensura.effect.template.Transformation;
 import com.github.manasmods.tensura.entity.magic.barrier.DarkCubeEntity;
 import com.github.manasmods.tensura.entity.magic.breath.PredatorMistProjectile;
 import com.github.manasmods.tensura.event.SkillPlunderEvent;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
+import com.github.manasmods.tensura.registry.particle.TensuraParticles;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.registry.skill.Skills;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -48,7 +53,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class CrimsonOracleSkill extends Skill {
+public class CrimsonOracleSkill extends Skill implements Transformation {
     public CrimsonOracleSkill(SkillType type) {
         super(SkillType.UNIQUE);
     }
@@ -155,7 +160,6 @@ public class CrimsonOracleSkill extends Skill {
 
         SkillStorage targetStorage = SkillAPI.getSkillsFrom(target);
         SkillStorage ownerStorage = SkillAPI.getSkillsFrom(player);
-
         List<ManasSkillInstance> targetSkills = new ArrayList<>(targetStorage.getLearnedSkills());
         for (ManasSkillInstance instance : targetSkills) {
             if (instance.getMode() != 1) return;
@@ -186,12 +190,13 @@ public class CrimsonOracleSkill extends Skill {
             breath.setSkill(crimson != null ? crimson : instance);
             breath.setPos(entity.position().add(0.0, (double) entity.getEyeHeight() * 0.7, 0.0));
             entity.getLevel().addFreshEntity(breath);
-            entity.getLevel().playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.BLAZE_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F);
+            entity.getLevel().playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.BLAZE_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F);
             entity.swing(InteractionHand.MAIN_HAND, true);
             this.addMasteryPoint(instance, entity);
             instance.setCoolDown(instance.isMastered(entity) ? 3 : 5);
         }
     }
+
 
     private ManasSkillInstance getCrimson(LivingEntity entity) {
         SkillStorage storage = SkillAPI.getSkillsFrom(entity);
@@ -218,9 +223,9 @@ public class CrimsonOracleSkill extends Skill {
 
     @Override
     public void onTick(ManasSkillInstance instance, LivingEntity living) {
-        if (!living.hasEffect((MobEffect)TensuraMobEffects.PRESENCE_SENSE.get())) {
-            living.addEffect(new MobEffectInstance((MobEffect)TensuraMobEffects.TRUE_BLINDNESS.get(), 40, 0, false, false, false));
-            living.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 40, 0, false, false, false));
+        if (!living.hasEffect((MobEffect)TensuraMobEffects.PRESENCE_SENSE.get()) || !living.hasEffect((MobEffect)TensuraMobEffects.TRUE_BLINDNESS.get())) {
+            living.addEffect(new MobEffectInstance((MobEffect)TensuraMobEffects.TRUE_BLINDNESS.get(), 600, 0, false, false, false));
+            living.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 600, 0, false, false, false));
         }
     }
 
@@ -229,8 +234,40 @@ public class CrimsonOracleSkill extends Skill {
         return 3;
     }
 
+    public Component getModeName(int mode) {
+        MutableComponent var10000;
+        switch (mode) {
+            case 1:
+                var10000 = Component.translatable("trmythos.skill.crimson_oracle.maw");
+                break;
+            case 2:
+                var10000 = Component.translatable("trmythos.skill.crimson_oracle.veil");
+                break;
+            case 3:
+                var10000 = Component.translatable("trmythos.skill.crimson_oracle.ultimate_villain");
+                break;
+            default:
+                var10000 = Component.empty();
+        }
+
+        return var10000;
+    }
+
     @Override
     public void onPressed(ManasSkillInstance instance, LivingEntity entity) {
+        if (instance.getMode() == 1) {
+            PredatorMistProjectile breath = new PredatorMistProjectile(entity.getLevel(), entity);
+            breath.setLength(3.0F);
+            ManasSkillInstance crimson = this.getCrimson(entity);
+            breath.setSkill(crimson != null ? crimson : instance);
+            breath.setPos(entity.position().add(0.0, (double) entity.getEyeHeight() * 0.7, 0.0));
+            entity.getLevel().addFreshEntity(breath);
+            entity.getLevel().playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.BLAZE_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F);
+            entity.swing(InteractionHand.MAIN_HAND, true);
+            this.addMasteryPoint(instance, entity);
+            instance.setCoolDown(instance.isMastered(entity) ? 3 : 5);
+        }
+
         if (instance.getMode() == 2) {
             if (!SkillHelper.outOfMagicule(entity, instance)) {
                 entity.swing(InteractionHand.MAIN_HAND, true);
@@ -264,6 +301,52 @@ public class CrimsonOracleSkill extends Skill {
 
                 instance.setCoolDown(instance.isMastered(entity) ? 2 : 4);
                 instance.markDirty();
+            }
+        }
+
+        if (instance.getMode() == 3) {
+            if (!this.failedToActivate(entity, (MobEffect) MythosMobEffects.ULTIMATE_VILLAIN.get())) {
+                if (!entity.hasEffect((MobEffect)MythosMobEffects.ULTIMATE_VILLAIN.get())) {
+                    if (SkillHelper.outOfMagicule(entity, instance)) {
+                        return;
+                    }
+
+                    this.addMasteryPoint(instance, entity);
+                    instance.setCoolDown(1200);
+                    entity.setHealth(entity.getHealth() * 2.0F);
+                    if (entity instanceof Player) {
+                        Player player = (Player)entity;
+                        TensuraPlayerCapability.getFrom(player).ifPresent((cap) -> {
+                            cap.setMagicule(cap.getMagicule() * 2.0);
+                            cap.setAura(cap.getAura() * 2.0);
+                            TensuraPlayerCapability.sync(player);
+                        });
+                    }
+
+                    entity.getLevel().playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.PLAYERS, 1.0F, 1.0F);
+
+                    if (entity instanceof Player player) {
+                        int amplifier = player.getServer().getPlayerList().getPlayerCount();
+
+                        entity.addEffect(new MobEffectInstance(
+                                (MobEffect) MythosMobEffects.CHILD_OF_THE_PLANE.get(),
+                                this.isMastered(instance, entity) ? 7200 : 3600,
+                                amplifier,
+                                false,
+                                false,
+                                false
+                        ));
+                    }
+
+                    TensuraParticleHelper.addServerParticlesAroundSelf(entity, ParticleTypes.POOF, 3.0);
+                    TensuraParticleHelper.addServerParticlesAroundSelf(entity, ParticleTypes.EXPLOSION, 3.0);
+                    TensuraParticleHelper.addServerParticlesAroundSelf(entity, (ParticleOptions) TensuraParticles.SOLAR_FLASH.get(), 2.0);
+                    TensuraParticleHelper.spawnServerParticles(entity.level, (ParticleOptions)TensuraParticles.DARK_RED_LIGHTNING_SPARK.get(), entity.getX(), entity.getY(), entity.getZ(), 55, 0.08, 0.08, 0.08, 0.5, true);
+                } else {
+                    entity.removeEffect((MobEffect)MythosMobEffects.ULTIMATE_VILLAIN.get());
+                    entity.getLevel().playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.BEACON_DEACTIVATE, SoundSource.PLAYERS, 1.0F, 1.0F);
+                }
+
             }
         }
     }
