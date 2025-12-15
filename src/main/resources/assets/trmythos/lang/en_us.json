@@ -117,7 +117,8 @@
   "trmythos.skill.mode.dike.annihilation_ray": "Annihilation Ray",
   "trmythos.skill.mode.dike.glimpse_of_heaven": "Glimpse of Heaven",
   "trmythos.skill.dike.awakening": "Drenched in purity, cleansed by light, you feel your spirit elevate to a level unfamiliar to you... You've become a True Hero.",
-
+  "trmythos.skill.mode.dike.not_enough_mp": "The world grows brighter, but only for a moment... Your target only grazed the edges of true grace; not a fault of their own, but yours. You lack the magicules required to awaken your subordinate.",
+  
   "trmythos.skill.saint": "Saint",
   "trmythos.skill.saint.description": "Ho Ho Ho merry christmas.",
   "trmythos.skill.mode.saint.gift_giving": "Gift Giving,",
@@ -178,7 +179,8 @@
   "trmythos.skill.mode.apophis.envoy": "Envoy",
   "trmythos.skill.mode.apophis.embodiment_of_sin": "Embodiment of Sin",
   "trmythos.skill.apophis.awakening": "You feel yourself sinking ever deeper into the abyssal depths of depravity, yet something in you still hungers for more... You've awakened as a True Demon Lord.",
-
+  "trmythos.skill.mode.apophis.not_enough_souls": "Energy surges around you and your subordinate. The souls you've collected thus far weil in protest of your actions, yet, it seems they aren't loud enough. It seems you lack the souls to awaken your subordinate.",
+  
   "trmythos.skill.paranoia": "§0Paranoia",
   "trmythos.skill.paranoia.description": "A shift in your mind has turned your pleasant, comforting dreams into horrible nightmares. Your paranoia manages to bring these horrors into reality.",
   "trmythos.skill.paranoia.dragonfire": "Dream of Dragonfire",
