@@ -28,10 +28,6 @@ public class VajraBreathProjectile extends BreathEntity {
         this.setOwner(entity);
     }
 
-    public void tick() {
-        super.tick();
-    }
-
     protected void onHitEntity(EntityHitResult entityHitResult) {
         Entity entity = entityHitResult.getEntity();
         entity.setSecondsOnFire(5);
@@ -60,7 +56,7 @@ public class VajraBreathProjectile extends BreathEntity {
                 Vec3 result = var21.scale(3.0).add(randomVec).normalize().scale(speed);
                 owner.getLevel().addParticle((ParticleOptions) TensuraParticles.LIGHTNING_EFFECT.get(), x + ox, y + oy, z + oz, result.x, result.y, result.z);
             }
+
         }
     }
-
 }
