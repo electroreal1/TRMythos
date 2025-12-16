@@ -46,7 +46,7 @@ public class DeusExMachinaRace extends Race {
 
     @Override
     public double getJumpHeight() {
-        return 5.5;
+        return 4;
     }
 
     @Override

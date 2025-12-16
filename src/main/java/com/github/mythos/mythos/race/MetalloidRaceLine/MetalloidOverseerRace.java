@@ -7,7 +7,6 @@ import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.mythos.mythos.registry.race.MythosRaces;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +48,7 @@ public class MetalloidOverseerRace extends Race {
 
     @Override
     public double getJumpHeight() {
-        return 4;
+        return 2.5;
     }
 
     @Override
