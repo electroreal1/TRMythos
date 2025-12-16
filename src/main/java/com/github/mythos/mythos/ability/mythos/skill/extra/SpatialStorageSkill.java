@@ -53,4 +53,5 @@ public class SpatialStorageSkill extends Skill implements ISpatialStorage {
         container.fromTag(instance.getOrCreateTag().getList("SpatialStorage", 10));
         return container;
     }
+
 }

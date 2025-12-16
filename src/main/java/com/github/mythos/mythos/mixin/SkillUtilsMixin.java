@@ -2,6 +2,8 @@ package com.github.mythos.mythos.mixin;
 
 import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
+import com.github.manasmods.manascore.api.skills.SkillAPI;
+import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.magic.Magic;
 import com.github.mythos.mythos.ability.confluence.skill.unique.ConfluenceUniques;
@@ -17,6 +19,8 @@ import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+
+import java.util.Optional;
 
 import static com.github.manasmods.tensura.ability.SkillUtils.isSkillToggled;
 import static com.github.manasmods.tensura.capability.skill.TensuraSkillCapability.isSkillInSlot;
@@ -69,7 +73,9 @@ public abstract class SkillUtilsMixin {
         if (hasSkill(entity, (ManasSkill)Skills.DEMONOLOGIST.get())) {
             point += 5;
         }
-
+        if (hasSkill(entity, (ManasSkill)Skills.SAGITTARIUS.get())) {
+            point += 8;
+        }
 
         return point;
     }
@@ -105,6 +111,9 @@ public abstract class SkillUtilsMixin {
         }
         if (hasSkill(entity, (ManasSkill)Skills.DEMONOLOGIST.get())) {
             point += 5;
+        }
+        if (hasSkill(entity, (ManasSkill)Skills.SAGITTARIUS.get())) {
+            point += 8;
         }
 
 
@@ -161,6 +170,22 @@ public abstract class SkillUtilsMixin {
 
 
         return original;
+    }
+
+
+    @ModifyReturnValue(
+            method = {"hasWarpShot"},
+            at = {@At("RETURN")},
+            remap = false
+    )
+    private static boolean trmythos$hasWarpShot(boolean original, LivingEntity entity) {
+        SkillStorage storage = SkillAPI.getSkillsFrom(entity);
+        Optional<ManasSkillInstance> sagittarius = storage.getSkill((ManasSkill) Skills.SAGITTARIUS.get());
+        if (sagittarius.isPresent()) {
+            return true;
+        } else {
+            return original;
+        }
     }
 
     @ModifyReturnValue(

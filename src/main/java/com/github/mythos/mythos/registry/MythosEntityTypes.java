@@ -1,6 +1,7 @@
 package com.github.mythos.mythos.registry;
 
 import com.github.mythos.mythos.entity.IntrovertBarrier;
+import com.github.mythos.mythos.entity.ThunderStorm;
 import com.github.mythos.mythos.entity.projectile.DragonFireBreathProjectile;
 import com.github.mythos.mythos.entity.projectile.StarFallProjectile;
 import com.github.mythos.mythos.entity.projectile.VajraBreathProjectile;
@@ -17,7 +18,7 @@ public class MythosEntityTypes {
 
     private static final DeferredRegister<EntityType<?>> registry;
     public static final RegistryObject<EntityType<DragonFireBreathProjectile>> DRAGONFIRE;
-//    public static final RegistryObject<EntityType<ThunderStorm>> THUNDER_STORM;
+    public static final RegistryObject<EntityType<ThunderStorm>> THUNDER_STORM;
     public static final RegistryObject<EntityType<VajraBreathProjectile>> VAJRA_BREATH;
     public static final RegistryObject<EntityType<IntrovertBarrier>> INTROVERT_BARRIER;
     public static final RegistryObject<EntityType<StarFallProjectile>> STARFALL;
@@ -39,30 +40,25 @@ public class MythosEntityTypes {
                                 VajraBreathProjectile::new, MobCategory.MISC)
                         .sized(1.0f, 1.0f)
                         .clientTrackingRange(64)
-                        .build(new ResourceLocation("trmythos", "vajra_breath").toString())
-        );
+                        .build(new ResourceLocation("trmythos", "vajra_breath").toString()));
        STARFALL = registry.register("starfall",
                 () -> EntityType.Builder.<StarFallProjectile>of(
                                 StarFallProjectile::new, MobCategory.MISC)
                         .sized(1.0f, 1.0f)
                         .clientTrackingRange(64)
-                        .build(new ResourceLocation("trmythos", "starfall").toString())
-        );
-//        THUNDER_STORM = registry.register("thunder_storm", () ->
-//                EntityType.Builder.<ThunderStorm>of(
-//                                ThunderStorm::new, MobCategory.MISC)
-//                        .sized(0.1f, 0.1f)
-//                        .clientTrackingRange(64).updateInterval(Integer.MAX_VALUE)
-//                        .build(new ResourceLocation("trmythos", "thunder_storm").toString())
-//        );
-
+                        .build(new ResourceLocation("trmythos", "starfall").toString()));
+        THUNDER_STORM = registry.register("thunder_storm", () ->
+                EntityType.Builder.<ThunderStorm>of(
+                                ThunderStorm::new, MobCategory.MISC)
+                        .sized(0.1f, 0.1f)
+                        .clientTrackingRange(64).updateInterval(Integer.MAX_VALUE)
+                        .build(new ResourceLocation("trmythos", "thunder_storm").toString()));
         INTROVERT_BARRIER = registry.register("introvert_barrier",
                         () -> EntityType.Builder.<IntrovertBarrier>of(
                                         IntrovertBarrier::new, MobCategory.MISC)
                                 .sized(1.0f, 1.0f)
                                 .clientTrackingRange(64)
-                                .build(new ResourceLocation("trmythos", "introvert_barrier").toString())
-        );
+                                .build(new ResourceLocation("trmythos", "introvert_barrier").toString()));
     }
 
 

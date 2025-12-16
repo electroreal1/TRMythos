@@ -69,7 +69,7 @@ public class HeavensWrathSkill extends Skill {
 
     public int nextMode(@NotNull LivingEntity entity, TensuraSkillInstance instance, boolean reverse) {
         if (instance.isMastered(entity)) {
-            return instance.getMode() == 3 ? 1 : instance.getMode() + 1;
+            return instance.getMode() == 2 ? 1 : instance.getMode() + 1;
         } else {
             return instance.getMode() == 1 ? 2 : 1;
         }

@@ -15,6 +15,7 @@ import com.github.mythos.mythos.ability.mythos.skill.unique.vassal_line.BalanceS
 import com.github.mythos.mythos.ability.mythos.skill.unique.vassal_line.EvolutionSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.vassal_line.FoundationSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.vassal_line.UnitySkill;
+import com.github.mythos.mythos.ability.mythos.skill.unique.zodiac_line.SagittariusSkill;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
@@ -62,6 +63,7 @@ public class Skills {
     public static final RegistryObject<CommonSenseSkill> COMMON_SENSE;
     public static final RegistryObject<DominateSkill> DOMINATE;
     public static final RegistryObject<CrimsonOracleSkill> CRIMSON_ORACLE;
+    public static final RegistryObject<SagittariusSkill> SAGITTARIUS;
     
     // vassal
     public static final RegistryObject<FoundationSkill> FOUNDATION;
@@ -128,6 +130,7 @@ public class Skills {
         COMMON_SENSE = registery.register("common_sense", () -> new CommonSenseSkill(Skill.SkillType.UNIQUE));
         DOMINATE = registery.register("dominate", () -> new DominateSkill(Skill.SkillType.UNIQUE));
         CRIMSON_ORACLE = registery.register("crimson_oracle", () -> new CrimsonOracleSkill(Skill.SkillType.UNIQUE));
+        SAGITTARIUS = registery.register("sagittarius", () -> new SagittariusSkill(Skill.SkillType.UNIQUE));
 
         // vassal series
         UNITY = registery.register("unity", () -> new UnitySkill(Skill.SkillType.UNIQUE));
