@@ -103,6 +103,9 @@ public class CrimsonOracleSkill extends Skill implements Transformation {
 
                         if (entity.hasEffect(MythosMobEffects.ULTIMATE_VILLAIN.get())) {
                             event.setCanceled(true);
+                            if (SkillUtils.canNegateDodge(entity, damageSource)) {
+                                event.setCanceled(true);
+                            }
                         }
                     }
                 }
@@ -223,7 +226,7 @@ public class CrimsonOracleSkill extends Skill implements Transformation {
 
     @Override
     public void onTick(ManasSkillInstance instance, LivingEntity living) {
-        if (!living.hasEffect((MobEffect)TensuraMobEffects.PRESENCE_SENSE.get()) || !living.hasEffect((MobEffect)TensuraMobEffects.TRUE_BLINDNESS.get())) {
+        if (!living.hasEffect((MobEffect)TensuraMobEffects.PRESENCE_SENSE.get())) {
             living.addEffect(new MobEffectInstance((MobEffect)TensuraMobEffects.TRUE_BLINDNESS.get(), 600, 0, false, false, false));
             living.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 600, 0, false, false, false));
         }
