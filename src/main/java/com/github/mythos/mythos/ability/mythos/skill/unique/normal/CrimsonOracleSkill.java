@@ -189,8 +189,14 @@ public class CrimsonOracleSkill extends Skill implements Transformation {
             }
             PredatorMistProjectile breath = new PredatorMistProjectile(entity.getLevel(), entity);
             breath.setLength(3.0F);
+            breath.setBlockMode(instance.getOrCreateTag().getInt("blockMode"));
+            if (instance.isMastered(entity)) {
+                breath.setConsumeProjectile(true);
+            }
+
             ManasSkillInstance crimson = this.getCrimson(entity);
             breath.setSkill(crimson != null ? crimson : instance);
+            breath.setLife(30);
             breath.setPos(entity.position().add(0.0, (double) entity.getEyeHeight() * 0.7, 0.0));
             entity.getLevel().addFreshEntity(breath);
             entity.getLevel().playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.BLAZE_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F);
