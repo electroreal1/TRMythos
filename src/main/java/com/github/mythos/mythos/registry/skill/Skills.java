@@ -64,6 +64,7 @@ public class Skills {
     public static final RegistryObject<DominateSkill> DOMINATE;
     public static final RegistryObject<CrimsonOracleSkill> CRIMSON_ORACLE;
     public static final RegistryObject<SagittariusSkill> SAGITTARIUS;
+    public static final RegistryObject<NpcLifeSkill> NPC_LIFE;
     
     // vassal
     public static final RegistryObject<FoundationSkill> FOUNDATION;
@@ -71,12 +72,13 @@ public class Skills {
     public static final RegistryObject<EvolutionSkill> EVOLUTION;
     public static final RegistryObject<BalanceSkill> BALANCE;
 
-
     // evolved uniques
     public static final RegistryObject<CarnageSkill> CARNAGE;
     public static final RegistryObject<AwakenedDao> AWAKENED_DAO;
     public static final RegistryObject<TrueDao> TRUE_DAO;
     public static final RegistryObject<PerseveranceSkill> PERSEVERANCE;
+    public static final RegistryObject<ShadowSkill> SHADOW;
+
     // extra
     public static final RegistryObject<AutomaticHakiCoatSkill> AUTOMATIC_HAKI_COAT;
     public static final RegistryObject<SpatialStorageSkill> SPATIAL_STORAGE_SKILL;
@@ -131,6 +133,7 @@ public class Skills {
         DOMINATE = registery.register("dominate", () -> new DominateSkill(Skill.SkillType.UNIQUE));
         CRIMSON_ORACLE = registery.register("crimson_oracle", () -> new CrimsonOracleSkill(Skill.SkillType.UNIQUE));
         SAGITTARIUS = registery.register("sagittarius", () -> new SagittariusSkill(Skill.SkillType.UNIQUE));
+        NPC_LIFE = registery.register("npc_life", () -> new NpcLifeSkill(Skill.SkillType.UNIQUE));
 
         // vassal series
         UNITY = registery.register("unity", () -> new UnitySkill(Skill.SkillType.UNIQUE));
@@ -144,6 +147,7 @@ public class Skills {
         AWAKENED_DAO = registery.register("awakened_dao", () -> new AwakenedDao(Skill.SkillType.UNIQUE));
         TRUE_DAO = registery.register("true_dao", () -> new TrueDao(Skill.SkillType.UNIQUE));
         PERSEVERANCE = registery.register("perseverance", () -> new PerseveranceSkill(Skill.SkillType.UNIQUE));
+        SHADOW = registery.register("shadow", () -> new ShadowSkill(Skill.SkillType.UNIQUE));
 
         // extra
         AUTOMATIC_HAKI_COAT = registery.register("automatic_haki_coat", () -> new AutomaticHakiCoatSkill(Skill.SkillType.EXTRA));

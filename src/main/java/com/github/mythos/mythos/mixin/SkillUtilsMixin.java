@@ -248,6 +248,14 @@ public abstract class SkillUtilsMixin {
             original +=10;
         }
 
+        if (hasSkill(player, (ManasSkill) Skills.NPC_LIFE.get())) {
+            if (isSkillMastered(player, (ManasSkill) Skills.NPC_LIFE.get())) {
+                original *= 4;
+            } else {
+                original *= 2;
+            }
+        }
+
 
         original += ChildOfThePlaneSkill.getChildOfThePlaneBoost(player, true, majin);
         original += BibliomaniaSkill.getBibliomaniaBoost(player, true, majin);
@@ -298,6 +306,13 @@ public abstract class SkillUtilsMixin {
         }
         if (hasSkill(player, (ManasSkill) ConfluenceUniques.CELESTIAL_PATH_BLUE.get())) {
             original +=10;
+        }
+        if (hasSkill(player, (ManasSkill) Skills.NPC_LIFE.get())) {
+            if (isSkillMastered(player, (ManasSkill) Skills.NPC_LIFE.get())) {
+                original *= 4;
+            } else {
+                original *= 2;
+            }
         }
 
         original += ChildOfThePlaneSkill.getChildOfThePlaneBoost(player, false, majin);
