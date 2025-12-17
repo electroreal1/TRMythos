@@ -9,7 +9,6 @@ import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.ability.skill.resist.ResistSkill;
 import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSource;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -34,13 +33,6 @@ public class CelestialMutationRed extends Skill {
     public double learningCost() {
         return 10000;
     }
-
-    @Override
-    public Component getModeName(int mode) {
-        return Component.translatable("trmythos.skill.celestial_mutation_red.overburst");
-    }
-
-
 
     @Override
     public boolean canTick(ManasSkillInstance instance, LivingEntity entity) {
