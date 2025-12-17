@@ -260,7 +260,7 @@ public class IndraSkill extends Skill implements Transformation {
             } else {
                 if (heldTicks % 100 == 0 && heldTicks > 0) {
                     this.addMasteryPoint(instance, entity);
-                }
+                } // ThunderBreath also works if the fix doesn't work
                 VajraBreathProjectile breath = new VajraBreathProjectile(entity.getLevel(), entity);
                 entity.getLevel().playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.LIGHTNING_BOLT_IMPACT, SoundSource.PLAYERS, 1.0F, 1.0F);
                 entity.getLevel().addFreshEntity(breath);

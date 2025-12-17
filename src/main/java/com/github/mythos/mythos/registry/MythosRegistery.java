@@ -7,6 +7,7 @@ import com.github.mythos.mythos.registry.menu.MythosMenuTypes;
 import com.github.mythos.mythos.registry.skill.FusedSkills;
 import com.github.mythos.mythos.registry.skill.Skills;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 public class MythosRegistery {
     public MythosRegistery () {
@@ -22,7 +23,7 @@ public class MythosRegistery {
         MythosMenuTypes.register(modEventBus);
         MythosItems.register(modEventBus);
         CatharsisHandler.register();
-        //MythosClient.clientSetup((FMLClientSetupEvent) modEventBus);
+        MythosClient.clientSetup((FMLClientSetupEvent) modEventBus);
         modEventBus.addListener(MythosClient::clientSetup);
 
 
