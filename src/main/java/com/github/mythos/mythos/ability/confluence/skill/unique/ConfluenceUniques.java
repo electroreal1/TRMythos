@@ -24,6 +24,7 @@ public class ConfluenceUniques {
     // Celestial Construct
     public static final RegistryObject<CelestialPathBlue> CELESTIAL_PATH_BLUE;
     public static final RegistryObject<CelestialCultivationOrange> CELESTIAL_CULTIVATION_ORANGE;
+    public static final RegistryObject<CelestialMutationRed> CELESTIAL_MUTATION_RED;
 
 
 
@@ -44,5 +45,6 @@ public class ConfluenceUniques {
         FRAGARACH = registery.register("fragarach", () -> new Fragarach(Skill.SkillType.UNIQUE));
         CELESTIAL_PATH_BLUE = registery.register("celestial_path_blue", () -> new CelestialPathBlue(Skill.SkillType.UNIQUE));
         CELESTIAL_CULTIVATION_ORANGE = registery.register("celestial_cultivation_orange", () -> new CelestialCultivationOrange(Skill.SkillType.UNIQUE));
+        CELESTIAL_MUTATION_RED = registery.register("celestial_mutation_red", () -> new CelestialMutationRed(Skill.SkillType.UNIQUE));
     }
 }

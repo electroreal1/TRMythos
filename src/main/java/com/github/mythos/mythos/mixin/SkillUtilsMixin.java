@@ -5,6 +5,7 @@ import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
 import com.github.manasmods.tensura.ability.SkillUtils;
+import com.github.manasmods.tensura.ability.battlewill.Battewill;
 import com.github.manasmods.tensura.ability.magic.Magic;
 import com.github.mythos.mythos.ability.confluence.skill.unique.ConfluenceUniques;
 import com.github.mythos.mythos.ability.mythos.skill.unique.normal.BibliomaniaSkill;
@@ -79,6 +80,9 @@ public abstract class SkillUtilsMixin {
         if (hasSkill(entity, (ManasSkill)ConfluenceUniques.CELESTIAL_CULTIVATION_ORANGE.get()) && instance.getSkill() instanceof Magic) {
             point += 999;
         }
+        if (hasSkill(entity, (ManasSkill)ConfluenceUniques.CELESTIAL_MUTATION_RED.get()) && instance.getSkill() instanceof Battewill) {
+            point += 999;
+        }
 
 
         return point;
@@ -120,6 +124,9 @@ public abstract class SkillUtilsMixin {
             point += 8;
         }
         if (hasSkill(entity, (ManasSkill)ConfluenceUniques.CELESTIAL_CULTIVATION_ORANGE.get()) && instance.getSkill() instanceof Magic) {
+            point += 999;
+        }
+        if (hasSkill(entity, (ManasSkill)ConfluenceUniques.CELESTIAL_MUTATION_RED.get()) && instance.getSkill() instanceof Battewill) {
             point += 999;
         }
 
