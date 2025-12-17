@@ -1,6 +1,7 @@
 package com.github.mythos.mythos.ability.mythos.skill.unique.normal;
 
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
+import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.registry.attribute.TensuraAttributeRegistry;
@@ -49,6 +50,7 @@ public class AlchemistSkill extends Skill {
     public void onPressed(ManasSkillInstance instance, LivingEntity entity) {
         AttributeInstance attributeInstance = (AttributeInstance) Objects.requireNonNull(entity.getAttribute((Attribute) TensuraAttributeRegistry.BARRIER.get()));
         if (instance.getMode() == 2) {
+            if (SkillHelper.outOfMagicule(entity, instance)) return;
             this.addMasteryPoint(instance, entity);
             instance.setCoolDown(10);
             double barrierPoints = 50;
