@@ -230,6 +230,9 @@ public abstract class SkillUtilsMixin {
                 original *= 3;
             }
         }
+        if (hasSkill(player, (ManasSkill) ConfluenceUniques.CELESTIAL_PATH_BLUE.get())) {
+            original +=10;
+        }
 
 
         original += ChildOfThePlaneSkill.getChildOfThePlaneBoost(player, true, majin);
@@ -257,6 +260,30 @@ public abstract class SkillUtilsMixin {
         }
         if (hasSkill(player, (ManasSkill) Skills.STARGAZER.get())) {
             original *= 2.0F;
+        }
+        if (hasSkill(player, (ManasSkill) Skills.TENACIOUS.get())) {
+            if (isSkillMastered(player, (ManasSkill) Skills.TENACIOUS.get())) {
+                original *= 3;
+            } else {
+                original *= 2;
+            }
+        }
+        if (hasSkill(player, (ManasSkill) Skills.PERSEVERANCE.get())) {
+            if (isSkillMastered(player, (ManasSkill) Skills.PERSEVERANCE.get())) {
+                original *= 6;
+            } else {
+                original *= 4;
+            }
+        }
+        if (hasSkill(player, (ManasSkill) Skills.DOMINATE.get())) {
+            if (isSkillMastered(player, (ManasSkill) Skills.DOMINATE.get())) {
+                original *= 4;
+            } else {
+                original *= 3;
+            }
+        }
+        if (hasSkill(player, (ManasSkill) ConfluenceUniques.CELESTIAL_PATH_BLUE.get())) {
+            original +=10;
         }
 
         original += ChildOfThePlaneSkill.getChildOfThePlaneBoost(player, false, majin);

@@ -21,6 +21,9 @@ public class ConfluenceUniques {
     public static final RegistryObject<Gram> GRAM;
     public static final RegistryObject<Fragarach> FRAGARACH;
 
+    // Celestial Path
+    public static final RegistryObject<CelestialPathBlue> CELESTIAL_PATH_BLUE;
+
 
     public ConfluenceUniques() {
     }
@@ -37,5 +40,6 @@ public class ConfluenceUniques {
         EXCALIBUR = registery.register("excalibur", () -> new Excalibur(Skill.SkillType.UNIQUE));
         GRAM = registery.register("gram", () -> new Gram(Skill.SkillType.UNIQUE));
         FRAGARACH = registery.register("fragarach", () -> new Fragarach(Skill.SkillType.UNIQUE));
+        CELESTIAL_PATH_BLUE = registery.register("celestial_path_blue", () -> new CelestialPathBlue(Skill.SkillType.UNIQUE));
     }
 }
