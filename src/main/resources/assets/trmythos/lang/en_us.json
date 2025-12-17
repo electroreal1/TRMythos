@@ -204,6 +204,14 @@
   "trmythos.skill.gram": "Gram",
   "trmythos.skill.description": "The blade that has slain dragons, the Dragon Slayer, they call you, for having killed a creature hundreds of times your size and power.",
 
+  "trmythos.skill.celestial_path_blue": "Celestial Path - Blue Mask",
+  "trmythos.skill.celestial_path_blue.description": "A single step guided by fate can change an entire battle.",
+  "trmythos.skill.celestial_path_blue.fate": "Fate Reversal",
+
+  "trmythos.skill.celestial_cultivation_orange": "Celestial Cultivation - Orange Mask",
+  "trmythos.skill.celestial_cultivation_orange.description": "Magic is not a resource, it is the world's heartbeat, and you hold its pulse.",
+  "trmythos.skill.celestial_cultivation_orange.aura": "Aura Conversion",
+
   "trmythos.skill.indra": "Indra",
   "trmythos.skill.indra.description": "When the heavens roar, all beneath the sky shall kneel.",
   "trmythos.skill.indra.breath": "Vajra Breath",

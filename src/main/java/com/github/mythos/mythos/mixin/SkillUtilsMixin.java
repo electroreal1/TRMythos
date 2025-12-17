@@ -76,6 +76,10 @@ public abstract class SkillUtilsMixin {
         if (hasSkill(entity, (ManasSkill)Skills.SAGITTARIUS.get())) {
             point += 8;
         }
+        if (hasSkill(entity, (ManasSkill)ConfluenceUniques.CELESTIAL_CULTIVATION_ORANGE.get()) && instance.getSkill() instanceof Magic) {
+            point += 999;
+        }
+
 
         return point;
     }
@@ -114,6 +118,9 @@ public abstract class SkillUtilsMixin {
         }
         if (hasSkill(entity, (ManasSkill)Skills.SAGITTARIUS.get())) {
             point += 8;
+        }
+        if (hasSkill(entity, (ManasSkill)ConfluenceUniques.CELESTIAL_CULTIVATION_ORANGE.get()) && instance.getSkill() instanceof Magic) {
+            point += 999;
         }
 
 
