@@ -6,6 +6,7 @@ import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.registry.attribute.TensuraAttributeRegistry;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -80,7 +81,12 @@ public class CelestialCultivationOrange extends Skill {
     @Override
     public void onPressed(ManasSkillInstance instance, LivingEntity entity) {
         if (entity instanceof Player player) {
+
             TensuraPlayerCapability.getFrom(player).ifPresent((cap -> {
+                if (cap.getBaseAura() < 10000) {
+                    player.displayClientMessage(Component.literal("You do not have enough Aura to do this.").withStyle(ChatFormatting.RED),
+                            false);
+                }
                 cap.setBaseAura(cap.getBaseAura() - 10000, player);
                 cap.setBaseMagicule(cap.getBaseMagicule() + 10000, player);
             }));
