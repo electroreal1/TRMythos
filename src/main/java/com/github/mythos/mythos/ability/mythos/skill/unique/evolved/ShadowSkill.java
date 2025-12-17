@@ -89,16 +89,16 @@ public class ShadowSkill extends Skill {
     public void onDamageEntity(ManasSkillInstance instance, LivingEntity entity, LivingHurtEvent event) {
         if (!(event.getSource().getEntity() instanceof Player player)) return;
         if (DamageSourceHelper.isPhysicalAttack(event.getSource())) {
-            event.setAmount(event.getAmount() * (instance.isMastered(player) ? 10 : 5));
+            event.setAmount(event.getAmount() * (instance.isMastered(player) ? 6 : 5));
         }
         if (DamageSourceHelper.isFireDamage(event.getSource())) {
-            event.setAmount(event.getAmount() * (instance.isMastered(player) ? 10 : 5));
+            event.setAmount(event.getAmount() * (instance.isMastered(player) ? 6 : 5));
         }
         if (DamageSourceHelper.isSpatialDamage(event.getSource())) {
-            event.setAmount(event.getAmount() * (instance.isMastered(player) ? 10 : 5));
+            event.setAmount(event.getAmount() * (instance.isMastered(player) ? 6 : 5));
         }
         if (DamageSourceHelper.isGravityDamage(event.getSource())) {
-            event.setAmount(event.getAmount() * (instance.isMastered(player) ? 10 : 5));
+            event.setAmount(event.getAmount() * (instance.isMastered(player) ? 6 : 5));
         }
     }
 
