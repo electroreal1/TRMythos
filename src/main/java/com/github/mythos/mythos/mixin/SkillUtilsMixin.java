@@ -7,7 +7,7 @@ import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.battlewill.Battewill;
 import com.github.manasmods.tensura.ability.magic.Magic;
-import com.github.mythos.mythos.ability.confluence.skill.unique.ConfluenceUniques;
+import com.github.mythos.mythos.ability.confluence.skill.ConfluenceUniques;
 import com.github.mythos.mythos.ability.mythos.skill.unique.normal.BibliomaniaSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.normal.ChildOfThePlaneSkill;
 import com.github.mythos.mythos.registry.MythosMobEffects;

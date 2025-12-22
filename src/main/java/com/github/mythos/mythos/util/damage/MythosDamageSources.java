@@ -4,7 +4,7 @@ import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSource;
 import com.github.manasmods.tensura.util.damage.TensuraEntityDamageSource;
-import com.github.mythos.mythos.ability.confluence.skill.unique.ConfluenceUniques;
+import com.github.mythos.mythos.ability.confluence.skill.ConfluenceUniques;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 

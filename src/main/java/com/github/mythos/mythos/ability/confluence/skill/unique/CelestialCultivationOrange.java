@@ -10,6 +10,7 @@ import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.registry.attribute.TensuraAttributeRegistry;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
+import com.github.mythos.mythos.ability.confluence.skill.ConfluenceUniques;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffect;

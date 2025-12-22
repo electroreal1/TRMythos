@@ -10,6 +10,7 @@ import com.github.manasmods.tensura.capability.skill.TensuraSkillCapability;
 import com.github.manasmods.tensura.enchantment.EngravingEnchantment;
 import com.github.manasmods.tensura.registry.enchantment.TensuraEnchantments;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
+import com.github.mythos.mythos.ability.confluence.skill.ConfluenceUniques;
 import com.github.mythos.mythos.registry.MythosItems;
 import com.github.mythos.mythos.util.damage.MythosDamageSources;
 import com.mojang.math.Vector3f;

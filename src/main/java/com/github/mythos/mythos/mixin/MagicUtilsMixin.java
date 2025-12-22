@@ -3,7 +3,7 @@ package com.github.mythos.mythos.mixin;
 import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.magic.MagicUltils;
-import com.github.mythos.mythos.ability.confluence.skill.unique.ConfluenceUniques;
+import com.github.mythos.mythos.ability.confluence.skill.ConfluenceUniques;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.registry.skill.Skills;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;

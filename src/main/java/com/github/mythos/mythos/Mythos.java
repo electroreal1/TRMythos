@@ -141,7 +141,7 @@ public class Mythos {
         String content = contentBuilder.toString();
         String[] newStarting = new String[]{"trmythos:canine", "trmythos:maiden", "trmythos:lesser_serpent","trmythos:godling","trmythos:metalloid"};
         String[] newRandom = new String[]{"trmythos:canine", "trmythos:maiden", "trmythos:lesser_serpent","trmythos:godling","trmythos:metalloid"};
-        String[] newSkills = new String[]{"trmythos:omniscient_eye", "trmythos:faker", "trmythos:purity","trmythos:bloodsucker", "trmythos:profanity","trmythos:opportunist","trmythos:sporeblood","trmythos:fragarach","trmythos:excalibur","trmythos:gram", "trmythos:heavens_wrath","trmythos:zephyros","trmythos:introvert","trmythos:stargazer","trmythos:tenacious","trmythos:demonologist","trmythos:sagittarius", "trmythos:npc_life"};
+        String[] newSkills = new String[]{"trmythos:omniscient_eye", "trmythos:faker", "trmythos:purity","trmythos:bloodsucker", "trmythos:profanity","trmythos:opportunist","trmythos:sporeblood","trmythos:fragarach","trmythos:excalibur","trmythos:gram", "trmythos:heavens_wrath","trmythos:zephyros","trmythos:introvert","trmythos:stargazer","trmythos:tenacious","trmythos:demonologist","trmythos:sagittarius", "trmythos:npc_life", "trmythos:celestial_path_blue", "trmythos:celestial_cultivation_orange", "trmythos:celestial_mutation_red"};
         String[] creatorSkills = new String[]{"trmythos:opportunist", "trmythos:heavens_wrath","trmythos:zephyros","trmythos:introvert","trmythos:stargazer","trmythos:tenacious","trmythos:demonologist"};
         String startingRacesKey = "startingRaces = [";
         String randomRacesKey = "possibleRandomRaces = [";

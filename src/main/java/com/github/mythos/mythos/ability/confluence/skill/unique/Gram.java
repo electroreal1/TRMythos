@@ -5,6 +5,7 @@ import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.capability.skill.TensuraSkillCapability;
+import com.github.mythos.mythos.ability.confluence.skill.ConfluenceUniques;
 import com.github.mythos.mythos.config.MythosSkillsConfig;
 import com.github.mythos.mythos.registry.MythosItems;
 import com.mojang.math.Vector3f;

@@ -5,7 +5,7 @@ import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
-import com.github.mythos.mythos.ability.confluence.skill.unique.ConfluenceUniques;
+import com.github.mythos.mythos.ability.confluence.skill.ConfluenceUniques;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;

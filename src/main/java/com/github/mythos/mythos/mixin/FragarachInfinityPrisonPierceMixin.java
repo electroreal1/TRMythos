@@ -3,7 +3,7 @@ package com.github.mythos.mythos.mixin;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.tensura.ability.skill.unique.InfinityPrisonSkill;
 import com.github.manasmods.tensura.capability.skill.TensuraSkillCapability;
-import com.github.mythos.mythos.ability.confluence.skill.unique.ConfluenceUniques;
+import com.github.mythos.mythos.ability.confluence.skill.ConfluenceUniques;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;

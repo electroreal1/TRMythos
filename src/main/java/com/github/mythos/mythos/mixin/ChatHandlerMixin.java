@@ -3,7 +3,7 @@ package com.github.mythos.mythos.mixin;
 import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
-import com.github.mythos.mythos.ability.confluence.skill.unique.ConfluenceUniques;
+import com.github.mythos.mythos.ability.confluence.skill.ConfluenceUniques;
 import com.github.mythos.mythos.handler.CatharsisHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;

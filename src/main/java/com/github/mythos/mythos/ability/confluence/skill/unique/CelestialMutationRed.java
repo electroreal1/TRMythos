@@ -11,6 +11,7 @@ import com.github.manasmods.tensura.ability.skill.resist.ResistSkill;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSource;
+import com.github.mythos.mythos.ability.confluence.skill.ConfluenceUniques;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.damagesource.DamageSource;
