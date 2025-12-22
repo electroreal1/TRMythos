@@ -1,8 +1,12 @@
 package com.github.mythos.mythos.ability.confluence.skill.unique;
 
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
+import com.github.manasmods.manascore.api.skills.SkillAPI;
+import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
 import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
+import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.skill.Skill;
+import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.registry.attribute.TensuraAttributeRegistry;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
@@ -63,6 +67,24 @@ public class CelestialCultivationOrange extends Skill {
 
             entity.addEffect(new MobEffectInstance((MobEffect) TensuraMobEffects.PRESENCE_SENSE.get(), 200, 3, false, false, false));
         }
+
+        if (entity instanceof Player player) {
+                SkillStorage storage = SkillAPI.getSkillsFrom(player);
+                Skill blue = ConfluenceUniques.CELESTIAL_PATH_BLUE.get();
+                if (SkillUtils.fullyHasSkill(player, blue)) {
+                    double chance = 0.01;
+                    double currentEP = TensuraEPCapability.getCurrentEP(player);
+
+                    if (!(player.getRandom().nextDouble() == chance)) {
+                        if (blue.getObtainingEpCost() > currentEP) {
+                            player.sendSystemMessage(Component.literal("Not Enough EP To Acquire Celestial Path - Blue Mask").withStyle(ChatFormatting.RED));
+                        } else if (blue.getObtainingEpCost() < currentEP) {
+                            storage.learnSkill(blue);
+                            player.sendSystemMessage(Component.literal("You have Acquired Celestial Path - Blue Mask").withStyle(ChatFormatting.BLUE));
+                        }
+                    }
+                }
+            }
     }
 
     public void onLearnSkill(ManasSkillInstance instance, LivingEntity living, UnlockSkillEvent event) {

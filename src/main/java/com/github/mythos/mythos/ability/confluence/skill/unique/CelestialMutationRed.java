@@ -4,11 +4,15 @@ import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
+import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.battlewill.Battewill;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.ability.skill.resist.ResistSkill;
+import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSource;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -87,6 +91,27 @@ public class CelestialMutationRed extends Skill {
             if (!player.level.isClientSide) {
 
                 attacker.hurt(DamageSource.thorns(player), event.getAmount() / 10);
+            }
+        }
+    }
+
+    @Override
+    public void onTick(ManasSkillInstance instance, LivingEntity living) {
+        if (living instanceof Player player) {
+            SkillStorage storage = SkillAPI.getSkillsFrom(player);
+            Skill blue = ConfluenceUniques.CELESTIAL_PATH_BLUE.get();
+            if (SkillUtils.fullyHasSkill(player, blue)) {
+                double chance = 0.01;
+                double currentEP = TensuraEPCapability.getCurrentEP(player);
+
+                if (!(player.getRandom().nextDouble() == chance)) {
+                    if (blue.getObtainingEpCost() > currentEP) {
+                        player.sendSystemMessage(Component.literal("Not Enough EP To Acquire Celestial Path - Blue Mask").withStyle(ChatFormatting.RED));
+                    } else if (blue.getObtainingEpCost() < currentEP) {
+                        storage.learnSkill(blue);
+                        player.sendSystemMessage(Component.literal("You have Acquired Celestial Path - Blue Mask").withStyle(ChatFormatting.BLUE));
+                    }
+                }
             }
         }
     }
