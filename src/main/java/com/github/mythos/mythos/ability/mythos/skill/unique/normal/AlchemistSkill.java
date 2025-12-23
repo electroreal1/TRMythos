@@ -1,10 +1,17 @@
 package com.github.mythos.mythos.ability.mythos.skill.unique.normal;
 
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
+import com.github.manasmods.manascore.api.skills.SkillAPI;
+import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
 import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
+import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
+import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.registry.attribute.TensuraAttributeRegistry;
+import com.github.mythos.mythos.registry.skill.Skills;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -28,14 +35,14 @@ public class AlchemistSkill extends Skill {
 
     @Override
     public int modes() {
-        return 4;
+        return 3;
     }
 
     public int nextMode(LivingEntity entity, TensuraSkillInstance instance, boolean reverse) {
         if (reverse)
-            return (instance.getMode() == 1) ? 4 : (instance.getMode() - 1);
+            return (instance.getMode() == 1) ? 3 : (instance.getMode() - 1);
         else
-            return (instance.getMode() == 4) ? 1 : (instance.getMode() + 1);
+            return (instance.getMode() == 3) ? 1 : (instance.getMode() + 1);
     }
 
     @Override
@@ -44,7 +51,6 @@ public class AlchemistSkill extends Skill {
             case 1 -> 1020;
             case 2 -> 100;
             case 3 -> 2004;
-            case 4 -> 20000.0;
             default -> 0.0;
         };
     }
@@ -82,5 +88,28 @@ public class AlchemistSkill extends Skill {
                 attributeInstance2.addPermanentModifier(new AttributeModifier(HP, "Health Max", exchangeRate, AttributeModifier.Operation.ADDITION));
             }
         }
-    }
+
+        if (instance.getMode() == 3 && entity instanceof Player player) {
+            TensuraPlayerCapability.getFrom(player).ifPresent((cap) -> {
+                int soulPoints = cap.getSoulPoints();
+                if (soulPoints >= 1500000) {
+                    cap.setSoulPoints(soulPoints - 1500000);
+                    SkillStorage storage = SkillAPI.getSkillsFrom(player);
+                    double currentEP = TensuraEPCapability.getCurrentEP(player);
+                    Skill cracked = Skills.CRACKED_PHILOSOPHER_STONE.get();
+                    if (storage.getSkill(cracked).isPresent()) return;
+                    if (cracked.getObtainingEpCost() > currentEP) {
+                        player.sendSystemMessage(Component.literal("Not Enough EP To Acquire Celestial Path - Blue Mask").withStyle(ChatFormatting.RED));
+                    } else if (cracked.getObtainingEpCost() < currentEP) {
+                        storage.learnSkill(cracked);
+                        instance.setCoolDown(60);
+                        this.addMasteryPoint(instance, entity);
+                        player.sendSystemMessage(Component.literal("You have Acquired Celestial Path - Blue Mask").withStyle(ChatFormatting.BLUE));
+                        }
+                    }
+                });
+
+            }
+        }
+
 }
