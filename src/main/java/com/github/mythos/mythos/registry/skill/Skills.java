@@ -8,6 +8,7 @@ import com.github.mythos.mythos.ability.mythos.skill.extra.SpatialStorageSkill;
 import com.github.mythos.mythos.ability.mythos.skill.extra.ThunderRainSkill;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.*;
 import com.github.mythos.mythos.ability.mythos.skill.unique.DominateSkill;
+import com.github.mythos.mythos.ability.mythos.skill.unique.DullahanSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.TenaciousSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.evolved.*;
 import com.github.mythos.mythos.ability.mythos.skill.unique.normal.*;
@@ -47,7 +48,7 @@ public class Skills {
     public static final RegistryObject<BloodsuckerSkill> BLOODSUCKER;
     public static final RegistryObject<SaintSkill> SAINT;
     public static final RegistryObject<Demonologist> DEMONOLOGIST;
-    //    public static final RegistryObject<DullahanSkill> DULLAHAN;
+        public static final RegistryObject<DullahanSkill> DULLAHAN;
     public static final RegistryObject<TheWorldSkill> THE_WORLD;
     public static final RegistryObject<BibliomaniaSkill> BIBLIOMANIA;
     public static final RegistryObject<ChildOfThePlaneSkill> CHILD_OF_THE_PLANE;
@@ -113,7 +114,7 @@ public class Skills {
         BIBLIOMANIA = registery.register("bibliomania", BibliomaniaSkill::new);
         SAINT = registery.register("saint", SaintSkill::new);
         DEMONOLOGIST = registery.register("demonologist", () -> new Demonologist(Skill.SkillType.UNIQUE));
-//        DULLAHAN = registery.register("dullahan", DullahanSkill::new);
+        DULLAHAN = registery.register("dullahan", DullahanSkill::new);
         OMNISCIENT_EYE = registery.register("omniscient_eye", OmniscientEyeSkill::new);
         PURITY_SKILL = registery.register("purity", () -> new PuritySkill(Skill.SkillType.UNIQUE));
         OPPORTUNIST_SKILL = registery.register("opportunist", () -> new OpportunistSkill(Skill.SkillType.UNIQUE));

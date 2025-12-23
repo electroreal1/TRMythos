@@ -39,6 +39,9 @@ public abstract class TensuraPlayerCapabilityMixin implements ICapabilityHasOwne
         if (SkillUtils.hasSkill(this.getOwner(), (ManasSkill) Skills.ARES.get())) {
             original = true;
         }
+        if (SkillUtils.hasSkill(this.getOwner(), (ManasSkill) Skills.DULLAHAN.get())) {
+            original = true;
+        }
         if (SkillUtils.hasSkill(this.getOwner(), (ManasSkill) Skills.UNDERWORLD_PRINCE.get())) {
             original = true;
         }

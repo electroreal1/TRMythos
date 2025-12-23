@@ -21,6 +21,7 @@ import com.github.manasmods.tensura.entity.magic.projectile.SeveranceCutterProje
 import com.github.manasmods.tensura.network.TensuraNetwork;
 import com.github.manasmods.tensura.network.play2client.RequestFxSpawningPacket;
 import com.github.manasmods.tensura.race.Race;
+import com.github.manasmods.tensura.race.RaceHelper;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.mythos.mythos.registry.MythosMobEffects;
@@ -464,14 +465,16 @@ public class TatariSkill extends Skill {
 
                         TensuraPlayerCapability.getFrom(subplayer).ifPresent(cap2 -> {
                             if (TensuraPlayerCapability.isTrueHero(entity)) {
-                                cap2.setTrueDemonLord(true);
                                 cap2.setTrueHero(false);
                             }
                         });
 
                     } else {
                         TensuraPlayerCapability.getFrom(subplayer).ifPresent(cap2 -> {
-                            cap2.setTrueDemonLord(true);
+                           if (TensuraEPCapability.getPermanentOwner(target) != entity.getUUID())
+                                return;
+
+                            harvestFestivalSubordinate(target, (Player)entity);
                         });
                     }
 
@@ -583,7 +586,32 @@ public class TatariSkill extends Skill {
 
             return false;
         }
+    private void harvestFestivalSubordinate(LivingEntity target, Player owner) {
+        if (target instanceof Player) {
+            if (TensuraPlayerCapability.isTrueDemonLord((Player)target)) {
+                owner.displayClientMessage(Component.translatable("tensura.evolve.demon_lord.already").setStyle(Style.EMPTY.withColor(ChatFormatting.RED)), false);
+                return;
+            }
 
+            if (TensuraPlayerCapability.isTrueHero(target)) {
+                owner.displayClientMessage(Component.translatable("tensura.evolve.demon_lord.hero").setStyle(Style.EMPTY.withColor(ChatFormatting.RED)), false);
+                return;
+            }
+
+            TensuraPlayerCapability.getFrom(owner).ifPresent((ownerCap) -> {
+                int ownerSoulPoints = ownerCap.getSoulPoints();
+                int harvestFestivalCost = 100000;
+                if (ownerSoulPoints < harvestFestivalCost) {
+                    owner.displayClientMessage(Component.translatable("trmythos.skill.mode.apophis.not_enough_souls", new Object[]{harvestFestivalCost / 1000}).setStyle(Style.EMPTY.withColor(ChatFormatting.RED)), false);
+                } else {
+                    TensuraPlayerCapability.getFrom((Player)target).ifPresent((cap) -> {
+                        ownerCap.setSoulPoints(ownerCap.getSoulPoints() - harvestFestivalCost);
+                        RaceHelper.awakening((Player)target, false);
+                    });
+                }
+            });
+        }
+    }
 }
 
 
