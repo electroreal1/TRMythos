@@ -27,9 +27,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
-import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.UUID;
+
+import static com.github.mythos.mythos.config.MythosSkillsConfig.EnableUltimateSkillObtainment;
 
 public class ImmortalSkill extends Skill {
     public ImmortalSkill(SkillType type) {super(SkillType.ULTIMATE);}
@@ -60,6 +61,7 @@ public class ImmortalSkill extends Skill {
     }
 
     public boolean meetEPRequirement(Player entity, double newEP) {
+        if (!EnableUltimateSkillObtainment()) return false;
         return (SkillUtils.isSkillMastered(entity, (ManasSkill) UniqueSkills.SURVIVOR.get()) && TensuraPlayerCapability.isTrueHero(entity));
     }
 
