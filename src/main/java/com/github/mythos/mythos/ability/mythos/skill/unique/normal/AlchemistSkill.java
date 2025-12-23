@@ -11,6 +11,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.Objects;
@@ -18,6 +19,8 @@ import java.util.UUID;
 
 public class AlchemistSkill extends Skill {
     protected static final UUID MULTILAYER = UUID.fromString("2c03b682-5705-11ee-8c99-0242ac120002");
+    protected static final UUID SHP = UUID.fromString("2c033682-5705-11ee-8c99-0242ac120002");
+    protected static final UUID HP = UUID.fromString("2gh3b682-5705-11ee-8c99-0242ac120002");
 
     public AlchemistSkill(SkillType type) {
         super(SkillType.UNIQUE);
@@ -48,6 +51,8 @@ public class AlchemistSkill extends Skill {
 
     @Override
     public void onPressed(ManasSkillInstance instance, LivingEntity entity) {
+        AttributeInstance attributeInstance2 = (AttributeInstance) Objects.requireNonNull(entity.getAttribute(Attributes.MAX_HEALTH));
+        AttributeInstance attributeInstance1 = (AttributeInstance) Objects.requireNonNull(entity.getAttribute((Attribute) TensuraAttributeRegistry.MAX_SPIRITUAL_HEALTH.get()));
         AttributeInstance attributeInstance = (AttributeInstance) Objects.requireNonNull(entity.getAttribute((Attribute) TensuraAttributeRegistry.BARRIER.get()));
         if (instance.getMode() == 2) {
             if (SkillHelper.outOfMagicule(entity, instance)) return;
@@ -56,6 +61,26 @@ public class AlchemistSkill extends Skill {
             double barrierPoints = 50;
             attributeInstance.addPermanentModifier(new AttributeModifier(MULTILAYER, "Multilayer Barrier", barrierPoints, AttributeModifier.Operation.ADDITION));
             entity.getLevel().playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.BEACON_ACTIVATE, SoundSource.PLAYERS, 1.0F, 1.0F);
+        }
+
+        if (instance.getMode() == 1) {
+            if (entity.isShiftKeyDown()) {
+                if (SkillHelper.outOfMagicule(entity, instance)) return;
+                this.addMasteryPoint(instance, entity);
+                instance.setCoolDown(10);
+                double exchangeRate = -2;
+                double exchangeRateAdd = 1;
+                attributeInstance1.addPermanentModifier(new AttributeModifier(SHP, "Spiritual Health Max", exchangeRate, AttributeModifier.Operation.ADDITION));
+                attributeInstance2.addPermanentModifier(new AttributeModifier(HP, "Health Max", exchangeRateAdd, AttributeModifier.Operation.ADDITION));
+            } else {
+                if (SkillHelper.outOfMagicule(entity, instance)) return;
+                this.addMasteryPoint(instance, entity);
+                instance.setCoolDown(10);
+                double exchangeRate = -2;
+                double exchangeRateAdd = 1;
+                attributeInstance1.addPermanentModifier(new AttributeModifier(SHP, "Spiritual Health Max", exchangeRateAdd, AttributeModifier.Operation.ADDITION));
+                attributeInstance2.addPermanentModifier(new AttributeModifier(HP, "Health Max", exchangeRate, AttributeModifier.Operation.ADDITION));
+            }
         }
     }
 }
