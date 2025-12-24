@@ -48,6 +48,9 @@ public abstract class TensuraPlayerCapabilityMixin implements ICapabilityHasOwne
         if (SkillUtils.hasSkill(this.getOwner(), (ManasSkill) Skills.ALCHEMIST.get())) {
             original = true;
         }
+        if (SkillUtils.hasSkill(this.getOwner(), (ManasSkill) Skills.CRACKED_PHILOSOPHER_STONE.get())) {
+            original = true;
+        }
 
         return original;
     }

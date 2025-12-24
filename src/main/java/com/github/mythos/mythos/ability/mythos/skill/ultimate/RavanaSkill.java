@@ -52,6 +52,11 @@ public class RavanaSkill extends Skill {
     }
 
     @Override
+    public int getMaxMastery() {
+        return 3000;
+    }
+
+    @Override
     public double getObtainingEpCost() {
         return 6162136;
     }
