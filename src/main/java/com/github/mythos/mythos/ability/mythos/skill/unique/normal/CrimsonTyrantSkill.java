@@ -158,21 +158,13 @@ public class CrimsonTyrantSkill extends Skill {
         if (damageAttr != null) {
             damageAttr.removeModifier(ATTACK_DAMAGE_MODIFIER);
             damageAttr.addTransientModifier(new AttributeModifier(
-                    ATTACK_DAMAGE_MODIFIER,
-                    "Kill stack damage boost",
-                    4.0 * (multiplier - 1.0),
-                    AttributeModifier.Operation.ADDITION
-            ));
+                    ATTACK_DAMAGE_MODIFIER, "Kill stack damage boost", 4.0 * (multiplier - 1.0), AttributeModifier.Operation.ADDITION));
         }
 
         if (speedAttr != null) {
             speedAttr.removeModifier(ATTACK_SPEED_MODIFIER);
             speedAttr.addTransientModifier(new AttributeModifier(
-                    ATTACK_SPEED_MODIFIER,
-                    "Kill stack speed boost",
-                    0.1 * (multiplier - 1.0),
-                    AttributeModifier.Operation.ADDITION
-            ));
+                    ATTACK_SPEED_MODIFIER, "Kill stack speed boost", 0.1 * (multiplier - 1.0), AttributeModifier.Operation.ADDITION));
         }
     }
 
@@ -257,9 +249,7 @@ public class CrimsonTyrantSkill extends Skill {
                     int fearLevel = (int) (difference * 0.5 - 1.0);
                     fearLevel = Math.min(fearLevel, TensuraConfig.INSTANCE.mobEffectConfig.maxFear.get());
                     SkillHelper.checkThenAddEffectSource(target, entity, (MobEffect) TensuraMobEffects.FEAR.get(), 200, fearLevel);
-                    SkillHelper.checkThenAddEffectSource(target, entity, (MobEffect) TensuraMobEffects.MOVEMENT_INTERFERENCE.get(), 200, 1);
-                    SkillHelper.checkThenAddEffectSource(target, entity, (MobEffect) TensuraMobEffects.CURSE.get(), 200, 1);
-                    SkillHelper.checkThenAddEffectSource(target, entity, (MobEffect) TensuraMobEffects.FRAGILITY.get(), 1200, 1, false, false, false);
+                    entity.addEffect(new MobEffectInstance(TensuraMobEffects.FRAGILITY.get(), 1200, fearLevel, false, false, false));
                     HakiSkill.hakiPush(target, entity, fearLevel);
                 }
             }

@@ -26,7 +26,6 @@ import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -40,8 +39,8 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.PacketDistributor;
@@ -103,7 +102,6 @@ public class CarnageSkill extends Skill {
         applyModifier(player, Attributes.ATTACK_DAMAGE, CARNAGE_DAMAGE_UUID, attackBonus);
         applyModifier(player, Attributes.ATTACK_SPEED, CARNAGE_SPEED_UUID, speedBonus);
 
-        // Special mode buff extension
         if (player.getPersistentData().getBoolean("AbsoluteBloodLordActive")) {
             extendOrAddEffect(player, MythosMobEffects.BLOOD_COAT.get(), 200);
             extendOrAddEffect(player, TensuraMobEffects.HAKI_COAT.get(), 200);
@@ -111,9 +109,8 @@ public class CarnageSkill extends Skill {
             extendOrAddEffect(player, TensuraMobEffects.INSPIRATION.get(), 200);
         }
     }
-
-    @SubscribeEvent
-    public static void onDamage(LivingDamageEvent event) {
+    @Override
+    public void onDamageEntity(ManasSkillInstance instance, LivingEntity entity, LivingHurtEvent event) {
         if (!(event.getSource().getEntity() instanceof Player player)) return;
         if (player.level.isClientSide) return;
 
@@ -193,6 +190,16 @@ public class CarnageSkill extends Skill {
                 server.sendParticles(new DustParticleOptions(color, 0.8f + rand.nextFloat() * 0.2f), px, py, pz, 1, 0, 0, 0, 0);
             }
         }
+
+
+        if (living.getTags().contains("AbsoluteBloodLordActive")) {
+            if (living.hasEffect(MythosMobEffects.BLOOD_COAT.get())) {
+                return;
+            } else {
+                living.getTags().remove("AbsoluteBloodLordActive");
+            }
+        }
+
     }
 
     @Override
@@ -249,8 +256,10 @@ public class CarnageSkill extends Skill {
                 if (difference > 2.0) {
                     int fearLevel = (int) (difference * 0.5 - 1.0);
                     fearLevel = Math.min(fearLevel, TensuraConfig.INSTANCE.mobEffectConfig.maxFear.get());
-                    SkillHelper.checkThenAddEffectSource(target, entity, (MobEffect) TensuraMobEffects.FEAR.get(), 200, fearLevel);
-                    entity.addEffect(new MobEffectInstance(TensuraMobEffects.FRAGILITY.get(), 1200, 1, false, false, false));
+                    SkillHelper.checkThenAddEffectSource(target, entity, TensuraMobEffects.FEAR.get(), 200, fearLevel);
+                    entity.addEffect(new MobEffectInstance(TensuraMobEffects.FRAGILITY.get(), 1200, fearLevel, false, false, false));
+                    entity.addEffect(new MobEffectInstance(TensuraMobEffects.CURSE.get(), 1200, fearLevel, false, false, false));
+                    entity.addEffect(new MobEffectInstance(TensuraMobEffects.MOVEMENT_INTERFERENCE.get(), 1200, fearLevel, false, false, false));
                     HakiSkill.hakiPush(target, entity, fearLevel);
                     }
                 }
@@ -258,21 +267,23 @@ public class CarnageSkill extends Skill {
         }
     }
 
-    public void onPressed(ServerPlayer player, ManasSkillInstance instance) {
-        if (!(instance.getMode() == 2)) return;
-        Level level = player.level;
 
-        level.playSound(null, player.blockPosition(), net.minecraft.sounds.SoundEvents.WITHER_DEATH,
+
+    public void onPressed(ManasSkillInstance instance, LivingEntity entity) {
+        if (!(instance.getMode() == 2)) return;
+        Level level = entity.level;
+
+        level.playSound(null, entity.blockPosition(), net.minecraft.sounds.SoundEvents.WITHER_DEATH,
                 SoundSource.PLAYERS, 2.0f, 0.9f);
 
-        player.addEffect(new MobEffectInstance(MythosMobEffects.BLOOD_COAT.get(), 1200, 1, false, false, false));
-        player.addEffect(new MobEffectInstance(TensuraMobEffects.HAKI_COAT.get(), 1200, 1, false, false, false));
-        player.addEffect(new MobEffectInstance(TensuraMobEffects.STRENGTHEN.get(), 1200, 25, false, false, false));
-        player.addEffect(new MobEffectInstance(TensuraMobEffects.INSPIRATION.get(), 1200, 15, false, false, false));
+        entity.addEffect(new MobEffectInstance(MythosMobEffects.BLOOD_COAT.get(), 1200, 1, false, false, false));
+        entity.addEffect(new MobEffectInstance(TensuraMobEffects.HAKI_COAT.get(), 1200, 1, false, false, false));
+        entity.addEffect(new MobEffectInstance(TensuraMobEffects.STRENGTHEN.get(), 1200, 25, false, false, false));
+        entity.addEffect(new MobEffectInstance(TensuraMobEffects.INSPIRATION.get(), 1200, 15, false, false, false));
 
-        player.getPersistentData().putBoolean("AbsoluteBloodLordActive", true);
+        entity.getPersistentData().putBoolean("AbsoluteBloodLordActive", true);
 
-        TensuraParticleHelper.addServerParticlesAroundSelf(player, net.minecraft.core.particles.ParticleTypes.EXPLOSION_EMITTER);
+        TensuraParticleHelper.addServerParticlesAroundSelf(entity, net.minecraft.core.particles.ParticleTypes.EXPLOSION_EMITTER);
 
         instance.setCoolDown(1200);
     }

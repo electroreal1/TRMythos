@@ -37,6 +37,7 @@ public class Skills {
     public static final RegistryObject<AresSkill> ARES;
     public static final RegistryObject<ApophisSkill> APOPHIS;
     public static final RegistryObject<DikeSkill> DIKE;
+    public static final RegistryObject<RavanaSkill> RAVANA;
     
     // uniques
     public static final RegistryObject<FakerSkill> FAKER;
@@ -48,7 +49,7 @@ public class Skills {
     public static final RegistryObject<BloodsuckerSkill> BLOODSUCKER;
     public static final RegistryObject<SaintSkill> SAINT;
     public static final RegistryObject<Demonologist> DEMONOLOGIST;
-        public static final RegistryObject<DullahanSkill> DULLAHAN;
+    public static final RegistryObject<DullahanSkill> DULLAHAN;
     public static final RegistryObject<TheWorldSkill> THE_WORLD;
     public static final RegistryObject<BibliomaniaSkill> BIBLIOMANIA;
     public static final RegistryObject<ChildOfThePlaneSkill> CHILD_OF_THE_PLANE;
@@ -109,6 +110,7 @@ public class Skills {
         ARES = registery.register("ares", () -> new AresSkill(Skill.SkillType.ULTIMATE));
         APOPHIS = registery.register("apophis", () -> new ApophisSkill(Skill.SkillType.ULTIMATE));
         DIKE = registery.register("dike", () -> new DikeSkill(Skill.SkillType.ULTIMATE));
+        RAVANA = registery.register("ravana", () -> new RavanaSkill(Skill.SkillType.ULTIMATE));
 
         // uniques
         FAKER = registery.register("faker", FakerSkill::new);
@@ -138,7 +140,7 @@ public class Skills {
         SAGITTARIUS = registery.register("sagittarius", () -> new SagittariusSkill(Skill.SkillType.UNIQUE));
         NPC_LIFE = registery.register("npc_life", () -> new NpcLifeSkill(Skill.SkillType.UNIQUE));
         ALCHEMIST = registery.register("alchemist", () -> new AlchemistSkill(Skill.SkillType.UNIQUE));
-        CRACKED_PHILOSOPHER_STONE = registery.register("cracked_philospher_stone", () -> new CrackedPhilospherStoneSkill(Skill.SkillType.UNIQUE));
+        CRACKED_PHILOSOPHER_STONE = registery.register("cracked_philosopher_stone", () -> new CrackedPhilospherStoneSkill(Skill.SkillType.UNIQUE));
 
         // vassal series
         UNITY = registery.register("unity", () -> new UnitySkill(Skill.SkillType.UNIQUE));
