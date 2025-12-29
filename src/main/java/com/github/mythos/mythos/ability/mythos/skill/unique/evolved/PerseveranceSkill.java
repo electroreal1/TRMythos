@@ -14,12 +14,15 @@ import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
 import com.github.manasmods.tensura.registry.attribute.TensuraAttributeRegistry;
+import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
+import com.github.manasmods.tensura.registry.particle.TensuraParticles;
 import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSource;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.registry.skill.Skills;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -36,6 +39,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.ToolActions;
@@ -49,7 +53,6 @@ import java.util.function.Predicate;
 
 public class PerseveranceSkill extends Skill {
     public PerseveranceSkill(SkillType type) {super(SkillType.UNIQUE);}
-    public static final UUID PERSISTENT = UUID.fromString("8d2fe5e0-4bb1-3f7e-8a4a-2d1d889f4241");
     public static final UUID WILLPOWER = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
 
     @Override
@@ -122,15 +125,10 @@ public class PerseveranceSkill extends Skill {
 
     public void onToggleOn(ManasSkillInstance skillInstance, LivingEntity entity) {
         AttributeInstance instance = entity.getAttribute((Attribute) ManasCoreAttributes.CRIT_CHANCE.get());
-        AttributeModifier attributemodifier = new AttributeModifier(PERSISTENT, "Persistent", 100.0D, AttributeModifier.Operation.ADDITION);
-        if (instance != null && !instance.hasModifier(attributemodifier))
-            instance.addTransientModifier(attributemodifier);
     }
 
     public void onToggleOff(ManasSkillInstance skillInstance, LivingEntity entity) {
         AttributeInstance instance = entity.getAttribute((Attribute)ManasCoreAttributes.CRIT_CHANCE.get());
-        if (instance != null)
-            instance.removeModifier(PERSISTENT);
     }
 
     public void onTick(ManasSkillInstance instance, LivingEntity entity) {
@@ -143,51 +141,52 @@ public class PerseveranceSkill extends Skill {
         }
     }
 
-//    public void onPressed(ManasSkillInstance instance, LivingEntity entity) {
-//        CompoundTag tag = instance.getOrCreateTag();
-//        // Willpower
-//        if (instance.getMode() == 1) {
-//            double EP = TensuraEPCapability.getEP(entity);
-//            AttributeInstance armor = entity.getAttribute(Attributes.ARMOR);
-//            if (armor != null)
-//                if (armor.getModifier(WILLPOWER) != null) {
-//                    armor.removeModifier(WILLPOWER);
-//                    entity.level.playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ARMOR_EQUIP_GENERIC, SoundSource.PLAYERS, 1.0F, 1.0F);
-//                } else {
-//                    AttributeModifier armorModifier = new AttributeModifier(WILLPOWER, "Willpower", getArmor(EP), AttributeModifier.Operation.ADDITION);
-//                    armor.addTransientModifier(armorModifier);
-//                    entity.level.playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ARMOR_EQUIP_NETHERITE, SoundSource.PLAYERS, 1.0F, 1.0F);
-//                    entity.level.playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.GENERIC_EXPLODE, SoundSource.PLAYERS, 1.0F, 1.0F);
-//                    TensuraParticleHelper.addServerParticlesAroundSelf((Entity)entity, (ParticleOptions)TensuraParticles.DARK_RED_LIGHTNING_SPARK.get(), 2.0D);
-//                    TensuraParticleHelper.addServerParticlesAroundSelf((Entity)entity, (ParticleOptions)TensuraParticles.DARK_PURPLE_LIGHTNING_SPARK.get(), 2.0D);
-//                    addMasteryPoint(instance, entity);
-//                    instance.setCoolDown(10);
-//                }
-//            AttributeInstance damage = entity.getAttribute(Attributes.ATTACK_DAMAGE);
-//            if (damage != null)
-//                if (damage.getModifier(WILLPOWER) != null) {
-//                    damage.removeModifier(WILLPOWER);
-//                } else {
-//                    damage.addTransientModifier(new AttributeModifier(WILLPOWER, "Willpower", instance.isMastered(entity) ? (getAttack(EP) * 2.0D) : getAttack(EP), AttributeModifier.Operation.ADDITION));
-//                }
-//            AttributeInstance speed = entity.getAttribute(Attributes.MOVEMENT_SPEED);
-//            if (speed != null)
-//                if (speed.getModifier(WILLPOWER) != null) {
-//                    speed.removeModifier(WILLPOWER);
-//                } else {
-//                    speed.addTransientModifier(new AttributeModifier(WILLPOWER, "Willpower", getSpeed(EP) / 100.0D, AttributeModifier.Operation.ADDITION));
-//                }
-//        }
-//        // Persistent
-//        if (instance.getMode() == 2) {
-//            if (entity.hasEffect((MobEffect)TensuraMobEffects.SEVERANCE_BLADE.get()))
-//                return;
-//            entity.swing(InteractionHand.MAIN_HAND, true);
-//            entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
-//            severance = instance.isMastered(entity) ? 19 : 4;
-//            entity.addEffect(new MobEffectInstance((MobEffect)TensuraMobEffects.SEVERANCE_BLADE.get(), 2400, severance, false, false, false));
-//        }
-//    }
+    public void onPressed(ManasSkillInstance instance, LivingEntity entity) {
+        CompoundTag tag = instance.getOrCreateTag();
+        int severance;
+        // Willpower
+        if (instance.getMode() == 1) {
+            double EP = TensuraEPCapability.getEP(entity);
+            AttributeInstance armor = entity.getAttribute(Attributes.ARMOR);
+            if (armor != null)
+                if (armor.getModifier(WILLPOWER) != null) {
+                    armor.removeModifier(WILLPOWER);
+                    entity.level.playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ARMOR_EQUIP_GENERIC, SoundSource.PLAYERS, 1.0F, 1.0F);
+                } else {
+                    AttributeModifier armorModifier = new AttributeModifier(WILLPOWER, "Willpower", getArmor(EP), AttributeModifier.Operation.ADDITION);
+                    armor.addTransientModifier(armorModifier);
+                    entity.level.playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ARMOR_EQUIP_NETHERITE, SoundSource.PLAYERS, 1.0F, 1.0F);
+                    entity.level.playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.GENERIC_EXPLODE, SoundSource.PLAYERS, 1.0F, 1.0F);
+                    TensuraParticleHelper.addServerParticlesAroundSelf((Entity)entity, (ParticleOptions) TensuraParticles.DARK_RED_LIGHTNING_SPARK.get(), 2.0D);
+                    TensuraParticleHelper.addServerParticlesAroundSelf((Entity)entity, (ParticleOptions)TensuraParticles.DARK_PURPLE_LIGHTNING_SPARK.get(), 2.0D);
+                    addMasteryPoint(instance, entity);
+                    instance.setCoolDown(10);
+                }
+            AttributeInstance damage = entity.getAttribute(Attributes.ATTACK_DAMAGE);
+            if (damage != null)
+                if (damage.getModifier(WILLPOWER) != null) {
+                    damage.removeModifier(WILLPOWER);
+                } else {
+                    damage.addTransientModifier(new AttributeModifier(WILLPOWER, "Willpower", instance.isMastered(entity) ? (getAttack(EP) * 2.0D) : getAttack(EP), AttributeModifier.Operation.ADDITION));
+                }
+            AttributeInstance speed = entity.getAttribute(Attributes.MOVEMENT_SPEED);
+            if (speed != null)
+                if (speed.getModifier(WILLPOWER) != null) {
+                    speed.removeModifier(WILLPOWER);
+                } else {
+                    speed.addTransientModifier(new AttributeModifier(WILLPOWER, "Willpower", getSpeed(EP) / 100.0D, AttributeModifier.Operation.ADDITION));
+                }
+        }
+        // Persistent
+        if (instance.getMode() == 2) {
+            if (entity.hasEffect((MobEffect)TensuraMobEffects.SEVERANCE_BLADE.get()))
+                return;
+            entity.swing(InteractionHand.MAIN_HAND, true);
+            entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
+            severance = instance.isMastered(entity) ? 19 : 4;
+            entity.addEffect(new MobEffectInstance((MobEffect) TensuraMobEffects.SEVERANCE_BLADE.get(), 2400, severance, false, false, false));
+        }
+    }
 
     public void onTouchEntity(ManasSkillInstance instance, LivingEntity entity, LivingHurtEvent event) {
         if (!isInSlot(entity))
