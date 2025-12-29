@@ -25,10 +25,9 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class AlchemistSkill extends Skill {
-    protected static final UUID MULTILAYER = UUID.fromString("2c03b682-5705-11ee-8c99-0242ac120002");
-    protected static final UUID SHP = UUID.fromString("2c033682-5705-11ee-8c99-0242ac120002");
-    protected static final UUID HP = UUID.fromString("2gh3b682-5705-11ee-8c99-0242ac120002");
-
+    protected static final UUID MULTILAYER = UUID.fromString("c74ccef7-40de-4e72-aff6-0f99a07adc37");
+    protected static final UUID SHP = UUID.fromString("9fd27908-f361-49db-9636-e2301139258f");
+    protected static final UUID HP = UUID.fromString("710c8826-48e0-4df5-88c6-678fa0272c27");
     public AlchemistSkill(SkillType type) {
         super(SkillType.UNIQUE);
     }

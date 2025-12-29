@@ -202,9 +202,11 @@
 
   "trmythos.skill.excalibur": "Excalibur",
   "trmythos.skill.excalibur.description": "The blade of kings, knights and monarchs, lead your army into battle.",
+  "item.trmythos.excalibur": "Excalibur",
 
   "trmythos.skill.gram": "Gram",
   "trmythos.skill.description": "The blade that has slain dragons, the Dragon Slayer, they call you, for having killed a creature hundreds of times your size and power.",
+  "item.trmythos.gram": "Gram",
 
   "trmythos.skill.celestial_path_blue": "Celestial Path - Blue Mask",
   "trmythos.skill.celestial_path_blue.description": "A single step guided by fate can change an entire battle.",

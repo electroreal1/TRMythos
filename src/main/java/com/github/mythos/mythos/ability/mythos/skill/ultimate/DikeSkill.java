@@ -2,7 +2,6 @@ package com.github.mythos.mythos.ability.mythos.skill.ultimate;
 
 import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
-import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
 import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.SkillUtils;
@@ -10,13 +9,10 @@ import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
-import com.github.manasmods.tensura.entity.DirewolfEntity;
 import com.github.manasmods.tensura.entity.magic.beam.BeamProjectile;
-import com.github.manasmods.tensura.entity.variant.DirewolfVariant;
 import com.github.manasmods.tensura.race.RaceHelper;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.registry.entity.TensuraEntityTypes;
-import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSources;
 import com.github.mythos.mythos.registry.MythosMobEffects;
@@ -36,7 +32,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -132,52 +127,52 @@ public class DikeSkill extends Skill {
     public boolean onHeld(ManasSkillInstance instance, LivingEntity living, int heldTicks) {
         // Annihilation Ray
         if (instance.getMode() == 2) {
-            if (living instanceof Player) {
-                Player player = (Player)living;
-                if (heldTicks % 100 == 0 && heldTicks > 0)
+            if (living instanceof Player player) {
+                if (heldTicks > 0 && heldTicks % 100 == 0) {
                     addMasteryPoint(instance, living);
+                }
                 double cost = magiculeCost(living, instance);
                 spawnSolarBeam(player, instance, cost);
-                living.level.playSound((Player)null, living.getX(), living.getY(), living.getZ(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.8F, 0.5F);
+                living.level.playSound(null, living.getX(), living.getY(), living.getZ(),
+                        SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.8F, 0.5F);
             }
             return true;
         }
 
         // Glimpse of Heaven
-        if (instance.getMode() == 3) {
-            if (isMastered(instance, living)) {
+        if (instance.getMode() == 3 && living instanceof ServerPlayer player) {
 
-                if (heldTicks % 20 == 0 && heldTicks <= 100 && living instanceof ServerPlayer player) {
+            if (!isMastered(instance, living)) return true;
+            if (heldTicks % 20 == 0 && heldTicks <= 100) {
+                int index = heldTicks / 20;
+                index = Math.min(index, GLIMPSE_MESSAGES.length - 1);
+                player.sendSystemMessage(GLIMPSE_MESSAGES[index]);
+            }
 
-                    int index = heldTicks / 20;
-                    if (index >= GLIMPSE_MESSAGES.length) index = GLIMPSE_MESSAGES.length - 1;
+            if (heldTicks >= 100) {
+                ServerLevel server = (ServerLevel) living.level;
 
-                    player.sendSystemMessage(GLIMPSE_MESSAGES[index]);
+                if (!living.level.isClientSide) {
+                    holyExplosion(server, living.position(), 25);
+                } else {
+                    holyChargeParticles(living, heldTicks);
                 }
 
-                if (heldTicks >= 100) {
-                    ServerLevel server = (ServerLevel) living.level;
-                    if (living.level.isClientSide) {
-                        holyChargeParticles(living, heldTicks);
-                    }
-                    double radius = 25;
-                    double damage = 5000;
-                    List<LivingEntity> targets = server.getEntitiesOfClass(
-                            LivingEntity.class,
-                            living.getBoundingBox().inflate(radius),
-                            e -> e != living
-                    );
-                    for (LivingEntity target : targets) {
-                        int kills = TensuraEPCapability.getHumanKill(target);
-                        double dmg = damage + (kills * 100);
-                        target.hurt(TensuraDamageSources.HOLY_DAMAGE, (float) dmg);
-                    }
-                    instance.setCoolDown(1200);
-                    return true;
+                double baseDamage = 5000;
+                double radius = 25;
+                List<LivingEntity> targets = server.getEntitiesOfClass(LivingEntity.class, living.getBoundingBox().inflate(radius), e -> e != living);
+
+                for (LivingEntity target : targets) {
+                    int kills = TensuraEPCapability.getHumanKill(target);
+                    double dmg = baseDamage + (kills * 100);
+                    target.hurt(TensuraDamageSources.HOLY_DAMAGE, (float) dmg);
                 }
+
+                instance.setCoolDown(1200);
+                return true;
             }
         }
-        return false;
+        return true;
     }
 
     public void onRelease(ManasSkillInstance instance, LivingEntity entity, int heldTicks) {
@@ -244,7 +239,8 @@ public class DikeSkill extends Skill {
         return light > 10;
     }
 
-    public void onEntityHurt(LivingHurtEvent event, ManasSkillInstance instance, Player player) {
+
+    public void onBeingDamaged(LivingHurtEvent event, ManasSkillInstance instance, Player player) {
         if (isInSlot(player)) {
             LivingEntity target = event.getEntity();
             DamageSource source = event.getSource();

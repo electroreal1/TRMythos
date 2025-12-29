@@ -257,9 +257,9 @@ public class CarnageSkill extends Skill {
                     int fearLevel = (int) (difference * 0.5 - 1.0);
                     fearLevel = Math.min(fearLevel, TensuraConfig.INSTANCE.mobEffectConfig.maxFear.get());
                     SkillHelper.checkThenAddEffectSource(target, entity, TensuraMobEffects.FEAR.get(), 200, fearLevel);
-                    entity.addEffect(new MobEffectInstance(TensuraMobEffects.FRAGILITY.get(), 1200, fearLevel, false, false, false));
-                    entity.addEffect(new MobEffectInstance(TensuraMobEffects.CURSE.get(), 1200, fearLevel, false, false, false));
-                    entity.addEffect(new MobEffectInstance(TensuraMobEffects.MOVEMENT_INTERFERENCE.get(), 1200, fearLevel, false, false, false));
+                    target.addEffect(new MobEffectInstance(TensuraMobEffects.FRAGILITY.get(), 1200, fearLevel, false, false, false));
+                    target.addEffect(new MobEffectInstance(TensuraMobEffects.CURSE.get(), 1200, fearLevel, false, false, false));
+                    target.addEffect(new MobEffectInstance(TensuraMobEffects.MOVEMENT_INTERFERENCE.get(), 1200, fearLevel, false, false, false));
                     HakiSkill.hakiPush(target, entity, fearLevel);
                     }
                 }

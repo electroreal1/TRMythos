@@ -209,14 +209,14 @@ public class HoarderSkill extends Skill implements ISpatialStorage {
 
     @Override
     public int modes() {
-        return 3;
+        return 2;
     }
 
     public int nextMode(LivingEntity entity, TensuraSkillInstance instance, boolean reverse) {
         if (reverse)
-            return (instance.getMode() == 1) ? 3 : (instance.getMode() - 1);
+            return (instance.getMode() == 1) ? 2 : (instance.getMode() - 1);
         else
-            return (instance.getMode() == 3) ? 1 : (instance.getMode() + 1);
+            return (instance.getMode() == 2) ? 1 : (instance.getMode() + 1);
     }
 
     @Override
