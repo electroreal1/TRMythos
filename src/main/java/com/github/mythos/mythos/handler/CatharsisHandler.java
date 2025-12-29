@@ -3,21 +3,13 @@ package com.github.mythos.mythos.handler;
 import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
-import com.github.manasmods.tensura.ability.skill.Skill;
-import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
 import com.github.mythos.mythos.ability.confluence.skill.ConfluenceUniques;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ServerChatEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class CatharsisHandler {
@@ -68,7 +60,7 @@ public class CatharsisHandler {
 
         SkillStorage storage = SkillAPI.getSkillsFrom(player);
         ManasSkill skill = ConfluenceUniques.CATHARSIS.get();
-        if (skill != null && !storage.getSkill(skill).isPresent()) {
+        if (storage.getSkill(skill).isEmpty()) {
             storage.learnSkill(skill);
             obtained = true;
             ownerUUID = player.getUUID().toString();
@@ -78,31 +70,6 @@ public class CatharsisHandler {
         }
     }
 
-    @SubscribeEvent
-    public void onBeingDamaged(LivingHurtEvent event) {
-        Entity source = event.getSource().getEntity();
-        Entity victim = event.getEntity();
-
-        if (!(victim instanceof LivingEntity target)) return;
-        if (!(source instanceof LivingEntity attacker)) return;
-
-        SkillStorage targetStorage = SkillAPI.getSkillsFrom(target);
-        Skill catharsisSkill = ConfluenceUniques.CATHARSIS.get();
-        if (targetStorage == null || !targetStorage.getSkill(catharsisSkill).isPresent()) return;
-
-        SkillStorage attackerStorage = SkillAPI.getSkillsFrom(attacker);
-        Skill sporeblood = ConfluenceUniques.SPOREBLOOD.get();
-        if (attackerStorage != null && attackerStorage.getSkill(sporeblood).isPresent()) {
-            float reduced = event.getAmount() * 0.75f;
-            event.setAmount(reduced);
-
-            attacker.level.playSound(null, target.blockPosition(),
-                    SoundEvents.SLIME_BLOCK_PLACE, SoundSource.PLAYERS,
-                    0.6F, 0.8F + target.getRandom().nextFloat() * 0.4F);
-
-            TensuraParticleHelper.addServerParticlesAroundSelf(target, ParticleTypes.SPORE_BLOSSOM_AIR);
-        }
-    }
 }
 
 

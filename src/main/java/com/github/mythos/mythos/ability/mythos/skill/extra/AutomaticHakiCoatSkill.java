@@ -6,6 +6,7 @@ import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
 import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.skill.Skill;
+import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import net.minecraft.resources.ResourceLocation;
@@ -31,8 +32,17 @@ public class AutomaticHakiCoatSkill extends Skill {
         SkillStorage storage = SkillAPI.getSkillsFrom(entity);
         Skill HeroHaki = ExtraSkills.HERO_HAKI.get();
         Skill DemonLordHaki = ExtraSkills.DEMON_LORD_HAKI.get();
+        double currentEP = TensuraEPCapability.getCurrentEP(entity);
 
-        return SkillUtils.isSkillMastered(entity, HeroHaki) || SkillUtils.isSkillMastered(entity, DemonLordHaki);
+        if (currentEP < getObtainingEpCost()) {
+            return false;
+        }
+
+        if (SkillUtils.hasSkill(entity, HeroHaki)) {
+            return true;
+        } else if (SkillUtils.hasSkill(entity, DemonLordHaki)) {
+            return true;
+        } else return false;
     }
 
     public double learningCost() {

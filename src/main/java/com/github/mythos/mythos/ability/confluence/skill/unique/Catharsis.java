@@ -1,15 +1,20 @@
 package com.github.mythos.mythos.ability.confluence.skill.unique;
 
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
+import com.github.manasmods.manascore.api.skills.SkillAPI;
+import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
 import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.skill.Skill;
+import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
 import com.github.manasmods.tensura.enchantment.EngravingEnchantment;
 import com.github.manasmods.tensura.registry.attribute.TensuraAttributeRegistry;
 import com.github.manasmods.tensura.registry.enchantment.TensuraEnchantments;
+import com.github.mythos.mythos.ability.confluence.skill.ConfluenceUniques;
 import com.github.mythos.mythos.registry.MythosItems;
 import com.mojang.math.Vector3f;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -19,6 +24,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -29,6 +35,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.UUID;
 
@@ -111,6 +118,7 @@ public class Catharsis extends Skill {
             return instance.isMastered(entity) && instance.isToggled() ? true : tag.getBoolean("ChaoticFateActivated");
         }
     }
+
 
     public void onTouchEntity(ManasSkillInstance instance, LivingEntity entity, LivingHurtEvent event, Player player) {
         CompoundTag tag = instance.getOrCreateTag();
@@ -236,6 +244,32 @@ public class Catharsis extends Skill {
         ItemStack off = player.getOffhandItem();
 
         return main.getItem() == MythosItems.CATHARSIS.get() || off.getItem() == MythosItems.CATHARSIS.get();
+    }
+
+    @SubscribeEvent
+    public void onBeingDamaged(LivingHurtEvent event) {
+        Entity source = event.getSource().getEntity();
+        Entity victim = event.getEntity();
+
+        if (!(victim instanceof LivingEntity target)) return;
+        if (!(source instanceof LivingEntity attacker)) return;
+
+        SkillStorage targetStorage = SkillAPI.getSkillsFrom(target);
+        Skill catharsisSkill = ConfluenceUniques.CATHARSIS.get();
+        if (targetStorage.getSkill(catharsisSkill).isEmpty()) return;
+
+        SkillStorage attackerStorage = SkillAPI.getSkillsFrom(attacker);
+        Skill sporeblood = ConfluenceUniques.SPOREBLOOD.get();
+        if (attackerStorage.getSkill(sporeblood).isPresent()) {
+            float reduced = event.getAmount() * 0.75f;
+            event.setAmount(reduced);
+
+            attacker.level.playSound(null, target.blockPosition(),
+                    SoundEvents.SLIME_BLOCK_PLACE, SoundSource.PLAYERS,
+                    0.6F, 0.8F + target.getRandom().nextFloat() * 0.4F);
+
+            TensuraParticleHelper.addServerParticlesAroundSelf(target, ParticleTypes.SPORE_BLOSSOM_AIR);
+        }
     }
 
 }
