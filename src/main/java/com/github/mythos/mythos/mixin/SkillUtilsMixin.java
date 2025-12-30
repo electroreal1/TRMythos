@@ -144,10 +144,15 @@ public abstract class SkillUtilsMixin {
         Entity var4 = source.getEntity();
         if (var4 instanceof LivingEntity attacker) {
             if (isSkillInSlot(attacker, (ManasSkill)Skills.ORUNMILA.get())) {
-                return true;
+                original = true;
             }
             if (isSkillInSlot(attacker, (ManasSkill) ConfluenceUniques.FRAGARACH.get())) {
-                return Math.random() < 0.5;
+                if (Math.random() < 0.5) {
+                    original = true;
+                }
+            }
+            if (isSkillInSlot(attacker, (ManasSkill)Skills.PRETENDER_KING.get())) {
+                original = true;
             }
         }
 
@@ -178,6 +183,9 @@ public abstract class SkillUtilsMixin {
                    original = true;
                }
                if (isSkillInSlot(entity, (ManasSkill)Skills.BALANCE.get())) {
+                   original = true;
+               }
+               if (isSkillInSlot(entity, (ManasSkill)Skills.PRETENDER_KING.get())) {
                    original = true;
                }
 
@@ -253,6 +261,13 @@ public abstract class SkillUtilsMixin {
                 original *= 4;
             } else {
                 original *= 2;
+            }
+        }
+        if (hasSkill(player, (ManasSkill) Skills.PRETENDER_KING.get())) {
+            if (isSkillMastered(player, (ManasSkill) Skills.PRETENDER_KING.get())) {
+                original += 10;
+            } else {
+                original += 5;
             }
         }
 

@@ -69,6 +69,7 @@ public class Skills {
     public static final RegistryObject<NpcLifeSkill> NPC_LIFE;
     public static final RegistryObject<AlchemistSkill> ALCHEMIST;
     public static final RegistryObject<CrackedPhilospherStoneSkill> CRACKED_PHILOSOPHER_STONE;
+    public static final RegistryObject<PretenderKingSkill> PRETENDER_KING;
 
     // vassal
     public static final RegistryObject<FoundationSkill> FOUNDATION;
@@ -141,6 +142,7 @@ public class Skills {
         NPC_LIFE = registery.register("npc_life", () -> new NpcLifeSkill(Skill.SkillType.UNIQUE));
         ALCHEMIST = registery.register("alchemist", () -> new AlchemistSkill(Skill.SkillType.UNIQUE));
         CRACKED_PHILOSOPHER_STONE = registery.register("cracked_philosopher_stone", () -> new CrackedPhilospherStoneSkill(Skill.SkillType.UNIQUE));
+        PRETENDER_KING = registery.register("pretender_king", () -> new PretenderKingSkill(Skill.SkillType.UNIQUE));
 
         // vassal series
         UNITY = registery.register("unity", () -> new UnitySkill(Skill.SkillType.UNIQUE));
