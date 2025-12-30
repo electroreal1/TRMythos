@@ -83,6 +83,9 @@ public abstract class SkillUtilsMixin {
         if (hasSkill(entity, (ManasSkill)ConfluenceUniques.CELESTIAL_MUTATION_RED.get()) && instance.getSkill() instanceof Battewill) {
             point += 999;
         }
+        if (hasSkill(entity, (ManasSkill) Skills.FALSE_HERO.get())) {
+            point += 15;
+        }
 
 
         return point;
@@ -122,6 +125,9 @@ public abstract class SkillUtilsMixin {
         }
         if (hasSkill(entity, (ManasSkill)Skills.SAGITTARIUS.get())) {
             point += 8;
+        }
+        if (hasSkill(entity, (ManasSkill) Skills.FALSE_HERO.get())) {
+            point += 15;
         }
         if (hasSkill(entity, (ManasSkill)ConfluenceUniques.CELESTIAL_CULTIVATION_ORANGE.get()) && instance.getSkill() instanceof Magic) {
             point += 999;
@@ -188,6 +194,9 @@ public abstract class SkillUtilsMixin {
                if (isSkillInSlot(entity, (ManasSkill)Skills.PRETENDER_KING.get())) {
                    original = true;
                }
+               if (isSkillInSlot(entity, (ManasSkill)Skills.FALSE_HERO.get())) {
+                   original = true;
+               }
 
 
 
@@ -229,6 +238,9 @@ public abstract class SkillUtilsMixin {
             original = 0;
         }
         if (hasSkill(player, (ManasSkill) Skills.STARGAZER.get())) {
+            original *= 2.0F;
+        }
+        if (hasSkill(player, (ManasSkill) Skills.FALSE_HERO.get())) {
             original *= 2.0F;
         }
         if (hasSkill(player, (ManasSkill) Skills.TENACIOUS.get())) {
@@ -328,6 +340,16 @@ public abstract class SkillUtilsMixin {
             } else {
                 original *= 2;
             }
+        }
+        if (hasSkill(player, (ManasSkill) Skills.PRETENDER_KING.get())) {
+            if (isSkillMastered(player, (ManasSkill) Skills.PRETENDER_KING.get())) {
+                original += 10;
+            } else {
+                original += 5;
+            }
+        }
+        if (hasSkill(player, (ManasSkill) Skills.FALSE_HERO.get())) {
+            original *= 2.0F;
         }
 
         original += ChildOfThePlaneSkill.getChildOfThePlaneBoost(player, false, majin);

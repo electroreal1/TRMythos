@@ -27,6 +27,10 @@ public abstract class SkillHelperMixin {
             if (SkillUtils.isSkillToggled(player, (ManasSkill) Skills.DOMINATE.get())) {
                 cost *= 0.5;
             }
+            if (SkillUtils.isSkillToggled(player, (ManasSkill) Skills.DOMINATE.get())) {
+                cost *= 2;
+            }
+
         }
         return cost;
     }
