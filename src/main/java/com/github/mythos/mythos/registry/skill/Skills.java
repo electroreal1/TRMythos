@@ -70,6 +70,8 @@ public class Skills {
     public static final RegistryObject<AlchemistSkill> ALCHEMIST;
     public static final RegistryObject<CrackedPhilospherStoneSkill> CRACKED_PHILOSOPHER_STONE;
     public static final RegistryObject<PretenderKingSkill> PRETENDER_KING;
+    public static final RegistryObject<HoarderSkill> HOARDER;
+    public static final RegistryObject<NightsThiefSkill> NIGHTS_THIEF;
 
     // vassal
     public static final RegistryObject<FoundationSkill> FOUNDATION;
@@ -143,6 +145,8 @@ public class Skills {
         ALCHEMIST = registery.register("alchemist", () -> new AlchemistSkill(Skill.SkillType.UNIQUE));
         CRACKED_PHILOSOPHER_STONE = registery.register("cracked_philosopher_stone", () -> new CrackedPhilospherStoneSkill(Skill.SkillType.UNIQUE));
         PRETENDER_KING = registery.register("pretender_king", () -> new PretenderKingSkill(Skill.SkillType.UNIQUE));
+        HOARDER = registery.register("hoarder", () -> new HoarderSkill(Skill.SkillType.UNIQUE));
+        NIGHTS_THIEF = registery.register("nights_thief", () -> new NightsThiefSkill(Skill.SkillType.UNIQUE));
 
         // vassal series
         UNITY = registery.register("unity", () -> new UnitySkill(Skill.SkillType.UNIQUE));
