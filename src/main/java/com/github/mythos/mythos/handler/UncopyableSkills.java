@@ -15,9 +15,7 @@ import java.util.Set;
 @Mod.EventBusSubscriber(modid = "trmythos")
 public class UncopyableSkills {
     public static final Set<ResourceLocation> BLOCKED_SKILLS = new HashSet<>();
-    static {
-        BLOCKED_SKILLS.add(new ResourceLocation("trmythos", "npc_life"));
-    }
+
 
 
     public static boolean isBlocked(ManasSkill skill) {
@@ -35,5 +33,10 @@ public class UncopyableSkills {
         if (event.getPlunderer() instanceof Player player) {
             player.displayClientMessage(Component.literal("This power cannot be plundered.").withStyle(ChatFormatting.DARK_RED), true);
         }
+    }
+
+    static {
+        BLOCKED_SKILLS.add(new ResourceLocation("trmythos", "npc_life"));
+        BLOCKED_SKILLS.add(new ResourceLocation("trmythos", "wavebreaker"));
     }
 }

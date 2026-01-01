@@ -1,6 +1,7 @@
 package com.github.mythos.mythos.networking;
 
 import com.github.mythos.mythos.networking.play2server.RequestSkillCopyOrunmilaPacket;
+import com.github.mythos.mythos.networking.play2server.TsunamiShakePacket;
 import com.google.common.base.Function;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -28,7 +29,16 @@ public class MythosNetwork {
     }
 
     public static void register() {
-        registerPacket(RequestSkillCopyOrunmilaPacket.class, RequestSkillCopyOrunmilaPacket::toBytes, RequestSkillCopyOrunmilaPacket::new, RequestSkillCopyOrunmilaPacket::handle);
+        registerPacket(RequestSkillCopyOrunmilaPacket.class,
+                RequestSkillCopyOrunmilaPacket::toBytes,
+                RequestSkillCopyOrunmilaPacket::new,
+                RequestSkillCopyOrunmilaPacket::handle);
+
+        registerPacket(TsunamiShakePacket.class,
+                TsunamiShakePacket::toBytes,
+                TsunamiShakePacket::new,
+                TsunamiShakePacket::handle
+                );
     }
 
 
@@ -46,6 +56,11 @@ public class MythosNetwork {
             }), msg);
         }
 
+    }
+
+    public static void sendTsunamiShake(ServerPlayer player, int duration, float strength) {
+        INSTANCE.send(PacketDistributor.PLAYER.with(() -> player),
+                new TsunamiShakePacket(duration, strength));
     }
 
     public static <MSG> void sendToAllTrackingAndSelf(MSG msg, LivingEntity tracked) {

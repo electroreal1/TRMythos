@@ -1,6 +1,5 @@
 package com.github.mythos.mythos.ability.mythos.skill.unique.normal;
 
-import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
 import com.github.manasmods.manascore.attribute.ManasCoreAttributes;
@@ -9,7 +8,6 @@ import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.race.RaceHelper;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.registry.particle.TensuraParticles;
-import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.manasmods.tensura.util.TensuraAdvancementsHelper;
 import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSources;
@@ -17,7 +15,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundAnimatePacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -27,10 +24,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -42,7 +37,9 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class CommonSenseSkill extends Skill {
@@ -108,9 +105,6 @@ public class CommonSenseSkill extends Skill {
     }
 
     public void onTick(ManasSkillInstance instance, LivingEntity entity) {
-        entity.removeEffect((MobEffect) TensuraMobEffects.INSANITY.get());
-        entity.removeEffect((MobEffect) TensuraMobEffects.FEAR.get());
-        entity.removeEffect((MobEffect) TensuraMobEffects.MIND_CONTROL.get());
         if (instance.isToggled()) {
             CompoundTag tag = instance.getOrCreateTag();
             int time = tag.getInt("activatedTimes");
@@ -118,6 +112,15 @@ public class CommonSenseSkill extends Skill {
                 addMasteryPoint(instance, entity);
             tag.putInt("activatedTimes", time + 1);
         }
+    }
+
+    @Override
+    public List<MobEffect> getImmuneEffects(ManasSkillInstance instance, LivingEntity entity) {
+        List<MobEffect> list = new ArrayList<>();
+        list.add((MobEffect) TensuraMobEffects.INSANITY.get());
+        list.add((MobEffect) TensuraMobEffects.FEAR.get());
+        list.add((MobEffect) TensuraMobEffects.MIND_CONTROL.get());
+        return list;
     }
 
     public void onBeingDamaged(ManasSkillInstance instance, LivingAttackEvent event) {
@@ -131,7 +134,7 @@ public class CommonSenseSkill extends Skill {
             return;
         if (damageSource.getEntity() == null || damageSource.getEntity() != damageSource.getDirectEntity())
             return;
-        if (entity.getAttribute(Attributes.LUCK).getValue() > 0.50F)
+        if (Objects.requireNonNull(entity.getAttribute(Attributes.LUCK)).getValue() > 0.50F)
             return;
         entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.PLAYERS, 2.0F, 1.0F);
         event.setCanceled(true);
@@ -144,7 +147,7 @@ public class CommonSenseSkill extends Skill {
             return;
         if (SkillUtils.isProjectileAlwaysHit(event.getProjectile()))
             return;
-        if (entity.getAttribute(Attributes.LUCK).getValue() > 0.50F)
+        if (Objects.requireNonNull(entity.getAttribute(Attributes.LUCK)).getValue() > 0.50F)
             return;
         entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.PLAYERS, 2.0F, 1.0F);
         event.setCanceled(true);
@@ -158,12 +161,12 @@ public class CommonSenseSkill extends Skill {
             return;
         if (!DamageSourceHelper.isPhysicalAttack(source))
             return;
-        if (attacker.getAttribute(Attributes.LUCK).getValue() <= 0.50D)
+        if (Objects.requireNonNull(attacker.getAttribute(Attributes.LUCK)).getValue() <= 0.50D)
             return;
         LivingEntity entity = e.getEntity();
         if (SkillUtils.canNegateCritChance((Entity)entity))
             return;
-        double critical = attacker.getAttribute(ManasCoreAttributes.CRIT_MULTIPLIER.get()).getValue();
+        double critical = Objects.requireNonNull(attacker.getAttribute(ManasCoreAttributes.CRIT_MULTIPLIER.get())).getValue();
         e.setAmount((float)(e.getAmount() * critical));
         entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_CRIT, attacker
                 .getSoundSource(), 1.0F, 1.0F);
@@ -200,29 +203,20 @@ public class CommonSenseSkill extends Skill {
     }
 
     public double magiculeCost(LivingEntity entity, ManasSkillInstance instance) {
-        switch (instance.getMode()) {
-            case 1:
-                return 1000.0D;
+        if (instance.getMode() == 1) {
+            return 1000.0D;
         }
-        return
-
-                0.0D;
+        return 0.0D;
     }
 
     public void onPressed(ManasSkillInstance instance, LivingEntity entity) {
         Level level = entity.getLevel();
-        switch (instance.getMode()) {
-            case 1:
-                useTrivia(instance, entity, level);
-                break;
-        }
+        useTrivia(instance, entity, level);
     }
 
     private void useTrivia(ManasSkillInstance instance, LivingEntity entity, Level level) {
         addMasteryPoint(instance, entity);
         instance.setCoolDown(1);
-
-        double range = instance.isMastered(entity) ? 15.0D : 10.0D;
 
         Vec3 target = entity.getEyePosition().add(entity.getLookAngle().scale(15.0D));
         Vec3 source = entity.getEyePosition().add(0.0D, 1.6D, 0.0D);

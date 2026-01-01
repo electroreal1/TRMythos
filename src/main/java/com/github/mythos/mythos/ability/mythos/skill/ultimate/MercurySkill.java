@@ -9,6 +9,7 @@ import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.registry.skill.UniqueSkills;
 import io.github.Memoires.trmysticism.registry.effects.MysticismMobEffects;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
@@ -50,8 +51,12 @@ public class MercurySkill extends Skill {
             list.add((MobEffect) TensuraMobEffects.MAGIC_INTERFERENCE.get());
             list.add((MobEffect) TensuraMobEffects.SPATIAL_BLOCKADE.get());
             list.add((MobEffect) TensuraMobEffects.ENERGY_BLOCKADE.get());
+            list.add((MobEffect) TensuraMobEffects.PARALYSIS.get());
             list.add((MobEffect) MysticismMobEffects.TIMESTOP.get());
             list.add((MobEffect) MysticismMobEffects.TIMESTOP_CORE.get());
+            list.add(MobEffects.WEAKNESS);
+            list.add(MobEffects.MOVEMENT_SLOWDOWN);
+            list.add(MobEffects.DIG_SLOWDOWN);
         }
         return list;
     }

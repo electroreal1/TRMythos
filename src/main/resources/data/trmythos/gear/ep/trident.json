@@ -1,0 +1,7 @@
+{
+  "evolvingItem": "tensura:vortex_spear",
+  "gainEP": 0.06,
+  "item": "minecraft:trident",
+  "maxEP": 18000,
+  "minEP": 1000
+}
