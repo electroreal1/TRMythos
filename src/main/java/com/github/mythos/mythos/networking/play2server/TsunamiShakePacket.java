@@ -22,7 +22,7 @@ public class TsunamiShakePacket {
 
     public void toBytes(FriendlyByteBuf buf) {
         buf.writeInt(duration);
-        buf.writeFloat(strength);
+        buf.writeFloat(strength); // God i need lodestone my goated library
     }
 
     public static void handle(TsunamiShakePacket msg, Supplier<NetworkEvent.Context> ctx) {

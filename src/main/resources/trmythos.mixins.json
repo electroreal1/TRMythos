@@ -10,6 +10,7 @@
     "MagicInterferenceEffectMixin",
     "MagicUtilsMixin",
     "MixinRobotnicSkill",
+    "ResistSkillMixin",
     "SkillHelperMixin",
     "SkillUtilsMixin",
     "TensuraPlayerCapabilityMixin",

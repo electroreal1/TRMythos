@@ -219,11 +219,8 @@ public class ProfanitySkill extends Skill {
                                 entity.getId(), 0.0, 1.0, 0.0, true)
                 );
 
-                List<LivingEntity> targets = level.getEntitiesOfClass(
-                        LivingEntity.class,
-                        entity.getBoundingBox().inflate(10.0),
-                        e -> e.isAlive() && !e.is(entity) && !entity.isAlliedTo(e)
-                );
+                List<LivingEntity> targets = level.getEntitiesOfClass(LivingEntity.class,
+                        entity.getBoundingBox().inflate(10.0), e -> e.isAlive() && !e.is(entity) && !entity.isAlliedTo(e));
 
                 if (!targets.isEmpty()) {
                     double ep = TensuraEPCapability.getEP(entity);
@@ -256,38 +253,6 @@ public class ProfanitySkill extends Skill {
         return false;
     }
 
-//    private static void applyRandomEffects(LivingEntity target, RandomSource random) {
-//        Set<String> blacklist = new HashSet<>(MythosSkillsConfig.blacklistedEffects.get());
-//
-//        List<MobEffect> allEffects = ForgeRegistries.MOB_EFFECTS.getValues().stream()
-//                .filter(Objects::nonNull)
-//                .filter(effect -> !blacklist.contains(ForgeRegistries.MOB_EFFECTS.getKey(effect).toString()))
-//                .collect(Collectors.toList());
-//
-//        for (MobEffect effect : ForgeRegistries.MOB_EFFECTS) {
-//            if (effect == null) continue; // skip null effects
-//            allEffects.add(effect);
-//        }
-//
-//        if (allEffects.isEmpty()) return;
-//
-//        Collections.shuffle(allEffects, new java.util.Random(random.nextLong()));
-//
-//        // Random number of effects: 1, 2, or 3
-//        int count = 1 + random.nextInt(3);
-//
-//        for (int i = 0; i < count && i < allEffects.size(); i++) {
-//            MobEffect effect = allEffects.get(i);
-//
-//            // Random duration: 5–20 seconds (100–400 ticks)
-//            int duration = 100 + random.nextInt(301);
-//
-//            // Random amplifier: 0–2 (level I–III)
-//            int amplifier = random.nextInt(3);
-//
-//            target.addEffect(new MobEffectInstance(effect, duration, amplifier));
-//        }
-//    }
 private static void applyRandomEffects(LivingEntity target, RandomSource random) {
     Set<String> blacklist = new HashSet<>(MythosSkillsConfig.blacklistedEffects.get());
 

@@ -160,6 +160,9 @@ public abstract class SkillUtilsMixin {
             if (isSkillInSlot(attacker, (ManasSkill)Skills.PRETENDER_KING.get())) {
                 original = true;
             }
+            if (isSkillInSlot(attacker, (ManasSkill)Skills.DENDRRAH.get())) {
+                original = true;
+            }
         }
 
         return original;

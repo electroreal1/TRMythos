@@ -1,4 +1,4 @@
-package com.github.mythos.mythos.ability.mythos.skill.ultimate;
+package com.github.mythos.mythos.ability.mythos.skill.ultimate.lord;
 
 import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;

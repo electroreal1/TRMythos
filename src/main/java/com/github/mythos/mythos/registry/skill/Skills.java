@@ -7,6 +7,8 @@ import com.github.mythos.mythos.ability.mythos.skill.extra.AutomaticHakiCoatSkil
 import com.github.mythos.mythos.ability.mythos.skill.extra.SpatialStorageSkill;
 import com.github.mythos.mythos.ability.mythos.skill.extra.ThunderRainSkill;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.*;
+import com.github.mythos.mythos.ability.mythos.skill.ultimate.god.DendrrahSkill;
+import com.github.mythos.mythos.ability.mythos.skill.ultimate.lord.*;
 import com.github.mythos.mythos.ability.mythos.skill.unique.DominateSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.DullahanSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.TenaciousSkill;
@@ -38,6 +40,9 @@ public class Skills {
     public static final RegistryObject<ApophisSkill> APOPHIS;
     public static final RegistryObject<DikeSkill> DIKE;
     public static final RegistryObject<RavanaSkill> RAVANA;
+
+    // God Class
+    public static final RegistryObject<DendrrahSkill> DENDRRAH;
     
     // uniques
     public static final RegistryObject<FakerSkill> FAKER;
@@ -117,6 +122,9 @@ public class Skills {
         APOPHIS = registery.register("apophis", () -> new ApophisSkill(Skill.SkillType.ULTIMATE));
         DIKE = registery.register("dike", () -> new DikeSkill(Skill.SkillType.ULTIMATE));
         RAVANA = registery.register("ravana", () -> new RavanaSkill(Skill.SkillType.ULTIMATE));
+
+        // god Class
+        DENDRRAH = registery.register("dendrahh", () -> new DendrrahSkill(Skill.SkillType.ULTIMATE));
 
         // uniques
         FAKER = registery.register("faker", FakerSkill::new);
