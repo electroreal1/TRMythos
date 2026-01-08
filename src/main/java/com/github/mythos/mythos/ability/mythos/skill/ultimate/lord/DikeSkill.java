@@ -287,7 +287,7 @@ public class DikeSkill extends Skill {
         Level level = living.level;
 
         double x = living.getX();
-        double y = living.getY() + 1.2;
+        double y = living.getY() + 0.2;
         double z = living.getZ();
 
         for (int i = 0; i < 3; i++) {
@@ -297,16 +297,9 @@ public class DikeSkill extends Skill {
             double px = x + Math.cos(angle) * radius;
             double pz = z + Math.sin(angle) * radius;
 
-            level.addParticle(ParticleTypes.END_ROD,
-                    px, y, pz,
-                    0, 0.01, 0);
-        }
+            level.addParticle(ParticleTypes.END_ROD, px, y, pz, 0, 0.01, 0);}
 
-        level.addParticle(
-                ParticleTypes.GLOW,
-                x, y, z,
-                0, 0.07, 0
-        );
+        level.addParticle(ParticleTypes.GLOW, x, y, z, 0, 0.07, 0);
     }
 
     private void holyExplosion(ServerLevel server, Vec3 pos, double radius) {

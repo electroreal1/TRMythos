@@ -304,8 +304,7 @@ public class RavanaSkill extends Skill {
         if (instance.getMode() == 2) {
             Level level = entity.level;
 
-            level.playSound(null, entity.blockPosition(), net.minecraft.sounds.SoundEvents.WITHER_DEATH,
-                    SoundSource.PLAYERS, 2.0f, 0.9f);
+            level.playSound(null, entity.blockPosition(), net.minecraft.sounds.SoundEvents.WITHER_DEATH, SoundSource.PLAYERS, 2.0f, 0.9f);
 
             entity.addEffect(new MobEffectInstance(MythosMobEffects.BLOOD_COAT.get(), 1200, 1, false, false, false));
             entity.addEffect(new MobEffectInstance(TensuraMobEffects.HAKI_COAT.get(), 1200, 1, false, false, false));

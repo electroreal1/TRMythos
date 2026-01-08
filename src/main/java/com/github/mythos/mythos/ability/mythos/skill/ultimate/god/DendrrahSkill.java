@@ -50,6 +50,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -198,6 +199,17 @@ public class DendrrahSkill extends Skill {
         return 4;
     }
 
+    @Override
+    public @NotNull Component getModeName(int mode) {
+        return switch (mode) {
+            case 1 -> Component.literal("War God Release");
+            case 2 -> Component.literal("Providence Blade");
+            case 3 -> Component.literal("Eternal War");
+            case 4 -> Component.literal("Cataclysm");
+            default -> Component.empty();
+        };
+    }
+
     public int nextMode(LivingEntity entity, TensuraSkillInstance instance, boolean reverse) {
         if (reverse)
             return (instance.getMode() == 1) ? 4 : (instance.getMode() - 1);
@@ -247,16 +259,17 @@ public class DendrrahSkill extends Skill {
     @Override
     public boolean onHeld(ManasSkillInstance instance, LivingEntity entity, int heldTicks) {
         if (instance.getMode() == 3) {
-            if (!(entity.getLevel() instanceof ServerLevel serverLevel)) return false;
-
+            Level level = entity.getLevel();
             if (heldTicks % 100 == 0) {
 
-                for (Entity e : serverLevel.getEntities(null, new AABB(Double.NEGATIVE_INFINITY, 0, Double.NEGATIVE_INFINITY,
+                for (Entity e : level.getEntities(null, new AABB(Double.NEGATIVE_INFINITY, 0, Double.NEGATIVE_INFINITY,
                         Double.POSITIVE_INFINITY, 256, Double.POSITIVE_INFINITY))) {
                     if (e instanceof LivingEntity living) {
                         int duration = 200;
-                        int amplifier = 0;
-                        living.addEffect(new MobEffectInstance(TensuraMobEffects.RAMPAGE.get(), duration, amplifier));
+                        int amplifier = 1;
+                        if (!((LivingEntity) e).hasEffect(TensuraMobEffects.RAMPAGE.get())) {
+                            living.addEffect(new MobEffectInstance(TensuraMobEffects.RAMPAGE.get(), duration, amplifier));
+                        }
                     }
                 }
             }

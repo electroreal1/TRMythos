@@ -55,18 +55,10 @@ public class ProfanitySkill extends Skill {
     }
 
     public double magiculeCost(LivingEntity entity, ManasSkillInstance instance) {
-        double var10000;
-        switch (instance.getMode()) {
-            case 1:
-                var10000 = 1000.0;
-            case 2:
-                var10000 = 1000.0;
-                break;
-            default:
-                var10000 = 500.0;
-        }
-
-        return var10000;
+        return switch (instance.getMode()) {
+            case 1, 2 -> 1000.0;
+            default -> 500.0;
+        };
     }
 
     public boolean canBeToggled(ManasSkillInstance instance, LivingEntity entity) {

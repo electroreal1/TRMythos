@@ -12,4 +12,12 @@ public class MythosDamageSourceHelper {
             return true;
         } else return false;
     }
+
+    public static boolean isBlood(DamageSource damageSource) {
+        if (damageSource.getMsgId().contains("blood")) {
+            return true;
+        } else if (damageSource.getMsgId().contains("bleed")) {
+            return true;
+        } else return false;
+    }
 }

@@ -158,7 +158,7 @@ public class PretenderKingSkill extends Skill {
     public void onPressed(ManasSkillInstance instance, LivingEntity entity) {
         if (instance.getMode() == 1) {
 
-            if (SkillHelper.outOfMagicule(entity, instance)) return;
+            if (!SkillHelper.outOfMagicule(entity, instance)) return;
             int radius = 10;
             int duration = 6;
             int maxStacks = 3;
@@ -199,7 +199,7 @@ public class PretenderKingSkill extends Skill {
                 instance.setCoolDown(instance.isMastered(entity) ? 5 : 10);
             }
         } else if (instance.getMode() == 2) {
-            if (SkillHelper.outOfMagicule(entity, instance)) return;
+            if (!SkillHelper.outOfMagicule(entity, instance)) return;
 
             int duration = 5;
             UUID MOVE_UUID = UUID.fromString("b5b4cc2b-f1cb-4711-ae6a-1dca224583b4");
@@ -222,6 +222,7 @@ public class PretenderKingSkill extends Skill {
 
     @Override
     public boolean onHeld(ManasSkillInstance instance, LivingEntity entity, int heldTicks) {
+        if (!(instance.getMode() == 3)) return false;
         if (!instance.isMastered(entity)) {
             entity.sendSystemMessage(Component.literal("You are too weak to use this move."));
         } else {
