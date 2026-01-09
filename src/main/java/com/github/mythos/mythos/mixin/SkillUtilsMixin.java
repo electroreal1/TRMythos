@@ -200,6 +200,9 @@ public abstract class SkillUtilsMixin {
                if (isSkillInSlot(entity, (ManasSkill)Skills.FALSE_HERO.get())) {
                    original = true;
                }
+               if (isSkillInSlot(entity, Skills.LUCIA.get())) {
+                   original = true;
+               }
 
 
 

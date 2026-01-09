@@ -40,6 +40,7 @@ public class Skills {
     public static final RegistryObject<ApophisSkill> APOPHIS;
     public static final RegistryObject<DikeSkill> DIKE;
     public static final RegistryObject<RavanaSkill> RAVANA;
+    public static final RegistryObject<LuciaSkill> LUCIA;
 
     // God Class
     public static final RegistryObject<DendrrahSkill> DENDRRAH;
@@ -123,6 +124,7 @@ public class Skills {
         APOPHIS = registery.register("apophis", () -> new ApophisSkill(Skill.SkillType.ULTIMATE));
         DIKE = registery.register("dike", () -> new DikeSkill(Skill.SkillType.ULTIMATE));
         RAVANA = registery.register("ravana", () -> new RavanaSkill(Skill.SkillType.ULTIMATE));
+        LUCIA = registery.register("lucia", () -> new LuciaSkill(Skill.SkillType.ULTIMATE));
 
         // god Class
         DENDRRAH = registery.register("dendrahh", () -> new DendrrahSkill(Skill.SkillType.ULTIMATE));

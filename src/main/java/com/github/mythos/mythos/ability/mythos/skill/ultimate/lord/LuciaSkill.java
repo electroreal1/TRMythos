@@ -1,4 +1,4 @@
-package com.github.mythos.mythos.ability.mythos.skill.unique.normal;
+package com.github.mythos.mythos.ability.mythos.skill.ultimate.lord;
 
 import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
@@ -8,6 +8,7 @@ import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
+import com.github.manasmods.tensura.ability.skill.resist.AbnormalConditionNullification;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
 import com.github.manasmods.tensura.effect.template.Transformation;
@@ -18,8 +19,8 @@ import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.registry.particle.TensuraParticles;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.registry.skill.Skills;
+import com.github.mythos.mythos.util.MythosUtils;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -53,14 +54,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class CrimsonOracleSkill extends Skill implements Transformation {
-    public CrimsonOracleSkill(SkillType type) {
-        super(SkillType.UNIQUE);
+public class LuciaSkill extends Skill implements Transformation {
+    public LuciaSkill(SkillType type) {
+        super(SkillType.ULTIMATE);
+    }
+
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/ultimate/lucia.png");
     }
 
     @Override
     public double getObtainingEpCost() {
-        return 666666;
+        return 6666666;
     }
 
     @Override
@@ -68,46 +73,44 @@ public class CrimsonOracleSkill extends Skill implements Transformation {
         return 3000;
     }
 
+    @Override
+    public int modes() {
+        return 4;
+    }
+
     public int nextMode(LivingEntity entity, TensuraSkillInstance instance, boolean reverse) {
         if (reverse)
-            return (instance.getMode() == 1) ? 3 : (instance.getMode() - 1);
+            return (instance.getMode() == 1) ? 4 : (instance.getMode() - 1);
         else
-            return (instance.getMode() == 3) ? 1 : (instance.getMode() + 1);
-    }
-
-    public ResourceLocation getSkillIcon() {
-        return new ResourceLocation("trmythos", "textures/skill/unique/crimson_oracle.png");
-    }
-
-    @Override
-    public boolean canBeToggled(ManasSkillInstance instance, LivingEntity entity) {
-        return true;
+            return (instance.getMode() == 4) ? 1 : (instance.getMode() + 1);
     }
 
     public void onBeingDamaged(ManasSkillInstance instance, LivingAttackEvent event) {
         if (!event.isCanceled()) {
+            if (this.isInSlot(event.getEntity())) {
                 DamageSource damageSource = event.getSource();
                 if (!damageSource.isBypassInvul() && !damageSource.isMagic()) {
                     Entity var5 = damageSource.getDirectEntity();
                     if (var5 instanceof LivingEntity) {
                         LivingEntity entity = (LivingEntity)var5;
-                        double dodgeChance = instance.isMastered(entity) ? 99.0 : 0.5;
+                        double dodgeChance = instance.isMastered(entity) ? 1 : 0.99;
+                        if (SkillUtils.canNegateDodge(entity, damageSource)) {
+                            dodgeChance = 0.8;
+                        }
 
                         if (!(entity.getRandom().nextDouble() >= dodgeChance)) {
                             entity.getLevel().playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_WEAK, SoundSource.PLAYERS, 2.0F, 1.0F);
                             event.setCanceled(true);
-                            SkillHelper.gainMP(entity, -666);
-                        }
-
-                        if (entity.hasEffect(MythosMobEffects.ULTIMATE_VILLAIN.get())) {
-                            event.setCanceled(true);
-                            if (SkillUtils.canNegateDodge(entity, damageSource)) {
-                                event.setCanceled(true);
-                            }
                         }
                     }
                 }
+            }
         }
+    }
+
+    @Override
+    public boolean canBeToggled(ManasSkillInstance instance, LivingEntity entity) {
+        return true;
     }
 
     public void onToggleOn(ManasSkillInstance instance, LivingEntity entity) {
@@ -131,8 +134,6 @@ public class CrimsonOracleSkill extends Skill implements Transformation {
         }
     }
 
-
-
     public void onToggleOff(ManasSkillInstance instance, LivingEntity entity) {
         if (entity instanceof ServerPlayer player) {
             MinecraftServer server = player.getServer();
@@ -151,6 +152,13 @@ public class CrimsonOracleSkill extends Skill implements Transformation {
         }
     }
 
+    @Override
+    public List<MobEffect> getImmuneEffects(ManasSkillInstance instance, LivingEntity entity) {
+        List<MobEffect> list = new ArrayList<>();
+        list.addAll(AbnormalConditionNullification.getAbnormalEffects());
+        list.add(TensuraMobEffects.BLACK_BURN.get());
+        return list;
+    }
 
     @SubscribeEvent
     public void onLivingDeath(LivingDeathEvent event, LivingEntity entity) {
@@ -227,18 +235,12 @@ public class CrimsonOracleSkill extends Skill implements Transformation {
         }
     }
 
-
     @Override
     public void onTick(ManasSkillInstance instance, LivingEntity living) {
-        if (!living.hasEffect((MobEffect)TensuraMobEffects.PRESENCE_SENSE.get())) {
+        if (!living.hasEffect((MobEffect) TensuraMobEffects.PRESENCE_SENSE.get())) {
             living.addEffect(new MobEffectInstance((MobEffect)TensuraMobEffects.TRUE_BLINDNESS.get(), 600, 0, false, false, false));
             living.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 600, 0, false, false, false));
         }
-    }
-
-    @Override
-    public int modes() {
-        return 3;
     }
 
     public Component getModeName(int mode) {
@@ -253,6 +255,9 @@ public class CrimsonOracleSkill extends Skill implements Transformation {
             case 3:
                 var10000 = Component.translatable("trmythos.skill.crimson_oracle.ultimate_villain");
                 break;
+            case 4:
+                var10000 = Component.literal("Final Seal");
+                break;
             default:
                 var10000 = Component.empty();
         }
@@ -265,7 +270,7 @@ public class CrimsonOracleSkill extends Skill implements Transformation {
         if (instance.getMode() == 1) {
             PredatorMistProjectile breath = new PredatorMistProjectile(entity.getLevel(), entity);
             breath.setLength(3.0F);
-            breath.setLife(50);
+            breath.setLife(500);
             ManasSkillInstance crimson = this.getCrimson(entity);
             breath.setSkill(crimson != null ? crimson : instance);
             breath.setPos(entity.position().add(0.0, (double) entity.getEyeHeight() * 0.7, 0.0));
@@ -281,8 +286,8 @@ public class CrimsonOracleSkill extends Skill implements Transformation {
                 entity.swing(InteractionHand.MAIN_HAND, true);
                 this.addMasteryPoint(instance, entity);
 
-                int distance = instance.isMastered(entity) ? 20 : 15;
-                Entity target = SkillHelper.getTargetingEntity(entity, (double) distance, false, true);
+                int distance = instance.isMastered(entity) ? 30 : 20;
+                Entity target = SkillHelper.getTargetingEntity(entity, distance, false, true);
                 Vec3 pos;
                 if (target != null) {
                     if (target.isOnGround()) {
@@ -301,7 +306,7 @@ public class CrimsonOracleSkill extends Skill implements Transformation {
                 cube.setMpCost(this.magiculeCost(entity, instance));
                 cube.setSkill(instance);
                 cube.setLife(600);
-                cube.setRadius(7.0F);
+                cube.setRadius(20.0F);
                 entity.getLevel().addFreshEntity(cube);
 
                 entity.getLevel().playSound(null, entity.getX(), entity.getY(), entity.getZ(),
@@ -313,8 +318,8 @@ public class CrimsonOracleSkill extends Skill implements Transformation {
         }
 
         if (instance.getMode() == 3) {
-            if (!this.failedToActivate(entity, (MobEffect) MythosMobEffects.ULTIMATE_VILLAIN.get())) {
-                if (!entity.hasEffect((MobEffect)MythosMobEffects.ULTIMATE_VILLAIN.get())) {
+            if (!this.failedToActivate(entity, MythosMobEffects.ULTIMATE_VILLAIN.get())) {
+                if (!entity.hasEffect(MythosMobEffects.ULTIMATE_VILLAIN.get())) {
                     if (SkillHelper.outOfMagicule(entity, instance)) {
                         return;
                     }
@@ -331,35 +336,46 @@ public class CrimsonOracleSkill extends Skill implements Transformation {
                         });
                     }
 
-                    entity.getLevel().playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.PLAYERS, 1.0F, 1.0F);
+                    entity.getLevel().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.PLAYERS, 1.0F, 1.0F);
 
                     if (entity instanceof Player player) {
                         int amplifier = player.getServer().getPlayerList().getPlayerCount();
 
-                        entity.addEffect(new MobEffectInstance(
-                                (MobEffect) MythosMobEffects.ULTIMATE_VILLAIN.get(),
-                                this.isMastered(instance, entity) ? 7200 : 3600,
-                                amplifier,
-                                false,
-                                false,
-                                false
-                        ));
+                        entity.addEffect(new MobEffectInstance(MythosMobEffects.ULTIMATE_VILLAIN.get(), this.isMastered(instance, entity) ? 10000 : 7200,
+                                amplifier, false, false, false));
                     }
 
                     TensuraParticleHelper.addServerParticlesAroundSelf(entity, ParticleTypes.POOF, 3.0);
                     TensuraParticleHelper.addServerParticlesAroundSelf(entity, ParticleTypes.EXPLOSION, 3.0);
-                    TensuraParticleHelper.addServerParticlesAroundSelf(entity, (ParticleOptions) TensuraParticles.SOLAR_FLASH.get(), 2.0);
-                    TensuraParticleHelper.spawnServerParticles(entity.level, (ParticleOptions)TensuraParticles.DARK_RED_LIGHTNING_SPARK.get(), entity.getX(), entity.getY(), entity.getZ(), 55, 0.08, 0.08, 0.08, 0.5, true);
+                    TensuraParticleHelper.addServerParticlesAroundSelf(entity, TensuraParticles.SOLAR_FLASH.get(), 2.0);
+                    TensuraParticleHelper.spawnServerParticles(entity.level, TensuraParticles.DARK_RED_LIGHTNING_SPARK.get(), entity.getX(), entity.getY(), entity.getZ(), 55, 0.08, 0.08, 0.08, 0.5, true);
                 } else {
-                    entity.removeEffect((MobEffect)MythosMobEffects.ULTIMATE_VILLAIN.get());
+                    entity.removeEffect(MythosMobEffects.ULTIMATE_VILLAIN.get());
                     entity.getLevel().playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.BEACON_DEACTIVATE, SoundSource.PLAYERS, 1.0F, 1.0F);
                 }
 
             }
         }
     }
+
+    @Override
+    public boolean onHeld(ManasSkillInstance instance, LivingEntity living, int heldTicks) {
+        Entity target = MythosUtils.getLookedAtEntity(living, 20);
+
+        if (!(target instanceof LivingEntity targetLiving)) {
+            return false;
+        }
+
+        if (heldTicks < 200) {
+            return true;
+        }
+
+        if (heldTicks == 200) {
+            targetLiving.addEffect(new MobEffectInstance(TensuraMobEffects.ANTI_SKILL.get(), 400, 1, false, false, false));
+            targetLiving.addEffect(new MobEffectInstance(TensuraMobEffects.INFINITE_IMPRISONMENT.get(), 400, 1, false, false, false));
+            targetLiving.addEffect(new MobEffectInstance(MythosMobEffects.FINAL_SEAL_DOOM.get(), 400, 1, false, false, false));
+        }
+
+        return true;
+    }
 }
-
-
-
-
