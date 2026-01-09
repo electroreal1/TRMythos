@@ -36,7 +36,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -44,7 +43,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -258,23 +256,6 @@ public class DendrrahSkill extends Skill {
 
     @Override
     public boolean onHeld(ManasSkillInstance instance, LivingEntity entity, int heldTicks) {
-        if (instance.getMode() == 3) {
-            Level level = entity.getLevel();
-            if (heldTicks % 100 == 0) {
-
-                for (Entity e : level.getEntities(null, new AABB(Double.NEGATIVE_INFINITY, 0, Double.NEGATIVE_INFINITY,
-                        Double.POSITIVE_INFINITY, 256, Double.POSITIVE_INFINITY))) {
-                    if (e instanceof LivingEntity living) {
-                        int duration = 200;
-                        int amplifier = 1;
-                        if (!((LivingEntity) e).hasEffect(TensuraMobEffects.RAMPAGE.get())) {
-                            living.addEffect(new MobEffectInstance(TensuraMobEffects.RAMPAGE.get(), duration, amplifier));
-                        }
-                    }
-                }
-            }
-        }
-
         if (instance.getMode() == 4) {
             if (heldTicks % 20 == 0 && SkillHelper.outOfMagicule(entity, instance)) return false;
 
@@ -322,7 +303,21 @@ public class DendrrahSkill extends Skill {
                     }
                 }
             }
+            return true;
+        }
 
+        if (instance.getMode() == 3) {
+            Level level = entity.getLevel();
+            if (heldTicks % 100 == 0) {
+
+                List<LivingEntity> list = entity.getLevel().getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(500.0),
+                        (living) -> !living.is(entity) && living.isAlive() && !living.isAlliedTo(entity));
+
+                for (LivingEntity target : list) {
+                    target.addEffect(new MobEffectInstance(TensuraMobEffects.RAMPAGE.get(), 30, 1, false, false, false));
+                }
+            }
+            return true;
         }
 
         return true;
