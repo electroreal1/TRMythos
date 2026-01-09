@@ -80,6 +80,7 @@ public class Skills {
     public static final RegistryObject<FalseHeroSkill> FALSE_HERO;
     public static final RegistryObject<WavebreakerSkill> WAVEBREAKER;
     public static final RegistryObject<EarthshakerSkill> EARTHSHAKER;
+    public static final RegistryObject<CrimsonArcanistSkill> CRIMSON_ARCANIST;
 
     // vassal
     public static final RegistryObject<FoundationSkill> FOUNDATION;
@@ -161,6 +162,7 @@ public class Skills {
         FALSE_HERO = registery.register("false_hero", () -> new FalseHeroSkill(Skill.SkillType.UNIQUE));
         WAVEBREAKER = registery.register("wavebreaker", () -> new WavebreakerSkill(Skill.SkillType.UNIQUE));
         EARTHSHAKER = registery.register("earthshaker", () -> new EarthshakerSkill(Skill.SkillType.UNIQUE));
+        CRIMSON_ARCANIST = registery.register("crimson_arcanist", () -> new CrimsonArcanistSkill(Skill.SkillType.UNIQUE));
         // vassal series
         UNITY = registery.register("unity", () -> new UnitySkill(Skill.SkillType.UNIQUE));
         FOUNDATION = registery.register("foundation", () -> new FoundationSkill(Skill.SkillType.UNIQUE));

@@ -3,6 +3,7 @@ package com.github.mythos.mythos.mixin;
 import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.magic.MagicUltils;
+import com.github.manasmods.tensura.capability.skill.TensuraSkillCapability;
 import com.github.mythos.mythos.ability.confluence.skill.ConfluenceUniques;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.registry.skill.Skills;
@@ -51,6 +52,9 @@ public class MagicUtilsMixin {
             }
             if (SkillUtils.isSkillToggled(player, (ManasSkill) ConfluenceUniques.CELESTIAL_CULTIVATION_ORANGE.get())) {
                 original *= 3;
+            }
+            if (TensuraSkillCapability.isSkillInSlot(player, (ManasSkill) Skills.CRIMSON_ARCANIST.get())) {
+                original -= 0.2f;
             }
         }
 

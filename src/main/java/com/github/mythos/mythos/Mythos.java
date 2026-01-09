@@ -6,6 +6,7 @@ import com.github.mythos.mythos.handler.CarnageHandler;
 import com.github.mythos.mythos.handler.CatharsisHandler;
 import com.github.mythos.mythos.handler.CrimsonTyrantHandler;
 import com.github.mythos.mythos.networking.MythosNetwork;
+import com.github.mythos.mythos.registry.MythosParticles;
 import com.github.mythos.mythos.registry.MythosRegistery;
 import com.github.mythos.mythos.registry.menu.MythosMenuTypes;
 import com.github.mythos.mythos.registry.race.MythosRaces;
@@ -49,6 +50,7 @@ public class Mythos {
         modEventBus.register(MythosRaces.class);
         MythosNetwork.register();
         CatharsisHandler.register();
+        MythosParticles.init(modEventBus);
         //FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, MythosConfig.SPEC, getConfigFileName("mythos-common"));
         LOGGER.info("Mythos has been loaded!");
