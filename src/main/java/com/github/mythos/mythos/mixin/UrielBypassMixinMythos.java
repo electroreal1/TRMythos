@@ -1,10 +1,9 @@
 package com.github.mythos.mythos.mixin;
 
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
-import com.github.manasmods.tensura.ability.skill.unique.InfinityPrisonSkill;
 import com.github.manasmods.tensura.capability.skill.TensuraSkillCapability;
-import com.github.mythos.mythos.ability.confluence.skill.ConfluenceUniques;
 import com.github.mythos.mythos.registry.skill.Skills;
+import io.github.Memoires.trmysticism.ability.skill.ultimate.UrielSkill;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -14,11 +13,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(
-        value = {InfinityPrisonSkill.class},
+        value = {UrielSkill.class},
         priority = 12
 )
-public class FragarachInfinityPrisonPierceMixin {
-    public FragarachInfinityPrisonPierceMixin() {
+public class UrielBypassMixinMythos {
+    public UrielBypassMixinMythos() {
     }
 
     @Inject(
@@ -30,23 +29,9 @@ public class FragarachInfinityPrisonPierceMixin {
     public void onBeingDamaged(ManasSkillInstance instance, LivingAttackEvent event, CallbackInfo ci) {
         Entity attacker = event.getSource().getEntity();
         if (attacker instanceof Player player) {
-            if (this.isBypassSkill(player)) {
+            if (TensuraSkillCapability.isSkillInSlot(player, Skills.ZERO.get())) {
                 ci.cancel();
             }
-
         }
     }
-
-    private boolean isBypassSkill(Player player) {
-        boolean original = false;
-        if (TensuraSkillCapability.isSkillInSlot(player, ConfluenceUniques.FRAGARACH.get())) {
-            original = true;
-        }
-
-        if (TensuraSkillCapability.isSkillInSlot(player, Skills.ZERO.get())) {
-            original = true;
-    }
-        return original;
-    }
-
 }

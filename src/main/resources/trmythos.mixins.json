@@ -14,6 +14,7 @@
     "SkillHelperMixin",
     "SkillUtilsMixin",
     "TensuraPlayerCapabilityMixin",
+    "UrielBypassMixinMythos",
     "VampireEvoMixin"
   ],
   "client": [],

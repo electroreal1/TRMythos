@@ -2,14 +2,13 @@ package com.github.mythos.mythos;
 
 import com.github.mythos.mythos.client.screen.OrunScreen;
 import com.github.mythos.mythos.config.MythosConfig;
-import com.github.mythos.mythos.handler.CarnageHandler;
-import com.github.mythos.mythos.handler.CatharsisHandler;
-import com.github.mythos.mythos.handler.CrimsonTyrantHandler;
+import com.github.mythos.mythos.handler.*;
 import com.github.mythos.mythos.networking.MythosNetwork;
 import com.github.mythos.mythos.registry.MythosParticles;
 import com.github.mythos.mythos.registry.MythosRegistery;
 import com.github.mythos.mythos.registry.menu.MythosMenuTypes;
 import com.github.mythos.mythos.registry.race.MythosRaces;
+import com.github.mythos.mythos.shaders.ClientShaderHandler;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
@@ -51,6 +50,9 @@ public class Mythos {
         MythosNetwork.register();
         CatharsisHandler.register();
         MythosParticles.init(modEventBus);
+        MinecraftForge.EVENT_BUS.register(GlobalEffectHandler.class);
+        MinecraftForge.EVENT_BUS.register(ClientShaderHandler.class);
+        MinecraftForge.EVENT_BUS.register(KhaosHandler.class);
         //FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, MythosConfig.SPEC, getConfigFileName("mythos-common"));
         LOGGER.info("Mythos has been loaded!");

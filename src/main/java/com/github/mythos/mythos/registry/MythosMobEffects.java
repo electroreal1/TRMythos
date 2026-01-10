@@ -61,6 +61,18 @@ public class MythosMobEffects {
             new UltimateVillainEffect(MobEffectCategory.BENEFICIAL, (new Color(100, 0, 0)).getRGB()));
     public static final RegistryObject<MobEffect> FINAL_SEAL_DOOM = registry.register("final_seal_doom", () ->
             new FinalSealDoomEffect(MobEffectCategory.HARMFUL, (new Color(100, 0, 0)).getRGB()));
+    public static final RegistryObject<MobEffect> SPATIAL_DYSPHORIA = registry.register("spatial_dysphoria", () ->
+            new SpatialDysphoriaEffect(MobEffectCategory.NEUTRAL, (new Color(90, 20, 90).getRGB())));
+    public static final RegistryObject<MobEffect> NON_EUCLIDEAN_STEP = registry.register("non_euclidean_step", () ->
+            new NonEuclideanStepEffect(MobEffectCategory.NEUTRAL, (new Color(90, 20, 90).getRGB())));
+    public static final RegistryObject<MobEffect> BOUNDARY_ERASURE_SINK = registry.register("boundary_erasure_sink", () ->
+            new BoundaryErasureSinkEffect(MobEffectCategory.NEUTRAL, (new Color(90, 20, 90).getRGB())));
+    public static final RegistryObject<MobEffect> ATROPHY = registry.register("atropohy", () ->
+            new AtrophyEffect(MobEffectCategory.NEUTRAL, (new Color(90, 20, 90).getRGB())));
+        public static final RegistryObject<MobEffect> GREAT_SILENCE = registry.register("great_silence", () ->
+            new GreatSilenceEffect(MobEffectCategory.NEUTRAL, (new Color(90, 20, 90).getRGB())));
+
+
     public static void init(IEventBus modEventBus) {
         registry.register(modEventBus);
     }

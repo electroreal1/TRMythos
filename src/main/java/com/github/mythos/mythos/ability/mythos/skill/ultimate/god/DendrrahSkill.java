@@ -315,6 +315,9 @@ public class DendrrahSkill extends Skill {
 
                 for (LivingEntity target : list) {
                     target.addEffect(new MobEffectInstance(TensuraMobEffects.RAMPAGE.get(), 30, 1, false, false, false));
+                    TensuraNetwork.INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> {
+                        return target;
+                    }), new RequestFxSpawningPacket(new ResourceLocation("tensura:wrath_boost"), entity.getId(), 0.0, 1.0, 0.0, true));
                 }
             }
             return true;

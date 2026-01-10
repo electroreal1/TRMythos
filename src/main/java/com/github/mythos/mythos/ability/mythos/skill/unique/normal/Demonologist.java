@@ -10,6 +10,7 @@ import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
+import com.github.manasmods.tensura.ability.skill.unique.WrathSkill;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
@@ -318,7 +319,7 @@ public class Demonologist extends Skill {
 
                 for (int i = 0; i < 3; i++) {
                     double px = target.getX() + (rand.nextDouble() - 0.5) * 0.5;
-                    double py = target.getY() + rand.nextDouble() * 1.0;
+                    double py = target.getY() + rand.nextDouble();
                     double pz = target.getZ() + (rand.nextDouble() - 0.5) * 0.5;
                     level.addParticle(ParticleTypes.SOUL_FIRE_FLAME, px, py, pz, 0, 0.05, 0);
                 }

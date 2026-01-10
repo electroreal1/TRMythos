@@ -1,88 +1,80 @@
 package com.github.mythos.mythos.networking;
 
+import com.github.mythos.mythos.networking.play2server.GreatSilencePacket;
 import com.github.mythos.mythos.networking.play2server.RequestSkillCopyOrunmilaPacket;
-import com.github.mythos.mythos.networking.play2server.TsunamiShakePacket;
-import com.google.common.base.Function;
+import com.github.mythos.mythos.networking.play2server.ScreenShakePacket;
+import com.github.mythos.mythos.networking.play2server.ShaderPacket;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.fml.ModList;
+import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
-import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
-import java.util.function.Predicate;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class MythosNetwork {
-    private static final String PROTOCOL_VERSION = ModList.get().getModFileById("trmythos").versionString().replaceAll("\\.", "");
-    private static final SimpleChannel INSTANCE;
-    private static final AtomicInteger PACKET_ID;
+    private static final String PROTOCOL_VERSION = "1"; // Simplified for compatibility
+    public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(
+            new ResourceLocation("trmythos", "main_channel"),
+            () -> PROTOCOL_VERSION,
+            PROTOCOL_VERSION::equals,
+            PROTOCOL_VERSION::equals
+    );
 
-    public MythosNetwork() {
-    }
+    private static final AtomicInteger PACKET_ID = new AtomicInteger();
 
     public static void register() {
         registerPacket(RequestSkillCopyOrunmilaPacket.class,
                 RequestSkillCopyOrunmilaPacket::toBytes,
                 RequestSkillCopyOrunmilaPacket::new,
-                RequestSkillCopyOrunmilaPacket::handle);
+                RequestSkillCopyOrunmilaPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
 
-        registerPacket(TsunamiShakePacket.class,
-                TsunamiShakePacket::toBytes,
-                TsunamiShakePacket::new,
-                TsunamiShakePacket::handle
-                );
+        registerPacket(ScreenShakePacket.class,
+                ScreenShakePacket::encode,
+                ScreenShakePacket::decode,
+                ScreenShakePacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+
+        registerPacket(ShaderPacket.class,
+                ShaderPacket::encode,
+                ShaderPacket::decode,
+                ShaderPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+
+        registerPacket(GreatSilencePacket.class,
+                GreatSilencePacket::encode,
+                GreatSilencePacket::decode,
+                GreatSilencePacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 
-
-    private static <MSG> void registerPacket(Class<MSG> messageType, BiConsumer<MSG, FriendlyByteBuf> encoder, Function<FriendlyByteBuf, MSG> decoder, BiConsumer<MSG, Supplier<NetworkEvent.Context>> messageConsumer) {
-        INSTANCE.registerMessage(PACKET_ID.getAndIncrement(), messageType, encoder, decoder, messageConsumer);
+    private static <MSG> void registerPacket(Class<MSG> messageType, BiConsumer<MSG, FriendlyByteBuf> encoder, Function<FriendlyByteBuf, MSG> decoder, BiConsumer<MSG, Supplier<NetworkEvent.Context>> messageConsumer, Optional<NetworkDirection> direction) {
+        INSTANCE.registerMessage(PACKET_ID.getAndIncrement(), messageType, encoder, decoder, messageConsumer, direction);
     }
+
 
     public static <MSG> void sendToServer(MSG msg) {
         INSTANCE.sendToServer(msg);
     }
-    public static <MSG> void sendTo(MSG msg, LivingEntity target) {
-        if (target instanceof Player) {
-            INSTANCE.send(PacketDistributor.PLAYER.with(() -> {
-                return (ServerPlayer)target;
-            }), msg);
-        }
 
+    public static <MSG> void sendToPlayer(MSG msg, ServerPlayer player) {
+        INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), msg);
     }
 
-    public static void sendTsunamiShake(ServerPlayer player, int duration, float strength) {
-        INSTANCE.send(PacketDistributor.PLAYER.with(() -> player),
-                new TsunamiShakePacket(duration, strength));
+    public static <MSG> void sendToAll(MSG msg) {
+        INSTANCE.send(PacketDistributor.ALL.noArg(), msg);
     }
 
     public static <MSG> void sendToAllTrackingAndSelf(MSG msg, LivingEntity tracked) {
-        INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> {
-            return tracked;
-        }), msg);
+        INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> tracked), msg);
     }
-
-    static {
-        ResourceLocation var10000 = new ResourceLocation("trmythos", "main_channel");
-        Supplier var10001 = () -> {
-            return PROTOCOL_VERSION;
-        };
-        String var10002 = PROTOCOL_VERSION;
-        Objects.requireNonNull(var10002);
-        Objects.requireNonNull(var10002);
-        Predicate var0 = var10002::equals;
-        String var10003 = PROTOCOL_VERSION;
-        Objects.requireNonNull(var10003);
-        Objects.requireNonNull(var10003);
-        INSTANCE = NetworkRegistry.newSimpleChannel(var10000, var10001, var0, var10003::equals);
-        PACKET_ID = new AtomicInteger();
-    }
-
 }

@@ -74,7 +74,7 @@ public class OmniscientEyeSkill extends Skill {
         return instance.getMode() == 1;
     }
     public void onToggleOn(ManasSkillInstance instance, LivingEntity entity) {
-    ThoughtAccelerationSkill.onToggle(instance, entity, ACCELERATION, true);
+        ThoughtAccelerationSkill.onToggle(instance, entity, ACCELERATION, true);
     }
 
     @Override

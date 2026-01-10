@@ -18,7 +18,7 @@ import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSources;
 import com.github.mythos.mythos.handler.BigTsunamiHandler;
 import com.github.mythos.mythos.networking.MythosNetwork;
-import com.github.mythos.mythos.networking.play2server.TsunamiShakePacket;
+import com.github.mythos.mythos.networking.play2server.ScreenShakePacket;
 import com.github.mythos.mythos.registry.skill.Skills;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -243,7 +243,7 @@ public class WavebreakerSkill extends Skill {
             target.push(push.x * 1.5, 0.6, push.z * 1.5);
 
             if (target instanceof ServerPlayer sp) {
-                MythosNetwork.sendTo(new TsunamiShakePacket(80, 1.2f), sp);
+                MythosNetwork.sendToPlayer(new ScreenShakePacket(80), sp);
             }
         }
         ServerLevel sLevel = (ServerLevel) player.level;

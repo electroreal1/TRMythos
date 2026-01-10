@@ -31,6 +31,9 @@ public class ResistSkillMixin {
             if (TensuraSkillCapability.isSkillInSlot(living, (ManasSkill) Skills.DENDRRAH.get())) {
                 original = true;
             }
+            if (TensuraSkillCapability.isSkillInSlot(living, Skills.ZERO.get())) {
+                original = true;
+            }
         }
 
         return original;
