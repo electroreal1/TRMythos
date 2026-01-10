@@ -20,15 +20,12 @@ import com.github.mythos.mythos.networking.play2server.ShaderPacket;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.registry.skill.Skills;
 import com.github.mythos.mythos.util.MythosUtils;
-import io.github.Memoires.trmysticism.registry.dimensions.MysticismDimensions;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -53,7 +50,6 @@ import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -307,7 +303,7 @@ public class ZeroSkill extends Skill {
 
             for (LivingEntity target : targets) {
                 if (target == player) {
-                    target.getPersistentData().putInt("BoundaryErasureUser", duration);
+                    player.getPersistentData().putInt("BoundaryErasureUser", duration);
                 } else {
                     target.addEffect(new MobEffectInstance(MythosMobEffects.BOUNDARY_ERASURE_SINK.get(), duration, 0));
                 }
@@ -318,19 +314,8 @@ public class ZeroSkill extends Skill {
     @Override
     public boolean onHeld(ManasSkillInstance instance, LivingEntity entity, int heldTicks) {
         if (!(entity instanceof ServerPlayer player)) return false;
-        Level level = player.level;
         if (instance.getMode() == 3) {
-            if (player.isShiftKeyDown()) {
-                CompoundTag tag = instance.getTag();
-                String currentDimension = tag != null ? tag.getString("dimension") : "";
-                if (entity instanceof Player) {
-                    player.displayClientMessage(Component.translatable("trmysticism.skill.mode.crasher.dimension_hopper.current_dimension", new Object[]{currentDimension}).setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_AQUA)), true);
-                }
-
-                return true;
-            } else {
                 executeAtrophyAoE(player, heldTicks);
-            }
         }
 
         if (instance.getMode() == 4) {
@@ -369,57 +354,6 @@ public class ZeroSkill extends Skill {
     }
 
     public void onRelease(ManasSkillInstance instance, LivingEntity entity, int heldTicks) {
-        if (instance.getMode() == 3 && this.isHeld(entity) && entity.isShiftKeyDown()) {
-            CompoundTag tag = instance.getTag();
-            String currentDimension = tag != null ? tag.getString("dimension") : "";
-            ResourceKey<Level> targetDimension = this.getTargetDimension(currentDimension);
-            if (targetDimension != null && entity.getServer() != null) {
-                if (entity instanceof Player) {
-                    Player player = (Player) entity;
-                    if (entity.level.dimension() == MysticismDimensions.FANTASY_WORLD) {
-                        player.displayClientMessage(Component.translatable("trmysticism.skill.mode.crasher.dimension_hopper.too_weak").setStyle(Style.EMPTY.withColor(ChatFormatting.RED)), false);
-                        return;
-                    }
-
-                    if (entity.level.dimension() == targetDimension) {
-                        player.displayClientMessage(Component.translatable("trmysticism.skill.mode.crasher.dimension_hopper.received_same").setStyle(Style.EMPTY.withColor(ChatFormatting.RED)), false);
-                        return;
-                    }
-                }
-
-                double targetX = entity.getX();
-                double targetY = entity.getY();
-                double targetZ = entity.getZ();
-                ServerLevel targetLevel = entity.getServer().getLevel(targetDimension);
-                if (entity.level.dimension() == Level.OVERWORLD && targetDimension == Level.NETHER) {
-                    targetX /= 8.0;
-                    targetZ /= 8.0;
-                } else if (entity.level.dimension() == Level.NETHER && targetDimension == Level.OVERWORLD) {
-                    targetX *= 8.0;
-                    targetZ *= 8.0;
-                }
-
-                if (targetLevel != null) {
-                    BlockPos safePos = this.findNearestSafeBlock(targetX, targetY, targetZ, targetLevel);
-                    SkillHelper.moveAcrossDimensionTo(entity, (double) safePos.getX(), (double) safePos.getY(), (double) safePos.getZ(), entity.getYRot(), entity.getXRot(), targetLevel);
-                    if (entity instanceof Player) {
-                        Player player = (Player) entity;
-                        if (player.getAbilities().mayfly) {
-                            player.getAbilities().flying = true;
-                            player.onUpdateAbilities();
-                        }
-                    }
-                }
-
-                if (instance.isMastered(entity)) {
-                    instance.setCoolDown(300);
-                } else {
-                    instance.setCoolDown(600);
-                }
-
-                this.addMasteryPoint(instance, entity);
-            }
-        }
         if (entity instanceof ServerPlayer player && instance.getMode() == 4) {
             stopSilenceForArea(player);
         }
@@ -444,95 +378,7 @@ public class ZeroSkill extends Skill {
         }
     }
 
-        private BlockPos findNearestSafeBlock ( double x, double y, double z, ServerLevel level){
-            BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
-            int radius = 100;
 
-            for (int r = 1; r <= radius; ++r) {
-                for (int dx = -r; dx <= r; ++dx) {
-                    for (int dz = -r; dz <= r; ++dz) {
-                        for (int dy = -r; dy <= r; ++dy) {
-                            mutablePos.set(x + (double) dx, y + (double) dy, z + (double) dz);
-                            BlockState blockState = level.getBlockState(mutablePos);
-                            BlockState blockBelow = level.getBlockState(mutablePos.below());
-                            if (blockState.isAir() && blockBelow.canOcclude()) {
-                                return mutablePos.immutable();
-                            }
-                        }
-                    }
-                }
-            }
-
-            return new BlockPos(x, y, z);
-        }
-
-    public void onScroll(ManasSkillInstance instance, LivingEntity living, double delta) {
-        if (instance.getMode() == 2) {
-            CompoundTag tag = instance.getOrCreateTag();
-            List<String> dimensions = Arrays.asList("Overworld", "Nether", "The End", "Hell", "Elemental Realm");
-            int currentIndex = tag.getInt("dimensionIndex");
-            int newIndex = currentIndex + (int)delta;
-            if (newIndex >= dimensions.size()) {
-                newIndex = 0;
-            } else if (newIndex < 0) {
-                newIndex = dimensions.size() - 1;
-            }
-
-            if (currentIndex != newIndex) {
-                tag.putInt("dimensionIndex", newIndex);
-                tag.putString("dimension", (String)dimensions.get(newIndex));
-                instance.markDirty();
-            }
-        }
-
-    }
-
-    private ResourceKey<Level> getTargetDimension(String dimensionName) {
-        ResourceKey var10000;
-        switch (dimensionName) {
-            case "Overworld":
-                var10000 = Level.OVERWORLD;
-                break;
-            case "Nether":
-                var10000 = Level.NETHER;
-                break;
-            case "The End":
-                var10000 = Level.END;
-                break;
-            case "Hell":
-                var10000 = TensuraDimensions.HELL;
-                break;
-            case "Elemental Realm":
-                var10000 = MysticismDimensions.ELEMENTAL_REALM;
-                break;
-            default:
-                var10000 = null;
-        }
-
-        return var10000;
-    }
-
-    public void executeGreatSilence(ServerPlayer player, BlockPos center) {
-        int radius = 50;
-        int duration = 300;
-
-        AABB area = new AABB(center).inflate(radius);
-        List<ServerPlayer> targets = player.level.getEntitiesOfClass(ServerPlayer.class, area);
-
-        for (ServerPlayer target : targets) {
-            target.addEffect(new MobEffectInstance(MythosMobEffects.GREAT_SILENCE.get(), duration, 0, false, false));
-
-            target.playSound(SoundEvents.CONDUIT_AMBIENT, 1, 0.1f);
-            target.playSound(SoundEvents.BEACON_AMBIENT, 1, 0.1f);
-            target.playSound(SoundEvents.FIRE_EXTINGUISH, 0.2f, 0.1f);
-
-            player.playSound(SoundEvents.CONDUIT_AMBIENT, 1, 0.1f);
-            player.playSound(SoundEvents.BEACON_AMBIENT, 1, 0.1f);
-            player.playSound(SoundEvents.FIRE_EXTINGUISH, 0.2f, 0.1f);
-
-            MythosNetwork.sendToPlayer(new GreatSilencePacket(true), target);
-        }
-    }
 }
 
 

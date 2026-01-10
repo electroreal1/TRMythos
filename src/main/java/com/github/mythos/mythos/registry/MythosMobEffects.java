@@ -69,7 +69,7 @@ public class MythosMobEffects {
             new BoundaryErasureSinkEffect(MobEffectCategory.NEUTRAL, (new Color(90, 20, 90).getRGB())));
     public static final RegistryObject<MobEffect> ATROPHY = registry.register("atropohy", () ->
             new AtrophyEffect(MobEffectCategory.NEUTRAL, (new Color(90, 20, 90).getRGB())));
-        public static final RegistryObject<MobEffect> GREAT_SILENCE = registry.register("great_silence", () ->
+    public static final RegistryObject<MobEffect> GREAT_SILENCE = registry.register("great_silence", () ->
             new GreatSilenceEffect(MobEffectCategory.NEUTRAL, (new Color(90, 20, 90).getRGB())));
 
 
