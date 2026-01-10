@@ -89,6 +89,7 @@ public class Skills {
     public static final RegistryObject<CrimsonArcanistSkill> CRIMSON_ARCANIST;
     public static final RegistryObject<Gaze> GAZE;
     public static final RegistryObject<ShadowOfTheTesseract> SHADOW_OF_THE_TESSERACT;
+    public static final RegistryObject<YellowSign> YELLOW_SIGN;
 
     // vassal
     public static final RegistryObject<FoundationSkill> FOUNDATION;
@@ -177,6 +178,8 @@ public class Skills {
         EARTHSHAKER = registery.register("earthshaker", () -> new EarthshakerSkill(Skill.SkillType.UNIQUE));
         CRIMSON_ARCANIST = registery.register("crimson_arcanist", () -> new CrimsonArcanistSkill(Skill.SkillType.UNIQUE));
         GAZE = registery.register("gaze", () -> new Gaze(Skill.SkillType.UNIQUE));
+        YELLOW_SIGN = registery.register("yellow_sign", () -> new YellowSign(Skill.SkillType.UNIQUE));
+
         // vassal series
         UNITY = registery.register("unity", () -> new UnitySkill(Skill.SkillType.UNIQUE));
         FOUNDATION = registery.register("foundation", () -> new FoundationSkill(Skill.SkillType.UNIQUE));

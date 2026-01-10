@@ -71,6 +71,8 @@ public class MythosMobEffects {
             new AtrophyEffect(MobEffectCategory.NEUTRAL, (new Color(90, 20, 90).getRGB())));
     public static final RegistryObject<MobEffect> GREAT_SILENCE = registry.register("great_silence", () ->
             new GreatSilenceEffect(MobEffectCategory.NEUTRAL, (new Color(90, 20, 90).getRGB())));
+    public static final RegistryObject<MobEffect> YELLOW_SIGN = registry.register("yellow_sign", () ->
+            new YellowSignEffect(MobEffectCategory.NEUTRAL, (new Color(255, 165, 15)).getRGB()));
 
 
     public static void init(IEventBus modEventBus) {

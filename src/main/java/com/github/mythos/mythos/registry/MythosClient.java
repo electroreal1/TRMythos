@@ -15,7 +15,7 @@ public class MythosClient {
 
     public static void clientSetup(final FMLClientSetupEvent event) {
        // FMLJavaModLoadingContext.get().getModEventBus().addListener(MythosClient::clientSetup);
-        MenuScreens.register(MythosMenuTypes.ORUN_MENU.get(), OrunScreen::new);
+        MenuScreens.register(MythosMenuTypes.ORUN_MENU.get(), OrunScreen::new);;
     }
 
     @SubscribeEvent

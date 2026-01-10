@@ -53,6 +53,7 @@ public class Mythos {
         MinecraftForge.EVENT_BUS.register(GlobalEffectHandler.class);
         MinecraftForge.EVENT_BUS.register(ClientShaderHandler.class);
         MinecraftForge.EVENT_BUS.register(KhaosHandler.class);
+        MinecraftForge.EVENT_BUS.register(YellowSignOverlayHandler.class);
         //FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, MythosConfig.SPEC, getConfigFileName("mythos-common"));
         LOGGER.info("Mythos has been loaded!");
