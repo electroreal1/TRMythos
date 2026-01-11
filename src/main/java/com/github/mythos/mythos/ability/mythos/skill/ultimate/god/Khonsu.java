@@ -94,7 +94,7 @@ public class Khonsu extends Skill {
     @Nullable
     @Override
     public MutableComponent getName() {
-        return Component.literal("Khonsu");
+        return Component.literal("Assassin God, Khonsu");
     }
 
     @Override
