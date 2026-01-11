@@ -46,28 +46,20 @@ public class Mythos {
     public Mythos() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        // 1. Common Registries (Safe for both sides)
+        // 1. Common Listeners
         modEventBus.addListener(this::onCommonSetup);
         MythosRegistery.register(modEventBus);
         modEventBus.register(MythosRaces.class);
         MythosParticles.init(modEventBus);
-        MythosNetwork.register();
-        CatharsisHandler.register();
 
-        // 2. Common Event Bus Registrations
+        // 2. Common Handlers (No client imports in these!)
         MinecraftForge.EVENT_BUS.register(CrimsonTyrantHandler.class);
         MinecraftForge.EVENT_BUS.register(CarnageHandler.class);
         MinecraftForge.EVENT_BUS.register(KhaosHandler.class);
 
-        // 3. SAFE CLIENT LOADING
-        // We use DistExecutor to call a SEPARATE class.
-        // This prevents the Server from ever seeing "ClientOnlyRegistrar"
+        // 3. Safe Client Loading via Proxy
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientOnlyRegistrar::registerClientOnlyEvents);
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, MythosConfig.SPEC, getConfigFileName("mythos-common"));
-        LOGGER.info("Mythos has been loaded!");
-
-//
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, MythosConfig.SPEC, getConfigFileName("mythos-common"));
         LOGGER.info("Mythos has been loaded!");
     }

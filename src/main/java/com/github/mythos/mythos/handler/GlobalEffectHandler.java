@@ -4,10 +4,12 @@ import com.github.mythos.mythos.Mythos;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
@@ -22,9 +24,9 @@ import java.util.Random;
 
 @Mod.EventBusSubscriber(modid = Mythos.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class GlobalEffectHandler {
+    public static boolean isGreatSilenceActive = false;
     private static final Random RANDOM = new Random();
     public static float shakeIntensity = 0f;
-    public static boolean isGreatSilenceActive = false;
     private static int soundLoopTimer = 0;
 
     @SubscribeEvent
@@ -33,23 +35,23 @@ public class GlobalEffectHandler {
             event.setPitch(event.getPitch() + (RANDOM.nextFloat() - 0.5f) * shakeIntensity);
             event.setYaw(event.getYaw() + (RANDOM.nextFloat() - 0.5f) * shakeIntensity);
             event.setRoll(event.getRoll() + (RANDOM.nextFloat() - 0.5f) * (shakeIntensity * 1.5f));
-
-            shakeIntensity -= 0.05f;
-            if (shakeIntensity < 0) shakeIntensity = 0;
         }
     }
 
     @SubscribeEvent
     public static void onRenderLivingPre(RenderLivingEvent.Pre<?, ?> event) {
-        MobEffectInstance effect = event.getEntity().getEffect(MythosMobEffects.ATROPHY.get());
+        LivingEntity entity = event.getEntity();
+        MobEffectInstance effect = entity.getEffect(MythosMobEffects.ATROPHY.get());
+
         if (effect != null) {
             PoseStack stack = event.getPoseStack();
             int amp = effect.getAmplifier();
 
             stack.pushPose();
             if (amp == 0) {
-                stack.scale(1.0f, 1.0f, 0.001f);
-                stack.scale(0.001f, 1.0f, 0.001f);
+                stack.scale(1.0f, 1.0f, 0.005f);
+            } else {
+                stack.scale(0.005f, 1.0f, 0.005f);
             }
         }
     }
@@ -63,23 +65,21 @@ public class GlobalEffectHandler {
 
     @SubscribeEvent
     public static void onClientChat(ClientChatReceivedEvent event) {
-        if (isGreatSilenceActive) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player != null && mc.player.hasEffect(MythosMobEffects.GREAT_SILENCE.get())) {
             String original = event.getMessage().getString();
-            event.setMessage(Component.literal("§7§k" + original));
+            event.setMessage(Component.literal("§7§k" + original).withStyle(ChatFormatting.GRAY));
         }
     }
 
     @SubscribeEvent
     public static void onSoundPlay(PlaySoundEvent event) {
-        if (isGreatSilenceActive && event.getSound() != null) {
-            String path = event.getSound().getLocation().getPath();
-
-            boolean isAllowed = path.contains("conduit.ambient") ||
-                    path.contains("warden.heartbeat") ||
-                    path.contains("beacon.ambient");
-
-            if (!isAllowed) {
-                event.setSound(null);
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player != null && mc.player.hasEffect(MythosMobEffects.GREAT_SILENCE.get())) {
+            if (event.getSound() != null) {
+                String path = event.getSound().getLocation().getPath();
+                boolean allowed = path.contains("conduit") || path.contains("warden") || path.contains("beacon");
+                if (!allowed) event.setSound(null);
             }
         }
     }
@@ -101,15 +101,24 @@ public class GlobalEffectHandler {
 
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
-        if (event.phase == TickEvent.Phase.END && isGreatSilenceActive) {
-            Minecraft mc = Minecraft.getInstance();
-            if (mc.player != null) {
-                if (soundLoopTimer-- <= 0) {
-                    mc.player.playSound(SoundEvents.CONDUIT_AMBIENT, 1.0f, 0.1f);
-                    mc.player.playSound(SoundEvents.WARDEN_HEARTBEAT, 0.7f, 0.2f);
-                    soundLoopTimer = 40;
-                }
+        if (event.phase != TickEvent.Phase.END) return;
+
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player == null) return;
+
+        if (mc.player.hasEffect(MythosMobEffects.GREAT_SILENCE.get())) {
+            if (soundLoopTimer-- <= 0) {
+                mc.player.playSound(SoundEvents.CONDUIT_AMBIENT, 1.0f, 0.1f);
+                mc.player.playSound(SoundEvents.WARDEN_HEARTBEAT, 0.7f, 0.2f);
+                soundLoopTimer = 40;
             }
+        }
+
+        MobEffectInstance dysphoria = mc.player.getEffect(MythosMobEffects.SPATIAL_DYSPHORIA.get());
+        if (dysphoria != null) {
+            shakeIntensity = 0.1f * (dysphoria.getAmplifier() + 1);
+        } else {
+            shakeIntensity = Math.max(0, shakeIntensity - 0.01f);
         }
     }
 

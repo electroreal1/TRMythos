@@ -1,5 +1,6 @@
 package com.github.mythos.mythos.ability.mythos.skill.ultimate.prince;
 
+import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
 import com.github.manasmods.manascore.attribute.ManasCoreAttributes;
@@ -13,6 +14,7 @@ import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
 import com.github.manasmods.tensura.entity.human.CloneEntity;
 import com.github.manasmods.tensura.registry.attribute.TensuraAttributeRegistry;
+import com.github.manasmods.tensura.registry.blocks.TensuraBlocks;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.registry.entity.TensuraEntityTypes;
 import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
@@ -27,6 +29,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
+import net.minecraft.network.protocol.game.ClientboundAnimatePacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -42,12 +45,15 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -57,10 +63,7 @@ import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class HaliSkill extends Skill {
     public static final UUID TSUKUYOMI = UUID.fromString("ff1ba7e1-9b9a-4580-8f6f-c5db93f93651");
@@ -84,14 +87,19 @@ public class HaliSkill extends Skill {
     @Nullable
     @Override
     public MutableComponent getName() {
-        return Component.literal("Hali, ")
-                .withStyle(ChatFormatting.YELLOW)
+        return Component.literal("Hali").withStyle(ChatFormatting.YELLOW)
+                .append(",").withStyle(ChatFormatting.WHITE)
                 .append(Component.literal("Sunken Sun").withStyle(ChatFormatting.BLACK));
     }
 
     @Override
+    public Component getSkillDescription() {
+      return Component.literal("In one kind of death the spirit also dieth, and this it hath been known to do while yet the body was in vigor for many years.");
+    }
+
+    @Override
     public boolean canTick(ManasSkillInstance instance, LivingEntity entity) {
-        return true;
+        return instance.isToggled();
     }
 
     @Override
@@ -176,7 +184,7 @@ public class HaliSkill extends Skill {
             DamageSource source = event.getSource();
             if (source.getEntity() == attacker && DamageSourceHelper.isPhysicalAttack(source) && !SkillHelper.outOfMagicule(attacker, instance)) {
                 LivingEntity target = event.getEntity();
-                float targetMaxSHP = (float)target.getAttributeValue(TensuraAttributeRegistry.MAX_SPIRITUAL_HEALTH.get());
+                float targetMaxSHP = (float) target.getAttributeValue(TensuraAttributeRegistry.MAX_SPIRITUAL_HEALTH.get());
 
                 if (SkillUtils.hasSkill(target, ResistanceSkills.SPIRITUAL_ATTACK_NULLIFICATION.get())) {
                     DamageSourceHelper.directSpiritualHurt(target, attacker, 7000.0F + targetMaxSHP * 0.4F);
@@ -190,7 +198,9 @@ public class HaliSkill extends Skill {
                     DamageSourceHelper.directSpiritualHurt(target, attacker, Float.MAX_VALUE);
                 }
                 instance.setCoolDown(instance.isMastered(attacker) ? 5 : 10);
-                if (!target.isAlive()) event.setCanceled(true);
+                if (!target.isAlive()) {
+                    event.setCanceled(true);
+                }
             }
         }
     }
@@ -211,13 +221,12 @@ public class HaliSkill extends Skill {
 
     @Override
     public void onToggleOff(ManasSkillInstance instance, LivingEntity entity) {
-        ThoughtAccelerationSkill.onToggle(instance, entity, ACCELERATION, true);
+        ThoughtAccelerationSkill.onToggle(instance, entity, ACCELERATION, false);
     }
 
     @Override
     public boolean onHeld(ManasSkillInstance instance, LivingEntity entity, int heldTicks) {
         if (instance.getMode() == 5) {
-            // Apply effect to the USER so they broadcast the "Domain Center" visuals
             boolean isShifting = entity.isShiftKeyDown();
             MobEffect domainEffect = isShifting ? MythosMobEffects.SUNRISE.get() : MythosMobEffects.SUNSET.get();
             entity.addEffect(new MobEffectInstance(domainEffect, 40, 0, false, false, true));
@@ -248,21 +257,23 @@ public class HaliSkill extends Skill {
             return true;
         }
 
-        if (instance.getMode() == 4) {
+        if (instance.getMode() != 4) {
+            return false;
+        } else {
             CompoundTag tag = instance.getTag();
             int clones = tag != null ? tag.getInt("clones") : 10;
-            if (entity instanceof Player player) {
-                player.displayClientMessage(Component.translatable("tensura.skill.output_number", clones).setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_AQUA)), true);
+            if (entity instanceof Player) {
+                Player player = (Player)entity;
+                player.displayClientMessage(Component.translatable("tensura.skill.output_number", new Object[]{clones}).setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_AQUA)), true);
             }
+
             return true;
         }
-
-        return true;
     }
 
     @Override
     public void onRelease(ManasSkillInstance instance, LivingEntity entity, int heldTicks) {
-        if (instance.getMode() == 5) {
+        if (instance.getMode() == 5 && this.isHeld(entity)) {
             instance.setCoolDown(300);
         }
 
@@ -295,6 +306,7 @@ public class HaliSkill extends Skill {
         if (instance.getMode() == 4) {
             CompoundTag tag = instance.getOrCreateTag();
             int newScale = tag.getInt("clones") + (int)delta;
+
             if (newScale > 10) {
                 newScale = 1;
             } else if (newScale < 1) {
@@ -306,7 +318,6 @@ public class HaliSkill extends Skill {
                 instance.markDirty();
             }
         }
-
     }
 
     public void onDeath(ManasSkillInstance instance, LivingDeathEvent event) {
@@ -352,7 +363,7 @@ public class HaliSkill extends Skill {
         level.playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundSource.PLAYERS, 1.0F, 1.0F);
         TensuraParticleHelper.addServerParticlesAroundSelf(entity, ParticleTypes.SQUID_INK, 1.0);
         TensuraParticleHelper.addServerParticlesAroundSelf(entity, ParticleTypes.SQUID_INK, 2.0);
-        double EP = TensuraEPCapability.getEP(entity) * 0.5 / (double)number;
+        double EP = TensuraEPCapability.getEP(entity) * 1 / (double)number;
         EntityType<CloneEntity> type = entity.isShiftKeyDown() ? (EntityType)TensuraEntityTypes.CLONE_SLIM.get() : (EntityType)TensuraEntityTypes.CLONE_DEFAULT.get();
 
         for(int i = 0; i < number; ++i) {
@@ -369,74 +380,126 @@ public class HaliSkill extends Skill {
             level.addFreshEntity(clone);
         }
 
+
     }
 
     @Override
     public void onPressed(ManasSkillInstance instance, LivingEntity entity) {
         if (!SkillHelper.outOfMagicule(entity, instance)) {
             switch (instance.getMode()) {
-                case 1 -> this.eyeOfTheMoon(instance, entity);
-                case 3 -> this.ultraspeedAction(instance, entity);
+                case 1:
+                        this.eyeOfTheMoon(instance, entity);
+                        break;
+                case 3:
+                        this.ultraspeedAction(instance, entity);
             }
+        }
+    }
+
+    @Override
+    public boolean canIgnoreCoolDown(ManasSkillInstance instance, LivingEntity entity) {
+        if (instance.getMastery() < 0) {
+            return false;
+        } else {
+            return instance.getMode() == 1 || instance.getMode() == 3;
         }
     }
 
     private void ultraspeedAction(ManasSkillInstance instance, LivingEntity entity) {
-        if ((entity.isOnGround() || entity.isInWaterOrBubble())) {
+        if ((entity.isOnGround() || entity.isInWaterOrBubble()) && !SkillHelper.outOfAura(entity, instance)) {
             this.addMasteryPoint(instance, entity);
             Level level = entity.getLevel();
             int range = instance.isMastered(entity) ? 80 : 50;
-            BlockHitResult result = SkillHelper.getPlayerPOVHitResult(level, entity, ClipContext.Fluid.NONE, range);
+            BlockHitResult result = SkillHelper.getPlayerPOVHitResult(level, entity, ClipContext.Fluid.NONE, (double)range);
             BlockPos resultPos = result.getBlockPos().relative(result.getDirection());
             Vec3 vec3 = SkillHelper.getFloorPos(resultPos);
+            if (!level.getBlockState(resultPos).getMaterial().isReplaceable()) {
+                vec3 = SkillHelper.getFloorPos(resultPos.above());
+            }
 
-            if (!entity.getLevel().getWorldBorder().isWithinBounds(new BlockPos(vec3.x(), vec3.y(), vec3.z()))) return;
-
-            Vec3 source = entity.position().add(0.0, entity.getBbHeight() / 2.0F, 0.0);
-            Vec3 offSetToTarget = vec3.subtract(source);
-
-            for(int i = 1; i < Mth.floor(offSetToTarget.length()); ++i) {
-                Vec3 particlePos = source.add(offSetToTarget.normalize().scale(i));
-                if (level instanceof ServerLevel sl) {
-                    sl.sendParticles(ParticleTypes.SWEEP_ATTACK, particlePos.x, particlePos.y, particlePos.z, 1, 0, 0, 0, 0);
+            if (level.getBlockState(resultPos).is((Block) TensuraBlocks.LABYRINTH_BARRIER_BLOCK.get())) {
+                level.playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.PLAYERS, 1.0F, 1.0F);
+            } else if (!entity.getLevel().getWorldBorder().isWithinBounds(new BlockPos(vec3.x(), vec3.y(), vec3.z()))) {
+                if (entity instanceof Player) {
+                    Player player = (Player)entity;
+                    player.displayClientMessage(Component.translatable("tensura.skill.teleport.out_border").setStyle(Style.EMPTY.withColor(ChatFormatting.RED)), false);
                 }
+            } else {
+                Vec3 source = entity.position().add(0.0, (double)(entity.getBbHeight() / 2.0F), 0.0);
+                Vec3 offSetToTarget = vec3.subtract(source);
 
-                AABB aabb = (new AABB(new BlockPos(particlePos))).inflate(3.0);
-                List<LivingEntity> targets = level.getEntitiesOfClass(LivingEntity.class, aabb, t -> t != entity && !t.isAlliedTo(entity));
+                for(int particleIndex = 1; particleIndex < Mth.floor(offSetToTarget.length()); ++particleIndex) {
+                    Vec3 particlePos = source.add(offSetToTarget.normalize().scale((double)particleIndex));
+                    ((ServerLevel)level).sendParticles(ParticleTypes.CLOUD, particlePos.x, particlePos.y, particlePos.z, 1, 0.0, 0.0, 0.0, 0.0);
+                    TensuraParticleHelper.addServerParticlesAroundPos(entity.getRandom(), level, particlePos, ParticleTypes.SWEEP_ATTACK, 3.0);
+                    TensuraParticleHelper.addServerParticlesAroundPos(entity.getRandom(), level, particlePos, ParticleTypes.SWEEP_ATTACK, 2.0);
+                    AABB aabb = (new AABB(new BlockPos(particlePos))).inflate(Math.max(entity.getAttributeValue((Attribute) ForgeMod.ATTACK_RANGE.get()), 2.0));
+                    List<LivingEntity> livingEntityList = level.getEntitiesOfClass(LivingEntity.class, aabb, (targetx) -> {
+                        return !targetx.is(entity) && !targetx.isAlliedTo(entity);
+                    });
+                    if (!livingEntityList.isEmpty()) {
+                        float bonus = instance.isMastered(entity) ? 1400F : 750.0F;
+                        float amount = (float)(entity.getAttributeValue(Attributes.ATTACK_DAMAGE) * entity.getAttributeValue((Attribute)ManasCoreAttributes.CRIT_MULTIPLIER.get()));
+                        Iterator var16 = livingEntityList.iterator();
 
-                for (LivingEntity target : targets) {
-                    float bonus = instance.isMastered(entity) ? 1400.0F : 750.0F;
-                    float baseDmg = (float)(entity.getAttributeValue(Attributes.ATTACK_DAMAGE) * entity.getAttributeValue(ManasCoreAttributes.CRIT_MULTIPLIER.get()));
+                        while(var16.hasNext()) {
+                            LivingEntity target = (LivingEntity)var16.next();
+                            float targetMaxSHP = (float)target.getAttributeValue((Attribute)TensuraAttributeRegistry.MAX_SPIRITUAL_HEALTH.get());
+                            if (target.hurt(this.sourceWithMP(DamageSource.mobAttack(entity), entity, instance), amount + bonus)) {
+                                if (!instance.isMastered(entity)) {
+                                    DamageSourceHelper.directSpiritualHurt(target, entity, targetMaxSHP * 0.5F);
+                                } else if (SkillUtils.hasSkill(target, (ManasSkill)ResistanceSkills.SPIRITUAL_ATTACK_NULLIFICATION.get())) {
+                                    if (entity.getRandom().nextFloat() > 0.25F) {
+                                        DamageSourceHelper.directSpiritualHurt(target, entity, Float.MAX_VALUE);
+                                    } else {
+                                        DamageSourceHelper.directSpiritualHurt(target, entity, targetMaxSHP * 0.5F);
+                                    }
+                                } else if (SkillUtils.hasSkill(target, (ManasSkill)ResistanceSkills.SPIRITUAL_ATTACK_RESISTANCE.get())) {
+                                    if (entity.getRandom().nextFloat() > 0.5F) {
+                                        DamageSourceHelper.directSpiritualHurt(target, entity, Float.MAX_VALUE);
+                                    } else {
+                                        DamageSourceHelper.directSpiritualHurt(target, entity, targetMaxSHP * 0.5F);
+                                    }
+                                } else {
+                                    DamageSourceHelper.directSpiritualHurt(target, entity, Float.MAX_VALUE);
+                                }
 
-                    if (target.hurt(this.sourceWithMP(DamageSource.mobAttack(entity), entity, instance), baseDmg + bonus)) {
-                        float targetMaxSHP = (float)target.getAttributeValue(TensuraAttributeRegistry.MAX_SPIRITUAL_HEALTH.get());
-
-                        if (instance.isMastered(entity)) {
-                            if (SkillUtils.hasSkill(target, ResistanceSkills.SPIRITUAL_ATTACK_NULLIFICATION.get())) {
-                                DamageSourceHelper.directSpiritualHurt(target, entity, targetMaxSHP * 0.5F);
-                            } else {
-                                DamageSourceHelper.directSpiritualHurt(target, entity, Float.MAX_VALUE);
+                                ItemStack stack = entity.getMainHandItem();
+                                stack.getItem().hurtEnemy(stack, target, entity);
+                                entity.getLevel().playSound((Player)null, target.getX(), target.getY(), target.getZ(), SoundEvents.PLAYER_ATTACK_CRIT, entity.getSoundSource(), 1.0F, 1.0F);
+                                if (level instanceof ServerLevel serverLevel) {
+                                    serverLevel.getChunkSource().broadcastAndSend(entity, new ClientboundAnimatePacket(entity, 4));
+                                }
                             }
-                        } else {
-                            DamageSourceHelper.directSpiritualHurt(target, entity, targetMaxSHP * 0.5F);
                         }
                     }
                 }
+
+                entity.resetFallDistance();
+                entity.unRide();
+                entity.moveTo(vec3);
+                entity.hasImpulse = true;
+                entity.swing(InteractionHand.MAIN_HAND, true);
+                level.playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.PLAYERS, 1.0F, 1.0F);
             }
-            entity.moveTo(vec3);
-            entity.swing(InteractionHand.MAIN_HAND, true);
-            level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.PLAYERS, 1.0F, 1.0F);
         }
+
     }
 
     public void eyeOfTheMoon(ManasSkillInstance instance, LivingEntity entity) {
-        if (!entity.hasEffect(TensuraMobEffects.SHADOW_STEP.get())) {
+        if (!entity.hasEffect((MobEffect)TensuraMobEffects.SHADOW_STEP.get())) {
+            if (SkillHelper.outOfMagicule(entity, instance)) {
+                return;
+            }
+
             this.addMasteryPoint(instance, entity);
-            entity.addEffect(new MobEffectInstance(TensuraMobEffects.SHADOW_STEP.get(), 6000, 0, false, false, false));
-            entity.getLevel().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
+            entity.getLevel().playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
+            entity.addEffect(new MobEffectInstance((MobEffect)TensuraMobEffects.SHADOW_STEP.get(), 6000, 0, false, false, false));
         } else {
-            entity.removeEffect(TensuraMobEffects.SHADOW_STEP.get());
+            entity.removeEffect((MobEffect)TensuraMobEffects.SHADOW_STEP.get());
+            entity.getLevel().playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 0.5F);
         }
+
     }
 
 

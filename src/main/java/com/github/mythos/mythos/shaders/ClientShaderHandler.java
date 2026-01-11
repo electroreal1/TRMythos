@@ -33,14 +33,15 @@ public class ClientShaderHandler {
         int currentAmplifier = hasEffect ? effect.getAmplifier() : -1;
 
         boolean currentlyHasShader = mc.gameRenderer.currentEffect() != null;
+        ResourceLocation activeShaderId = currentlyHasShader ? ResourceLocation.tryParse(mc.gameRenderer.currentEffect().getName()) : null;
+        ResourceLocation targetShader = currentAmplifier >= 2 ? STRONG_SHADER : WEAK_SHADER;
 
-        if (hasEffect && currentAmplifier != lastActiveAmplifier) {
-            ResourceLocation shaderToLoad = currentAmplifier >= 2 ? STRONG_SHADER : WEAK_SHADER;
-
-            mc.gameRenderer.loadEffect(shaderToLoad);
-            lastActiveAmplifier = currentAmplifier;
-        }
-        else if (!hasEffect && currentlyHasShader) {
+        if (hasEffect) {
+            if (currentAmplifier != lastActiveAmplifier || activeShaderId == null || !activeShaderId.equals(targetShader)) {
+                mc.gameRenderer.loadEffect(targetShader);
+                lastActiveAmplifier = currentAmplifier;
+            }
+        } else if (currentlyHasShader && activeShaderId != null && (activeShaderId.equals(WEAK_SHADER) || activeShaderId.equals(STRONG_SHADER))) {
             mc.gameRenderer.shutdownEffect();
             lastActiveAmplifier = -1;
         }
