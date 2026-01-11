@@ -8,6 +8,7 @@ import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.battlewill.Battewill;
 import com.github.manasmods.tensura.ability.magic.Magic;
 import com.github.mythos.mythos.ability.confluence.skill.ConfluenceUniques;
+import com.github.mythos.mythos.ability.mythos.skill.ultimate.god.Kthanid;
 import com.github.mythos.mythos.ability.mythos.skill.unique.normal.BibliomaniaSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.normal.ChildOfThePlaneSkill;
 import com.github.mythos.mythos.registry.MythosMobEffects;
@@ -23,7 +24,6 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.Optional;
 
-import static com.github.manasmods.tensura.ability.SkillUtils.isSkillToggled;
 import static com.github.manasmods.tensura.capability.skill.TensuraSkillCapability.isSkillInSlot;
 
 @Mixin(value = {SkillUtils.class}, priority = 8)
@@ -39,6 +39,11 @@ public abstract class SkillUtilsMixin {
 
     @Shadow
     public static boolean isSkillMastered(LivingEntity entity, ManasSkill manasSkill) {
+        return false;
+    }
+
+    @Shadow
+    public static boolean isSkillToggled(Entity entity, ManasSkill skill) {
         return false;
     }
 
@@ -78,6 +83,9 @@ public abstract class SkillUtilsMixin {
         }
         if (hasSkill(entity, (ManasSkill) Skills.FALSE_HERO.get())) {
             point += 15;
+        }
+        if (SkillUtils.hasSkill(entity, Skills.KTHANID.get()) && !(instance.getSkill() instanceof Kthanid)) {
+            point += 9999;
         }
 
 
@@ -124,6 +132,9 @@ public abstract class SkillUtilsMixin {
         if (hasSkill(entity, (ManasSkill) ConfluenceUniques.CELESTIAL_MUTATION_RED.get()) && instance.getSkill() instanceof Battewill) {
             point += 999;
         }
+        if (SkillUtils.hasSkill(entity, Skills.KTHANID.get()) && !(instance.getSkill() instanceof Kthanid)) {
+            point += 9999;
+        }
 
 
         return point;
@@ -150,6 +161,9 @@ public abstract class SkillUtilsMixin {
             }
 
             if (isSkillInSlot(attacker, Skills.KHONSU.get())) {
+                original = true;
+            }
+            if (isSkillInSlot(attacker, Skills.KTHANID.get())) {
                 original = true;
             }
         }

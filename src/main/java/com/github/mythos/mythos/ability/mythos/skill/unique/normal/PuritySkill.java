@@ -126,20 +126,6 @@ public class PuritySkill extends Skill {
         MinecraftForge.EVENT_BUS.unregister(this);
     }
 
-    public void PurityDamageCap(LivingHurtEvent event) {
-        final LivingEntity target = event.getEntity();
-        if (target.getLevel().isClientSide()) return;
-
-        final double cap = MythosSkillsConfig.purityDamageCap.get();
-
-        float amount = event.getAmount();
-        if (amount <= 0f || Float.isNaN(amount) || Float.isInfinite(amount)) return;
-
-        if (amount > cap) {
-            event.setAmount((float) cap);
-        }
-    }
-
     private void spawnLightArrows(ManasSkillInstance instance, LivingEntity entity, Vec3 pos, int arrowAmount, double distance) {
         int arrowRot = 360 / arrowAmount;
 //        int souls = TensuraPlayerCapability.getSoulPoints((Player) entity) / 1000;

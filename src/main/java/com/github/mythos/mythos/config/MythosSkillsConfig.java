@@ -15,10 +15,10 @@ public class MythosSkillsConfig {
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> blacklistedEffects;
     public static ForgeConfigSpec.DoubleValue vassalAssemblyChance;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> purityImmuneEffects;
-    public static ForgeConfigSpec.DoubleValue purityDamageCap;
     public static ForgeConfigSpec.BooleanValue VampireAncestor;
     public static ForgeConfigSpec.BooleanValue DeadApostleAncestor;
     public static ForgeConfigSpec.BooleanValue VampireCarnage;
+    public static ForgeConfigSpec.BooleanValue endOfEvilReset;
     public static ForgeConfigSpec.BooleanValue CarnageBloodDominion;
     public static ForgeConfigSpec.BooleanValue EnableUltimateSkillObtainment;
     public static ForgeConfigSpec.BooleanValue ApophisEmbodiment;
@@ -110,9 +110,6 @@ public class MythosSkillsConfig {
                         ),
                         o -> o instanceof String
                 );
-        purityDamageCap = builder
-                .comment("maximum amount of damage that can be dealt by purity's justice ability (0.0–10000).")
-                .defineInRange("purityDamageCap", 1000, 0.0, 10000.0);
 
         vassalAssemblyChance = builder
                 .comment("Chance (0.0–1.0) for [True Passive] Vassal Assembly to trigger when damaged.")
@@ -128,6 +125,11 @@ public class MythosSkillsConfig {
         VampireCarnage = builder
                 .comment("if true, then on learning Carnage you will be set to vampire baron race.")
                 .define("VampireCarnage", true);
+
+        endOfEvilReset = builder
+                .comment("If true then those who dies to Kthanid's End of Evil will be character reset," +
+                        "note: THIS CANNOT REVERSE SOMEONE WHO WAS ALREADY RESET")
+                .define("endOfEvilReset", false);
 
         CarnageBloodDominion = builder
                 .comment("if true, then carnage will be able to convert players and mobs into the vampire race.")
@@ -208,6 +210,9 @@ public class MythosSkillsConfig {
     }
     public static boolean CarnageBloodDominion() {
         return CarnageBloodDominion.get();
+    }
+    public static boolean endOfEvilReset() {
+        return endOfEvilReset.get();
     }
     public static boolean ApophisEmbodiment() {
         return ApophisEmbodiment.get();

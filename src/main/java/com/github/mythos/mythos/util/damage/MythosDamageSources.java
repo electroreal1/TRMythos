@@ -17,6 +17,7 @@ public class MythosDamageSources {
     public static final DamageSource OVERPRESSURE_BURST_WIND = (new TensuraDamageSource("trmythos.overpressure_burst_wind")).bypassArmor();
     public static final DamageSource VAJRA_SPEAR = (new TensuraDamageSource("trmythos.vajra_spear_lightning")).bypassArmor().bypassMagic().bypassInvul();
     public static final DamageSource BLOOD = (new TensuraDamageSource("trmythos.blood")).bypassArmor().bypassMagic().bypassEnchantments();
+    public static final DamageSource END_OF_EVIL = (new TensuraDamageSource("trmythos.end_of_evil")).bypassArmor().bypassMagic().bypassEnchantments();
 
 
 
@@ -48,6 +49,9 @@ public class MythosDamageSources {
 
     public static DamageSource blood() {
         return (new TensuraDamageSource("trmythos.blood")).bypassArmor().bypassMagic().bypassEnchantments();
+    }
+    public static DamageSource EndOfEvil() {
+        return (new TensuraDamageSource("trmythos.end_of_evil")).bypassArmor().bypassMagic().bypassEnchantments();
     }
 
 }
