@@ -73,6 +73,10 @@ public class MythosMobEffects {
             new GreatSilenceEffect(MobEffectCategory.NEUTRAL, (new Color(90, 20, 90).getRGB())));
     public static final RegistryObject<MobEffect> YELLOW_SIGN = registry.register("yellow_sign", () ->
             new YellowSignEffect(MobEffectCategory.NEUTRAL, (new Color(255, 165, 15)).getRGB()));
+    public static final RegistryObject<MobEffect> SUNSET = registry.register("sunset", () ->
+            new SunriseEffect(MobEffectCategory.NEUTRAL, (new Color(255, 165, 15)).getRGB()));
+    public static final RegistryObject<MobEffect> SUNRISE = registry.register("sunrise", () ->
+            new SunsetEffect(MobEffectCategory.NEUTRAL, (new Color(255, 165, 15)).getRGB()));
 
 
     public static void init(IEventBus modEventBus) {

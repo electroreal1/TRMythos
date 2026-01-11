@@ -42,19 +42,26 @@ public class Mythos {
 
     public Mythos() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
         modEventBus.addListener(this::onCommonSetup);
         MythosRegistery.register(modEventBus);
+        modEventBus.register(MythosRaces.class);
+        MythosParticles.init(modEventBus);
+
         MinecraftForge.EVENT_BUS.register(CrimsonTyrantHandler.class);
         MinecraftForge.EVENT_BUS.register(CarnageHandler.class);
-        modEventBus.register(MythosRaces.class);
+        MinecraftForge.EVENT_BUS.register(KhaosHandler.class);
+        MinecraftForge.EVENT_BUS.register(GlobalEffectHandler.class);
+
         MythosNetwork.register();
         CatharsisHandler.register();
-        MythosParticles.init(modEventBus);
-        MinecraftForge.EVENT_BUS.register(GlobalEffectHandler.class);
-        MinecraftForge.EVENT_BUS.register(ClientShaderHandler.class);
-        MinecraftForge.EVENT_BUS.register(KhaosHandler.class);
-        MinecraftForge.EVENT_BUS.register(YellowSignOverlayHandler.class);
-        //FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
+
+        if (net.minecraftforge.fml.loading.FMLEnvironment.dist == net.minecraftforge.api.distmarker.Dist.CLIENT) {
+            MinecraftForge.EVENT_BUS.register(ClientShaderHandler.class);
+            MinecraftForge.EVENT_BUS.register(YellowSignOverlayHandler.class);
+            modEventBus.addListener(this::onClientSetup);
+        }
+
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, MythosConfig.SPEC, getConfigFileName("mythos-common"));
         LOGGER.info("Mythos has been loaded!");
     }

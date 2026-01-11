@@ -9,6 +9,7 @@ import com.github.mythos.mythos.ability.mythos.skill.extra.ThunderRainSkill;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.*;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.god.DendrrahSkill;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.lord.*;
+import com.github.mythos.mythos.ability.mythos.skill.ultimate.prince.HaliSkill;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.prince.ZeroSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.DominateSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.DullahanSkill;
@@ -46,6 +47,7 @@ public class Skills {
 
     // Prince Class
     public static final RegistryObject<ZeroSkill> ZERO;
+    public static final RegistryObject<HaliSkill> HALI;
 
     // God Class
     public static final RegistryObject<DendrrahSkill> DENDRRAH;
@@ -137,6 +139,7 @@ public class Skills {
 
         // Prince Class
         ZERO = registery.register("zero", () -> new ZeroSkill(Skill.SkillType.ULTIMATE));
+        HALI = registery.register("hali", () -> new HaliSkill(Skill.SkillType.ULTIMATE));
 
         // god Class
         DENDRRAH = registery.register("dendrahh", () -> new DendrrahSkill(Skill.SkillType.ULTIMATE));

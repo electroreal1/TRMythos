@@ -5,11 +5,13 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "trmythos.refmap.json",
   "mixins": [
+    "CharmSkillMixin",
     "ChatHandlerMixin",
     "FragarachInfinityPrisonPierceMixin",
     "MagicInterferenceEffectMixin",
     "MagicUtilsMixin",
     "MixinRobotnicSkill",
+    "PossessionSkillMixin",
     "ResistSkillMixin",
     "SkillHelperMixin",
     "SkillUtilsMixin",

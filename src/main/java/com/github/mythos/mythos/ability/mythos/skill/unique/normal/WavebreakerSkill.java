@@ -16,7 +16,6 @@ import com.github.manasmods.tensura.registry.skill.CommonSkills;
 import com.github.manasmods.tensura.registry.skill.IntrinsicSkills;
 import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSources;
-import com.github.mythos.mythos.handler.BigTsunamiHandler;
 import com.github.mythos.mythos.networking.MythosNetwork;
 import com.github.mythos.mythos.networking.play2server.ScreenShakePacket;
 import com.github.mythos.mythos.registry.skill.Skills;
@@ -69,6 +68,8 @@ public class WavebreakerSkill extends Skill {
             SkillUtils.learnSkill(entity, CommonSkills.HYDRAULIC_PROPULSION.get());
         }
     }
+
+
 
     @Override
     public void onDamageEntity(ManasSkillInstance instance, LivingEntity entity, LivingHurtEvent event) {
@@ -249,7 +250,6 @@ public class WavebreakerSkill extends Skill {
         ServerLevel sLevel = (ServerLevel) player.level;
         Vec3 origin = player.position().add(0, 1, 0);
         Vec3 look = player.getLookAngle().normalize();
-        new BigTsunamiHandler(sLevel, origin, look, 16, 8, 8, 100, instance.isMastered(player) ? 40 : 80);
         instance.setCoolDown(100);
     }
 }

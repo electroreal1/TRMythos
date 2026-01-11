@@ -71,7 +71,7 @@ public class ZeroSkill extends Skill {
         if (currentEP < getObtainingEpCost()) {
             return false;
         }
-        return SkillUtils.isSkillMastered(player, Skills.GAZE.get());
+        return SkillUtils.isSkillMastered(player, Skills.KHAOS.get());
     }
 
     @Override
