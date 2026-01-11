@@ -15,10 +15,8 @@ public class ClientOnlyRegistrar {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientOnlyRegistrar::onClientSetup);
 
         // Manual registration for handlers that DON'T have @Mod.EventBusSubscriber
-//        MinecraftForge.EVENT_BUS.register(ClientShaderHandler.class);
         MinecraftForge.EVENT_BUS.register(YellowSignOverlayHandler.class);
         MinecraftForge.EVENT_BUS.register(HaliShaderHandler.class);
-//        MinecraftForge.EVENT_BUS.register(GlobalEffectHandler.class);
     }
 
     public static void onClientSetup(FMLClientSetupEvent event) {

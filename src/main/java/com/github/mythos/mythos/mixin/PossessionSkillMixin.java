@@ -24,5 +24,9 @@ public class PossessionSkillMixin {
             cir.setReturnValue(false);
         }
 
+        if (SkillUtils.isSkillToggled(target, Skills.KHONSU.get())) {
+            cir.setReturnValue(false);
+        }
+
     }
 }

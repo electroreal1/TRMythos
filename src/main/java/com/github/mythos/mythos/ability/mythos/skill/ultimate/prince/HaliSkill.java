@@ -65,6 +65,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
+import static net.minecraft.ChatFormatting.*;
+
 public class HaliSkill extends Skill {
     public static final UUID TSUKUYOMI = UUID.fromString("ff1ba7e1-9b9a-4580-8f6f-c5db93f93651");
     protected static final UUID ACCELERATION = UUID.fromString("8f08f72d-014b-4b4b-8560-987a0375959d");
@@ -88,7 +90,7 @@ public class HaliSkill extends Skill {
     @Override
     public MutableComponent getName() {
         return Component.literal("Hali").withStyle(ChatFormatting.YELLOW)
-                .append(",").withStyle(ChatFormatting.WHITE)
+                .append(", ").withStyle(WHITE)
                 .append(Component.literal("Sunken Sun").withStyle(ChatFormatting.BLACK));
     }
 
@@ -118,6 +120,77 @@ public class HaliSkill extends Skill {
     @Override
     public void onLearnSkill(ManasSkillInstance instance, LivingEntity entity, UnlockSkillEvent event) {
         SkillUtils.learnSkill(entity, ResistanceSkills.SPIRITUAL_ATTACK_NULLIFICATION.get());
+
+        if (entity instanceof Player player) {
+            triggerHaliLearningSequence(player);
+        }
+    }
+
+    private void triggerHaliLearningSequence(Player player) {
+        player.playSound(SoundEvents.BEACON_ACTIVATE, 1.0f, 0.5f);
+
+        player.sendSystemMessage(Component.literal("« Notice »")
+                .withStyle(WHITE, (BOLD)));
+
+        player.sendSystemMessage(Component.literal("Condition Met: Mastery of Ultimate Skill [Tsukuyomi] has reached the threshold of Singularity.")
+                .withStyle(GRAY));
+
+        player.sendSystemMessage(Component.literal("Evolutionary Path Branching: The logic of \"Moon Shadow\" is being overwritten by the ")
+                .append(Component.literal("[Sunken Sun]").withStyle(WHITE, (BOLD))));
+
+        player.sendSystemMessage(Component.literal("\nConfirmed: You have obtained the Skill ")
+                .withStyle(WHITE, BOLD));
+        player.sendSystemMessage(Component.literal("[Hali").withStyle(YELLOW).append(", ").withStyle(WHITE).append("Sunken Sun].\n").withStyle(BLACK));
+
+        player.sendSystemMessage(Component.literal("\nSystem Alert: Your spiritual body has ceased to reflect external magicules.")
+                .withStyle(GRAY));
+        player.sendSystemMessage(Component.literal("You have entered the state of Lunar Stillness. The \"Voice of the World\" will now become muffled as you drift toward the Far Side of the Moon.")
+                .withStyle(DARK_GRAY, ITALIC));
+
+        player.playSound(SoundEvents.WARDEN_HEARTBEAT, 1.0f, 0.5f);
+
+        player.sendSystemMessage(Component.literal("\n« Success: The shadow has detached from the light. »")
+                .withStyle(GRAY));
+    }
+
+    @Override
+    public void onSkillMastered(ManasSkillInstance instance, LivingEntity entity) {
+        if (entity instanceof Player player) {
+            triggerHaliMasterySequence(player);
+        }
+    }
+
+    private void triggerHaliMasterySequence(Player player) {
+        player.playSound(SoundEvents.BEACON_ACTIVATE, 1.0f, 0.5f);
+
+        player.sendSystemMessage(Component.literal("« Notice »")
+                .withStyle(WHITE, (BOLD)));
+
+        player.sendSystemMessage(Component.literal("Individual confirmed as having transcended the \"Cycle of the Sun.\"\n")
+                .withStyle(GRAY));
+
+        player.sendSystemMessage(Component.literal("Condition Met: The lungs of the spirit have adapted to the vacuum. Confirmed: Skill [Hali] has been fully integrated into the soul-circuit.\n ")
+                        .withStyle(WHITE));
+
+        player.sendSystemMessage(Component.literal("System Analysis:\n.")
+                .withStyle(WHITE, BOLD));
+
+        player.sendSystemMessage(Component.literal("Biological Nullification: The Individual no longer consumes the \"Breath of Life.\"\n")
+                .withStyle(GRAY));
+        player.sendSystemMessage(Component.literal("Sensory Redaction: Ambient noise and vibrations now bypass the user. You have become a \"Silent Singularity.\"\n")
+                .withStyle(DARK_GRAY, ITALIC));
+
+        player.sendSystemMessage(Component.literal("Evolutionary Bridge: The pathway to the moon’s \"Dark Side\" is now open.\n")
+                .withStyle(GRAY));
+
+        player.sendSystemMessage(Component.literal("Current Status: The Individual is now categorized as a [Dweller of the Unseen]. Your presence is no longer recorded by the atmosphere, and your shadows are no longer cast by the light.\n")
+                .withStyle(GRAY));
+
+        player.sendSystemMessage(Component.literal("« Notification: \"In the silence where the spirit dieth, you have found the strength to remain.\" »\n")
+                .withStyle(GRAY));
+
+        player.playSound(SoundEvents.WARDEN_HEARTBEAT, 1.0f, 0.5f);
+
     }
 
     @Override
@@ -279,19 +352,27 @@ public class HaliSkill extends Skill {
 
         if (instance.getMode() == 4 && this.isHeld(entity)) {
             Level level = entity.getLevel();
-            AttributeInstance recon = entity.getAttribute((Attribute)TensuraAttributeRegistry.SIZE.get());
+            AttributeInstance recon = entity.getAttribute(TensuraAttributeRegistry.SIZE.get());
+
             if (recon != null && recon.getModifier(TSUKUYOMI) != null) {
                 recon.removePermanentModifier(TSUKUYOMI);
                 instance.setCoolDown(10);
-                level.playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ILLUSIONER_CAST_SPELL, SoundSource.PLAYERS, 1.0F, 1.0F);
+                level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ILLUSIONER_CAST_SPELL, SoundSource.PLAYERS, 1.0F, 1.0F);
+
+                AABB searchArea = entity.getBoundingBox().inflate(100.0);
+                List<CloneEntity> activeClones = level.getEntitiesOfClass(CloneEntity.class, searchArea,
+                        clone -> clone.getOwner() == entity); // Only target clones owned by this player
+
+                for (CloneEntity clone : activeClones) {
+                    TensuraParticleHelper.addServerParticlesAroundSelf(clone, ParticleTypes.SQUID_INK, 1.0);
+                    clone.discard();
+                }
             } else {
                 this.addMasteryPoint(instance, entity);
                 CompoundTag tag = instance.getTag();
-                if (tag == null) {
-                    this.summonClones(entity, level, 10);
-                } else {
-                    this.summonClones(entity, level, tag.getInt("clones"));
-                }
+                int cloneCount = (tag != null) ? tag.getInt("clones") : 10;
+
+                this.summonClones(entity, level, cloneCount);
 
                 AttributeModifier tsukuyomi = new AttributeModifier(TSUKUYOMI, "TsukuyomiClonesEffect", 0.0, AttributeModifier.Operation.ADDITION);
                 if (recon != null && recon.getModifier(TSUKUYOMI) == null) {
@@ -495,8 +576,10 @@ public class HaliSkill extends Skill {
             this.addMasteryPoint(instance, entity);
             entity.getLevel().playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
             entity.addEffect(new MobEffectInstance((MobEffect)TensuraMobEffects.SHADOW_STEP.get(), 6000, 0, false, false, false));
+            entity.addEffect(new MobEffectInstance((MobEffect)TensuraMobEffects.PRESENCE_CONCEALMENT.get(), 6000, 3, false, false, false));
         } else {
             entity.removeEffect((MobEffect)TensuraMobEffects.SHADOW_STEP.get());
+            entity.removeEffect(TensuraMobEffects.PRESENCE_CONCEALMENT.get());
             entity.getLevel().playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 0.5F);
         }
 

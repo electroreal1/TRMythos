@@ -24,6 +24,10 @@ public class CharmSkillMixin {
             failed = true;
         }
 
+        if (SkillUtils.isSkillToggled(target, Skills.KHONSU.get())) {
+            failed = true;
+        }
+
         cir.setReturnValue(failed);
     }
 }
