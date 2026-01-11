@@ -97,6 +97,10 @@ public class Kthanid extends Skill {
         if (entity instanceof ServerPlayer player) {
             TensuraAdvancementsHelper.grant(player, TensuraAdvancementsHelper.Advancements.MASTER_SMITH);
         }
+
+        if (!(entity.getLevel() instanceof ServerLevel serverLevel)) return;
+        Component msg = Component.literal("Darkness writhes as a new presence shines upon the world. Fear nestles its way into the empty hearts of the unjust, knowing that the light is soon to swallow them for their misdoings. The God of Light, the true Justice, has been born unto the world.").withStyle(ChatFormatting.RED).withStyle(ChatFormatting.BOLD);
+        serverLevel.players().forEach(player1 -> player1.displayClientMessage(msg, false));
     }
 
     private double getMaxEP(LivingEntity entity) {
@@ -104,6 +108,7 @@ public class Kthanid extends Skill {
             return TensuraPlayerCapability.getBaseMagicule(p) + TensuraPlayerCapability.getBaseAura(p);
         return TensuraEPCapability.getEP(entity);
     }
+
 
     private double getCurrentEP(LivingEntity entity) {
         if (entity instanceof Player p)
