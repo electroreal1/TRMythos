@@ -1,5 +1,6 @@
 package com.github.mythos.mythos.shaders;
 
+import com.github.mythos.mythos.Mythos;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
@@ -11,7 +12,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(value = Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = Mythos.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ClientShaderHandler {
 
     private static final ResourceLocation WEAK_SHADER = new ResourceLocation("minecraft", "shaders/post/phosphor.json");

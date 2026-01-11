@@ -4,6 +4,7 @@ import com.github.mythos.mythos.client.screen.OrunScreen;
 import com.github.mythos.mythos.config.MythosConfig;
 import com.github.mythos.mythos.handler.*;
 import com.github.mythos.mythos.networking.MythosNetwork;
+import com.github.mythos.mythos.registry.ClientOnlyRegistrar;
 import com.github.mythos.mythos.registry.MythosParticles;
 import com.github.mythos.mythos.registry.MythosRegistery;
 import com.github.mythos.mythos.registry.menu.MythosMenuTypes;
@@ -11,9 +12,11 @@ import com.github.mythos.mythos.registry.race.MythosRaces;
 import com.github.mythos.mythos.shaders.ClientShaderHandler;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -43,25 +46,28 @@ public class Mythos {
     public Mythos() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
+        // 1. Common Registries (Safe for both sides)
         modEventBus.addListener(this::onCommonSetup);
         MythosRegistery.register(modEventBus);
         modEventBus.register(MythosRaces.class);
         MythosParticles.init(modEventBus);
-
-        MinecraftForge.EVENT_BUS.register(CrimsonTyrantHandler.class);
-        MinecraftForge.EVENT_BUS.register(CarnageHandler.class);
-        MinecraftForge.EVENT_BUS.register(KhaosHandler.class);
-        MinecraftForge.EVENT_BUS.register(GlobalEffectHandler.class);
-
         MythosNetwork.register();
         CatharsisHandler.register();
 
-        if (net.minecraftforge.fml.loading.FMLEnvironment.dist == net.minecraftforge.api.distmarker.Dist.CLIENT) {
-            MinecraftForge.EVENT_BUS.register(ClientShaderHandler.class);
-            MinecraftForge.EVENT_BUS.register(YellowSignOverlayHandler.class);
-            modEventBus.addListener(this::onClientSetup);
-        }
+        // 2. Common Event Bus Registrations
+        MinecraftForge.EVENT_BUS.register(CrimsonTyrantHandler.class);
+        MinecraftForge.EVENT_BUS.register(CarnageHandler.class);
+        MinecraftForge.EVENT_BUS.register(KhaosHandler.class);
 
+        // 3. SAFE CLIENT LOADING
+        // We use DistExecutor to call a SEPARATE class.
+        // This prevents the Server from ever seeing "ClientOnlyRegistrar"
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientOnlyRegistrar::registerClientOnlyEvents);
+
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, MythosConfig.SPEC, getConfigFileName("mythos-common"));
+        LOGGER.info("Mythos has been loaded!");
+
+//
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, MythosConfig.SPEC, getConfigFileName("mythos-common"));
         LOGGER.info("Mythos has been loaded!");
     }
@@ -93,6 +99,11 @@ public class Mythos {
     private void onClientSetup(FMLClientSetupEvent event) {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
         MenuScreens.register(MythosMenuTypes.ORUN_MENU.get(), OrunScreen::new);
+        MinecraftForge.EVENT_BUS.register(ClientShaderHandler.class);
+        MinecraftForge.EVENT_BUS.register(YellowSignOverlayHandler.class);
+        MinecraftForge.EVENT_BUS.register(HaliShaderHandler.class);
+        MinecraftForge.EVENT_BUS.register(GlobalEffectHandler.class);
+        MinecraftForge.EVENT_BUS.register(KhaosHandler.class);
     }
 
 

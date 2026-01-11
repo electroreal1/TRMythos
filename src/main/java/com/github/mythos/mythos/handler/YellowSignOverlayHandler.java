@@ -1,5 +1,6 @@
 package com.github.mythos.mythos.handler;
 
+import com.github.mythos.mythos.Mythos;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
@@ -17,7 +18,7 @@ import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = "trmythos", bus = Mod.EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber(modid = Mythos.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class YellowSignOverlayHandler {
     private static final ResourceLocation YELLOW_SIGN_TEXTURE = new ResourceLocation("trmythos", "textures/gui/yellow_sign.png");
 

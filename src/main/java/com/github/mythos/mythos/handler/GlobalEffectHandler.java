@@ -1,5 +1,6 @@
 package com.github.mythos.mythos.handler;
 
+import com.github.mythos.mythos.Mythos;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -19,7 +20,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.util.Random;
 
-@Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE, modid = "trmythos")
+@Mod.EventBusSubscriber(modid = Mythos.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class GlobalEffectHandler {
     private static final Random RANDOM = new Random();
     public static float shakeIntensity = 0f;
