@@ -3,7 +3,6 @@ package com.github.mythos.mythos.registry;
 import com.github.mythos.mythos.client.screen.OrunScreen;
 import com.github.mythos.mythos.handler.GlobalEffectHandler;
 import com.github.mythos.mythos.handler.HaliShaderHandler;
-import com.github.mythos.mythos.handler.KhaosClientHandler;
 import com.github.mythos.mythos.handler.YellowSignOverlayHandler;
 import com.github.mythos.mythos.registry.menu.MythosMenuTypes;
 import com.github.mythos.mythos.shaders.ClientShaderHandler;
@@ -20,9 +19,6 @@ public class ClientOnlyRegistrar {
         MinecraftForge.EVENT_BUS.register(YellowSignOverlayHandler.class);
         MinecraftForge.EVENT_BUS.register(HaliShaderHandler.class);
         MinecraftForge.EVENT_BUS.register(GlobalEffectHandler.class);
-        MinecraftForge.EVENT_BUS.register(KhaosClientHandler.class);
-        // Note: KhaosHandler was already registered in the main constructor.
-        // If it has client code, it needs to be split!
     }
 
     public static void onClientSetup(FMLClientSetupEvent event) {
