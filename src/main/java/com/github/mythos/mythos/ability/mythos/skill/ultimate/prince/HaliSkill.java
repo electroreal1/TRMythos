@@ -48,9 +48,12 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.Nullable;
 
@@ -331,6 +334,18 @@ public class HaliSkill extends Skill {
             player.displayClientMessage(Component.literal("§eSelf Necromancing: §0Revived against " + damageType), true);
         }
 
+    }
+
+    @SubscribeEvent
+    public void onLevelTick(TickEvent.LevelTickEvent event) {
+        if (event.side == LogicalSide.SERVER && event.phase == TickEvent.Phase.END) {
+
+            if (event.level.getDayTime() % 24000 == 0) {
+
+                this.usedDeathTypes.clear();
+
+            }
+        }
     }
 
     private void summonClones(LivingEntity entity, Level level, int number) {
