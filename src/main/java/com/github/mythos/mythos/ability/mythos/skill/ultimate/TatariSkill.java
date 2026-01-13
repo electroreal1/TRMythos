@@ -88,6 +88,10 @@ public class TatariSkill extends Skill {
         super(SkillType.ULTIMATE);
     }
 
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/ultimate/tatari.png");
+    }
+
     public boolean canBeToggled(@NotNull ManasSkillInstance instance, @NotNull LivingEntity entity) {
         return true;
     }
