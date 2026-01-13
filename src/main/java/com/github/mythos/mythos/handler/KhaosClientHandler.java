@@ -26,14 +26,14 @@ public class KhaosClientHandler {
         if (event.phase != TickEvent.Phase.END) return;
 
         Minecraft mc = Minecraft.getInstance();
-        if (mc.player != null && mc.player.hasEffect(MythosMobEffects.GREAT_SILENCE.get())) {
+        if (mc.player != null && GlobalEffectHandler.isGreatSilenceActive) {
             if (mc.level.getGameTime() % 40 == 0) {
                 mc.player.playSound(SoundEvents.CONDUIT_AMBIENT, 1.0f, 0.1f);
             }
-            heartTick++;
-            if (heartTick >= 30) {
+
+            // Pulsating heartbeat
+            if (mc.level.getGameTime() % 30 == 0) {
                 mc.player.playSound(SoundEvents.WARDEN_HEARTBEAT, 0.6f, 0.2f);
-                heartTick = 0;
             }
         }
     }
@@ -46,8 +46,11 @@ public class KhaosClientHandler {
         if (effect != null) {
             event.getPoseStack().pushPose();
             int amp = effect.getAmplifier();
-            if (amp == 0) event.getPoseStack().scale(1.0f, 1.0f, 0.005f);
-            else event.getPoseStack().scale(0.005f, 1.0f, 0.005f);
+
+            if (amp == 0) {
+                event.getPoseStack().scale(0.005f, 10.0f, 0.005f);
+                event.getPoseStack().translate(0.005f, 10.0f, 0.005f);
+            }
         }
     }
 
@@ -71,8 +74,7 @@ public class KhaosClientHandler {
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public static void onSoundPlay(PlaySoundEvent event) {
-        Minecraft mc = Minecraft.getInstance();
-        if (mc.player != null && mc.player.hasEffect(MythosMobEffects.GREAT_SILENCE.get())) {
+        if (GlobalEffectHandler.isGreatSilenceActive) {
             if (event.getSound() != null) {
                 String path = event.getSound().getLocation().getPath();
                 boolean allowed = path.contains("conduit") || path.contains("warden") || path.contains("beacon");
@@ -90,6 +92,23 @@ public class KhaosClientHandler {
             float alpha = (float) (Math.sin(timer * 0.5f) * 0.5f + 0.5f);
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, alpha * 0.5f);
         }
+    }
+
+    @SubscribeEvent
+    @OnlyIn(Dist.CLIENT)
+    public static void onRenderHotbar(RenderGuiOverlayEvent.Pre event) {
+        if (GlobalEffectHandler.isGreatSilenceActive) {
+            long time = Minecraft.getInstance().level.getGameTime();
+            float alpha = (time % 5 == 0) ? 0.2f : 1.0f;
+
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, alpha);
+        }
+    }
+
+    @SubscribeEvent
+    @OnlyIn(Dist.CLIENT)
+    public static void onRenderHotbarPost(RenderGuiOverlayEvent.Post event) {
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
     @SubscribeEvent

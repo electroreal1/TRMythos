@@ -3,6 +3,7 @@ package com.github.mythos.mythos.mob_effect;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
 public class BoundaryErasureSinkEffect extends MobEffect {
@@ -12,26 +13,24 @@ public class BoundaryErasureSinkEffect extends MobEffect {
 
     @Override
     public void applyEffectTick(LivingEntity entity, int amplifier) {
-        if (entity.getPersistentData().contains("BoundaryErasureUser")) return;
+        entity.noPhysics = true;
 
-        if (entity.isOnGround() || entity.isInWall()) {
-            entity.noPhysics = true;
+        Vec3 move = entity.getDeltaMovement();
+        entity.setDeltaMovement(move.x * 0.5, -0.08, move.z * 0.5);
 
-            Vec3 motion = entity.getDeltaMovement();
-            entity.setDeltaMovement(motion.x * 0.5, -0.15, motion.z * 0.5);
+        if (entity.getDeltaMovement().y > 0 && entity.isOnGround()) {
+            entity.setDeltaMovement(entity.getDeltaMovement().add(0, -(0.5 + entity.getJumpBoostPower()), 0));
         }
 
-        entity.hurtMarked = true;
+        if (entity instanceof Player player) {
+            if (player.zza > 0) {
+                player.setDeltaMovement(entity.getDeltaMovement().add(0,  -(0.5 + player.getJumpBoostPower()), 0));
+            }
+        }
     }
 
     @Override
-    public void removeAttributeModifiers(LivingEntity entity, net.minecraft.world.entity.ai.attributes.AttributeMap pAttributeMap, int pAmplifier) {
-        super.removeAttributeModifiers(entity, pAttributeMap, pAmplifier);
-        entity.noPhysics = false;
-    }
-
-    @Override
-    public boolean isDurationEffectTick(int pDuration, int pAmplifier) {
+    public boolean isDurationEffectTick(int duration, int amplifier) {
         return true;
     }
 }

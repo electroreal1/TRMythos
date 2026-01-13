@@ -4,7 +4,6 @@ import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
 import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.skill.Skill;
-import com.github.manasmods.tensura.capability.skill.TensuraSkillCapability;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.util.MythosUtils;
@@ -45,32 +44,34 @@ public class Gaze extends Skill {
         }
     }
 
+    @Override
     public void onTick(ManasSkillInstance instance, LivingEntity entity) {
         if (instance.isToggled()) {
-            entity.addEffect(new MobEffectInstance((MobEffect) TensuraMobEffects.PRESENCE_SENSE.get(), 200, 1, false,
-                    false, false));
-            entity.addEffect(new MobEffectInstance((MobEffect) TensuraMobEffects.HEAT_SENSE.get(), 200, 0, false,
-                    false, false));
-            entity.addEffect(new MobEffectInstance((MobEffect) TensuraMobEffects.AUDITORY_SENSE.get(), 200, 0, false,
-                    false, false));
+            entity.addEffect(new MobEffectInstance(TensuraMobEffects.PRESENCE_SENSE.get(), 200, 1, false, false, false));
+            entity.addEffect(new MobEffectInstance(TensuraMobEffects.HEAT_SENSE.get(), 200, 0, false, false, false));
+            entity.addEffect(new MobEffectInstance(TensuraMobEffects.AUDITORY_SENSE.get(), 200, 0, false, false, false));
         }
 
-        if (TensuraSkillCapability.isSkillInSlot(entity, this)) {
-            LivingEntity entity1 = MythosUtils.getLookedAtEntity(entity, 30);
-                SkillHelper.checkThenAddEffectSource(entity1, entity, new MobEffectInstance(MythosMobEffects.SPATIAL_DYSPHORIA.get(), 10,
+        if (this.isInSlot(entity)) {
+            LivingEntity target = MythosUtils.getLookedAtEntity(entity, 30);
+
+            if (target != null) {
+                SkillHelper.checkThenAddEffectSource(target, entity, new MobEffectInstance(MythosMobEffects.SPATIAL_DYSPHORIA.get(), 200,
                         1, false, false, false));
-                SkillHelper.checkThenAddEffectSource(entity1, entity, new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10,
-                        3, false, false, false));
+                SkillHelper.checkThenAddEffectSource(target, entity, new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200,
+                        2, false, false, false));
+            }
         }
     }
 
     @Override
     public List<MobEffect> getImmuneEffects(ManasSkillInstance instance, LivingEntity entity) {
         List<MobEffect> list = new ArrayList<>();
-        if (instance.isToggled()) {
+        if (this.isInSlot(entity)) {
             list.add(TensuraMobEffects.FEAR.get());
             list.add(TensuraMobEffects.MIND_CONTROL.get());
             list.add(TensuraMobEffects.INSANITY.get());
+            list.add(MobEffects.CONFUSION);
         }
         return list;
     }
@@ -80,6 +81,4 @@ public class Gaze extends Skill {
     public MutableComponent getName() {
         return Component.literal("Gaze");
     }
-
-
 }

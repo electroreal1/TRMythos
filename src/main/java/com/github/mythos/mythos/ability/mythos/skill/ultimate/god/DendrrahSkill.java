@@ -1,6 +1,5 @@
 package com.github.mythos.mythos.ability.mythos.skill.ultimate.god;
 
-import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
@@ -12,7 +11,6 @@ import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.ability.skill.extra.HakiSkill;
 import com.github.manasmods.tensura.ability.skill.unique.CookSkill;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
-import com.github.manasmods.tensura.config.TensuraConfig;
 import com.github.manasmods.tensura.entity.magic.TensuraProjectile;
 import com.github.manasmods.tensura.entity.magic.projectile.SeveranceCutterProjectile;
 import com.github.manasmods.tensura.network.TensuraNetwork;
@@ -20,10 +18,9 @@ import com.github.manasmods.tensura.network.play2client.RequestFxSpawningPacket;
 import com.github.manasmods.tensura.registry.attribute.TensuraAttributeRegistry;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSources;
-import com.github.mythos.mythos.config.MythosSkillsConfig;
 import com.github.mythos.mythos.handler.GodClassHandler;
 import com.github.mythos.mythos.registry.skill.Skills;
-import io.github.Memoires.trmysticism.registry.effects.MysticismMobEffects;
+import com.github.mythos.mythos.util.MythosUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -42,7 +39,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -51,8 +47,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 import static com.github.mythos.mythos.config.MythosSkillsConfig.EnableUltimateSkillObtainment;
 
@@ -88,74 +85,61 @@ public class DendrrahSkill extends Skill {
 
     @Override
     public boolean meetEPRequirement(Player player, double newEP) {
-        if (!(player.getLevel() instanceof ServerLevel world)) return false;
+        if (!(player.level instanceof ServerLevel world)) return false;
         GodClassHandler godClassHandler = GodClassHandler.get(world);
         if (!EnableUltimateSkillObtainment()) return false;
-        double currentEP = TensuraEPCapability.getCurrentEP(player);
-        if (currentEP < getObtainingEpCost()) {
-            return false;
-        }
-        return SkillUtils.isSkillMastered(player, (ManasSkill) Skills.ARES.get()) &&
-                SkillUtils.isSkillMastered(player, (ManasSkill) Skills.RAVANA.get()) && !godClassHandler.isDendrahhObtained();
+
+        return TensuraEPCapability.getCurrentEP(player) >= getObtainingEpCost() && SkillUtils.isSkillMastered(player, Skills.ARES.get()) && SkillUtils.isSkillMastered(player, Skills.RAVANA.get()) && !godClassHandler.isDendrahhObtained();
     }
 
     @Override
     public void onLearnSkill(ManasSkillInstance instance, LivingEntity entity, UnlockSkillEvent event) {
-        if (!(entity instanceof Player player)) return;
-        if (!(entity.getLevel() instanceof ServerLevel world)) return;
-        GodClassHandler godClassHandler = GodClassHandler.get(world);
-        if (instance.getMastery() >= 0 && !instance.isTemporarySkill()) {
-            SkillStorage storage = SkillAPI.getSkillsFrom(player);
+        if (!(entity instanceof Player player) || !(entity.level instanceof ServerLevel serverLevel)) return;
 
-            SkillAPI.getSkillRegistry().forEach(skill -> {
-                if (Objects.requireNonNull(skill.getName()).contains(Component.nullToEmpty("resistance")) ||
-                        skill.getName().contains(Component.nullToEmpty("nullification"))) {
-                    storage.learnSkill(skill);
-                }
-            });
+        GodClassHandler godClassHandler = GodClassHandler.get(serverLevel);
 
-            if (!(entity.getLevel() instanceof ServerLevel serverLevel)) return;
+        SkillStorage storage = SkillAPI.getSkillsFrom(player);
+        SkillAPI.getSkillRegistry().forEach(skill -> {
+            String skillName = Objects.requireNonNull(skill.getName()).getString().toLowerCase();
+            if (skillName.contains("resistance") || skillName.contains("nullification")) {
+                storage.learnSkill(skill);
+            }
+        });
 
-            Component msg = Component.literal("Violence, suffering, bloodshed, seem to spark at the most minor slight. Each conflict fuels another, in a cycle that seems to drag the world closer to its inevitable end. The Apocalypse God has arisen, and an indescribably rage fills the hearts of all life...").withStyle(ChatFormatting.RED).withStyle(ChatFormatting.BOLD);
-            serverLevel.players().forEach(player1 -> player1.displayClientMessage(msg, false));
-            godClassHandler.setDendrahhObtained();
-            CompoundTag tag = instance.getOrCreateTag();
-            tag.putBoolean("ChaoticFateActivated", true);
-        }
+        Component msg = Component.literal("Violence, suffering, bloodshed... The Apocalypse God has arisen. An indescribable rage fills the hearts of all life!").withStyle(ChatFormatting.RED, ChatFormatting.BOLD);
+        serverLevel.players().forEach(p -> p.displayClientMessage(msg, false));
+
+        godClassHandler.setDendrahhObtained();
     }
 
     @SubscribeEvent
     public static void onEntityKilled(LivingDeathEvent event) {
         if (!(event.getSource().getEntity() instanceof Player player)) return;
-        if (player.level.isClientSide) return;
 
-        double attackBonus = 10;
-        double speedBonus = 0.1;
-        double defenseBonus = 50;
-
-        applyModifier(player, Attributes.ATTACK_DAMAGE, DENDRRAH_DAMAGE_UUID, attackBonus);
-        applyModifier(player, Attributes.ATTACK_SPEED, DENDRRAH_SPEED_UUID, speedBonus);
-        applyModifier(player, Attributes.ARMOR, DENDRRAH_ARMOR_UUID, defenseBonus);
+        if (SkillUtils.hasSkill(player, Skills.DENDRRAH.get())) {
+            applyModifier(player, Attributes.ATTACK_DAMAGE, DENDRRAH_DAMAGE_UUID, 10.0);
+            applyModifier(player, Attributes.ATTACK_SPEED, DENDRRAH_SPEED_UUID, 0.2);
+            applyModifier(player, Attributes.ARMOR, DENDRRAH_ARMOR_UUID, 50.0);
+        }
     }
 
     private static void applyModifier(Player player, Attribute attr, UUID id, double amount) {
         AttributeInstance inst = player.getAttribute(attr);
-        if (inst == null) return;
-        inst.removeModifier(id);
-        inst.addTransientModifier(new AttributeModifier(id, "dendrrah_boost", amount, AttributeModifier.Operation.ADDITION));
+        if (inst != null) {
+            inst.removeModifier(id);
+            inst.addTransientModifier(new AttributeModifier(id, "apocalypse_boost", amount, AttributeModifier.Operation.ADDITION));
+        }
     }
 
+    @Override
     public void onDamageEntity(ManasSkillInstance instance, LivingEntity entity, LivingHurtEvent e) {
-        if (instance.isToggled()) {
+        if (this.isInSlot(entity)) {
             LivingEntity target = e.getEntity();
-            if (!(TensuraEPCapability.getEP(target) > TensuraEPCapability.getEP(entity) * 2.0)) {
-                AttributeInstance attribute = target.getAttribute((Attribute) TensuraAttributeRegistry.BARRIER.get());
-                if (attribute != null) {
-                    attribute.removeModifiers();
-                }
-
-                entity.getLevel().playSound((Player) null, entity.blockPosition(), SoundEvents.GLASS_BREAK, SoundSource.AMBIENT, 1.0F, 1.0F);
+            AttributeInstance barrier = target.getAttribute((Attribute) TensuraAttributeRegistry.BARRIER.get());
+            if (barrier != null) {
+                barrier.setBaseValue(0);
             }
+            entity.level.playSound(null, target.blockPosition(), SoundEvents.GLASS_BREAK, SoundSource.AMBIENT, 1.0F, 0.5F);
         }
     }
 
@@ -209,10 +193,8 @@ public class DendrrahSkill extends Skill {
     }
 
     public int nextMode(LivingEntity entity, TensuraSkillInstance instance, boolean reverse) {
-        if (reverse)
-            return (instance.getMode() == 1) ? 4 : (instance.getMode() - 1);
-        else
-            return (instance.getMode() == 4) ? 1 : (instance.getMode() + 1);
+        if (reverse) return (instance.getMode() == 1) ? 4 : (instance.getMode() - 1);
+        else return (instance.getMode() == 4) ? 1 : (instance.getMode() + 1);
     }
 
     @Override
@@ -225,100 +207,65 @@ public class DendrrahSkill extends Skill {
 
         // Providence Blade
         if (instance.getMode() == 2) {
-            SeveranceCutterProjectile spaceCutter = new SeveranceCutterProjectile(entity.getLevel(), entity);
-            spaceCutter.setSpeed(5F);
+            SeveranceCutterProjectile cutter = new SeveranceCutterProjectile(entity.level, entity);
+            double userEP = TensuraEPCapability.getEP(player);
+            double targetEP = 0;
 
-//            float userEP = (float) TensuraEPCapability.getEP(player);
-//            float targetEP = (float) TensuraEPCapability.getEP(entity);
-//
-//
-//            float epDifference = userEP - targetEP;
-           // float damage = this.isMastered(instance, entity) ? 2000 : 1000 + epDifference;
-            float damage = this.isMastered(instance, entity) ? 2000 : 1000;
-            if (damage > 100000) {
-                damage = 100000;
-            }
-            spaceCutter.setDamage(damage);
-            spaceCutter.setSize(this.isMastered(instance, entity) ? 8.0F : 5.0F);
-            spaceCutter.setMpCost(this.magiculeCost(entity, instance));
-            spaceCutter.setSkill(instance);
-            spaceCutter.setNoGravity(true);
-            spaceCutter.setPosAndShoot(entity);
-            spaceCutter.setPosDirection(entity, TensuraProjectile.PositionDirection.MIDDLE);
-            entity.getLevel().addFreshEntity(spaceCutter);
-            instance.addMasteryPoint(entity);
-            instance.setCoolDown(3);
+            LivingEntity target = MythosUtils.getLookedAtEntity(entity, 30);
+            if (target != null) targetEP = TensuraEPCapability.getEP(target);
+
+            float baseDmg = instance.isMastered(entity) ? 2000F : 1000F;
+            float epBonus = (float) Math.max(0, (userEP - targetEP) / 1000.0);
+
+            cutter.setDamage(Math.min(100000, baseDmg + epBonus));
+            cutter.setSize(this.isMastered(instance, entity) ? 8.0F : 5.0F);
+            cutter.setNoGravity(true);
+            cutter.setSkill(instance);
+            cutter.setPosAndShoot(entity);
+            cutter.setPosDirection(entity, TensuraProjectile.PositionDirection.MIDDLE);
+            entity.level.addFreshEntity(cutter);
             entity.swing(InteractionHand.MAIN_HAND, true);
-            entity.swing(InteractionHand.OFF_HAND, true);
-            entity.getLevel().playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.TRIDENT_THROW, SoundSource.PLAYERS, 1.0F, 1.0F);
         }
     }
 
     @Override
     public boolean onHeld(ManasSkillInstance instance, LivingEntity entity, int heldTicks) {
+        // Cataclysm
         if (instance.getMode() == 4) {
             if (heldTicks % 20 == 0 && SkillHelper.outOfMagicule(entity, instance)) return false;
 
-            if (heldTicks % 100 == 0 && heldTicks > 0) this.addMasteryPoint(instance, entity);
+            if (heldTicks % 2 == 0) {
+                TensuraNetwork.INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity),
+                        new RequestFxSpawningPacket(new ResourceLocation("tensura:demon_lord_haki"),
+                                entity.getId(), 0.0, 1.0, 0.0, true));
+            }
 
-            if (instance.getMode() == 1) {
-                if (heldTicks % 20 == 0) {
-                    entity.getLevel().playSound(null, entity.blockPosition(), SoundEvents.BEEHIVE_DRIP, SoundSource.PLAYERS, 1.0F, 1.0F);
-                    entity.getLevel().playSound(null, entity.blockPosition(), SoundEvents.BEEHIVE_DRIP, SoundSource.PLAYERS, 1.0F, 1.0F);
-                    entity.getLevel().playSound(null, entity.blockPosition(), SoundEvents.BEEHIVE_DRIP, SoundSource.PLAYERS, 1.0F, 1.0F);
-                    entity.getLevel().playSound(null, entity.blockPosition(), SoundEvents.BEEHIVE_DRIP, SoundSource.PLAYERS, 1.0F, 1.0F);
-                    entity.getLevel().playSound(null, entity.blockPosition(), SoundEvents.BEEHIVE_DRIP, SoundSource.PLAYERS, 1.0F, 1.0F);
-                }
-                if (heldTicks % 2 == 0) {
-                    TensuraNetwork.INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity),
-                            new RequestFxSpawningPacket(new ResourceLocation("tensura:demon_lord_haki"), entity.getId(), 0.0, 1.0, 0.0, true));
-                }
-                List<LivingEntity> list = entity.getLevel().getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(15.0),
-                        (living) -> !living.is(entity) && living.isAlive() && !living.isAlliedTo(entity));
+            List<LivingEntity> targets = entity.level.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(20.0), (living) -> living != entity && living.isAlive() && !living.isAlliedTo(entity));
 
-                if (!list.isEmpty()) {
-                    double scale = instance.getTag() == null ? 0.0 : instance.getTag().getDouble("scale");
-                    double multiplier = scale == 0.0 ? 1.0 : Math.min(scale, 1.0);
-                    double ownerEP = TensuraEPCapability.getEP(entity) * multiplier;
-
-                    for (LivingEntity target : list) {
-                        if (target instanceof Player player && player.getAbilities().invulnerable) continue;
-
-                        double targetEP = TensuraEPCapability.getEP(target);
-                        double difference = ownerEP / targetEP;
-
-                        if (difference > 2.0) {
-                            int fearLevel = (int) (difference * 0.5 - 1.0);
-                            Level level = target.level;
-                            fearLevel = Math.min(fearLevel, TensuraConfig.INSTANCE.mobEffectConfig.maxFear.get());
-                            SkillHelper.checkThenAddEffectSource(target, entity, TensuraMobEffects.FEAR.get(), 200, fearLevel);
-                            target.addEffect(new MobEffectInstance(TensuraMobEffects.FRAGILITY.get(), 1200, fearLevel, false, false, false));
-                            target.addEffect(new MobEffectInstance(TensuraMobEffects.CURSE.get(), 1200, fearLevel, false, false, false));
-                            target.addEffect(new MobEffectInstance(TensuraMobEffects.MOVEMENT_INTERFERENCE.get(), 1200, fearLevel, false, false, false));
-                            target.addEffect(new MobEffectInstance(MysticismMobEffects.MARKED_FOR_DEATH.get(), 1200, 1, false, false, false));
-                            SkillHelper.checkThenAddEffectSource(target, entity, Objects.requireNonNull(applyBadRandomEffects(target, level.random)));
-                            target.hurt(TensuraDamageSources.bloodRay(entity), 1000);
-                            HakiSkill.hakiPush(target, entity, fearLevel);
-                        }
-                    }
+            for (LivingEntity target : targets) {
+                if (heldTicks % 40 == 0) {
+                    applyBadRandomEffects(target, entity.level.random);
+                    target.hurt(TensuraDamageSources.bloodRay(entity), 1000);
+                    HakiSkill.hakiPush(target, entity, 2);
                 }
             }
             return true;
         }
 
+        // Eternal War
         if (instance.getMode() == 3) {
-            Level level = entity.getLevel();
-            if (heldTicks % 100 == 0) {
+            if (heldTicks % 60 == 0) {
+                List<LivingEntity> targets = entity.level.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(1000.0),
+                        (living) -> living != entity && living.isAlive());
 
-                List<LivingEntity> list = entity.getLevel().getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(500.0),
-                        (living) -> !living.is(entity) && living.isAlive() && !living.isAlliedTo(entity));
+                for (LivingEntity target : targets) {
+                    target.addEffect(new MobEffectInstance(TensuraMobEffects.RAMPAGE.get(), 100, 0));
 
-                for (LivingEntity target : list) {
-                    target.addEffect(new MobEffectInstance(TensuraMobEffects.RAMPAGE.get(), 30, 1, false, false, false));
-                    TensuraNetwork.INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> {
-                        return target;
-                    }), new RequestFxSpawningPacket(new ResourceLocation("tensura:wrath_boost"), entity.getId(), 0.0, 1.0, 0.0, true));
+                    TensuraNetwork.INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> target),
+                            new RequestFxSpawningPacket(new ResourceLocation("tensura:wrath_boost"),
+                                    target.getId(), 0.0, 1.0, 0.0, true));
                 }
+                instance.addMasteryPoint(entity);
             }
             return true;
         }
@@ -326,35 +273,15 @@ public class DendrrahSkill extends Skill {
         return true;
     }
 
-    private static MobEffectInstance applyBadRandomEffects(LivingEntity target, RandomSource random) {
-        Set<String> blacklist = new HashSet<>(MythosSkillsConfig.blacklistedEffects.get());
+    private void applyBadRandomEffects(LivingEntity target, RandomSource random) {
+        List<MobEffect> badEffects = ForgeRegistries.MOB_EFFECTS.getValues().stream()
+                .filter(e -> !e.isBeneficial()).toList();
 
-        List<MobEffect> availableEffects = ForgeRegistries.MOB_EFFECTS.getValues().stream()
-                .filter(Objects::nonNull)
-                .filter(effect -> !effect.isBeneficial())
-                .filter(effect -> {
-                    var key = ForgeRegistries.MOB_EFFECTS.getKey(effect);
-                    return key != null && !blacklist.contains(key.toString());
-                })
-                .collect(Collectors.toList());
-
-        if (availableEffects.isEmpty()) return null;
-
-        Collections.shuffle(availableEffects, new java.util.Random(random.nextLong()));
-
-        int count = 1 + random.nextInt(2);
-
-        for (int i = 0; i < count && i < availableEffects.size(); i++) {
-            MobEffect effect = availableEffects.get(i);
-
-            int duration = 100 + random.nextInt(301);
-            int amplifier = random.nextInt(3);
-
-            target.addEffect(new MobEffectInstance(effect, duration, amplifier));
+        for (int i = 0; i < 2; i++) {
+            MobEffect effect = badEffects.get(random.nextInt(badEffects.size()));
+            target.addEffect(new MobEffectInstance(effect, 200, 1));
         }
-        return null;
     }
-
 
 
 }

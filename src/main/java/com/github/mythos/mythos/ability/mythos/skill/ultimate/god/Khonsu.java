@@ -12,7 +12,6 @@ import com.github.manasmods.tensura.ability.skill.extra.ThoughtAccelerationSkill
 import com.github.manasmods.tensura.ability.skill.resist.AbnormalConditionNullification;
 import com.github.manasmods.tensura.ability.skill.resist.SpiritualAttackNullification;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
-import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
 import com.github.manasmods.tensura.entity.human.CloneEntity;
 import com.github.manasmods.tensura.registry.attribute.TensuraAttributeRegistry;
@@ -70,6 +69,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
+import static com.github.mythos.mythos.ability.mythos.skill.ultimate.prince.HaliSkill.applyDrain;
 import static net.minecraft.ChatFormatting.*;
 
 public class Khonsu extends Skill {
@@ -395,41 +395,28 @@ public class Khonsu extends Skill {
     @Override
     public boolean onHeld(ManasSkillInstance instance, LivingEntity entity, int heldTicks) {
         if (instance.getMode() == 5) {
-            boolean isShifting = entity.isShiftKeyDown();
+            boolean isShifting = entity.isCrouching();
+
             MobEffect domainEffect = isShifting ? MythosMobEffects.SUNRISE.get() : MythosMobEffects.SUNSET.get();
+
+            if (entity.hasEffect(MythosMobEffects.SUNSET.get()) && isShifting) entity.removeEffect(MythosMobEffects.SUNSET.get());
+            if (entity.hasEffect(MythosMobEffects.SUNRISE.get()) && !isShifting) entity.removeEffect(MythosMobEffects.SUNRISE.get());
 
             entity.addEffect(new MobEffectInstance(domainEffect, 40, 0, false, false, true));
 
             if (heldTicks % 20 == 0) {
-                if (SkillHelper.outOfMagicule(entity, instance)) return false;
 
                 AABB area = entity.getBoundingBox().inflate(12.5);
                 List<LivingEntity> targets = entity.level.getEntitiesOfClass(LivingEntity.class, area, e -> e != entity);
 
                 for (LivingEntity target : targets) {
-                    boolean isMoving = target.getDeltaMovement().lengthSqr() > 0.005; // Threshold for "moving"
+                    boolean isMoving = target.getDeltaMovement().horizontalDistanceSqr() > 0.005;
 
                     if (!isShifting && isMoving) {
-                        float targetMaxSHP = (float) target.getAttributeValue(TensuraAttributeRegistry.MAX_SPIRITUAL_HEALTH.get());
-                        double drainPercent = 0.15;
-
-                        DamageSourceHelper.directSpiritualHurt(target, entity, (float) (targetMaxSHP * drainPercent));
-
-                        if (target instanceof Player player) {
-                            TensuraPlayerCapability.getFrom(player).ifPresent(cap -> {
-                                cap.setMagicule(cap.getMagicule() * (1.0 - drainPercent));
-                            });
-                        }
-                    } else if (isShifting && !isMoving) {
-                        double drainPercent = 0.20;
-
-                        target.hurt(DamageSource.MAGIC, (float) (target.getMaxHealth() * drainPercent));
-
-                        if (target instanceof Player player) {
-                            TensuraPlayerCapability.getFrom(player).ifPresent(cap -> {
-                                cap.setMagicule(cap.getMagicule() * (1.0 - drainPercent));
-                            });
-                        }
+                        applyDrain(entity, target, 0.25, true);
+                    }
+                    else if (isShifting && !isMoving) {
+                        applyDrain(entity, target, 0.25, false);
                     }
                 }
             }

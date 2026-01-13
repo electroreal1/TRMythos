@@ -67,6 +67,8 @@ public class MythosMobEffects {
             new NonEuclideanStepEffect(MobEffectCategory.NEUTRAL, (new Color(90, 20, 90).getRGB())));
     public static final RegistryObject<MobEffect> BOUNDARY_ERASURE_SINK = registry.register("boundary_erasure_sink", () ->
             new BoundaryErasureSinkEffect(MobEffectCategory.NEUTRAL, (new Color(90, 20, 90).getRGB())));
+    public static final RegistryObject<MobEffect> BOUNDARY_ERASURE_USER = registry.register("boundary_erasure_user", () ->
+            new BoundaryErasureUserEffect(MobEffectCategory.NEUTRAL, (new Color(90, 20, 90).getRGB())));
     public static final RegistryObject<MobEffect> ATROPHY = registry.register("atropohy", () ->
             new AtrophyEffect(MobEffectCategory.NEUTRAL, (new Color(90, 20, 90).getRGB())));
     public static final RegistryObject<MobEffect> GREAT_SILENCE = registry.register("great_silence", () ->

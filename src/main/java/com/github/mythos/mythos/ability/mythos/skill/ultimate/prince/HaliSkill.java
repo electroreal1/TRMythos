@@ -89,7 +89,8 @@ public class HaliSkill extends Skill {
     @Nullable
     @Override
     public MutableComponent getName() {
-        return Component.literal("Hali").withStyle(ChatFormatting.YELLOW).append(", ").withStyle(WHITE).append(Component.literal("Sunken Sun").withStyle(ChatFormatting.BLACK));
+        return Component.literal("Hali").withStyle(YELLOW)
+                .append(", ").withStyle(WHITE).append(Component.literal("Sunken Sun").withStyle(BLACK));
     }
 
     @Override
@@ -282,41 +283,28 @@ public class HaliSkill extends Skill {
     @Override
     public boolean onHeld(ManasSkillInstance instance, LivingEntity entity, int heldTicks) {
         if (instance.getMode() == 5) {
-            boolean isShifting = entity.isShiftKeyDown();
+            boolean isShifting = entity.isCrouching();
+
             MobEffect domainEffect = isShifting ? MythosMobEffects.SUNRISE.get() : MythosMobEffects.SUNSET.get();
+
+            if (entity.hasEffect(MythosMobEffects.SUNSET.get()) && isShifting) entity.removeEffect(MythosMobEffects.SUNSET.get());
+            if (entity.hasEffect(MythosMobEffects.SUNRISE.get()) && !isShifting) entity.removeEffect(MythosMobEffects.SUNRISE.get());
 
             entity.addEffect(new MobEffectInstance(domainEffect, 40, 0, false, false, true));
 
             if (heldTicks % 20 == 0) {
-                if (SkillHelper.outOfMagicule(entity, instance)) return false;
 
                 AABB area = entity.getBoundingBox().inflate(12.5);
                 List<LivingEntity> targets = entity.level.getEntitiesOfClass(LivingEntity.class, area, e -> e != entity);
 
                 for (LivingEntity target : targets) {
-                    boolean isMoving = target.getDeltaMovement().lengthSqr() > 0.005; // Threshold for "moving"
+                    boolean isMoving = target.getDeltaMovement().horizontalDistanceSqr() > 0.005;
 
                     if (!isShifting && isMoving) {
-                        float targetMaxSHP = (float) target.getAttributeValue(TensuraAttributeRegistry.MAX_SPIRITUAL_HEALTH.get());
-                        double drainPercent = 0.15;
-
-                        DamageSourceHelper.directSpiritualHurt(target, entity, (float) (targetMaxSHP * drainPercent));
-
-                        if (target instanceof Player player) {
-                            TensuraPlayerCapability.getFrom(player).ifPresent(cap -> {
-                                cap.setMagicule(cap.getMagicule() * (1.0 - drainPercent));
-                            });
-                        }
-                    } else if (isShifting && !isMoving) {
-                        double drainPercent = 0.20;
-
-                        target.hurt(DamageSource.MAGIC, (float) (target.getMaxHealth() * drainPercent));
-
-                        if (target instanceof Player player) {
-                            TensuraPlayerCapability.getFrom(player).ifPresent(cap -> {
-                                cap.setMagicule(cap.getMagicule() * (1.0 - drainPercent));
-                            });
-                        }
+                        applyDrain(entity, target, 0.15, true);
+                    }
+                    else if (isShifting && !isMoving) {
+                        applyDrain(entity, target, 0.15, false);
                     }
                 }
             }
@@ -334,6 +322,22 @@ public class HaliSkill extends Skill {
             }
 
             return true;
+        }
+    }
+
+    public static void applyDrain(LivingEntity source, LivingEntity target, double percent, boolean isSpiritual) {
+        if (isSpiritual) {
+            float maxSHP = (float) target.getAttributeValue(TensuraAttributeRegistry.MAX_SPIRITUAL_HEALTH.get());
+            DamageSourceHelper.directSpiritualHurt(target, source, (float) (maxSHP * percent));
+        } else {
+            target.setHealth((float) (target.getMaxHealth() * percent));
+        }
+
+        if (target instanceof Player player) {
+            TensuraPlayerCapability.getFrom(player).ifPresent(cap -> {
+                cap.setMagicule(cap.getMagicule() * (1.0 - percent));
+                cap.setAura(cap.getAura() * (1.0 - percent));
+            });
         }
     }
 

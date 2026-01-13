@@ -3,7 +3,6 @@ package com.github.mythos.mythos.mob_effect;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
 public class NonEuclideanStepEffect extends MobEffect {
@@ -13,19 +12,18 @@ public class NonEuclideanStepEffect extends MobEffect {
 
     @Override
     public void applyEffectTick(LivingEntity entity, int amplifier) {
-        if (entity instanceof Player player) {
-            if (player.fallDistance > 0) {
-                player.fallDistance = 0;
-            }
+        if (entity.fallDistance > 0) {
+            entity.fallDistance = 0;
+        }
 
-            if (player.horizontalCollision) {
-                Vec3 move = player.getDeltaMovement();
+        if (entity.horizontalCollision) {
+            Vec3 move = entity.getDeltaMovement();
 
-                if (Math.abs(move.x) > 0.01 || Math.abs(move.z) > 0.01) {
-                    player.setDeltaMovement(move.x, 0.2, move.z);
+            if (Math.abs(move.x) > 0.005 || Math.abs(move.z) > 0.005) {
 
-                    player.setOnGround(true);
-                }
+                entity.setDeltaMovement(move.x, 0.25, move.z);
+
+                entity.setOnGround(true);
             }
         }
     }

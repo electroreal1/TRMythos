@@ -2,11 +2,13 @@ package com.github.mythos.mythos.handler;
 
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -18,28 +20,36 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.List;
+
 @Mod.EventBusSubscriber(modid = "trmythos")
 public class KhaosHandler {
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (event.phase != TickEvent.Phase.END || event.player == null) return;
-
         Player player = event.player;
 
         if (player.getPersistentData().contains("BoundaryErasureUser")) {
             int timer = player.getPersistentData().getInt("BoundaryErasureUser");
-
             if (timer > 0) {
                 player.getPersistentData().putInt("BoundaryErasureUser", timer - 1);
 
                 BlockPos below = player.blockPosition().below();
                 if (player.level.getBlockState(below).isAir() && !player.isShiftKeyDown()) {
                     Vec3 move = player.getDeltaMovement();
+
                     player.setDeltaMovement(move.x, 0, move.z);
                     player.setOnGround(true);
-                    player.setDeltaMovement(player.getDeltaMovement().multiply(1.05, 1, 1.05));
                     player.fallDistance = 0;
+
+                    player.setDeltaMovement(player.getDeltaMovement().multiply(1.05, 1, 1.05));
+
+                    if (player.level.isClientSide && player.tickCount % 2 == 0) {
+                        player.level.addParticle(ParticleTypes.END_ROD, player.getX(), player.getY() - 0.1, player.getZ(), 0, 0, 0);
+                    }
                 }
+            } else {
+                player.getPersistentData().remove("BoundaryErasureUser");
             }
         }
     }
@@ -82,8 +92,14 @@ public class KhaosHandler {
 
     public static void sendFakeBlock(Player originator, BlockPos pos, BlockState fakeState) {
         if (originator instanceof ServerPlayer serverPlayer) {
-            ClientboundBlockUpdatePacket packet = new ClientboundBlockUpdatePacket(pos, fakeState);
-            serverPlayer.getLevel().getChunkSource().broadcast(originator, packet);
+            serverPlayer.connection.send(new ClientboundBlockUpdatePacket(pos, fakeState));
+
+            List<ServerPlayer> nearby = serverPlayer.getLevel().getPlayers(p ->
+                    p != serverPlayer && p.distanceToSqr(originator) < 225); // 15^2
+
+            for (ServerPlayer other : nearby) {
+                other.connection.send(new ClientboundBlockUpdatePacket(pos, fakeState));
+            }
         }
     }
 
@@ -91,16 +107,19 @@ public class KhaosHandler {
     public static void onLivingTick(LivingEvent.LivingTickEvent event) {
         LivingEntity entity = event.getEntity();
         if (entity.hasEffect(MythosMobEffects.ATROPHY.get())) {
-            int amplifier = entity.getEffect(MythosMobEffects.ATROPHY.get()).getAmplifier();
+            MobEffectInstance effect = entity.getEffect(MythosMobEffects.ATROPHY.get());
+            if (effect == null) return;
+
+            int amplifier = effect.getAmplifier();
 
             if (amplifier >= 1) {
                 entity.setDeltaMovement(0, 0, 0);
                 entity.setNoGravity(true);
-                entity.setYRot(entity.yRotO);
                 entity.setXRot(entity.xRotO);
+                entity.setYRot(entity.yRotO);
             } else {
                 Vec3 delta = entity.getDeltaMovement();
-                entity.setDeltaMovement(delta.x, delta.y, delta.z * 0.01);
+                entity.setDeltaMovement(delta.x * 0.01, delta.y, delta.z * 0.01);
             }
         }
     }
