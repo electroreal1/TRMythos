@@ -1,9 +1,7 @@
 package com.github.mythos.mythos.ability.mythos.skill.unique.normal;
 
-import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
-import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
 import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
 import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.TensuraSkill;
@@ -12,7 +10,6 @@ import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.network.TensuraNetwork;
 import com.github.manasmods.tensura.network.play2client.RequestFxSpawningPacket;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
-import com.github.manasmods.tensura.registry.skill.UniqueSkills;
 import com.github.manasmods.tensura.util.TensuraAdvancementsHelper;
 import com.github.mythos.mythos.registry.skill.Skills;
 import net.minecraft.ChatFormatting;
@@ -25,15 +22,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -64,6 +60,7 @@ public class BibliomaniaSkill extends Skill {
     protected boolean canActivateInRaceLimit(ManasSkillInstance instance) {
         return instance.getMode() == 1;
     }
+
     public void onToggleOn(ManasSkillInstance instance, LivingEntity entity) {
 
     }
@@ -77,24 +74,17 @@ public class BibliomaniaSkill extends Skill {
         int eatenSpiderEyes = 0;
         if (player.level.isClientSide) {
             if (player instanceof LocalPlayer localPlayer) {
-                eatenSpiderEyes = localPlayer.getStats()
-                        .getValue(Stats.ITEM_USED.get(Items.SPIDER_EYE));
+                eatenSpiderEyes = localPlayer.getStats().getValue(Stats.ITEM_USED.get(Items.SPIDER_EYE));
             }
-        }
-        else if (player instanceof ServerPlayer serverPlayer) {
-            eatenSpiderEyes = serverPlayer.getStats()
-                    .getValue(Stats.ITEM_USED.get(Items.SPIDER_EYE));
+        } else if (player instanceof ServerPlayer serverPlayer) {
+            eatenSpiderEyes = serverPlayer.getStats().getValue(Stats.ITEM_USED.get(Items.SPIDER_EYE));
         }
         if (eatenSpiderEyes >= 10) {
-                player.displayClientMessage(
-                        Component.literal("You teeter at the precipice. One articulation of the word suffices.")
-                                .withStyle(ChatFormatting.DARK_PURPLE),
-                        false
-                );
+            player.displayClientMessage(Component.literal("You teeter at the precipice. One articulation of the word suffices.").withStyle(ChatFormatting.DARK_PURPLE), false);
             return true;
         }
         return false;
-        }
+    }
 
 
     public void onToggleOff(ManasSkillInstance instance, LivingEntity entity) {
@@ -104,7 +94,7 @@ public class BibliomaniaSkill extends Skill {
     public void onLearnSkill(@NotNull ManasSkillInstance instance, @NotNull LivingEntity entity, @NotNull UnlockSkillEvent event) {
         if (instance.getMastery() >= 0 && !instance.isTemporarySkill()) {
             if (entity instanceof ServerPlayer) {
-                ServerPlayer player = (ServerPlayer)entity;
+                ServerPlayer player = (ServerPlayer) entity;
                 TensuraAdvancementsHelper.grant(player, TensuraAdvancementsHelper.Advancements.MASTER_SMITH);
             }
         }
@@ -112,8 +102,7 @@ public class BibliomaniaSkill extends Skill {
 
     public void onDamageEntity(ManasSkillInstance instance, LivingEntity attacker, LivingHurtEvent e) {
         LivingEntity target = e.getEntity();
-        if (!isInSlot(attacker))
-            return;
+        if (!isInSlot(attacker)) return;
         if (attacker instanceof Player) {
             Player player = (Player) attacker;
             if (!SkillHelper.outOfMagicule((LivingEntity) player, instance))
@@ -214,17 +203,14 @@ public class BibliomaniaSkill extends Skill {
     public void onPressed(ManasSkillInstance instance, LivingEntity entity) {
         if (instance.getMode() == 1) {
             if (!(entity instanceof Player player)) return;
-                CompoundTag tag = instance.getOrCreateTag();
-                float recordPoints = tag.getFloat("recordPoints");
-                    player.displayClientMessage(
-                            Component.literal("Record Points: " + recordPoints)
-                                    .setStyle(Style.EMPTY.withColor(ChatFormatting.BLACK)),
-                            true
-                    );
-                }
-
-
+            CompoundTag tag = instance.getOrCreateTag();
+            float recordPoints = tag.getFloat("recordPoints");
+            player.displayClientMessage(Component.literal("Record Points: " + recordPoints).setStyle(Style.EMPTY.withColor(ChatFormatting.BLACK)), true);
         }
+
+
+    }
+
     public boolean onHeld(ManasSkillInstance instance, LivingEntity entity, int heldTicks) {
         if (!SkillHelper.outOfMagicule(entity, instance)) {
 
@@ -239,37 +225,16 @@ public class BibliomaniaSkill extends Skill {
                 tag.putFloat("recordPoints", updatedP);
                 instance.markDirty();
             }
-            TensuraNetwork.INSTANCE.send(
-                    PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity),
-                    new RequestFxSpawningPacket(new ResourceLocation("tensura:haki"),
-                            entity.getId(), 0.0D, 1.0D, 0.0D, true)
-            );
+            TensuraNetwork.INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), new RequestFxSpawningPacket(new ResourceLocation("tensura:haki"), entity.getId(), 0.0D, 1.0D, 0.0D, true));
 
-            List<LivingEntity> nearbyEntities = entity.getLevel().getEntitiesOfClass(
-                    LivingEntity.class,
-                    entity.getBoundingBox().inflate(15.0D),
-                    target -> !target.isAlliedTo(entity) && target.isAlive() && !entity.isAlliedTo(target)
-            );
+            List<LivingEntity> nearbyEntities = entity.getLevel().getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(15.0D), target -> !target.isAlliedTo(entity) && target.isAlive() && !entity.isAlliedTo(target));
 
             for (LivingEntity target : nearbyEntities) {
-                if (target instanceof Player player && player.getAbilities().invulnerable)
-                    continue;
+                if (target instanceof Player player && player.getAbilities().invulnerable) continue;
 
-                SkillHelper.checkThenAddEffectSource(
-                        target,
-                        entity,
-                        TensuraMobEffects.MAGIC_INTERFERENCE.get(),
-                        200,
-                        1
-                );
+                SkillHelper.checkThenAddEffectSource(target, entity, TensuraMobEffects.MAGIC_INTERFERENCE.get(), 200, 1);
 
-                SkillHelper.checkThenAddEffectSource(
-                        target,
-                        entity,
-                        TensuraMobEffects.MAGICULE_POISON.get(),
-                        400,
-                        3
-                );
+                SkillHelper.checkThenAddEffectSource(target, entity, TensuraMobEffects.MAGICULE_POISON.get(), 400, 3);
             }
 
 
@@ -278,7 +243,7 @@ public class BibliomaniaSkill extends Skill {
 
         return false;
     }
-    }
+}
 
 
 
