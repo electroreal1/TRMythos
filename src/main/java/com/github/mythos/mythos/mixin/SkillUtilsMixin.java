@@ -106,6 +106,15 @@ public abstract class SkillUtilsMixin {
             point += 6;
         }
         if (hasSkill(entity, (ManasSkill) Skills.ZEPIA.get())) {
+            point += 12;
+        }
+        if (hasSkill(entity, (ManasSkill) Skills.TATARI.get())) {
+            point += 30;
+        }
+        if (hasSkill(entity, (ManasSkill) Skills.TATARI.get()) && instance.getSkill() instanceof Magic) {
+            point += 30;
+        }
+        if (hasSkill(entity, (ManasSkill) Skills.ZEPIA.get())) {
             point += 9;
         }
         if (hasSkill(entity, (ManasSkill) Skills.OMNISCIENT_EYE.get())) {
@@ -184,6 +193,9 @@ public abstract class SkillUtilsMixin {
             original = true;
         }
         if (isSkillInSlot(entity, (ManasSkill) Skills.ORUNMILA.get())) {
+            original = true;
+        }
+        if (isSkillInSlot(entity, (ManasSkill) Skills.TATARI.get())) {
             original = true;
         }
         if (isSkillInSlot(entity, (ManasSkill) Skills.CHILD_OF_THE_PLANE.get())) {
