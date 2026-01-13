@@ -56,6 +56,7 @@ public class Mythos {
         MinecraftForge.EVENT_BUS.register(CrimsonTyrantHandler.class);
         MinecraftForge.EVENT_BUS.register(CarnageHandler.class);
         MinecraftForge.EVENT_BUS.register(KhaosHandler.class);
+        MinecraftForge.EVENT_BUS.register(AuthorLogicHandler.class);
 
         // 3. Safe Client Loading via Proxy
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientOnlyRegistrar::registerClientOnlyEvents);
@@ -154,9 +155,9 @@ public class Mythos {
 
 
         String content = contentBuilder.toString();
-        String[] newStarting = new String[]{"trmythos:canine", "trmythos:maiden", "trmythos:lesser_serpent","trmythos:godling","trmythos:metalloid"};
-        String[] newRandom = new String[]{"trmythos:canine", "trmythos:maiden", "trmythos:lesser_serpent","trmythos:godling","trmythos:metalloid"};
-        String[] newSkills = new String[]{"trmythos:omniscient_eye", "trmythos:faker", "trmythos:purity","trmythos:bloodsucker", "trmythos:profanity","trmythos:opportunist","trmythos:sporeblood","trmythos:fragarach","trmythos:excalibur","trmythos:gram", "trmythos:heavens_wrath","trmythos:zephyros","trmythos:introvert","trmythos:stargazer","trmythos:tenacious","trmythos:demonologist","trmythos:sagittarius", "trmythos:npc_life", "trmythos:celestial_path_blue", "trmythos:celestial_cultivation_orange", "trmythos:celestial_mutation_red"};
+        String[] newStarting = new String[]{"trmythos:canine", "trmythos:maiden", "trmythos:lesser_serpent","trmythos:godling","trmythos:metalloid", "trmythos:revenant"};
+        String[] newRandom = new String[]{"trmythos:canine", "trmythos:maiden", "trmythos:lesser_serpent","trmythos:godling","trmythos:metalloid", "trmythos:revenant"};
+        String[] newSkills = new String[]{"trmythos:omniscient_eye", "trmythos:faker", "trmythos:purity","trmythos:bloodsucker", "trmythos:profanity","trmythos:opportunist","trmythos:sporeblood","trmythos:fragarach","trmythos:excalibur","trmythos:gram", "trmythos:heavens_wrath","trmythos:zephyros","trmythos:introvert","trmythos:stargazer","trmythos:tenacious","trmythos:demonologist","trmythos:sagittarius", "trmythos:npc_life", "trmythos:celestial_path_blue", "trmythos:celestial_cultivation_orange", "trmythos:celestial_mutation_red", "trmythos:author", "trmythos:alchemist", "trmythos:hoarder", "trmythos:nights_thief", "trmythos:pretender_king", "trmythos:false_hero", "trmythos:crimson_arcanist", "trmythos:gaze", "trmythos:yellow_sign", "trmythos:author"};
         String[] creatorSkills = new String[]{"trmythos:opportunist", "trmythos:heavens_wrath","trmythos:zephyros","trmythos:introvert","trmythos:stargazer","trmythos:tenacious","trmythos:demonologist"};
         String startingRacesKey = "startingRaces = [";
         String randomRacesKey = "possibleRandomRaces = [";
