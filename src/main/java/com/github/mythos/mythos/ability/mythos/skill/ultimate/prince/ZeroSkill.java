@@ -11,6 +11,7 @@ import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.menu.SpatialMenu;
 import com.github.manasmods.tensura.registry.dimensions.TensuraDimensions;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
+import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSources;
 import com.github.mythos.mythos.handler.KhaosHandler;
 import com.github.mythos.mythos.networking.MythosNetwork;
@@ -31,7 +32,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.SimpleMenuProvider;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -238,7 +238,7 @@ public class ZeroSkill extends Skill {
             if (holdTicks >= 20 && holdTicks < 60) target.addEffect(new MobEffectInstance(MythosMobEffects.ATROPHY.get(), 10, 0, false, false));
             else if (holdTicks >= 60 && holdTicks < 100) target.addEffect(new MobEffectInstance(MythosMobEffects.ATROPHY.get(), 10, 1, false, false));
             else if (holdTicks >= 100) {
-                target.hurt(DamageSource.OUT_OF_WORLD, Float.MAX_VALUE);
+                DamageSourceHelper.directSpiritualHurt(target, player, 5000);
             }
         }
     }

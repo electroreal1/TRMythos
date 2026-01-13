@@ -27,6 +27,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -39,6 +40,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -255,22 +257,34 @@ public class DendrrahSkill extends Skill {
         // Eternal War
         if (instance.getMode() == 3) {
             if (heldTicks % 60 == 0) {
-                List<LivingEntity> targets = entity.level.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(1000.0),
-                        (living) -> living != entity && living.isAlive());
+                if (!(entity.level instanceof ServerLevel serverLevel)) return true;
 
-                for (LivingEntity target : targets) {
-                    target.addEffect(new MobEffectInstance(TensuraMobEffects.RAMPAGE.get(), 100, 0));
-
-                    TensuraNetwork.INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> target),
-                            new RequestFxSpawningPacket(new ResourceLocation("tensura:wrath_boost"),
-                                    target.getId(), 0.0, 1.0, 0.0, true));
+                for (ServerPlayer playerTarget : serverLevel.players()) {
+                    applyApocalypseEffect(playerTarget);
                 }
+
+                AABB area = entity.getBoundingBox().inflate(100.0);
+                List<LivingEntity> nearbyMobs = serverLevel.getEntitiesOfClass(LivingEntity.class, area,
+                        mob -> !(mob instanceof Player) && mob.isAlive());
+
+                for (LivingEntity mob : nearbyMobs) {
+                    applyApocalypseEffect(mob);
+                }
+
                 instance.addMasteryPoint(entity);
             }
             return true;
         }
 
         return true;
+    }
+
+    private void applyApocalypseEffect(LivingEntity target) {
+        target.addEffect(new MobEffectInstance(TensuraMobEffects.RAMPAGE.get(), 100, 0));
+
+        TensuraNetwork.INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> target),
+                new RequestFxSpawningPacket(new ResourceLocation("tensura:wrath_boost"),
+                        target.getId(), 0.0, 1.0, 0.0, true));
     }
 
     private void applyBadRandomEffects(LivingEntity target, RandomSource random) {
