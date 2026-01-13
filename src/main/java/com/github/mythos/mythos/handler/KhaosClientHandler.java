@@ -18,8 +18,6 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class KhaosClientHandler {
-    private static int heartTick = 0;
-
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public static void onClientTick(TickEvent.ClientTickEvent event) {
