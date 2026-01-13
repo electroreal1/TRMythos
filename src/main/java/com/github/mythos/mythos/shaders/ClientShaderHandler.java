@@ -15,7 +15,6 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = Mythos.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ClientShaderHandler {
 
-    private static final ResourceLocation WEAK_SHADER = new ResourceLocation("minecraft", "shaders/post/phosphor.json");
     private static final ResourceLocation STRONG_SHADER = new ResourceLocation("minecraft", "shaders/post/blobs.json");
 
     private static int lastActiveAmplifier = -1;
@@ -34,14 +33,14 @@ public class ClientShaderHandler {
 
         boolean currentlyHasShader = mc.gameRenderer.currentEffect() != null;
         ResourceLocation activeShaderId = currentlyHasShader ? ResourceLocation.tryParse(mc.gameRenderer.currentEffect().getName()) : null;
-        ResourceLocation targetShader = currentAmplifier >= 2 ? STRONG_SHADER : WEAK_SHADER;
+        ResourceLocation targetShader = STRONG_SHADER;
 
         if (hasEffect) {
             if (currentAmplifier != lastActiveAmplifier || activeShaderId == null || !activeShaderId.equals(targetShader)) {
                 mc.gameRenderer.loadEffect(targetShader);
                 lastActiveAmplifier = currentAmplifier;
             }
-        } else if (currentlyHasShader && activeShaderId != null && (activeShaderId.equals(WEAK_SHADER) || activeShaderId.equals(STRONG_SHADER))) {
+        } else if (currentlyHasShader && activeShaderId != null && (activeShaderId.equals(STRONG_SHADER))) {
             mc.gameRenderer.shutdownEffect();
             lastActiveAmplifier = -1;
         }

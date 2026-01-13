@@ -26,6 +26,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -66,6 +67,10 @@ public class ZeroSkill extends Skill {
     public boolean meetEPRequirement(Player player, double newEP) {
         return TensuraEPCapability.getCurrentEP(player) >= getObtainingEpCost() &&
                 SkillUtils.isSkillMastered(player, Skills.KHAOS.get());
+    }
+
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/ultimate/zero.png");
     }
 
     @Nullable
@@ -132,9 +137,9 @@ public class ZeroSkill extends Skill {
         entity.addEffect(new MobEffectInstance(TensuraMobEffects.PRESENCE_SENSE.get(), 200, 9, false, false));
         entity.addEffect(new MobEffectInstance(TensuraMobEffects.HEAT_SENSE.get(), 200, 0, false, false));
         entity.addEffect(new MobEffectInstance(TensuraMobEffects.AUDITORY_SENSE.get(), 200, 0, false, false));
-
+        entity.addEffect(new MobEffectInstance(MythosMobEffects.NON_EUCLIDEAN_STEP.get(), 200, 0, false, false,
+                false));
         if (instance.isToggled()) {
-            entity.addEffect(new MobEffectInstance(MythosMobEffects.NON_EUCLIDEAN_STEP.get(), 200, 0, false, false));
             entity.getPersistentData().putBoolean("AuraOfUnmadeActive", true);
             if (entity.isSprinting()) {
                 entity.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 10, 0, false, false, false));
@@ -178,13 +183,13 @@ public class ZeroSkill extends Skill {
                     }
                 }
             } else {
-                EntityHitResult entityHit = ProjectileUtil.getEntityHitResult(player, player.getEyePosition(), player.getEyePosition().add(player.getLookAngle().scale(32.0D)), player.getBoundingBox().expandTowards(player.getLookAngle().scale(32.0D)).inflate(1.0D), e -> e instanceof LivingEntity && !e.isSpectator(), 32.0D);
+                EntityHitResult entityHit = ProjectileUtil.getEntityHitResult(player, player.getEyePosition(), player.getEyePosition().add(player.getLookAngle().scale(42.0D)), player.getBoundingBox().expandTowards(player.getLookAngle().scale(32.0D)).inflate(1.0D), e -> e instanceof LivingEntity && !e.isSpectator(), 32.0D);
                 if (entityHit != null && entityHit.getEntity() instanceof LivingEntity target) {
                     target.hurt(TensuraDamageSources.elementalAttack("tensura.space_attack", entity, false), 3000);
                     level.addParticle(ParticleTypes.REVERSE_PORTAL, target.getX(), target.getY() + 1, target.getZ(), 0, 0, 0);
                     player.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0f, 0.5f);
                 } else {
-                    HitResult hit = player.pick(32, 0, false);
+                    HitResult hit = player.pick(42, 0, false);
                     if (hit.getType() == HitResult.Type.BLOCK) {
                         BlockPos targetPos = ((BlockHitResult) hit).getBlockPos().relative(((BlockHitResult) hit).getDirection());
                         player.teleportTo(targetPos.getX() + 0.5, targetPos.getY(), targetPos.getZ() + 0.5);
