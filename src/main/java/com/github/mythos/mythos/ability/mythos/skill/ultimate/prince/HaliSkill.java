@@ -89,14 +89,12 @@ public class HaliSkill extends Skill {
     @Nullable
     @Override
     public MutableComponent getName() {
-        return Component.literal("Hali").withStyle(ChatFormatting.YELLOW)
-                .append(", ").withStyle(WHITE)
-                .append(Component.literal("Sunken Sun").withStyle(ChatFormatting.BLACK));
+        return Component.literal("Hali").withStyle(ChatFormatting.YELLOW).append(", ").withStyle(WHITE).append(Component.literal("Sunken Sun").withStyle(ChatFormatting.BLACK));
     }
 
     @Override
     public Component getSkillDescription() {
-      return Component.literal("In one kind of death the spirit also dieth, and this it hath been known to do while yet the body was in vigor for many years.");
+        return Component.literal("In one kind of death the spirit also dieth, and this it hath been known to do while yet the body was in vigor for many years.");
     }
 
     @Override
@@ -129,28 +127,21 @@ public class HaliSkill extends Skill {
     private void triggerHaliLearningSequence(Player player) {
         player.playSound(SoundEvents.BEACON_ACTIVATE, 1.0f, 0.5f);
 
-        player.sendSystemMessage(Component.literal("« Notice »")
-                .withStyle(WHITE, (BOLD)));
+        player.sendSystemMessage(Component.literal("« Notice »").withStyle(WHITE, (BOLD)));
 
-        player.sendSystemMessage(Component.literal("Condition Met: Mastery of Ultimate Skill [Tsukuyomi] has reached the threshold of Singularity.")
-                .withStyle(GRAY));
+        player.sendSystemMessage(Component.literal("Condition Met: Mastery of Ultimate Skill [Tsukuyomi] has reached the threshold of Singularity.").withStyle(GRAY));
 
-        player.sendSystemMessage(Component.literal("Evolutionary Path Branching: The logic of \"Moon Shadow\" is being overwritten by the ")
-                .append(Component.literal("[Sunken Sun]").withStyle(WHITE, (BOLD))));
+        player.sendSystemMessage(Component.literal("Evolutionary Path Branching: The logic of \"Moon Shadow\" is being overwritten by the ").append(Component.literal("[Sunken Sun]").withStyle(WHITE, (BOLD))));
 
-        player.sendSystemMessage(Component.literal("\nConfirmed: You have obtained the Skill ")
-                .withStyle(WHITE, BOLD));
+        player.sendSystemMessage(Component.literal("\nConfirmed: You have obtained the Skill ").withStyle(WHITE, BOLD));
         player.sendSystemMessage(Component.literal("[Hali").withStyle(YELLOW).append(", ").withStyle(WHITE).append("Sunken Sun].\n").withStyle(BLACK));
 
-        player.sendSystemMessage(Component.literal("\nSystem Alert: Your spiritual body has ceased to reflect external magicules.")
-                .withStyle(GRAY));
-        player.sendSystemMessage(Component.literal("You have entered the state of Lunar Stillness. The \"Voice of the World\" will now become muffled as you drift toward the Far Side of the Moon.")
-                .withStyle(DARK_GRAY, ITALIC));
+        player.sendSystemMessage(Component.literal("\nSystem Alert: Your spiritual body has ceased to reflect external magicules.").withStyle(GRAY));
+        player.sendSystemMessage(Component.literal("You have entered the state of Lunar Stillness. The \"Voice of the World\" will now become muffled as you drift toward the Far Side of the Moon.").withStyle(DARK_GRAY, ITALIC));
 
         player.playSound(SoundEvents.WARDEN_HEARTBEAT, 1.0f, 0.5f);
 
-        player.sendSystemMessage(Component.literal("\n« Success: The shadow has detached from the light. »")
-                .withStyle(GRAY));
+        player.sendSystemMessage(Component.literal("\n« Success: The shadow has detached from the light. »").withStyle(GRAY));
     }
 
     @Override
@@ -163,31 +154,22 @@ public class HaliSkill extends Skill {
     private void triggerHaliMasterySequence(Player player) {
         player.playSound(SoundEvents.BEACON_ACTIVATE, 1.0f, 0.5f);
 
-        player.sendSystemMessage(Component.literal("« Notice »")
-                .withStyle(WHITE, (BOLD)));
+        player.sendSystemMessage(Component.literal("« Notice »").withStyle(WHITE, (BOLD)));
 
-        player.sendSystemMessage(Component.literal("Individual confirmed as having transcended the \"Cycle of the Sun.\"\n")
-                .withStyle(GRAY));
+        player.sendSystemMessage(Component.literal("Individual confirmed as having transcended the \"Cycle of the Sun.\"\n").withStyle(GRAY));
 
-        player.sendSystemMessage(Component.literal("Condition Met: The lungs of the spirit have adapted to the vacuum. Confirmed: Skill [Hali] has been fully integrated into the soul-circuit.\n ")
-                        .withStyle(WHITE));
+        player.sendSystemMessage(Component.literal("Condition Met: The lungs of the spirit have adapted to the vacuum. Confirmed: Skill [Hali] has been fully integrated into the soul-circuit.\n ").withStyle(WHITE));
 
-        player.sendSystemMessage(Component.literal("System Analysis:\n.")
-                .withStyle(WHITE, BOLD));
+        player.sendSystemMessage(Component.literal("System Analysis:\n.").withStyle(WHITE, BOLD));
 
-        player.sendSystemMessage(Component.literal("Biological Nullification: The Individual no longer consumes the \"Breath of Life.\"\n")
-                .withStyle(GRAY));
-        player.sendSystemMessage(Component.literal("Sensory Redaction: Ambient noise and vibrations now bypass the user. You have become a \"Silent Singularity.\"\n")
-                .withStyle(DARK_GRAY, ITALIC));
+        player.sendSystemMessage(Component.literal("Biological Nullification: The Individual no longer consumes the \"Breath of Life.\"\n").withStyle(GRAY));
+        player.sendSystemMessage(Component.literal("Sensory Redaction: Ambient noise and vibrations now bypass the user. You have become a \"Silent Singularity.\"\n").withStyle(DARK_GRAY, ITALIC));
 
-        player.sendSystemMessage(Component.literal("Evolutionary Bridge: The pathway to the moon’s \"Dark Side\" is now open.\n")
-                .withStyle(GRAY));
+        player.sendSystemMessage(Component.literal("Evolutionary Bridge: The pathway to the moon’s \"Dark Side\" is now open.\n").withStyle(GRAY));
 
-        player.sendSystemMessage(Component.literal("Current Status: The Individual is now categorized as a [Dweller of the Unseen]. Your presence is no longer recorded by the atmosphere, and your shadows are no longer cast by the light.\n")
-                .withStyle(GRAY));
+        player.sendSystemMessage(Component.literal("Current Status: The Individual is now categorized as a [Dweller of the Unseen]. Your presence is no longer recorded by the atmosphere, and your shadows are no longer cast by the light.\n").withStyle(GRAY));
 
-        player.sendSystemMessage(Component.literal("« Notification: \"In the silence where the spirit dieth, you have found the strength to remain.\" »\n")
-                .withStyle(GRAY));
+        player.sendSystemMessage(Component.literal("« Notification: \"In the silence where the spirit dieth, you have found the strength to remain.\" »\n").withStyle(GRAY));
 
         player.playSound(SoundEvents.WARDEN_HEARTBEAT, 1.0f, 0.5f);
 
@@ -302,23 +284,34 @@ public class HaliSkill extends Skill {
         if (instance.getMode() == 5) {
             boolean isShifting = entity.isShiftKeyDown();
             MobEffect domainEffect = isShifting ? MythosMobEffects.SUNRISE.get() : MythosMobEffects.SUNSET.get();
+
             entity.addEffect(new MobEffectInstance(domainEffect, 40, 0, false, false, true));
 
             if (heldTicks % 20 == 0) {
                 if (SkillHelper.outOfMagicule(entity, instance)) return false;
 
-                AABB area = entity.getBoundingBox().inflate(25.0);
+                AABB area = entity.getBoundingBox().inflate(12.5);
                 List<LivingEntity> targets = entity.level.getEntitiesOfClass(LivingEntity.class, area, e -> e != entity);
 
                 for (LivingEntity target : targets) {
-                    boolean isMoving = target.getDeltaMovement().lengthSqr() > 0.001;
+                    boolean isMoving = target.getDeltaMovement().lengthSqr() > 0.005; // Threshold for "moving"
 
-                    if ((isShifting && !isMoving) || (!isShifting && isMoving)) {
-
+                    if (!isShifting && isMoving) {
                         float targetMaxSHP = (float) target.getAttributeValue(TensuraAttributeRegistry.MAX_SPIRITUAL_HEALTH.get());
-                        double drainPercent = isShifting ? 0.20 : 0.15;
+                        double drainPercent = 0.15;
 
                         DamageSourceHelper.directSpiritualHurt(target, entity, (float) (targetMaxSHP * drainPercent));
+
+                        if (target instanceof Player player) {
+                            TensuraPlayerCapability.getFrom(player).ifPresent(cap -> {
+                                cap.setMagicule(cap.getMagicule() * (1.0 - drainPercent));
+                            });
+                        }
+                    } else if (isShifting && !isMoving) {
+                        double drainPercent = 0.20;
+
+                        target.hurt(DamageSource.MAGIC, (float) (target.getMaxHealth() * drainPercent));
+
                         if (target instanceof Player player) {
                             TensuraPlayerCapability.getFrom(player).ifPresent(cap -> {
                                 cap.setMagicule(cap.getMagicule() * (1.0 - drainPercent));
@@ -336,7 +329,7 @@ public class HaliSkill extends Skill {
             CompoundTag tag = instance.getTag();
             int clones = tag != null ? tag.getInt("clones") : 10;
             if (entity instanceof Player) {
-                Player player = (Player)entity;
+                Player player = (Player) entity;
                 player.displayClientMessage(Component.translatable("tensura.skill.output_number", new Object[]{clones}).setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_AQUA)), true);
             }
 
@@ -360,8 +353,7 @@ public class HaliSkill extends Skill {
                 level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ILLUSIONER_CAST_SPELL, SoundSource.PLAYERS, 1.0F, 1.0F);
 
                 AABB searchArea = entity.getBoundingBox().inflate(100.0);
-                List<CloneEntity> activeClones = level.getEntitiesOfClass(CloneEntity.class, searchArea,
-                        clone -> clone.getOwner() == entity); // Only target clones owned by this player
+                List<CloneEntity> activeClones = level.getEntitiesOfClass(CloneEntity.class, searchArea, clone -> clone.getOwner() == entity); // Only target clones owned by this player
 
                 for (CloneEntity clone : activeClones) {
                     TensuraParticleHelper.addServerParticlesAroundSelf(clone, ParticleTypes.SQUID_INK, 1.0);
@@ -386,7 +378,7 @@ public class HaliSkill extends Skill {
     public void onScroll(ManasSkillInstance instance, LivingEntity entity, double delta) {
         if (instance.getMode() == 4) {
             CompoundTag tag = instance.getOrCreateTag();
-            int newScale = tag.getInt("clones") + (int)delta;
+            int newScale = tag.getInt("clones") + (int) delta;
 
             if (newScale > 10) {
                 newScale = 1;
@@ -441,13 +433,13 @@ public class HaliSkill extends Skill {
     }
 
     private void summonClones(LivingEntity entity, Level level, int number) {
-        level.playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundSource.PLAYERS, 1.0F, 1.0F);
+        level.playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundSource.PLAYERS, 1.0F, 1.0F);
         TensuraParticleHelper.addServerParticlesAroundSelf(entity, ParticleTypes.SQUID_INK, 1.0);
         TensuraParticleHelper.addServerParticlesAroundSelf(entity, ParticleTypes.SQUID_INK, 2.0);
-        double EP = TensuraEPCapability.getEP(entity) * 1 / (double)number;
-        EntityType<CloneEntity> type = entity.isShiftKeyDown() ? (EntityType)TensuraEntityTypes.CLONE_SLIM.get() : (EntityType)TensuraEntityTypes.CLONE_DEFAULT.get();
+        double EP = TensuraEPCapability.getEP(entity) * 1 / (double) number;
+        EntityType<CloneEntity> type = entity.isShiftKeyDown() ? (EntityType) TensuraEntityTypes.CLONE_SLIM.get() : (EntityType) TensuraEntityTypes.CLONE_DEFAULT.get();
 
-        for(int i = 0; i < number; ++i) {
+        for (int i = 0; i < number; ++i) {
             CloneEntity clone = new CloneEntity(type, level);
             if (entity instanceof Player player) {
                 clone.tame(player);
@@ -455,7 +447,7 @@ public class HaliSkill extends Skill {
 
             clone.setSkill(this);
             clone.copyStatsAndSkills(entity, false);
-            TensuraEPCapability.setLivingEP(clone, (double)Math.round(EP));
+            TensuraEPCapability.setLivingEP(clone, (double) Math.round(EP));
             clone.setPos(entity.position());
             clone.copySize(entity);
             level.addFreshEntity(clone);
@@ -469,10 +461,10 @@ public class HaliSkill extends Skill {
         if (!SkillHelper.outOfMagicule(entity, instance)) {
             switch (instance.getMode()) {
                 case 1:
-                        this.eyeOfTheMoon(instance, entity);
-                        break;
+                    this.eyeOfTheMoon(instance, entity);
+                    break;
                 case 3:
-                        this.ultraspeedAction(instance, entity);
+                    this.ultraspeedAction(instance, entity);
             }
         }
     }
@@ -491,7 +483,7 @@ public class HaliSkill extends Skill {
             this.addMasteryPoint(instance, entity);
             Level level = entity.getLevel();
             int range = instance.isMastered(entity) ? 80 : 50;
-            BlockHitResult result = SkillHelper.getPlayerPOVHitResult(level, entity, ClipContext.Fluid.NONE, (double)range);
+            BlockHitResult result = SkillHelper.getPlayerPOVHitResult(level, entity, ClipContext.Fluid.NONE, (double) range);
             BlockPos resultPos = result.getBlockPos().relative(result.getDirection());
             Vec3 vec3 = SkillHelper.getFloorPos(resultPos);
             if (!level.getBlockState(resultPos).getMaterial().isReplaceable()) {
@@ -499,19 +491,19 @@ public class HaliSkill extends Skill {
             }
 
             if (level.getBlockState(resultPos).is((Block) TensuraBlocks.LABYRINTH_BARRIER_BLOCK.get())) {
-                level.playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.PLAYERS, 1.0F, 1.0F);
+                level.playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.PLAYERS, 1.0F, 1.0F);
             } else if (!entity.getLevel().getWorldBorder().isWithinBounds(new BlockPos(vec3.x(), vec3.y(), vec3.z()))) {
                 if (entity instanceof Player) {
-                    Player player = (Player)entity;
+                    Player player = (Player) entity;
                     player.displayClientMessage(Component.translatable("tensura.skill.teleport.out_border").setStyle(Style.EMPTY.withColor(ChatFormatting.RED)), false);
                 }
             } else {
-                Vec3 source = entity.position().add(0.0, (double)(entity.getBbHeight() / 2.0F), 0.0);
+                Vec3 source = entity.position().add(0.0, (double) (entity.getBbHeight() / 2.0F), 0.0);
                 Vec3 offSetToTarget = vec3.subtract(source);
 
-                for(int particleIndex = 1; particleIndex < Mth.floor(offSetToTarget.length()); ++particleIndex) {
-                    Vec3 particlePos = source.add(offSetToTarget.normalize().scale((double)particleIndex));
-                    ((ServerLevel)level).sendParticles(ParticleTypes.CLOUD, particlePos.x, particlePos.y, particlePos.z, 1, 0.0, 0.0, 0.0, 0.0);
+                for (int particleIndex = 1; particleIndex < Mth.floor(offSetToTarget.length()); ++particleIndex) {
+                    Vec3 particlePos = source.add(offSetToTarget.normalize().scale((double) particleIndex));
+                    ((ServerLevel) level).sendParticles(ParticleTypes.CLOUD, particlePos.x, particlePos.y, particlePos.z, 1, 0.0, 0.0, 0.0, 0.0);
                     TensuraParticleHelper.addServerParticlesAroundPos(entity.getRandom(), level, particlePos, ParticleTypes.SWEEP_ATTACK, 3.0);
                     TensuraParticleHelper.addServerParticlesAroundPos(entity.getRandom(), level, particlePos, ParticleTypes.SWEEP_ATTACK, 2.0);
                     AABB aabb = (new AABB(new BlockPos(particlePos))).inflate(Math.max(entity.getAttributeValue((Attribute) ForgeMod.ATTACK_RANGE.get()), 2.0));
@@ -520,22 +512,22 @@ public class HaliSkill extends Skill {
                     });
                     if (!livingEntityList.isEmpty()) {
                         float bonus = instance.isMastered(entity) ? 1400F : 750.0F;
-                        float amount = (float)(entity.getAttributeValue(Attributes.ATTACK_DAMAGE) * entity.getAttributeValue((Attribute)ManasCoreAttributes.CRIT_MULTIPLIER.get()));
+                        float amount = (float) (entity.getAttributeValue(Attributes.ATTACK_DAMAGE) * entity.getAttributeValue((Attribute) ManasCoreAttributes.CRIT_MULTIPLIER.get()));
                         Iterator var16 = livingEntityList.iterator();
 
-                        while(var16.hasNext()) {
-                            LivingEntity target = (LivingEntity)var16.next();
-                            float targetMaxSHP = (float)target.getAttributeValue((Attribute)TensuraAttributeRegistry.MAX_SPIRITUAL_HEALTH.get());
+                        while (var16.hasNext()) {
+                            LivingEntity target = (LivingEntity) var16.next();
+                            float targetMaxSHP = (float) target.getAttributeValue((Attribute) TensuraAttributeRegistry.MAX_SPIRITUAL_HEALTH.get());
                             if (target.hurt(this.sourceWithMP(DamageSource.mobAttack(entity), entity, instance), amount + bonus)) {
                                 if (!instance.isMastered(entity)) {
                                     DamageSourceHelper.directSpiritualHurt(target, entity, targetMaxSHP * 0.5F);
-                                } else if (SkillUtils.hasSkill(target, (ManasSkill)ResistanceSkills.SPIRITUAL_ATTACK_NULLIFICATION.get())) {
+                                } else if (SkillUtils.hasSkill(target, (ManasSkill) ResistanceSkills.SPIRITUAL_ATTACK_NULLIFICATION.get())) {
                                     if (entity.getRandom().nextFloat() > 0.25F) {
                                         DamageSourceHelper.directSpiritualHurt(target, entity, Float.MAX_VALUE);
                                     } else {
                                         DamageSourceHelper.directSpiritualHurt(target, entity, targetMaxSHP * 0.5F);
                                     }
-                                } else if (SkillUtils.hasSkill(target, (ManasSkill)ResistanceSkills.SPIRITUAL_ATTACK_RESISTANCE.get())) {
+                                } else if (SkillUtils.hasSkill(target, (ManasSkill) ResistanceSkills.SPIRITUAL_ATTACK_RESISTANCE.get())) {
                                     if (entity.getRandom().nextFloat() > 0.5F) {
                                         DamageSourceHelper.directSpiritualHurt(target, entity, Float.MAX_VALUE);
                                     } else {
@@ -547,7 +539,7 @@ public class HaliSkill extends Skill {
 
                                 ItemStack stack = entity.getMainHandItem();
                                 stack.getItem().hurtEnemy(stack, target, entity);
-                                entity.getLevel().playSound((Player)null, target.getX(), target.getY(), target.getZ(), SoundEvents.PLAYER_ATTACK_CRIT, entity.getSoundSource(), 1.0F, 1.0F);
+                                entity.getLevel().playSound((Player) null, target.getX(), target.getY(), target.getZ(), SoundEvents.PLAYER_ATTACK_CRIT, entity.getSoundSource(), 1.0F, 1.0F);
                                 if (level instanceof ServerLevel serverLevel) {
                                     serverLevel.getChunkSource().broadcastAndSend(entity, new ClientboundAnimatePacket(entity, 4));
                                 }
@@ -561,26 +553,26 @@ public class HaliSkill extends Skill {
                 entity.moveTo(vec3);
                 entity.hasImpulse = true;
                 entity.swing(InteractionHand.MAIN_HAND, true);
-                level.playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.PLAYERS, 1.0F, 1.0F);
+                level.playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.PLAYERS, 1.0F, 1.0F);
             }
         }
 
     }
 
     public void eyeOfTheMoon(ManasSkillInstance instance, LivingEntity entity) {
-        if (!entity.hasEffect((MobEffect)TensuraMobEffects.SHADOW_STEP.get())) {
+        if (!entity.hasEffect((MobEffect) TensuraMobEffects.SHADOW_STEP.get())) {
             if (SkillHelper.outOfMagicule(entity, instance)) {
                 return;
             }
 
             this.addMasteryPoint(instance, entity);
-            entity.getLevel().playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
-            entity.addEffect(new MobEffectInstance((MobEffect)TensuraMobEffects.SHADOW_STEP.get(), 6000, 0, false, false, false));
-            entity.addEffect(new MobEffectInstance((MobEffect)TensuraMobEffects.PRESENCE_CONCEALMENT.get(), 6000, 3, false, false, false));
+            entity.getLevel().playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
+            entity.addEffect(new MobEffectInstance((MobEffect) TensuraMobEffects.SHADOW_STEP.get(), 6000, 0, false, false, false));
+            entity.addEffect(new MobEffectInstance((MobEffect) TensuraMobEffects.PRESENCE_CONCEALMENT.get(), 6000, 3, false, false, false));
         } else {
-            entity.removeEffect((MobEffect)TensuraMobEffects.SHADOW_STEP.get());
+            entity.removeEffect((MobEffect) TensuraMobEffects.SHADOW_STEP.get());
             entity.removeEffect(TensuraMobEffects.PRESENCE_CONCEALMENT.get());
-            entity.getLevel().playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 0.5F);
+            entity.getLevel().playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 0.5F);
         }
 
     }

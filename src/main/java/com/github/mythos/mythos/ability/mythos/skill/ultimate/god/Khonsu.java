@@ -397,23 +397,34 @@ public class Khonsu extends Skill {
         if (instance.getMode() == 5) {
             boolean isShifting = entity.isShiftKeyDown();
             MobEffect domainEffect = isShifting ? MythosMobEffects.SUNRISE.get() : MythosMobEffects.SUNSET.get();
+
             entity.addEffect(new MobEffectInstance(domainEffect, 40, 0, false, false, true));
 
             if (heldTicks % 20 == 0) {
                 if (SkillHelper.outOfMagicule(entity, instance)) return false;
 
-                AABB area = entity.getBoundingBox().inflate(25.0);
+                AABB area = entity.getBoundingBox().inflate(12.5);
                 List<LivingEntity> targets = entity.level.getEntitiesOfClass(LivingEntity.class, area, e -> e != entity);
 
                 for (LivingEntity target : targets) {
-                    boolean isMoving = target.getDeltaMovement().lengthSqr() > 0.001;
+                    boolean isMoving = target.getDeltaMovement().lengthSqr() > 0.005; // Threshold for "moving"
 
-                    if ((isShifting && !isMoving) || (!isShifting && isMoving)) {
-
+                    if (!isShifting && isMoving) {
                         float targetMaxSHP = (float) target.getAttributeValue(TensuraAttributeRegistry.MAX_SPIRITUAL_HEALTH.get());
-                        double drainPercent = isShifting ? 0.20 : 0.15;
+                        double drainPercent = 0.15;
 
                         DamageSourceHelper.directSpiritualHurt(target, entity, (float) (targetMaxSHP * drainPercent));
+
+                        if (target instanceof Player player) {
+                            TensuraPlayerCapability.getFrom(player).ifPresent(cap -> {
+                                cap.setMagicule(cap.getMagicule() * (1.0 - drainPercent));
+                            });
+                        }
+                    } else if (isShifting && !isMoving) {
+                        double drainPercent = 0.20;
+
+                        target.hurt(DamageSource.MAGIC, (float) (target.getMaxHealth() * drainPercent));
+
                         if (target instanceof Player player) {
                             TensuraPlayerCapability.getFrom(player).ifPresent(cap -> {
                                 cap.setMagicule(cap.getMagicule() * (1.0 - drainPercent));
