@@ -1,7 +1,6 @@
 package com.github.mythos.mythos.ability.mythos.skill.unique.normal;
 
 
-import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.tensura.ability.SkillHelper;
@@ -11,7 +10,6 @@ import com.github.manasmods.tensura.ability.skill.extra.HakiSkill;
 import com.github.manasmods.tensura.ability.skill.unique.ReaperSkill;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
-import com.github.manasmods.tensura.config.TensuraConfig;
 import com.github.manasmods.tensura.network.TensuraNetwork;
 import com.github.manasmods.tensura.network.play2client.RequestFxSpawningPacket;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
@@ -25,10 +23,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -58,72 +54,44 @@ public class UnderworldPrince extends Skill {
     }
 
     @Override
+    public int getMaxMastery() {
+        return 1000;
+    }
+
+    private static final Random RANDOM = new Random();
+
+    @Override
     public void onTick(ManasSkillInstance instance, LivingEntity living) {
-        TensuraEPCapability.getFrom(living).ifPresent((cap) -> {
-            cap.setChaos(true);
-        });
-        TensuraEPCapability.sync(living);
+        if (living.tickCount % 20 == 0) {
+            TensuraEPCapability.getFrom(living).ifPresent(cap -> cap.setChaos(true));
+            TensuraEPCapability.sync(living);
 
-        ReaperSkill reaperSkill = (ReaperSkill) UniqueSkills.REAPER.get();
-
-        if (instance.isMastered(living)) {
-            Random random = new Random();
-            int randomNumber = random.nextInt(10);
-            if (randomNumber == 1) {
-                TensuraSkillInstance noCost = new TensuraSkillInstance((ManasSkill)reaperSkill);
+            if (instance.isMastered(living) && living.tickCount % 1200 == 0 && RANDOM.nextInt(10) == 1) {
+                ReaperSkill reaperSkill = UniqueSkills.REAPER.get();
+                TensuraSkillInstance noCost = new TensuraSkillInstance(reaperSkill);
                 noCost.getOrCreateTag().putBoolean("NoMagiculeCost", true);
-                if (SkillAPI.getSkillsFrom((Entity)living).learnSkill((ManasSkillInstance)noCost)) {
-                    living.sendSystemMessage(Component.literal("The Underworld Beckons you to embrace souls of the damned!").withStyle(ChatFormatting.BLACK));
+                if (SkillAPI.getSkillsFrom(living).learnSkill(noCost)) {
+                    living.sendSystemMessage(Component.literal("The Underworld beckons you to embrace souls of the damned!").withStyle(ChatFormatting.DARK_PURPLE));
                 }
-            } else {
-                return;
             }
-
         }
 
-        if (instance.isToggled()) {
-            double range = 10;
-            if (living.tickCount % 10 != 0) return;
-
-            Level level = living.level;
-            if (level.isClientSide()) return;
-
-            List<LivingEntity> nearby = level.getEntitiesOfClass(
-                    LivingEntity.class,
-                    living.getBoundingBox().inflate(range),
-                    e -> e != living
-            );
+        if (instance.isToggled() && living.tickCount % 20 == 0 && !living.level.isClientSide()) {
+            List<LivingEntity> nearby = living.level.getEntitiesOfClass(LivingEntity.class, living.getBoundingBox().inflate(10.0),
+                    e -> e != living && e.isAlive() && !e.isAlliedTo(living));
 
             for (LivingEntity target : nearby) {
-                target.addEffect(new MobEffectInstance(
-                        MobEffects.MOVEMENT_SLOWDOWN,
-                        40, // 2 seconds
-                        2,
-                        false, true, true
-                ));
+                target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 2, false, false, true));
+                target.addEffect(new MobEffectInstance(MobEffects.WITHER, 60, 1, false, false, true));
 
-                target.addEffect(new MobEffectInstance(
-                        MobEffects.WITHER,
-                        40,
-                        1,
-                        false, true, true
-                ));
-
-                if (level.random.nextFloat() < 0.05f) {
-                    target.hurt(TensuraDamageSources.corrosion(target), 10);
+                if (living.level.random.nextFloat() < 0.10f) {
+                    target.hurt(TensuraDamageSources.corrosion(living), 10.0F);
                 }
             }
 
-            if (level instanceof ServerLevel server) {
-                server.sendParticles(
-                        ParticleTypes.SMOKE,
-                        living.getX(),
-                        living.getY() + 1,
-                        living.getZ(),
-                        12,
-                        0.5, 0.4, 0.5,
-                        0.01
-                );
+            if (living.level instanceof ServerLevel server) {
+                server.sendParticles(ParticleTypes.SMOKE, living.getX(), living.getY() + 1, living.getZ(), 10, 0.5, 0.5, 0.5, 0.02);
+                server.sendParticles(ParticleTypes.SNOWFLAKE, living.getX(), living.getY() + 1, living.getZ(), 5, 0.5, 0.5, 0.5, 0.02);
             }
         }
     }
@@ -144,8 +112,11 @@ public class UnderworldPrince extends Skill {
                 int soulPoints = cap.getSoulPoints();
                 if (soulPoints >= 1000000) {
                     cap.setSoulPoints(soulPoints - 1000000);
-                    SkillHelper.gainMaxMP(entity, (double) 10000);
-                    instance.setCoolDown(60);
+                    SkillHelper.gainMaxMP(entity, 10000.0);
+
+                    entity.level.playSound(null, entity.blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 1.0F, 0.5F);
+
+                    instance.setCoolDown(20);
                     this.addMasteryPoint(instance, entity);
                 }
             });
@@ -155,47 +126,45 @@ public class UnderworldPrince extends Skill {
     @Override
     public boolean onHeld(ManasSkillInstance instance, LivingEntity entity, int heldTicks) {
         if (instance.getMode() == 2) {
+            Level level = entity.level;
 
             if (heldTicks % 20 == 0) {
-                entity.getLevel().playSound(null, entity.blockPosition(), SoundEvents.BEEHIVE_DRIP, SoundSource.PLAYERS, 1.0F, 1.0F);
-                entity.getLevel().playSound(null, entity.blockPosition(), SoundEvents.BEEHIVE_DRIP, SoundSource.PLAYERS, 1.0F, 1.0F);
-                entity.getLevel().playSound(null, entity.blockPosition(), SoundEvents.BEEHIVE_DRIP, SoundSource.PLAYERS, 1.0F, 1.0F);
-                entity.getLevel().playSound(null, entity.blockPosition(), SoundEvents.BEEHIVE_DRIP, SoundSource.PLAYERS, 1.0F, 1.0F);
-                entity.getLevel().playSound(null, entity.blockPosition(), SoundEvents.BEEHIVE_DRIP, SoundSource.PLAYERS, 1.0F, 1.0F);
+                level.playSound(null, entity.blockPosition(), SoundEvents.SOUL_ESCAPE, SoundSource.PLAYERS, 1.0F, 0.8F);
             }
 
-            if (heldTicks % 2 == 0) {
+            if (heldTicks % 4 == 0) {
                 TensuraNetwork.INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity),
                         new RequestFxSpawningPacket(new ResourceLocation("tensura:blizzard"), entity.getId(), 0.0, 1.0, 0.0, true));
             }
 
+            if (heldTicks % 10 == 0) {
+                List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(15.0),
+                        (target) -> target != entity && target.isAlive() && !target.isAlliedTo(entity));
 
-            List<LivingEntity> list = entity.getLevel().getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(15.0),
-                    (living) -> !living.is(entity) && living.isAlive() && !living.isAlliedTo(entity));
+                if (!list.isEmpty()) {
+                    double ownerEP = TensuraEPCapability.getEP(entity);
+                    float damage = instance.isMastered(entity) ? 300.0F : 100.0F;
 
-            if (!list.isEmpty()) {
-                double scale = instance.getTag() == null ? 0.0 : instance.getTag().getDouble("scale");
-                double multiplier = scale == 0.0 ? 1.0 : Math.min(scale, 1.0);
-                double ownerEP = TensuraEPCapability.getEP(entity) * multiplier;
+                    for (LivingEntity target : list) {
+                        if (target instanceof Player player && player.getAbilities().invulnerable) continue;
 
-                for (LivingEntity target : list) {
-                    if (target instanceof Player player && player.getAbilities().invulnerable) continue;
+                        double targetEP = TensuraEPCapability.getEP(target);
+                        double difference = ownerEP / Math.max(targetEP, 1.0);
 
-                    double targetEP = TensuraEPCapability.getEP(target);
-                    double difference = ownerEP / targetEP;
+                        if (difference > 2.0) {
+                            int fearLevel = (int) Math.min((difference * 0.5 - 1.0), 4);
 
-                    if (difference > 2.0) {
-                        int fearLevel = (int) (difference * 0.5 - 1.0);
-                        fearLevel = Math.min(fearLevel, TensuraConfig.INSTANCE.mobEffectConfig.maxFear.get());
-                        SkillHelper.checkThenAddEffectSource(target, entity, (MobEffect) TensuraMobEffects.FEAR.get(), 200, fearLevel);
-                        SkillHelper.checkThenAddEffectSource(target, entity, (MobEffect) TensuraMobEffects.CHILL.get(), 200, fearLevel);
-                        float damage = instance.isMastered(entity) ? 300 : 100;
-                        target.hurt(DamageSource.FREEZE, damage);
-                        target.hurt(TensuraDamageSources.CORROSION, damage);
-                        HakiSkill.hakiPush(target, entity, fearLevel);
+                            SkillHelper.checkThenAddEffectSource(target, entity, TensuraMobEffects.FEAR.get(), 100, fearLevel);
+                            SkillHelper.checkThenAddEffectSource(target, entity, TensuraMobEffects.CHILL.get(), 100, fearLevel);
+
+                            target.hurt(DamageSource.FREEZE, damage);
+                            target.hurt(TensuraDamageSources.CORROSION, damage);
+
+                            HakiSkill.hakiPush(target, entity, fearLevel);
+                        }
                     }
+                    this.addMasteryPoint(instance, entity);
                 }
-
             }
         }
         return true;
