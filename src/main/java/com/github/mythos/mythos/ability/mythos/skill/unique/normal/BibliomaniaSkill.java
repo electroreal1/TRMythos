@@ -206,7 +206,6 @@ public class BibliomaniaSkill extends Skill {
         CompoundTag tag = instance.getOrCreateTag();
         float recordPoints = tag.getFloat("recordPoints");
 
-        // MODE 1 — existing behavior
         if (instance.getMode() == 1) {
             player.displayClientMessage(
                     Component.literal("Record Points: " + recordPoints)
@@ -215,7 +214,7 @@ public class BibliomaniaSkill extends Skill {
             );
             return;
         }
-        // MODE 2 — Glossary
+
         if (instance.getMode() == 2) {
 
             List<ResourceLocation> skills = getCopiedSkills(instance);
@@ -247,7 +246,6 @@ public class BibliomaniaSkill extends Skill {
         }
 
 
-        // MODE 3 — Words of Power list
         if (instance.getMode() == 3) {
 
             player.displayClientMessage(

@@ -68,9 +68,6 @@ public class BibliomaniaChatHandler {
 
             CompoundTag tag = instance.getOrCreateTag();
 
-            /* =========================
-               MODE 2 — Reverse Invocation
-               ========================= */
             if (instance.getMode() == 2) {
                 float rp = tag.getFloat("recordPoints");
                 if (rp < REVERSE_COST) return;
@@ -114,9 +111,6 @@ public class BibliomaniaChatHandler {
                 return;
             }
 
-            /* =========================
-               MODE 3 — Words of Power
-               ========================= */
             Integer cost = WORD_COSTS.get(word);
             if (cost == null) return;
 
@@ -234,9 +228,6 @@ public class BibliomaniaChatHandler {
         }
     }
 
-    /* =========================
-       Helpers
-       ========================= */
 
     public static void addCopiedSkill(ManasSkillInstance instance, ResourceLocation id) {
         CompoundTag tag = instance.getOrCreateTag();
