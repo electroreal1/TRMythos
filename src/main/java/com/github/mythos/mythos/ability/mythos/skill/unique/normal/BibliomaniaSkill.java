@@ -33,6 +33,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Optional;
 
+import static com.github.mythos.mythos.handler.BibliomaniaChatHandler.getCopiedSkills;
+
 public class BibliomaniaSkill extends Skill {
     public BibliomaniaSkill() {
         super(SkillType.UNIQUE);
@@ -93,8 +95,7 @@ public class BibliomaniaSkill extends Skill {
 
     public void onLearnSkill(@NotNull ManasSkillInstance instance, @NotNull LivingEntity entity, @NotNull UnlockSkillEvent event) {
         if (instance.getMastery() >= 0 && !instance.isTemporarySkill()) {
-            if (entity instanceof ServerPlayer) {
-                ServerPlayer player = (ServerPlayer) entity;
+            if (entity instanceof ServerPlayer player) {
                 TensuraAdvancementsHelper.grant(player, TensuraAdvancementsHelper.Advancements.MASTER_SMITH);
             }
         }
@@ -103,16 +104,15 @@ public class BibliomaniaSkill extends Skill {
     public void onDamageEntity(ManasSkillInstance instance, LivingEntity attacker, LivingHurtEvent e) {
         LivingEntity target = e.getEntity();
         if (!isInSlot(attacker)) return;
-        if (attacker instanceof Player) {
-            Player player = (Player) attacker;
-            if (!SkillHelper.outOfMagicule((LivingEntity) player, instance))
-                SkillHelper.addEffectWithSource(target, (LivingEntity) player, (MobEffect) TensuraMobEffects.CORROSION.get(), 100, 2);
-            SkillHelper.addEffectWithSource(target, (LivingEntity) player, (MobEffect) TensuraMobEffects.FATAL_POISON.get(), 300, 2);
+        if (attacker instanceof Player player) {
+            if (!SkillHelper.outOfMagicule(player, instance))
+                SkillHelper.addEffectWithSource(target, player, TensuraMobEffects.CORROSION.get(), 100, 2);
+            SkillHelper.addEffectWithSource(target, player, TensuraMobEffects.FATAL_POISON.get(), 300, 2);
         }
     }
 
     public static float getBibliomaniaBoost(Player player, boolean magicule, boolean majin) {
-        TensuraSkill skill = (TensuraSkill) Skills.BIBLIOMANIA.get();
+        TensuraSkill skill = Skills.BIBLIOMANIA.get();
         Optional<ManasSkillInstance> optional = SkillAPI.getSkillsFrom(player).getSkill(skill);
         if (optional.isEmpty()) {
             return 0.0F;
@@ -201,15 +201,87 @@ public class BibliomaniaSkill extends Skill {
     }
 
     public void onPressed(ManasSkillInstance instance, LivingEntity entity) {
+        if (!(entity instanceof Player player)) return;
+
+        CompoundTag tag = instance.getOrCreateTag();
+        float recordPoints = tag.getFloat("recordPoints");
+
+        // MODE 1 — existing behavior
         if (instance.getMode() == 1) {
-            if (!(entity instanceof Player player)) return;
-            CompoundTag tag = instance.getOrCreateTag();
-            float recordPoints = tag.getFloat("recordPoints");
-            player.displayClientMessage(Component.literal("Record Points: " + recordPoints).setStyle(Style.EMPTY.withColor(ChatFormatting.BLACK)), true);
+            player.displayClientMessage(
+                    Component.literal("Record Points: " + recordPoints)
+                            .withStyle(ChatFormatting.BLACK),
+                    true
+            );
+            return;
+        }
+        // MODE 2 — Glossary
+        if (instance.getMode() == 2) {
+
+            List<ResourceLocation> skills = getCopiedSkills(instance);
+
+            player.displayClientMessage(
+                    Component.literal("=== Glossary ===")
+                            .withStyle(ChatFormatting.DARK_PURPLE),
+                    false
+            );
+
+            if (skills.isEmpty()) {
+                player.displayClientMessage(
+                        Component.literal("No recorded uniques.")
+                                .withStyle(ChatFormatting.DARK_GRAY),
+                        false
+                );
+                return;
+            }
+
+            for (ResourceLocation id : skills) {
+                player.displayClientMessage(
+                        Component.literal("- " + id.toString())
+                                .withStyle(ChatFormatting.LIGHT_PURPLE),
+                        false
+                );
+            }
+
+            return;
         }
 
 
+        // MODE 3 — Words of Power list
+        if (instance.getMode() == 3) {
+
+            player.displayClientMessage(
+                    Component.literal("=== Words of Power ===")
+                            .withStyle(ChatFormatting.DARK_PURPLE),
+                    false
+            );
+
+            for (WordOfPower word : WORDS_OF_POWER) {
+                boolean canUse = recordPoints >= word.cost();
+
+                ChatFormatting color = canUse
+                        ? ChatFormatting.DARK_PURPLE
+                        : ChatFormatting.BLACK;
+
+                player.displayClientMessage(
+                        Component.literal(word.name() + " (" + word.cost() + " RP)")
+                                .withStyle(color),
+                        false
+                );
+            }
+        }
     }
+
+    private record WordOfPower(String name, int cost) {
+    }
+
+    private static final List<WordOfPower> WORDS_OF_POWER = List.of(
+            new WordOfPower("Power Word: Study", 75),
+            new WordOfPower("Power Word: Explode", 30),
+            new WordOfPower("Power Word: Blind", 20),
+            new WordOfPower("Power Word: Heal", 10),
+            new WordOfPower("Power Word: Alter", 30)
+    );
 
     public boolean onHeld(ManasSkillInstance instance, LivingEntity entity, int heldTicks) {
         if (!SkillHelper.outOfMagicule(entity, instance)) {
@@ -221,7 +293,7 @@ public class BibliomaniaSkill extends Skill {
             if (heldTicks % 40 == 0 && heldTicks > 0) {
                 CompoundTag tag = instance.getOrCreateTag();
                 float currentP = tag.getFloat("recordPoints");
-                float updatedP = Math.min(currentP + 3.0F, 1000.0F);
+                float updatedP = Math.min(currentP + 100.0F, 1000.0F);
                 tag.putFloat("recordPoints", updatedP);
                 instance.markDirty();
             }
