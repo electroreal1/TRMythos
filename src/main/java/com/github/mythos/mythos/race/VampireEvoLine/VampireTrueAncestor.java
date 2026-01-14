@@ -103,11 +103,11 @@ public class VampireTrueAncestor extends Race implements Transformation {
     }
 
     private double AuraEvolutionReward() {
-        return 2000000;
+        return 20000;
     }
 
     private double ManaEvolutionReward() {
-        return 1600000;
+        return 16000;
     }
 
     @Override

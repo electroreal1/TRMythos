@@ -101,11 +101,11 @@ public class VampireArchduke extends Race implements Transformation {
     }
 
     private double AuraEvolutionReward() {
-        return 800000;
+        return 8000;
     }
 
     private double ManaEvolutionReward() {
-        return 500000;
+        return 5000;
     }
 
     @Override
@@ -134,6 +134,7 @@ public class VampireArchduke extends Race implements Transformation {
     public List<Race> getNextEvolutions(Player player) {
         List<Race> list = new ArrayList();
         list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getValue(MythosRaces.VAMPIRE_PRINCE));
+        list.add(TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.NAMELESS_DIVINITY_RACE));
         return list;
     }
 

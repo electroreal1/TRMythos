@@ -107,11 +107,11 @@ public class VampirePrince extends Race implements Transformation {
     }
 
     private double AuraEvolutionReward() {
-        return 1200000;
+        return 12000;
     }
 
     private double ManaEvolutionReward() {
-        return 800000;
+        return 8000;
     }
 
     @Override

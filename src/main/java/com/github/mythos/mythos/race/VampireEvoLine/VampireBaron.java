@@ -101,11 +101,11 @@ public class VampireBaron extends VampireRace implements Transformation {
     }
 
     private double AuraEvolutionReward() {
-        return 30000;
+        return 3000;
     }
 
     private double ManaEvolutionReward() {
-        return 70000;
+        return 7000;
     }
 
     @Override

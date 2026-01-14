@@ -101,11 +101,11 @@ public class VampireEarl extends Race implements Transformation {
     }
 
     private double AuraEvolutionReward() {
-        return 240000;
+        return 2400;
     }
 
     private double ManaEvolutionReward() {
-        return 180000;
+        return 1800;
     }
 
     @Override

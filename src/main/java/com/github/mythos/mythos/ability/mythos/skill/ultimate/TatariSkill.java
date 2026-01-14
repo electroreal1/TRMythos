@@ -9,9 +9,6 @@ import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
-import net.minecraft.stats.Stats;
-import com.github.manasmods.tensura.registry.entity.TensuraEntityTypes;
-import net.minecraft.server.level.ServerPlayer;
 import com.github.manasmods.tensura.ability.skill.extra.ThoughtAccelerationSkill;
 import com.github.manasmods.tensura.ability.skill.intrinsic.CharmSkill;
 import com.github.manasmods.tensura.ability.skill.unique.CookSkill;
@@ -28,6 +25,7 @@ import com.github.manasmods.tensura.network.play2client.RequestFxSpawningPacket;
 import com.github.manasmods.tensura.race.Race;
 import com.github.manasmods.tensura.race.RaceHelper;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
+import com.github.manasmods.tensura.registry.entity.TensuraEntityTypes;
 import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.manasmods.tensura.registry.skill.UniqueSkills;
 import com.github.mythos.mythos.registry.MythosMobEffects;
@@ -43,9 +41,12 @@ import net.minecraft.network.protocol.game.ClientboundPlayerInfoPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -58,8 +59,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.util.Mth;
-import java.util.UUID;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -67,8 +66,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static com.github.mythos.mythos.ability.mythos.skill.ultimate.ZepiaSkill.ACCELERATION;
 import static com.github.mythos.mythos.config.MythosSkillsConfig.EnableUltimateSkillObtainment;
@@ -106,8 +107,7 @@ public class TatariSkill extends Skill {
         if (currentEP < getObtainingEpCost()) {
             return false;
         }
-        return SkillUtils.isSkillMastered(player, Skills.ZEPIA.get())
-                && meetsTatariConditions(player);
+        return SkillUtils.isSkillMastered(player, Skills.ZEPIA.get()) && meetsTatariConditions(player);
 
     }
 
@@ -129,26 +129,22 @@ public class TatariSkill extends Skill {
         TensuraEPCapability.getFrom(entity).ifPresent(cap -> cap.setChaos(true));
         TensuraEPCapability.sync(entity);
 
-        if (!(entity instanceof ServerPlayer player))
-            return;
+        if (!(entity instanceof ServerPlayer player)) return;
 
         CompoundTag tag = instance.getOrCreateTag();
 
-        if (!instance.isToggled())
-            return;
+        if (!instance.isToggled()) return;
 
         this.gainMastery(instance, entity);
 
 
-        if (instance.onCoolDown())
-            return;
+        if (instance.onCoolDown()) return;
 
         long gameTime = player.level.getGameTime();
         long lastRoll = tag.getLong(LAST_COOLDOWN_ROLL);
 
 
-        if (gameTime - lastRoll < ROLL_INTERVAL_TICKS)
-            return;
+        if (gameTime - lastRoll < ROLL_INTERVAL_TICKS) return;
 
 
         tag.putLong(LAST_COOLDOWN_ROLL, gameTime);
@@ -157,31 +153,16 @@ public class TatariSkill extends Skill {
         if (player.getRandom().nextFloat() <= 0.25F) {
             instance.setCoolDown(30);
 
-            player.displayClientMessage(
-                    Component.literal("Tatari destabilizes... you are exposed.")
-                            .withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD),
-                    true
-            );
+            player.displayClientMessage(Component.literal("Tatari destabilizes... you are exposed.").withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD), true);
 
-            player.level.playSound(
-                    null,
-                    player.blockPosition(),
-                    SoundEvents.WARDEN_HEARTBEAT,
-                    SoundSource.PLAYERS,
-                    1.2F,
-                    0.8F
-            );
+            player.level.playSound(null, player.blockPosition(), SoundEvents.WARDEN_HEARTBEAT, SoundSource.PLAYERS, 1.2F, 0.8F);
         }
         if (instance.getMode() == 8 && instance.isToggled()) {
             if (instance.getCoolDown() <= 0) {
                 instance.setToggled(false);
 
                 if (entity instanceof Player p) {
-                    p.displayClientMessage(
-                            Component.literal("The night of wallachia ends...")
-                                    .withStyle(ChatFormatting.GRAY),
-                            true
-                    );
+                    p.displayClientMessage(Component.literal("The night of wallachia ends...").withStyle(ChatFormatting.GRAY), true);
                 }
             }
         }
@@ -200,51 +181,25 @@ public class TatariSkill extends Skill {
             MinecraftServer server = player.getServer();
             PlayerList playerList = server.getPlayerList();
 
-            ClientboundPlayerInfoPacket removePacket =
-                    new ClientboundPlayerInfoPacket(ClientboundPlayerInfoPacket.Action.REMOVE_PLAYER, player);
+            ClientboundPlayerInfoPacket removePacket = new ClientboundPlayerInfoPacket(ClientboundPlayerInfoPacket.Action.REMOVE_PLAYER, player);
 
-            MutableComponent leaveMessage = Component.translatable(
-                    "multiplayer.player.left", player.getDisplayName()
-            ).setStyle(Style.EMPTY.withColor(ChatFormatting.YELLOW));
+            MutableComponent leaveMessage = Component.translatable("multiplayer.player.left", player.getDisplayName()).setStyle(Style.EMPTY.withColor(ChatFormatting.YELLOW));
 
             for (ServerPlayer target : playerList.getPlayers()) {
                 target.connection.send(removePacket);
                 target.sendSystemMessage(leaveMessage);
             }
         }
-        List<LivingEntity> nearbyEntities = entity.getLevel().getEntitiesOfClass(
-                LivingEntity.class,
-                entity.getBoundingBox().inflate(15.0D),
-                target -> !target.isAlliedTo(entity) && target.isAlive() && !entity.isAlliedTo(target)
-        );
+        List<LivingEntity> nearbyEntities = entity.getLevel().getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(15.0D), target -> !target.isAlliedTo(entity) && target.isAlive() && !entity.isAlliedTo(target));
 
         for (LivingEntity target : nearbyEntities) {
-            if (target instanceof Player player && player.getAbilities().invulnerable)
-                continue;
+            if (target instanceof Player player && player.getAbilities().invulnerable) continue;
 
-            SkillHelper.checkThenAddEffectSource(
-                    target,
-                    entity,
-                    MobEffects.BLINDNESS,
-                    5,
-                    3
-            );
+            SkillHelper.checkThenAddEffectSource(target, entity, MobEffects.BLINDNESS, 5, 3);
 
-            SkillHelper.checkThenAddEffectSource(
-                    target,
-                    entity,
-                    TensuraMobEffects.MAGICULE_POISON.get(),
-                    5,
-                    3
-            );
+            SkillHelper.checkThenAddEffectSource(target, entity, TensuraMobEffects.MAGICULE_POISON.get(), 5, 3);
 
-            SkillHelper.checkThenAddEffectSource(
-                    target,
-                    entity,
-                    TensuraMobEffects.INSANITY.get(),
-                    5,
-                    13
-            );
+            SkillHelper.checkThenAddEffectSource(target, entity, TensuraMobEffects.INSANITY.get(), 5, 13);
         }
     }
 
@@ -258,12 +213,9 @@ public class TatariSkill extends Skill {
             MinecraftServer server = player.getServer();
             PlayerList playerList = server.getPlayerList();
 
-            ClientboundPlayerInfoPacket addPacket =
-                    new ClientboundPlayerInfoPacket(ClientboundPlayerInfoPacket.Action.ADD_PLAYER, player);
+            ClientboundPlayerInfoPacket addPacket = new ClientboundPlayerInfoPacket(ClientboundPlayerInfoPacket.Action.ADD_PLAYER, player);
 
-            MutableComponent joinMessage = Component.translatable(
-                    "multiplayer.player.joined", player.getDisplayName()
-            ).setStyle(Style.EMPTY.withColor(ChatFormatting.YELLOW));
+            MutableComponent joinMessage = Component.translatable("multiplayer.player.joined", player.getDisplayName()).setStyle(Style.EMPTY.withColor(ChatFormatting.YELLOW));
             for (ServerPlayer target : playerList.getPlayers()) {
                 target.connection.send(addPacket);
                 target.sendSystemMessage(joinMessage);
@@ -281,11 +233,7 @@ public class TatariSkill extends Skill {
                 SkillStorage storage = SkillAPI.getSkillsFrom(player);
                 storage.forgetSkill(Skills.TATARI.get());
 
-                player.displayClientMessage(
-                        Component.literal("Tatari rejects you. The conditions were not fulfilled.")
-                                .withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD),
-                        false
-                );
+                player.displayClientMessage(Component.literal("Tatari rejects you. The conditions were not fulfilled.").withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD), false);
 
                 return;
             }
@@ -306,10 +254,8 @@ public class TatariSkill extends Skill {
     }
 
     public int nextMode(LivingEntity entity, TensuraSkillInstance instance, boolean reverse) {
-        if (reverse)
-            return (instance.getMode() == 1) ? 8 : (instance.getMode() - 1);
-        else
-            return (instance.getMode() == 8) ? 1 : (instance.getMode() + 1);
+        if (reverse) return (instance.getMode() == 1) ? 8 : (instance.getMode() - 1);
+        else return (instance.getMode() == 8) ? 1 : (instance.getMode() + 1);
     }
 
     public Component getModeName(int mode) {
@@ -353,15 +299,11 @@ public class TatariSkill extends Skill {
                     if (held.hasCustomHoverName()) {
                         String name = held.getHoverName().getString().trim();
                         ServerLevel level = (ServerLevel) player.getLevel();
-                        LivingEntity target = level.getEntitiesOfClass(LivingEntity.class,
-                                player.getBoundingBox().inflate(5000),
-                                e -> e.getName().getString().equalsIgnoreCase(name)
-                        ).stream().findFirst().orElse(null);
+                        LivingEntity target = level.getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(5000), e -> e.getName().getString().equalsIgnoreCase(name)).stream().findFirst().orElse(null);
                         if (target != null) {
                             if (!SkillHelper.outOfMagicule(player, instance)) {
                                 player.teleportTo(target.getX(), target.getY(), target.getZ());
-                                level.playSound(null, target.blockPosition(),
-                                        SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 1.0F, 1.0F);
+                                level.playSound(null, target.blockPosition(), SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 1.0F, 1.0F);
                                 TensuraParticleHelper.addServerParticlesAroundSelf(player, ParticleTypes.PORTAL, 1.0D);
                                 addMasteryPoint(instance, player);
                                 instance.setCoolDown(100);
@@ -379,18 +321,15 @@ public class TatariSkill extends Skill {
                                 switch (mode) {
                                     case 1:
                                         cap.setAnalysisMode(2);
-                                        player.displayClientMessage(Component.translatable("tensura.skill.analytical.analyzing_mode.block")
-                                                .setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_AQUA)), true);
+                                        player.displayClientMessage(Component.translatable("tensura.skill.analytical.analyzing_mode.block").setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_AQUA)), true);
                                         break;
                                     case 2:
                                         cap.setAnalysisMode(0);
-                                        player.displayClientMessage(Component.translatable("tensura.skill.analytical.analyzing_mode.both")
-                                                .setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_AQUA)), true);
+                                        player.displayClientMessage(Component.translatable("tensura.skill.analytical.analyzing_mode.both").setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_AQUA)), true);
                                         break;
                                     default:
                                         cap.setAnalysisMode(1);
-                                        player.displayClientMessage(Component.translatable("tensura.skill.analytical.analyzing_mode.entity")
-                                                .setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_AQUA)), true);
+                                        player.displayClientMessage(Component.translatable("tensura.skill.analytical.analyzing_mode.entity").setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_AQUA)), true);
                                         break;
                                 }
                                 player.playNotifySound(SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
@@ -425,23 +364,12 @@ public class TatariSkill extends Skill {
                     CharmSkill.charm(instance, entity);
                     Level level3 = entity.getLevel();
 
-                    List<LivingEntity> nearbyEntities = entity.getLevel().getEntitiesOfClass(
-                            LivingEntity.class,
-                            entity.getBoundingBox().inflate(15.0D),
-                            target -> !target.isAlliedTo(entity) && target.isAlive() && !entity.isAlliedTo(target)
-                    );
+                    List<LivingEntity> nearbyEntities = entity.getLevel().getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(15.0D), target -> !target.isAlliedTo(entity) && target.isAlive() && !entity.isAlliedTo(target));
 
                     for (LivingEntity target : nearbyEntities) {
-                        if (target instanceof Player player && player.getAbilities().invulnerable)
-                            continue;
+                        if (target instanceof Player player && player.getAbilities().invulnerable) continue;
 
-                        SkillHelper.checkThenAddEffectSource(
-                                target,
-                                entity,
-                                TensuraMobEffects.MIND_CONTROL.get(),
-                                200,
-                                1
-                        );
+                        SkillHelper.checkThenAddEffectSource(target, entity, TensuraMobEffects.MIND_CONTROL.get(), 200, 1);
 
 
                         TensuraParticleHelper.addServerParticlesAroundSelf(target, ParticleTypes.HEART, 0.25D);
@@ -449,14 +377,7 @@ public class TatariSkill extends Skill {
 
                     addMasteryPoint(instance, entity);
                     instance.setCoolDown(10);
-                    level3.playSound(
-                            null,
-                            entity.getX(), entity.getY(), entity.getZ(),
-                            SoundEvents.WARDEN_HEARTBEAT,
-                            SoundSource.PLAYERS,
-                            1.0F,
-                            1.2F
-                    );
+                    level3.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.WARDEN_HEARTBEAT, SoundSource.PLAYERS, 1.0F, 1.2F);
 
                     if (entity instanceof Player p) {
                         p.displayClientMessage(Component.literal("You're fooling them...").withStyle(ChatFormatting.LIGHT_PURPLE), true);
@@ -464,16 +385,13 @@ public class TatariSkill extends Skill {
                 }
                 break;
             case 4:
-                if (SkillHelper.outOfMagicule(entity, instance))
-                    return;
+                if (SkillHelper.outOfMagicule(entity, instance)) return;
                 instance.setCoolDown(10);
                 Level level = entity.level;
 
-                if (SkillHelper.outOfMagicule(entity, instance))
-                    return;
+                if (SkillHelper.outOfMagicule(entity, instance)) return;
 
-                HellFlareProjectile projectile =
-                        new HellFlareProjectile(level, entity);
+                HellFlareProjectile projectile = new HellFlareProjectile(level, entity);
 
                 projectile.setDamage(3000.0F);
                 projectile.setSpeed(2.0F);
@@ -485,23 +403,10 @@ public class TatariSkill extends Skill {
                 projectile.setPosAndShoot(entity);
                 level.addFreshEntity(projectile);
 
-                level.playSound(
-                        null,
-                        entity.getX(),
-                        entity.getY(),
-                        entity.getZ(),
-                        SoundEvents.BLAZE_SHOOT,
-                        SoundSource.PLAYERS,
-                        1.0F,
-                        1.0F
-                );
+                level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.BLAZE_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F);
 
                 // Particles
-                TensuraParticleHelper.addServerParticlesAroundSelf(
-                        entity,
-                        ParticleTypes.FLAME,
-                        1.0D
-                );
+                TensuraParticleHelper.addServerParticlesAroundSelf(entity, ParticleTypes.FLAME, 1.0D);
 
 
                 SeveranceCutterProjectile spaceCutter = new SeveranceCutterProjectile(entity.getLevel(), entity);
@@ -522,16 +427,7 @@ public class TatariSkill extends Skill {
                 entity.swing(InteractionHand.MAIN_HAND, true);
                 entity.swing(InteractionHand.OFF_HAND, true);
 
-                entity.getLevel().playSound(
-                        null,
-                        entity.getX(),
-                        entity.getY(),
-                        entity.getZ(),
-                        SoundEvents.PLAYER_ATTACK_SWEEP,
-                        SoundSource.PLAYERS,
-                        1.0F,
-                        1.0F
-                );
+                entity.getLevel().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.PLAYERS, 1.0F, 1.0F);
                 break;
             case 5:
                 if (entity instanceof Player player) {
@@ -543,11 +439,7 @@ public class TatariSkill extends Skill {
                 if (!(entity instanceof Player owner)) return;
 
                 if (instance.getMastery() < instance.getMaxMastery() * 0.5) {
-                    owner.displayClientMessage(
-                            Component.literal("Your mastery of Tatari is insufficient.")
-                                    .withStyle(ChatFormatting.LIGHT_PURPLE),
-                            true
-                    );
+                    owner.displayClientMessage(Component.literal("Your mastery of Tatari is insufficient.").withStyle(ChatFormatting.LIGHT_PURPLE), true);
                     return;
                 }
 
@@ -555,17 +447,11 @@ public class TatariSkill extends Skill {
 
                 if (owner.isShiftKeyDown()) {
                     double stored = tag.getDouble(OSIRIS_EP);
-                    owner.displayClientMessage(
-                            Component.literal("Osiris EP Stored: " + (long) stored)
-                                    .withStyle(ChatFormatting.DARK_PURPLE),
-                            true
-                    );
+                    owner.displayClientMessage(Component.literal("Osiris EP Stored: " + (long) stored).withStyle(ChatFormatting.DARK_PURPLE), true);
                     return;
                 }
 
-                LivingEntity target = SkillHelper.getTargetingEntity(
-                        LivingEntity.class, owner, 20.0D, 0.0D, false
-                );
+                LivingEntity target = SkillHelper.getTargetingEntity(LivingEntity.class, owner, 20.0D, 0.0D, false);
 
                 if (target == null || target == owner) return;
 
@@ -607,8 +493,7 @@ public class TatariSkill extends Skill {
                 double newMax = Math.max(1.0D, maxHealth - stolen);
 
                 maxHealthAttr.setBaseValue(newMax);
-                if (target.getHealth() > newMax)
-                    target.setHealth((float) newMax);
+                if (target.getHealth() > newMax) target.setHealth((float) newMax);
 
                 tag.putDouble(OSIRIS_EP, tag.getDouble(OSIRIS_EP) + stolen);
                 instance.markDirty();
@@ -624,26 +509,16 @@ public class TatariSkill extends Skill {
             case 7: {
                 if (!(entity instanceof Player owner)) return;
 
-                LivingEntity target = SkillHelper.getTargetingEntity(
-                        LivingEntity.class, owner, 15.0D, 0.0D, false
-                );
+                LivingEntity target = SkillHelper.getTargetingEntity(LivingEntity.class, owner, 15.0D, 0.0D, false);
 
                 if (!(target instanceof Player subordinate)) {
-                    owner.displayClientMessage(
-                            Component.literal("Target must be a player.")
-                                    .withStyle(ChatFormatting.RED),
-                            true
-                    );
+                    owner.displayClientMessage(Component.literal("Target must be a player.").withStyle(ChatFormatting.RED), true);
                     return;
                 }
 
                 UUID ownerUUID = TensuraEPCapability.getPermanentOwner(subordinate);
                 if (ownerUUID == null || !ownerUUID.equals(owner.getUUID())) {
-                    owner.displayClientMessage(
-                            Component.literal("Target is not your subordinate.")
-                                    .withStyle(ChatFormatting.RED),
-                            true
-                    );
+                    owner.displayClientMessage(Component.literal("Target is not your subordinate.").withStyle(ChatFormatting.RED), true);
                     return;
                 }
 
@@ -654,21 +529,13 @@ public class TatariSkill extends Skill {
                     double requiredEP = targetCap.getEP() * 0.8D;
 
                     if (storedEP < requiredEP) {
-                        owner.displayClientMessage(
-                                Component.literal("Insufficient stored EP (" + (long) requiredEP + " required)")
-                                        .withStyle(ChatFormatting.RED),
-                                true
-                        );
+                        owner.displayClientMessage(Component.literal("Insufficient stored EP (" + (long) requiredEP + " required)").withStyle(ChatFormatting.RED), true);
                         return;
                     }
 
                     List<ManasSkillInstance> skills = getOsirisTransferableSkills(owner);
                     if (skills.isEmpty()) {
-                        owner.displayClientMessage(
-                                Component.literal("No transferable skills available.")
-                                        .withStyle(ChatFormatting.RED),
-                                true
-                        );
+                        owner.displayClientMessage(Component.literal("No transferable skills available.").withStyle(ChatFormatting.RED), true);
                         return;
                     }
 
@@ -678,22 +545,14 @@ public class TatariSkill extends Skill {
 
                     TensuraSkillCapability.getFrom(subordinate).ifPresent(subCap -> {
                         if (SkillUtils.hasSkill(subordinate, selected.getSkill())) {
-                            owner.displayClientMessage(
-                                    Component.literal("Target already has this skill.")
-                                            .withStyle(ChatFormatting.YELLOW),
-                                    true
-                            );
+                            owner.displayClientMessage(Component.literal("Target already has this skill.").withStyle(ChatFormatting.YELLOW), true);
                             return;
                         }
 
                         SkillUtils.learnSkill(subordinate, selected.getSkill());
 
                         if (!SkillUtils.hasSkill(subordinate, selected.getSkill())) {
-                            owner.displayClientMessage(
-                                    Component.literal("Skill transfer failed.")
-                                            .withStyle(ChatFormatting.RED),
-                                    true
-                            );
+                            owner.displayClientMessage(Component.literal("Skill transfer failed.").withStyle(ChatFormatting.RED), true);
                         }
                     });
 
@@ -702,14 +561,7 @@ public class TatariSkill extends Skill {
 
                     applyFX(owner, subordinate, requiredEP);
 
-                    owner.displayClientMessage(
-                            Component.literal("Granted ")
-                                    .append(selected.getSkill().getName())
-                                    .append(" to ")
-                                    .append(subordinate.getName())
-                                    .withStyle(ChatFormatting.DARK_PURPLE),
-                            true
-                    );
+                    owner.displayClientMessage(Component.literal("Granted ").append(selected.getSkill().getName()).append(" to ").append(subordinate.getName()).withStyle(ChatFormatting.DARK_PURPLE), true);
 
                     instance.addMasteryPoint(owner);
                     instance.setCoolDown(1200);
@@ -717,19 +569,14 @@ public class TatariSkill extends Skill {
                 break;
             }
             case 8: {
-                if (!(entity instanceof Player owner))
-                    return;
+                if (!(entity instanceof Player owner)) return;
 
                 CompoundTag tag = instance.getOrCreateTag();
                 int uses = tag.getInt(TATARI_USES);
 
                 boolean permanentCopy = uses >= 13;
 
-                List<LivingEntity> targets = owner.getLevel().getEntitiesOfClass(
-                        LivingEntity.class,
-                        owner.getBoundingBox().inflate(50.0D),
-                        e -> e.isAlive() && e != owner
-                );
+                List<LivingEntity> targets = owner.getLevel().getEntitiesOfClass(LivingEntity.class, owner.getBoundingBox().inflate(50.0D), e -> e.isAlive() && e != owner);
 
                 for (LivingEntity target : targets) {
 
@@ -744,24 +591,14 @@ public class TatariSkill extends Skill {
                     }
 
                     if (shouldSubjugate(owner, target, uses)) {
-                        TensuraEPCapability.getFrom(target).ifPresent(cap ->
-                                cap.setPermanentOwner(owner.getUUID())
-                        );
+                        TensuraEPCapability.getFrom(target).ifPresent(cap -> cap.setPermanentOwner(owner.getUUID()));
 
                         if (target instanceof Player p) {
-                            p.displayClientMessage(
-                                    Component.literal("Your will bends to Tatari.")
-                                            .withStyle(ChatFormatting.DARK_RED),
-                                    true
-                            );
+                            p.displayClientMessage(Component.literal("Your will bends to Tatari.").withStyle(ChatFormatting.DARK_RED), true);
                         }
                     }
 
-                    TensuraParticleHelper.addServerParticlesAroundSelf(
-                            target,
-                            ParticleTypes.SOUL_FIRE_FLAME,
-                            0.8D
-                    );
+                    TensuraParticleHelper.addServerParticlesAroundSelf(target, ParticleTypes.SOUL_FIRE_FLAME, 0.8D);
                 }
 
                 tag.putInt(TATARI_USES, uses + 1);
@@ -770,33 +607,21 @@ public class TatariSkill extends Skill {
                 instance.setCoolDown(TATARI_DURATION);
                 instance.markDirty();
 
-                owner.displayClientMessage(
-                        Component.literal("Tatari engulfs the world for 10 minutes.")
-                                .withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD),
-                        true
-                );
+                owner.displayClientMessage(Component.literal("Tatari engulfs the world for 10 minutes.").withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD), true);
 
                 // ===== POST-13 USE EFFECT =====
                 if (uses + 1 == 13) {
                     instance.setMastery(0);
 
-                    owner.displayClientMessage(
-                            Component.literal("Tatari has devoured itself. Mastery reset.")
-                                    .withStyle(ChatFormatting.DARK_PURPLE),
-                            true
-                    );
+                    owner.displayClientMessage(Component.literal("Tatari has devoured itself. Mastery reset.").withStyle(ChatFormatting.DARK_PURPLE), true);
                 }
                 instance.setToggled(true);
                 instance.setCoolDown(TATARI_DURATION);
                 instance.markDirty();
                 if (owner.getServer() != null) {
-                    Component msg = Component.literal(
-                            "⚠ Tatari has descended. The world bends to a single will."
-                    ).withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD);
+                    Component msg = Component.literal("⚠ Tatari has descended. The world bends to a single will.").withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD);
 
-                    owner.getServer()
-                            .getPlayerList()
-                            .broadcastSystemMessage(msg, false);
+                    owner.getServer().getPlayerList().broadcastSystemMessage(msg, false);
                 }
 
                 break;
@@ -806,27 +631,11 @@ public class TatariSkill extends Skill {
     }
 
     private void applyFX(Player owner, LivingEntity target, double amount) {
-        TensuraParticleHelper.addServerParticlesAroundSelf(
-                target,
-                ParticleTypes.SOUL,
-                1.2D
-        );
+        TensuraParticleHelper.addServerParticlesAroundSelf(target, ParticleTypes.SOUL, 1.2D);
 
-        owner.level.playSound(
-                null,
-                owner.blockPosition(),
-                SoundEvents.WITHER_AMBIENT,
-                SoundSource.PLAYERS,
-                1.0F,
-                0.8F
-        );
+        owner.level.playSound(null, owner.blockPosition(), SoundEvents.WITHER_AMBIENT, SoundSource.PLAYERS, 1.0F, 0.8F);
 
-        owner.displayClientMessage(
-                Component.literal(
-                        "Replicant absorbed " + (int) amount + " energy."
-                ).withStyle(ChatFormatting.DARK_PURPLE),
-                true
-        );
+        owner.displayClientMessage(Component.literal("Replicant absorbed " + (int) amount + " energy.").withStyle(ChatFormatting.DARK_PURPLE), true);
     }
 
     public void awakenSubordinates(Player player, LivingEntity entity) {
@@ -843,18 +652,13 @@ public class TatariSkill extends Skill {
             cap.setEP(player, cap.getEP() - cost);
             TensuraEPCapability.sync(player);
 
-            List<LivingEntity> subs = player.getLevel().getEntitiesOfClass(
-                    LivingEntity.class,
-                    player.getBoundingBox().inflate(40.0D),
-                    target -> {
+            List<LivingEntity> subs = player.getLevel().getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(40.0D), target -> {
 
-                        return target instanceof Mob mob && mob.isAlliedTo(player);
-                    }
-            );
+                return target instanceof Mob mob && mob.isAlliedTo(player);
+            });
 
             for (LivingEntity sub : subs) {
-                sub.getActiveEffects().removeIf(effect ->
-                        effect.getEffect().getCategory().equals(MobEffectCategory.HARMFUL));
+                sub.getActiveEffects().removeIf(effect -> effect.getEffect().getCategory().equals(MobEffectCategory.HARMFUL));
 
                 sub.heal(sub.getMaxHealth());
                 if (sub instanceof Player subplayer) {
@@ -869,8 +673,7 @@ public class TatariSkill extends Skill {
 
                     } else {
                         TensuraPlayerCapability.getFrom(subplayer).ifPresent(cap2 -> {
-                            if (TensuraEPCapability.getPermanentOwner(target) != entity.getUUID())
-                                return;
+                            if (TensuraEPCapability.getPermanentOwner(target) != entity.getUUID()) return;
 
                             harvestFestivalSubordinate(target, (Player) entity);
                         });
@@ -887,10 +690,7 @@ public class TatariSkill extends Skill {
                 TensuraParticleHelper.addServerParticlesAroundSelf(sub, ParticleTypes.ENCHANT, 1.0D);
             }
 
-            player.displayClientMessage(
-                    Component.literal("Your subordinates have awakened!").withStyle(ChatFormatting.GOLD),
-                    true
-            );
+            player.displayClientMessage(Component.literal("Your subordinates have awakened!").withStyle(ChatFormatting.GOLD), true);
         });
     }
 
@@ -932,10 +732,7 @@ public class TatariSkill extends Skill {
             if (!(var3 instanceof Skill skill)) {
                 return false;
             } else {
-                return skill.getType().equals(SkillType.COMMON) ||
-                        skill.getType().equals(SkillType.EXTRA) ||
-                        (skill.getClass().equals(CookSkill.class) || skill.getClass().equals(WrathSkill.class)) ||
-                        skill.getType().equals(SkillType.INTRINSIC);
+                return skill.getType().equals(SkillType.COMMON) || skill.getType().equals(SkillType.EXTRA) || (skill.getClass().equals(CookSkill.class) || skill.getClass().equals(WrathSkill.class)) || skill.getType().equals(SkillType.INTRINSIC);
             }
         } else {
             return false;
@@ -955,12 +752,7 @@ public class TatariSkill extends Skill {
                         int index = (tag.getInt(OSIRIS_INDEX) + 1) % skills.size();
                         tag.putInt(OSIRIS_INDEX, index);
 
-                        player.displayClientMessage(
-                                Component.literal("Osiris Selection: ")
-                                        .append(skills.get(index).getSkill().getName())
-                                        .withStyle(ChatFormatting.GOLD),
-                                true
-                        );
+                        player.displayClientMessage(Component.literal("Osiris Selection: ").append(skills.get(index).getSkill().getName()).withStyle(ChatFormatting.GOLD), true);
                     }
                 }
             }
@@ -974,50 +766,17 @@ public class TatariSkill extends Skill {
                 addMasteryPoint(instance, entity);
             }
 
-            TensuraNetwork.INSTANCE.send(
-                    PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity),
-                    new RequestFxSpawningPacket(new ResourceLocation("tensura:haki"),
-                            entity.getId(), 0.0D, 1.0D, 0.0D, true)
-            );
+            TensuraNetwork.INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), new RequestFxSpawningPacket(new ResourceLocation("tensura:haki"), entity.getId(), 0.0D, 1.0D, 0.0D, true));
 
-            List<LivingEntity> nearbyEntities = entity.getLevel().getEntitiesOfClass(
-                    LivingEntity.class,
-                    entity.getBoundingBox().inflate(15.0D),
-                    target -> !target.isAlliedTo(entity) && target.isAlive() && !entity.isAlliedTo(target)
-            );
+            List<LivingEntity> nearbyEntities = entity.getLevel().getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(15.0D), target -> !target.isAlliedTo(entity) && target.isAlive() && !entity.isAlliedTo(target));
 
             for (LivingEntity target : nearbyEntities) {
-                if (target instanceof Player player && player.getAbilities().instabuild)
-                    continue;
+                if (target instanceof Player player && player.getAbilities().instabuild) continue;
 
-                SkillHelper.checkThenAddEffectSource(
-                        target,
-                        entity,
-                        TensuraMobEffects.LUST_EMBRACEMENT.get(),
-                        200,
-                        1
-                );
-                SkillHelper.checkThenAddEffectSource(
-                        target,
-                        entity,
-                        TensuraMobEffects.INSANITY.get(),
-                        400,
-                        8
-                );
-                SkillHelper.checkThenAddEffectSource(
-                        target,
-                        entity,
-                        TensuraMobEffects.MAGIC_INTERFERENCE.get(),
-                        400,
-                        2
-                );
-                SkillHelper.checkThenAddEffectSource(
-                        target,
-                        entity,
-                        TensuraMobEffects.DISINTEGRATING.get(),
-                        400,
-                        1
-                );
+                SkillHelper.checkThenAddEffectSource(target, entity, TensuraMobEffects.LUST_EMBRACEMENT.get(), 200, 1);
+                SkillHelper.checkThenAddEffectSource(target, entity, TensuraMobEffects.INSANITY.get(), 400, 8);
+                SkillHelper.checkThenAddEffectSource(target, entity, TensuraMobEffects.MAGIC_INTERFERENCE.get(), 400, 2);
+                SkillHelper.checkThenAddEffectSource(target, entity, TensuraMobEffects.DISINTEGRATING.get(), 400, 1);
             }
 
             return true;
@@ -1058,13 +817,11 @@ public class TatariSkill extends Skill {
         List<ManasSkillInstance> result = new ArrayList<>();
 
         for (ManasSkillInstance inst : storage.getLearnedSkills()) {
-            if (!canCopy(inst))
-                continue;
+            if (!canCopy(inst)) continue;
 
             ManasSkill skill = inst.getSkill();
             if (skill instanceof Skill s && s.getType() == SkillType.ULTIMATE) {
-                if (inst.getMastery() < inst.getMaxMastery() * 0.8)
-                    continue;
+                if (inst.getMastery() < inst.getMaxMastery() * 0.8) continue;
             }
 
             result.add(inst);
@@ -1079,19 +836,14 @@ public class TatariSkill extends Skill {
 
         @SubscribeEvent
         public static void onPlayerDeath(LivingDeathEvent event) {
-            if (!(event.getEntity() instanceof ServerPlayer player))
-                return;
+            if (!(event.getEntity() instanceof ServerPlayer player)) return;
 
 
-            if (!SkillUtils.hasSkill(player, Skills.TATARI.get()))
-                return;
+            if (!SkillUtils.hasSkill(player, Skills.TATARI.get())) return;
 
             ServerLevel level = player.getLevel();
 
-            Component announce = Component.literal(
-                    "The sky's crimson glow fades as " + player.getName().getString() +
-                            " falls, and TATARI is rumor once more..."
-            ).withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD);
+            Component announce = Component.literal("The sky's crimson glow fades as " + player.getName().getString() + " falls, and TATARI is rumor once more...").withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD);
 
             for (ServerPlayer p : level.getServer().getPlayerList().getPlayers()) {
                 p.sendSystemMessage(announce);
@@ -1105,76 +857,39 @@ public class TatariSkill extends Skill {
                 storage.forgetSkill(Skills.TATARI.get());
             }
 
-            List<LivingEntity> affected = level.getEntitiesOfClass(
-                    LivingEntity.class,
-                    player.getBoundingBox().inflate(25.0D),
-                    e -> e.isAlive() && e != player
-            );
+            List<LivingEntity> affected = level.getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(25.0D), e -> e.isAlive() && e != player);
 
             for (LivingEntity target : affected) {
 
-                SkillHelper.checkThenAddEffectSource(
-                        target, player,
-                        MobEffects.BLINDNESS,
-                        200, // 10s
-                        1
-                );
+                SkillHelper.checkThenAddEffectSource(target, player, MobEffects.BLINDNESS, 200, // 10s
+                        1);
 
-                SkillHelper.checkThenAddEffectSource(
-                        target, player,
-                        TensuraMobEffects.MAGIC_INTERFERENCE.get(),
-                        300, // 15s
-                        2
-                );
+                SkillHelper.checkThenAddEffectSource(target, player, TensuraMobEffects.MAGIC_INTERFERENCE.get(), 300, // 15s
+                        2);
 
-                SkillHelper.checkThenAddEffectSource(
-                        target, player,
-                        MobEffects.CONFUSION,
-                        160, // 8s
-                        1
-                );
+                SkillHelper.checkThenAddEffectSource(target, player, MobEffects.CONFUSION, 160, // 8s
+                        1);
 
-                TensuraParticleHelper.addServerParticlesAroundSelf(
-                        target,
-                        ParticleTypes.ASH,
-                        1.0D
-                );
+                TensuraParticleHelper.addServerParticlesAroundSelf(target, ParticleTypes.ASH, 1.0D);
             }
 
-            level.playSound(
-                    null,
-                    player.blockPosition(),
-                    SoundEvents.WITHER_SPAWN,
-                    SoundSource.PLAYERS,
-                    2.0F,
-                    0.7F
-            );
+            level.playSound(null, player.blockPosition(), SoundEvents.WITHER_SPAWN, SoundSource.PLAYERS, 2.0F, 0.7F);
 
-            List<LivingEntity> subs = level.getEntitiesOfClass(
-                    LivingEntity.class,
-                    player.getBoundingBox().inflate(50.0D),
-                    e -> {
-                        UUID owner = TensuraEPCapability.getPermanentOwner(e);
-                        return owner != null && owner.equals(player.getUUID());
-                    }
-            );
+            List<LivingEntity> subs = level.getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(50.0D), e -> {
+                UUID owner = TensuraEPCapability.getPermanentOwner(e);
+                return owner != null && owner.equals(player.getUUID());
+            });
 
             for (LivingEntity sub : subs) {
 
-                sub.getActiveEffects().removeIf(effect ->
-                        effect.getEffect().getCategory() != MobEffectCategory.HARMFUL
-                );
+                sub.getActiveEffects().removeIf(effect -> effect.getEffect().getCategory() != MobEffectCategory.HARMFUL);
 
                 TensuraEPCapability.getFrom(sub).ifPresent(ep -> {
                     ep.setChaos(false);
                     TensuraEPCapability.sync(sub);
                 });
 
-                TensuraParticleHelper.addServerParticlesAroundSelf(
-                        sub,
-                        ParticleTypes.SMOKE,
-                        1.5D
-                );
+                TensuraParticleHelper.addServerParticlesAroundSelf(sub, ParticleTypes.SMOKE, 1.5D);
             }
 
         }
@@ -1184,25 +899,15 @@ public class TatariSkill extends Skill {
     public void onBeingDamaged(@NotNull ManasSkillInstance instance, LivingAttackEvent event) {
         LivingEntity entity = event.getEntity();
 
-        if (!this.isInSlot(entity))
-            return;
+        if (!this.isInSlot(entity)) return;
 
-        if (!instance.isToggled())
-            return;
+        if (!instance.isToggled()) return;
 
-        if (instance.onCoolDown())
-            return;
+        if (instance.onCoolDown()) return;
 
         event.setCanceled(true);
 
-        entity.level.playSound(
-                null,
-                entity.blockPosition(),
-                SoundEvents.WITHER_AMBIENT,
-                SoundSource.PLAYERS,
-                0.6F,
-                0.5F
-        );
+        entity.level.playSound(null, entity.blockPosition(), SoundEvents.WITHER_AMBIENT, SoundSource.PLAYERS, 0.6F, 0.5F);
     }
 
     private @Nullable ManasSkillInstance plunderOneSkill(LivingEntity target) {
@@ -1210,12 +915,10 @@ public class TatariSkill extends Skill {
         List<ManasSkillInstance> candidates = new ArrayList<>();
 
         for (ManasSkillInstance inst : storage.getLearnedSkills()) {
-            if (canCopy(inst))
-                candidates.add(inst);
+            if (canCopy(inst)) candidates.add(inst);
         }
 
-        if (candidates.isEmpty())
-            return null;
+        if (candidates.isEmpty()) return null;
 
         return candidates.get(target.getRandom().nextInt(candidates.size()));
     }
@@ -1231,62 +934,41 @@ public class TatariSkill extends Skill {
     private boolean meetsTatariConditions(Player player) {
 
         // I — Malignant Information
-        if (TensuraPlayerCapability.isTrueHero(player))
-            return false;
+        if (TensuraPlayerCapability.isTrueHero(player)) return false;
 
         ServerPlayer serverPlayer = (ServerPlayer) player;
 
-        int hinataKills = serverPlayer.getStats()
-                .getValue(Stats.ENTITY_KILLED.get(TensuraEntityTypes.HINATA_SAKAGUCHI.get()));
+        int hinataKills = serverPlayer.getStats().getValue(Stats.ENTITY_KILLED.get(TensuraEntityTypes.HINATA_SAKAGUCHI.get()));
 
-        int shizuKills = serverPlayer.getStats()
-                .getValue(Stats.ENTITY_KILLED.get(TensuraEntityTypes.SHIZU.get()));
+        int shizuKills = serverPlayer.getStats().getValue(Stats.ENTITY_KILLED.get(TensuraEntityTypes.SHIZU.get()));
 
-        int charybdisKills = serverPlayer.getStats()
-                .getValue(Stats.ENTITY_KILLED.get(TensuraEntityTypes.CHARYBDIS.get()));
+        int charybdisKills = serverPlayer.getStats().getValue(Stats.ENTITY_KILLED.get(TensuraEntityTypes.CHARYBDIS.get()));
 
-        if (hinataKills < 1 || shizuKills < 1 || charybdisKills < 1)
-            return false;
+        if (hinataKills < 1 || shizuKills < 1 || charybdisKills < 1) return false;
 
         // II — Widespread Rumor
-        int villagerKills = serverPlayer.getStats()
-                .getValue(Stats.ENTITY_KILLED.get(EntityType.VILLAGER));
+        int villagerKills = serverPlayer.getStats().getValue(Stats.ENTITY_KILLED.get(EntityType.VILLAGER));
 
-        int playerKills = serverPlayer.getStats()
-                .getValue(Stats.ENTITY_KILLED.get(EntityType.PLAYER));
+        int playerKills = serverPlayer.getStats().getValue(Stats.ENTITY_KILLED.get(EntityType.PLAYER));
 
-        int illagerKills =
-                serverPlayer.getStats().getValue(Stats.ENTITY_KILLED.get(EntityType.PILLAGER))
-                        + serverPlayer.getStats().getValue(Stats.ENTITY_KILLED.get(EntityType.VINDICATOR))
-                        + serverPlayer.getStats().getValue(Stats.ENTITY_KILLED.get(EntityType.EVOKER))
-                        + serverPlayer.getStats().getValue(Stats.ENTITY_KILLED.get(EntityType.ILLUSIONER));
+        int illagerKills = serverPlayer.getStats().getValue(Stats.ENTITY_KILLED.get(EntityType.PILLAGER)) + serverPlayer.getStats().getValue(Stats.ENTITY_KILLED.get(EntityType.VINDICATOR)) + serverPlayer.getStats().getValue(Stats.ENTITY_KILLED.get(EntityType.EVOKER)) + serverPlayer.getStats().getValue(Stats.ENTITY_KILLED.get(EntityType.ILLUSIONER));
 
         int totalHumanKills = villagerKills + playerKills + illagerKills;
 
-        if (totalHumanKills < 1000)
-            return false;
+        if (totalHumanKills < 1000) return false;
 
 
         boolean hasCook = SkillUtils.hasSkill(player, UniqueSkills.COOK.get());
         boolean hasWrath = SkillUtils.hasSkill(player, UniqueSkills.WRATH.get());
 
-        if (!hasCook && !hasWrath)
-            return false;
+        if (!hasCook && !hasWrath) return false;
 
         // III — Witnessed
         SkillStorage storage = SkillAPI.getSkillsFrom(player);
-        List<ManasSkill> banned = List.of(
-                UniqueSkills.SHADOW_STRIKER.get(),
-                UniqueSkills.UNYIELDING.get(),
-                UniqueSkills.INFINITY_PRISON.get(),
-                UniqueSkills.SUPPRESSOR.get(),
-                UniqueSkills.OPPRESSOR.get(),
-                UniqueSkills.FALSIFIER.get()
-        );
+        List<ManasSkill> banned = List.of(UniqueSkills.SHADOW_STRIKER.get(), UniqueSkills.UNYIELDING.get(), UniqueSkills.INFINITY_PRISON.get(), UniqueSkills.SUPPRESSOR.get(), UniqueSkills.OPPRESSOR.get(), UniqueSkills.FALSIFIER.get());
 
         for (ManasSkill bannedSkill : banned) {
-            if (storage.getSkill(bannedSkill).isPresent())
-                return false;
+            if (storage.getSkill(bannedSkill).isPresent()) return false;
         }
 
         // IV — Terminal Point
