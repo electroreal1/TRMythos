@@ -8,14 +8,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.UUID;
 
 public class OrunMenu extends AbstractContainerMenu {
-
-    public List<ResourceLocation> skills;
-    public UUID targetUUID;
+    private List<ResourceLocation> skills;
+    private UUID targetUUID;
 
     public OrunMenu(int pContainerId, Inventory inventory, FriendlyByteBuf buf) {
         this(pContainerId, inventory);
@@ -24,30 +24,20 @@ public class OrunMenu extends AbstractContainerMenu {
     }
 
     public OrunMenu(int pContainerId, Inventory inventory) {
-        super((MenuType) MythosMenuTypes.ORUN_MENU.get(), pContainerId);
+        super((MenuType<?>) MythosMenuTypes.ORUN_MENU.get(), pContainerId);
     }
 
-
+    @Override
     public boolean stillValid(Player pPlayer) {
         return true;
     }
 
-    public ItemStack quickMoveStack(Player pPlayer, int pIndex) {
+    @Override
+    public @NotNull ItemStack quickMoveStack(Player pPlayer, int pIndex) {
         return ItemStack.EMPTY;
     }
 
-    public boolean check() {
-        return true;
-    }
-
-    public List<ResourceLocation> getSkills() {
-        return this.skills;
-    }
-
-    public UUID getTargetUUID() {
-        return this.targetUUID;
-    }
-
-
-
+    public List<ResourceLocation> getSkills() { return this.skills; }
+    public UUID getTargetUUID() { return this.targetUUID; }
+    public boolean check() { return true; }
 }

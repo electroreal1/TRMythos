@@ -1,9 +1,9 @@
 package com.github.mythos.mythos.networking;
 
 import com.github.mythos.mythos.networking.play2server.GreatSilencePacket;
-import com.github.mythos.mythos.networking.play2server.RequestSkillCopyOrunmilaPacket;
 import com.github.mythos.mythos.networking.play2server.ScreenShakePacket;
 import com.github.mythos.mythos.networking.play2server.ShaderPacket;
+import com.github.mythos.mythos.networking.play2server.SkillCopyPacket;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -32,10 +32,10 @@ public class MythosNetwork {
     private static final AtomicInteger PACKET_ID = new AtomicInteger();
 
     public static void register() {
-        registerPacket(RequestSkillCopyOrunmilaPacket.class,
-                RequestSkillCopyOrunmilaPacket::toBytes,
-                RequestSkillCopyOrunmilaPacket::new,
-                RequestSkillCopyOrunmilaPacket::handle,
+        registerPacket(SkillCopyPacket.class,
+                SkillCopyPacket::toBytes,
+                SkillCopyPacket::new,
+                SkillCopyPacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
 
         registerPacket(ScreenShakePacket.class,

@@ -26,6 +26,9 @@ public class MagicInterferenceEffectMixin {
         if (SkillUtils.hasSkill(player, (ManasSkill) Skills.PRETENDER_KING.get())) {
             cir.setReturnValue(true);
         }
+        if (SkillUtils.isSkillToggled(player, Skills.ORUNMILA.get())) {
+            cir.setReturnValue(true);
+        }
 
     }
 }

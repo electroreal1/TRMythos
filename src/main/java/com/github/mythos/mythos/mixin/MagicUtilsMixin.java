@@ -56,6 +56,9 @@ public class MagicUtilsMixin {
             if (TensuraSkillCapability.isSkillInSlot(player, (ManasSkill) Skills.CRIMSON_ARCANIST.get())) {
                 original -= 0.2f;
             }
+            if (SkillUtils.hasSkill(player, Skills.ORUNMILA.get())) {
+                original *= 9999;
+            }
         }
 
 
