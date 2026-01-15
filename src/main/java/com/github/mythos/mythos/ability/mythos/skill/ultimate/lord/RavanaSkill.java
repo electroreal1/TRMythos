@@ -46,6 +46,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.UUID;
 
+import static com.github.mythos.mythos.config.MythosSkillsConfig.EnableUltimateSkillObtainment;
+
 public class RavanaSkill extends Skill {
     public RavanaSkill(SkillType type) {
         super(SkillType.ULTIMATE);
@@ -73,6 +75,7 @@ public class RavanaSkill extends Skill {
     }
 
     public boolean meetEPRequirement(@NotNull Player player, double newEP) {
+        if (!EnableUltimateSkillObtainment()) return false;
         double currentEP = TensuraEPCapability.getCurrentEP(player);
         if (currentEP < getObtainingEpCost()) {
             return false;

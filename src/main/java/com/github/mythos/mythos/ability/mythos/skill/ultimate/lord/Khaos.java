@@ -43,6 +43,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.UUID;
 
+import static com.github.mythos.mythos.config.MythosSkillsConfig.EnableUltimateSkillObtainment;
 import static com.github.mythos.mythos.handler.KhaosHandler.sendFakeBlock;
 
 public class Khaos extends Skill {
@@ -59,6 +60,7 @@ public class Khaos extends Skill {
 
     @Override
     public boolean meetEPRequirement(Player player, double newEP) {
+        if (!EnableUltimateSkillObtainment()) return false;
         return TensuraEPCapability.getCurrentEP(player) >= getObtainingEpCost() &&
                 SkillUtils.isSkillMastered(player, Skills.SHADOW_OF_THE_TESSERACT.get());
     }
