@@ -17,7 +17,8 @@
     "SkillUtilsMixin",
     "TensuraPlayerCapabilityMixin",
     "UrielBypassMixinMythos",
-    "VampireEvoMixin"
+    "VampireEvoMixin",
+    "WeaponEPHandlerMixin"
   ],
   "client": [],
   "injectors": {
