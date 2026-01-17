@@ -87,11 +87,11 @@ public class NetjeruRace extends Race {
     }
 
     private double AuraEvolutionReward() {
-        return 2500000;
+        return 250000;
     }
 
     private double ManaEvolutionReward() {
-        return 7500000;
+        return 750000;
     }
 
     @Override
@@ -146,4 +146,5 @@ public class NetjeruRace extends Race {
     public boolean isMajin() {return true;}
     public boolean isSpiritual() {return true;}
     public boolean isDivine() {return true;}
+
 }
