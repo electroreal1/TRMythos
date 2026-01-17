@@ -93,11 +93,11 @@ public class EusebiaRace extends Race {
     }
 
     private double AuraEvolutionReward() {
-        return 7500000;
+        return 750000;
     }
 
     private double ManaEvolutionReward() {
-        return 2500000;
+        return 250000;
     }
 
     @Override
@@ -152,3 +152,4 @@ public class EusebiaRace extends Race {
     public boolean isSpiritual() {return true;}
     public boolean isDivine() {return true;}
 }
+
