@@ -27,10 +27,10 @@
   "trmythos.evolution_menu.true_demon_lord": "Awaken as a True Demon Lord",
   "trmythos.evolution_menu.true_hero": "Awaken as a True Hero",
   
-  "trmythos.skill.balance": "Balance",
-  "trmythos.skill.evolution": "Evolution",
-  "trmythos.skill.foundation": "Foundation",
-  "trmythos.skill.unity": "Unity",
+  "trmythos.skill.balance": "Balance WIP",
+  "trmythos.skill.evolution": "Evolution WIP",
+  "trmythos.skill.foundation": "Foundation WIP",
+  "trmythos.skill.unity": "Unity WIP",
 
   "trmythos.skill.omniscient_eye": "Omniscient Eye",
   "trmythos.skill.omniscient_eye.description": "See all, comprehend all, able to peer into the souls of others and mimic that which makes up their being.",
@@ -46,6 +46,11 @@
 
   "trmythos.skill.orunmila": "Orunmila",
   "trmythos.skill.orunmila.description": "Your consciousness has elevated. Your mind has become so advanced, it now acts as a sort of library - a repository for all the world's information, whose knowledge only you are privy to search through as you please.",
+
+  "trmythos.cultist.bless.not_enough_sp": "§7You need §4{0} SP §7to bless this item.",
+  "trmythos.cultist.bless.success": "§dYour offering is accepted. Soul Eater level is now §5{0}",
+  "trmythos.cultist.absorb_ep": "§5You have absorbed EP from your slain follower. §d+{0} EP",
+
 
   "trmythos.skill.bloodsucker": "Bloodsucker",
   "trmythos.skill.bloodsucker.description": "Awaken to a much greater power at the measly cost of your humanity.",
