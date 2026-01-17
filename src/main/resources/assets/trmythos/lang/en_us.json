@@ -51,6 +51,7 @@
   "trmythos.cultist.bless.success": "§dYour offering is accepted. Soul Eater level is now §5{0}",
   "trmythos.cultist.absorb_ep": "§5You have absorbed EP from your slain follower. §d+{0} EP",
 
+  "trmythos.skill.lunatic.delirium": "%s has been afflicted with Delirium.",
 
   "trmythos.skill.bloodsucker": "Bloodsucker",
   "trmythos.skill.bloodsucker.description": "Awaken to a much greater power at the measly cost of your humanity.",
