@@ -91,11 +91,11 @@ public class AesirRace extends Race {
     }
 
     private double AuraEvolutionReward() {
-        return 5000000;
+        return 500000;
     }
 
     private double ManaEvolutionReward() {
-        return 5000000;
+        return 500000;
     }
 
     @Override
@@ -150,3 +150,4 @@ public class AesirRace extends Race {
     public boolean isSpiritual() {return true;}
     public boolean isDivine() {return true;}
 }
+
