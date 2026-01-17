@@ -53,6 +53,10 @@
 
   "trmythos.skill.lunatic.delirium": "%s has been afflicted with Delirium.",
 
+  "death.attack.life_skill": "Life has been stolen.",
+  "trmythos.skill.mammon.copy": "§6Mammon §3has temporarily stolen %s!",
+  "trmythos.skill.mammon.perm_copy": "§6Mammon §3has permanently copied %s!",
+
   "trmythos.skill.bloodsucker": "Bloodsucker",
   "trmythos.skill.bloodsucker.description": "Awaken to a much greater power at the measly cost of your humanity.",
   "trmythos.skill.mode.bloodsucker.space_ripper_stingy_eyes": "Space Ripper Stingy Eyes",

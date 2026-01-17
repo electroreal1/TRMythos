@@ -81,6 +81,8 @@ public class MythosMobEffects {
             new SunsetEffect(MobEffectCategory.NEUTRAL, (new Color(255, 165, 15)).getRGB()));
     public static final RegistryObject<MobEffect> KHONSU = registry.register("khonsu", () ->
             new EyeOfTheMoonKhonsuEffect(MobEffectCategory.NEUTRAL, (new Color(255, 165, 15)).getRGB()));
+    public static final RegistryObject<MobEffect> MAMMON_FLARE = registry.register("khonsu", () ->
+            new MammonFlareEffect(MobEffectCategory.NEUTRAL, (new Color(255, 165, 15)).getRGB()));
 
 
     public static void init(IEventBus modEventBus) {

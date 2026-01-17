@@ -88,8 +88,14 @@ public class LunaticSkill extends Skill {
             if (entity instanceof Player) {
                 Player player = (Player)entity;
                 switch (instance.getMode()) {
-                    case 1 -> this.momentOfLucidity(player);
-                    case 2 -> this.Delirium(player);
+                    case 1 -> {
+                        this.momentOfLucidity(player);
+                        this.addMasteryPoint(instance, entity);
+                    }
+                    case 2 -> {
+                        this.Delirium(player);
+                        this.addMasteryPoint(instance, entity);
+                    }
                 }
 
             }
@@ -135,7 +141,7 @@ public class LunaticSkill extends Skill {
         if (insanity > 0) {
             this.setInsanity(player, insanity - 1);
 
-            player.displayClientMessage(Component.literal("You grasp onto a fleeting moment of clarity.").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.displayClientMessage(Component.literal("You grasp onto a fleeting moment of clarity.").withStyle(ChatFormatting.LIGHT_PURPLE), true);;
         }
     }
 

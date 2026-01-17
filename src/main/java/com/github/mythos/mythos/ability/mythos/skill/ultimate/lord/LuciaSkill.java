@@ -9,6 +9,7 @@ import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.ability.skill.resist.AbnormalConditionNullification;
+import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
 import com.github.manasmods.tensura.effect.template.Transformation;
@@ -49,10 +50,13 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static com.github.mythos.mythos.config.MythosSkillsConfig.EnableUltimateSkillObtainment;
 
 public class LuciaSkill extends Skill implements Transformation {
     public LuciaSkill(SkillType type) {
@@ -76,6 +80,15 @@ public class LuciaSkill extends Skill implements Transformation {
     @Override
     public int modes() {
         return 4;
+    }
+
+    public boolean meetEPRequirement(@NotNull Player player, double newEP) {
+        if (!EnableUltimateSkillObtainment()) return false;
+        double currentEP = TensuraEPCapability.getCurrentEP(player);
+        if (currentEP < getObtainingEpCost()) {
+            return false;
+        }
+        return SkillUtils.isSkillMastered(player, Skills.CRIMSON_ORACLE.get());
     }
 
     public int nextMode(LivingEntity entity, TensuraSkillInstance instance, boolean reverse) {
