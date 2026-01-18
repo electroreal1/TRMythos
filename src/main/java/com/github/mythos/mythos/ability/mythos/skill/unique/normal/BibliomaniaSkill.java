@@ -244,7 +244,13 @@ public class BibliomaniaSkill extends Skill {
 
             return;
         }
-
+        if (instance.getMode() == 5) {
+            player.displayClientMessage(
+                    Component.literal("Unfinished, Sorry 🥹")
+                            .withStyle(ChatFormatting.GREEN),
+                    false
+            );
+        }
 
         if (instance.getMode() == 3) {
 
@@ -313,6 +319,7 @@ public class BibliomaniaSkill extends Skill {
 
         return false;
     }
+
 }
 
 
