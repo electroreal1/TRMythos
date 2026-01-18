@@ -49,6 +49,7 @@ public class Skills {
     public static final RegistryObject<LuciaSkill> LUCIA;
     public static final RegistryObject<Khaos> KHAOS;
     public static final RegistryObject<MammonSkill> MAMMON;
+    public static final RegistryObject<AsclepiusSkill> ASCLEPIUS;
 
     // Prince Class
     public static final RegistryObject<ZeroSkill> ZERO;
@@ -151,6 +152,7 @@ public class Skills {
         LUCIA = registery.register("lucia", () -> new LuciaSkill(Skill.SkillType.ULTIMATE));
         KHAOS = registery.register("khaos", () -> new Khaos(Skill.SkillType.ULTIMATE));
         MAMMON = registery.register("mammon", () -> new MammonSkill(Skill.SkillType.ULTIMATE));
+        ASCLEPIUS = registery.register("asclepius", () -> new AsclepiusSkill(Skill.SkillType.ULTIMATE));
 
         // Prince Class
         ZERO = registery.register("zero", () -> new ZeroSkill(Skill.SkillType.ULTIMATE));
