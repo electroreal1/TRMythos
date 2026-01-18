@@ -38,5 +38,6 @@ public class UncopyableSkills {
     static {
         BLOCKED_SKILLS.add(new ResourceLocation("trmythos", "npc_life"));
         BLOCKED_SKILLS.add(new ResourceLocation("trmythos", "wavebreaker"));
+        BLOCKED_SKILLS.add(new ResourceLocation("trmythos", "megalomaniac"));
     }
 }

@@ -17,6 +17,8 @@ import com.github.mythos.mythos.ability.mythos.skill.unique.DominateSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.DullahanSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.TenaciousSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.evolved.*;
+import com.github.mythos.mythos.ability.mythos.skill.unique.megalomaniac_watcher.MegalomaniacSkill;
+import com.github.mythos.mythos.ability.mythos.skill.unique.megalomaniac_watcher.WatcherSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.normal.*;
 import com.github.mythos.mythos.ability.mythos.skill.unique.vassal_line.BalanceSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.vassal_line.EvolutionSkill;
@@ -99,6 +101,10 @@ public class Skills {
     public static final RegistryObject<YellowSign> YELLOW_SIGN;
     public static final RegistryObject<AuthorSkill> AUTHOR;
     public static final RegistryObject<CultistSkill> CULTIST;
+    public static final RegistryObject<MegalomaniacSkill> MEGALOMANIAC;
+    public static final RegistryObject<WatcherSkill> WATCHER;
+    public static final RegistryObject<ControlFreakSkill> CONTROL_FREAK;
+    public static final RegistryObject<LoserSkill> LOSER;
 
     // vassal
     public static final RegistryObject<FoundationSkill> FOUNDATION;
@@ -195,6 +201,10 @@ public class Skills {
         YELLOW_SIGN = registery.register("yellow_sign", () -> new YellowSign(Skill.SkillType.UNIQUE));
         AUTHOR = registery.register("author", () -> new AuthorSkill(Skill.SkillType.UNIQUE));
         CULTIST = registery.register("cultist", () -> new CultistSkill(Skill.SkillType.UNIQUE));
+        MEGALOMANIAC = registery.register("megalomaniac", () -> new MegalomaniacSkill(Skill.SkillType.UNIQUE));
+        WATCHER = registery.register("watcher", () -> new WatcherSkill(Skill.SkillType.UNIQUE));
+        CONTROL_FREAK = registery.register("control_freak", () -> new ControlFreakSkill(Skill.SkillType.UNIQUE));
+        LOSER = registery.register("loser", () -> new LoserSkill(Skill.SkillType.UNIQUE));
 
         // vassal series
         UNITY = registery.register("unity", () -> new UnitySkill(Skill.SkillType.UNIQUE));

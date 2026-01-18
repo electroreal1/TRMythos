@@ -298,6 +298,12 @@ public abstract class SkillUtilsMixin {
                 original += 5;
             }
         }
+        if (hasSkill(player, (ManasSkill) Skills.FALSE_HERO.get())) {
+            original *= 2.0F;
+        }
+        if (hasSkill(player, Skills.LOSER.get())) {
+            original *= 0.5F;
+        }
 
 
         original += ChildOfThePlaneSkill.getChildOfThePlaneBoost(player, true, majin);
@@ -362,6 +368,9 @@ public abstract class SkillUtilsMixin {
         }
         if (hasSkill(player, (ManasSkill) Skills.FALSE_HERO.get())) {
             original *= 2.0F;
+        }
+        if (hasSkill(player, Skills.LOSER.get())) {
+            original *= 0.5F;
         }
 
         original += ChildOfThePlaneSkill.getChildOfThePlaneBoost(player, false, majin);
