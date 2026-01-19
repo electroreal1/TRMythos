@@ -40,7 +40,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.EntityDamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
@@ -286,9 +285,7 @@ public class Khonsu extends Skill {
 
                 if (isCrouching) {
                     if (isMastered || !SkillUtils.hasSkill(target, ResistanceSkills.SPIRITUAL_ATTACK_RESISTANCE.get())) {
-                        EntityDamageSource khonsuPhysical = new EntityDamageSource("khonsu_physical_kill", attacker);
-                        khonsuPhysical.bypassArmor();
-                        target.hurt(khonsuPhysical, Float.MAX_VALUE);
+                        target.hurt(DamageSource.GENERIC, Float.MAX_VALUE);
                     } else {
                         DamageSourceHelper.directSpiritualHurt(target, attacker, 12000.0F + targetMaxSHP * 0.8F);
                     }
@@ -749,26 +746,20 @@ public class Khonsu extends Skill {
                                 } else if (SkillUtils.hasSkill(target, (ManasSkill) ResistanceSkills.SPIRITUAL_ATTACK_NULLIFICATION.get())) {
                                     if (entity.getRandom().nextFloat() > 0.25F) {
                                         DamageSourceHelper.directSpiritualHurt(target, entity, Float.MAX_VALUE);
-                                        EntityDamageSource khonsuPhysical = new EntityDamageSource("khonsu_physical_kill", entity);
-                                        khonsuPhysical.bypassArmor();
-                                        target.hurt(khonsuPhysical, Float.MAX_VALUE);
+                                        target.hurt(DamageSource.GENERIC, Float.MAX_VALUE);
                                     } else {
                                         DamageSourceHelper.directSpiritualHurt(target, entity, targetMaxSHP * 0.5F);
                                     }
                                 } else if (SkillUtils.hasSkill(target, (ManasSkill) ResistanceSkills.SPIRITUAL_ATTACK_RESISTANCE.get())) {
                                     if (entity.getRandom().nextFloat() > 0.5F) {
                                         DamageSourceHelper.directSpiritualHurt(target, entity, Float.MAX_VALUE);
-                                        EntityDamageSource khonsuPhysical = new EntityDamageSource("khonsu_physical_kill", entity);
-                                        khonsuPhysical.bypassArmor();
-                                        target.hurt(khonsuPhysical, Float.MAX_VALUE);
+                                        target.hurt(DamageSource.GENERIC, Float.MAX_VALUE);
                                     } else {
                                         DamageSourceHelper.directSpiritualHurt(target, entity, targetMaxSHP * 0.5F);
                                     }
                                 } else {
                                     DamageSourceHelper.directSpiritualHurt(target, entity, Float.MAX_VALUE);
-                                    EntityDamageSource khonsuPhysical = new EntityDamageSource("khonsu_physical_kill", entity);
-                                    khonsuPhysical.bypassArmor();
-                                    target.hurt(khonsuPhysical, Float.MAX_VALUE);
+                                    target.hurt(DamageSource.GENERIC, Float.MAX_VALUE);
                                 }
 
                                 ItemStack stack = entity.getMainHandItem();
