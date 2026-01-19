@@ -15,7 +15,6 @@
     "ResistSkillMixin",
     "SkillHelperMixin",
     "SkillUtilsMixin",
-    "TensuraPlayerCapabilityMixin",
     "UrielBypassMixinMythos",
     "VampireEvoMixin",
     "WeaponEPHandlerMixin"
