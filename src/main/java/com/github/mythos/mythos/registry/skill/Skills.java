@@ -20,10 +20,7 @@ import com.github.mythos.mythos.ability.mythos.skill.unique.evolved.*;
 import com.github.mythos.mythos.ability.mythos.skill.unique.megalomaniac_watcher.MegalomaniacSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.megalomaniac_watcher.WatcherSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.normal.*;
-import com.github.mythos.mythos.ability.mythos.skill.unique.vassal_line.BalanceSkill;
-import com.github.mythos.mythos.ability.mythos.skill.unique.vassal_line.EvolutionSkill;
-import com.github.mythos.mythos.ability.mythos.skill.unique.vassal_line.FoundationSkill;
-import com.github.mythos.mythos.ability.mythos.skill.unique.vassal_line.UnitySkill;
+import com.github.mythos.mythos.ability.mythos.skill.unique.vassal_line.*;
 import com.github.mythos.mythos.ability.mythos.skill.unique.zodiac_line.SagittariusSkill;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -112,6 +109,7 @@ public class Skills {
     public static final RegistryObject<UnitySkill> UNITY;
     public static final RegistryObject<EvolutionSkill> EVOLUTION;
     public static final RegistryObject<BalanceSkill> BALANCE;
+    public static final RegistryObject<CycleSkill> CYCLE;
 
     // evolved uniques
     public static final RegistryObject<CarnageSkill> CARNAGE;
@@ -213,6 +211,7 @@ public class Skills {
         FOUNDATION = registery.register("foundation", () -> new FoundationSkill(Skill.SkillType.UNIQUE));
         EVOLUTION = registery.register("evolution", () -> new EvolutionSkill(Skill.SkillType.UNIQUE));
         BALANCE = registery.register("balance", () -> new BalanceSkill(Skill.SkillType.UNIQUE));
+        CYCLE = registery.register("cycle", () -> new CycleSkill(Skill.SkillType.UNIQUE));
 
         // evolved uniques
         CARNAGE = registery.register("carnage", () -> new CarnageSkill(Skill.SkillType.UNIQUE));

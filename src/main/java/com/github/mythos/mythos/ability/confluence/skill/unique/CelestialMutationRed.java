@@ -60,8 +60,7 @@ public class CelestialMutationRed extends Skill {
                     resistance = skill;
                     if (Math.random() < 0.1) {
                         ManasSkill var12 = resistance.getSkill();
-                        if (var12 instanceof ResistSkill) {
-                            ResistSkill resistSkill = (ResistSkill) var12;
+                        if (var12 instanceof ResistSkill resistSkill) {
                             if (resistance.canBeToggled(player) && resistSkill.isDamageResisted(event.getSource(), resistance)) {
                                 if (resistance.getMastery() >= 0) {
                                     resistSkill.addMasteryPoint(resistance, player);
@@ -126,14 +125,13 @@ public class CelestialMutationRed extends Skill {
                     e.setAmount((e.getAmount() + damage) * 2);
                     this.addMasteryPoint(instance, attacker);
                 }
-                TensuraDamageSource damageSource = (TensuraDamageSource)source;
+                TensuraDamageSource damageSource = (TensuraDamageSource) source;
                 if (damageSource.getSkill() != null && damageSource.getSkill().getSkill() instanceof Battewill) {
                     e.setAmount(e.getAmount() * 2.0F);
                 }
             }
         }
     }
-
 
 
 }

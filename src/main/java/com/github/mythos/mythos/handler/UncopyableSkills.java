@@ -49,5 +49,9 @@ public class UncopyableSkills {
         BLOCKED_SKILLS.add(new ResourceLocation("trmythos", "megalomaniac"));
         BLOCKED_SKILLS.add(new ResourceLocation("trmythos", "watcher"));
         BLOCKED_SKILLS.add(new ResourceLocation("trmythos", "unity"));
+        BLOCKED_SKILLS.add(new ResourceLocation("trmythos", "evolution"));
+        BLOCKED_SKILLS.add(new ResourceLocation("trmythos", "balance"));
+        BLOCKED_SKILLS.add(new ResourceLocation("trmythos", "cycle"));
+        BLOCKED_SKILLS.add(new ResourceLocation("trmythos", "foundation"));
     }
 }
