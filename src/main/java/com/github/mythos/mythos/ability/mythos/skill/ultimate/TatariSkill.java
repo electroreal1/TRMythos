@@ -113,7 +113,7 @@ public class TatariSkill extends Skill {
 
 
     public double learningCost() {
-        return 15000.0;
+        return 25000.0;
     }
 
     private Player target;
@@ -139,7 +139,7 @@ public class TatariSkill extends Skill {
 
 
         if (instance.onCoolDown()) return;
-
+        applyTatariAura(player);
         long gameTime = player.level.getGameTime();
         long lastRoll = tag.getLong(LAST_COOLDOWN_ROLL);
 
@@ -190,17 +190,7 @@ public class TatariSkill extends Skill {
                 target.sendSystemMessage(leaveMessage);
             }
         }
-        List<LivingEntity> nearbyEntities = entity.getLevel().getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(15.0D), target -> !target.isAlliedTo(entity) && target.isAlive() && !entity.isAlliedTo(target));
 
-        for (LivingEntity target : nearbyEntities) {
-            if (target instanceof Player player && player.getAbilities().invulnerable) continue;
-
-            SkillHelper.checkThenAddEffectSource(target, entity, MobEffects.BLINDNESS, 5, 3);
-
-            SkillHelper.checkThenAddEffectSource(target, entity, TensuraMobEffects.MAGICULE_POISON.get(), 5, 3);
-
-            SkillHelper.checkThenAddEffectSource(target, entity, TensuraMobEffects.INSANITY.get(), 5, 13);
-        }
     }
 
     public void onToggleOff(ManasSkillInstance instance, LivingEntity entity) {
@@ -405,7 +395,6 @@ public class TatariSkill extends Skill {
 
                 level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.BLAZE_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F);
 
-                // Particles
                 TensuraParticleHelper.addServerParticlesAroundSelf(entity, ParticleTypes.FLAME, 1.0D);
 
 
@@ -484,7 +473,6 @@ public class TatariSkill extends Skill {
                     break;
                 }
 
-                // ===== NON-PLAYER TARGET =====
                 AttributeInstance maxHealthAttr = target.getAttribute(Attributes.MAX_HEALTH);
                 if (maxHealthAttr == null) return;
 
@@ -639,7 +627,6 @@ public class TatariSkill extends Skill {
     }
 
     public void awakenSubordinates(Player player, LivingEntity entity) {
-        // Access EP capability
         TensuraEPCapability.getFrom(player).ifPresent(cap -> {
             double maxEP = cap.getEP();
             double cost = maxEP * 0.25;
@@ -895,7 +882,6 @@ public class TatariSkill extends Skill {
         }
     }
 
-
     public void onBeingDamaged(@NotNull ManasSkillInstance instance, LivingAttackEvent event) {
         LivingEntity entity = event.getEntity();
 
@@ -974,6 +960,45 @@ public class TatariSkill extends Skill {
         // IV — Terminal Point
         MobEffectInstance insanity = player.getEffect(TensuraMobEffects.INSANITY.get());
         return insanity != null && insanity.getAmplifier() >= 24;
+    }
+    private void applyTatariAura(LivingEntity owner) {
+        if (!(owner instanceof ServerPlayer player)) return;
+
+        double radius = 16.0D;
+
+        List<LivingEntity> targets = player.level.getEntitiesOfClass(
+                LivingEntity.class,
+                player.getBoundingBox().inflate(radius),
+                e -> e != player && e.isAlive()
+        );
+
+        for (LivingEntity target : targets) {
+
+            target.addEffect(new MobEffectInstance(
+                    MobEffects.BLINDNESS,
+                    60,
+                    5,
+                    true,
+                    false
+            ));
+
+            target.addEffect(new MobEffectInstance(
+                    MobEffects.CONFUSION,
+                    60,
+                    5,
+                    true,
+                    false
+            ));
+
+            target.addEffect(new MobEffectInstance(
+                    TensuraMobEffects.MAGIC_INTERFERENCE.get(),
+                    60,
+                    3,
+                    true,
+                    false
+            ));
+
+        }
     }
 
 }

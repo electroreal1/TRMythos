@@ -7,6 +7,7 @@ import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
 import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.skill.Skill;
+import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.mythos.mythos.registry.skill.Skills;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
@@ -20,6 +21,13 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Explosion;
+import net.minecraft.util.RandomSource;
+import net.minecraftforge.common.util.ITeleporter;
+import net.minecraft.world.level.portal.PortalInfo;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -129,6 +137,11 @@ public class BibliomaniaChatHandler {
                             target.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 200));
                             target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 6));
                             target.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200));
+                            target.addEffect(new MobEffectInstance(TensuraMobEffects.MAGIC_INTERFERENCE.get(), 200,
+                                    3,
+                                    true,
+                                    false
+                            ));
                         }
                     }
                 }
@@ -146,7 +159,9 @@ public class BibliomaniaChatHandler {
                 case "Explode" -> {
                     for (LivingEntity target : player.level.getEntitiesOfClass(
                             LivingEntity.class, player.getBoundingBox().inflate(20))) {
+
                         if (target != player && target.isAlive()) {
+
                             player.level.explode(
                                     player,
                                     target.getX(),
@@ -155,25 +170,82 @@ public class BibliomaniaChatHandler {
                                     3.0F,
                                     Explosion.BlockInteraction.NONE
                             );
+
+                            target.hurt(
+                                    DamageSource.indirectMagic(player, player),
+                                    40.0F
+                            );
+
+                            applyRandomEffects(target);
                         }
                     }
                 }
 
+
+
                 case "Alter" -> {
-                    if (args.length != 4) return;
+
+                    boolean mastered = instance.isMastered(player);
+
                     try {
-                        double x = Double.parseDouble(args[1]);
-                        double y = Double.parseDouble(args[2]);
-                        double z = Double.parseDouble(args[3]);
-                        player.teleportTo(x + 0.5, y, z + 0.5);
+                        if (mastered && args.length == 5) {
+                            // DIMENSION TELEPORT
+                            ResourceLocation dimId = new ResourceLocation(args[1]);
+                            double x = Double.parseDouble(args[2]);
+                            double y = Double.parseDouble(args[3]);
+                            double z = Double.parseDouble(args[4]);
+
+                            var level = player.server.getLevel(
+                                    net.minecraft.resources.ResourceKey.create(
+                                            net.minecraft.core.Registry.DIMENSION_REGISTRY,
+                                            dimId
+                                    )
+                            );
+
+                            if (level == null) {
+                                player.displayClientMessage(
+                                        Component.literal("That realm does not exist.")
+                                                .withStyle(ChatFormatting.DARK_GRAY),
+                                        false
+                                );
+                                return;
+                            }
+
+                            player.changeDimension(level, new ITeleporter() {
+                                public PortalInfo getPortalInfo(
+                                        net.minecraft.world.entity.Entity entity,
+                                        net.minecraft.world.level.Level dest,
+                                        java.util.function.Function<Boolean, PortalInfo> defaultPortalInfo
+                                ) {
+                                    return new PortalInfo(
+                                            new Vec3(x + 0.5, y, z + 0.5),
+                                            entity.getDeltaMovement(),
+                                            entity.getYRot(),
+                                            entity.getXRot()
+                                    );
+                                }
+                            });
+
+                        } else if (args.length == 4) {
+                            double x = Double.parseDouble(args[1]);
+                            double y = Double.parseDouble(args[2]);
+                            double z = Double.parseDouble(args[3]);
+
+                            player.teleportTo(x + 0.5, y, z + 0.5);
+                        } else {
+                            return;
+                        }
+
                         player.playNotifySound(
                                 SoundEvents.CHORUS_FRUIT_TELEPORT,
                                 SoundSource.PLAYERS, 1, 1
                         );
                         player.fallDistance = 0;
-                    } catch (NumberFormatException ignored) {
-                    }
+
+                    } catch (Exception ignored) {}
                 }
+
+
 
                 case "Study" -> {
                     List<ResourceLocation> stored = getCopiedSkills(instance);
@@ -250,4 +322,25 @@ public class BibliomaniaChatHandler {
     private static String reverse(String s) {
         return new StringBuilder(s).reverse().toString();
     }
+
+    private static void applyRandomEffects(LivingEntity target) {
+        RandomSource random = target.level.random;
+
+        List<MobEffect> effects = ForgeRegistries.MOB_EFFECTS.getValues().stream()
+                .filter(e -> e != null)
+                .toList();
+
+        if (effects.isEmpty()) return;
+
+        int count = 1 + random.nextInt(3);
+
+        for (int i = 0; i < count; i++) {
+            MobEffect effect = effects.get(random.nextInt(effects.size()));
+            int duration = 100 + random.nextInt(300);
+            int amplifier = random.nextInt(3);
+
+            target.addEffect(new MobEffectInstance(effect, duration, amplifier));
+        }
+    }
+
 }
