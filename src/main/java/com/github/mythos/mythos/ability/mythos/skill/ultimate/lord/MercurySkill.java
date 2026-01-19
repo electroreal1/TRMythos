@@ -2,6 +2,9 @@ package com.github.mythos.mythos.ability.mythos.skill.ultimate.lord;
 
 import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
+import com.github.manasmods.manascore.api.skills.SkillAPI;
+import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
+import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
@@ -37,6 +40,17 @@ public class MercurySkill extends Skill {
         }
         return SkillUtils.isSkillMastered(player, (ManasSkill) UniqueSkills.TRAVELER.get()) &&
                 SkillUtils.isSkillMastered(player, (ManasSkill) UniqueSkills.USURPER.get());
+    }
+
+    @Override
+    public void onLearnSkill(ManasSkillInstance instance, LivingEntity entity, UnlockSkillEvent event) {
+        if (entity instanceof Player player && !instance.isTemporarySkill()) {
+            SkillStorage storage = SkillAPI.getSkillsFrom(player);
+            Skill greedSkill = UniqueSkills.TRAVELER.get();
+            Skill greedSkill1 = UniqueSkills.USURPER.get();
+            storage.getSkill(greedSkill).ifPresent(storage::forgetSkill);
+            storage.getSkill(greedSkill1).ifPresent(storage::forgetSkill);
+        }
     }
 
     @Override

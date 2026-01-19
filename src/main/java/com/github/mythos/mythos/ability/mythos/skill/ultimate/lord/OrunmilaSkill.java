@@ -78,9 +78,7 @@ public class OrunmilaSkill extends Skill {
     public void onLearnSkill(ManasSkillInstance instance, @NotNull LivingEntity entity, @NotNull UnlockSkillEvent event) {
         if (entity instanceof Player player) {
             SkillStorage storage = SkillAPI.getSkillsFrom(player);
-            if (storage != null) {
-                storage.forgetSkill(Skills.OMNISCIENT_EYE.get());
-            }
+            storage.forgetSkill(Skills.OMNISCIENT_EYE.get());
         }
     }
 

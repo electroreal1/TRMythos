@@ -2,6 +2,8 @@ package com.github.mythos.mythos.ability.mythos.skill.ultimate.lord;
 
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
+import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
+import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
@@ -48,6 +50,21 @@ public class AsclepiusSkill extends Skill {
                 SkillUtils.isSkillMastered(player, CommonSkills.POISON.get()) &&
                 SkillUtils.isSkillMastered(player, CommonSkills.CORROSION.get()) &&
                 SkillUtils.isSkillMastered(player, CommonSkills.PARALYSIS.get());
+    }
+
+    @Override
+    public void onLearnSkill(ManasSkillInstance instance, LivingEntity entity, UnlockSkillEvent event) {
+        if (entity instanceof Player player && !instance.isTemporarySkill()) {
+            SkillStorage storage = SkillAPI.getSkillsFrom(player);
+            Skill greedSkill = UniqueSkills.HEALER.get();
+            Skill greedSkill1 = CommonSkills.PARALYSIS.get();
+            Skill greedSkill2 = CommonSkills.CORROSION.get();
+            Skill greedSkill3 = CommonSkills.POISON.get();
+            storage.getSkill(greedSkill).ifPresent(storage::forgetSkill);
+            storage.getSkill(greedSkill1).ifPresent(storage::forgetSkill);
+            storage.getSkill(greedSkill2).ifPresent(storage::forgetSkill);
+            storage.getSkill(greedSkill3).ifPresent(storage::forgetSkill);
+        }
     }
 
     @Override

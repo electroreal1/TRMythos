@@ -1,6 +1,8 @@
 package com.github.mythos.mythos.ability.mythos.skill.ultimate.prince;
 
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
+import com.github.manasmods.manascore.api.skills.SkillAPI;
+import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
 import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
 import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.SkillUtils;
@@ -69,6 +71,7 @@ public class ZeroSkill extends Skill {
                 SkillUtils.isSkillMastered(player, Skills.KHAOS.get());
     }
 
+
     public ResourceLocation getSkillIcon() {
         return new ResourceLocation("trmythos", "textures/skill/ultimate/zero.png");
     }
@@ -129,6 +132,12 @@ public class ZeroSkill extends Skill {
                 MythosNetwork.sendToPlayer(new ScreenShakePacket(15.0f), target);
                 MythosNetwork.sendToPlayer(new ShaderPacket("minecraft:shaders/post/blobs.json"), target);
             }
+        }
+
+        if (living instanceof Player player && !instance.isTemporarySkill()) {
+            SkillStorage storage = SkillAPI.getSkillsFrom(player);
+            Skill greedSkill = Skills.KHAOS.get();
+            storage.getSkill(greedSkill).ifPresent(storage::forgetSkill);
         }
     }
 
@@ -240,8 +249,10 @@ public class ZeroSkill extends Skill {
         AABB area = player.getBoundingBox().inflate(10.0);
         List<LivingEntity> targets = player.level.getEntitiesOfClass(LivingEntity.class, area, e -> e != player);
         for (LivingEntity target : targets) {
-            if (holdTicks >= 20 && holdTicks < 60) target.addEffect(new MobEffectInstance(MythosMobEffects.ATROPHY.get(), 10, 0, false, false));
-            else if (holdTicks >= 60 && holdTicks < 100) target.addEffect(new MobEffectInstance(MythosMobEffects.ATROPHY.get(), 10, 1, false, false));
+            if (holdTicks >= 20 && holdTicks < 60)
+                target.addEffect(new MobEffectInstance(MythosMobEffects.ATROPHY.get(), 10, 0, false, false));
+            else if (holdTicks >= 60 && holdTicks < 100)
+                target.addEffect(new MobEffectInstance(MythosMobEffects.ATROPHY.get(), 10, 1, false, false));
             else if (holdTicks >= 100) {
                 DamageSourceHelper.directSpiritualHurt(target, player, 5000);
             }

@@ -4,6 +4,7 @@ import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
+import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
 import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
@@ -89,6 +90,15 @@ public class LuciaSkill extends Skill implements Transformation {
             return false;
         }
         return SkillUtils.isSkillMastered(player, Skills.CRIMSON_ORACLE.get());
+    }
+
+    @Override
+    public void onLearnSkill(ManasSkillInstance instance, LivingEntity entity, UnlockSkillEvent event) {
+        if (entity instanceof Player player && !instance.isTemporarySkill()) {
+            SkillStorage storage = SkillAPI.getSkillsFrom(player);
+            Skill greedSkill = Skills.CRIMSON_ORACLE.get();
+            storage.getSkill(greedSkill).ifPresent(storage::forgetSkill);
+        }
     }
 
     public int nextMode(LivingEntity entity, TensuraSkillInstance instance, boolean reverse) {

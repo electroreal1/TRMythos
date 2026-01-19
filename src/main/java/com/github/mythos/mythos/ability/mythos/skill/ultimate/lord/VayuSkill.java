@@ -1,7 +1,9 @@
 package com.github.mythos.mythos.ability.mythos.skill.ultimate.lord;
 
-import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
+import com.github.manasmods.manascore.api.skills.SkillAPI;
+import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
+import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
@@ -30,10 +32,19 @@ public class VayuSkill extends Skill {
         if (currentEP < getObtainingEpCost()) {
             return false;
         }
-        return SkillUtils.isSkillMastered(player, (ManasSkill) Skills.ZEPHYROS.get());
+        return SkillUtils.isSkillMastered(player, Skills.ZEPHYROS.get());
     }
 
-    public void onEntityHit(ManasSkillInstance instance, @NotNull LivingEntity living, @NotNull LivingHurtEvent e, Player player) {
+    @Override
+    public void onLearnSkill(ManasSkillInstance instance, LivingEntity entity, UnlockSkillEvent event) {
+        if (entity instanceof Player player && !instance.isTemporarySkill()) {
+            SkillStorage storage = SkillAPI.getSkillsFrom(player);
+            Skill greedSkill = Skills.ZEPHYROS.get();
+            storage.getSkill(greedSkill).ifPresent(storage::forgetSkill);
+        }
+    }
+
+    public void onDamageEntity(ManasSkillInstance instance, @NotNull LivingEntity living, @NotNull LivingHurtEvent e, Player player) {
         if (instance.isToggled()) {
             if (DamageSourceHelper.isWindDamage(e.getSource())) {
                 if (instance.isMastered(living)) {
@@ -45,7 +56,7 @@ public class VayuSkill extends Skill {
         }
     }
 
-    public void onEntityHurt(LivingHurtEvent event, ManasSkillInstance instance) {
+    public void onBeingDamaged(LivingHurtEvent event, ManasSkillInstance instance) {
         if (instance.isToggled()) {
             LivingEntity target = event.getEntity();
             DamageSource source = event.getSource();

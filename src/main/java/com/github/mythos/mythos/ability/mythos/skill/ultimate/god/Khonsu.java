@@ -2,6 +2,8 @@ package com.github.mythos.mythos.ability.mythos.skill.ultimate.god;
 
 import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
+import com.github.manasmods.manascore.api.skills.SkillAPI;
+import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
 import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
 import com.github.manasmods.manascore.attribute.ManasCoreAttributes;
 import com.github.manasmods.tensura.ability.SkillHelper;
@@ -120,12 +122,20 @@ public class Khonsu extends Skill {
         return SkillUtils.isSkillMastered(player, Skills.HALI.get());
     }
 
+
+
     @Override
     public void onLearnSkill(ManasSkillInstance instance, LivingEntity entity, UnlockSkillEvent event) {
         SkillUtils.learnSkill(entity, ResistanceSkills.SPIRITUAL_ATTACK_NULLIFICATION.get());
 
         if (entity instanceof Player player) {
             triggerHaliLearningSequence(player);
+        }
+
+        if (entity instanceof Player player && !instance.isTemporarySkill()) {
+            SkillStorage storage = SkillAPI.getSkillsFrom(player);
+            Skill greedSkill = Skills.HALI.get();
+            storage.getSkill(greedSkill).ifPresent(storage::forgetSkill);
         }
     }
 

@@ -111,6 +111,11 @@ public class DendrrahSkill extends Skill {
         Component msg = Component.literal("Violence, suffering, bloodshed... The Apocalypse God has arisen. An indescribable rage fills the hearts of all life!").withStyle(ChatFormatting.RED, ChatFormatting.BOLD);
         serverLevel.players().forEach(p -> p.displayClientMessage(msg, false));
 
+        if (instance.isTemporarySkill()) {
+            Skill greedSkill = Skills.ARES.get();
+            storage.getSkill(greedSkill).ifPresent(storage::forgetSkill);
+        }
+
         godClassHandler.setDendrahhObtained();
     }
 

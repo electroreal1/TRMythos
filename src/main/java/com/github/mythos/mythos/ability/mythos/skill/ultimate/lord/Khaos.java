@@ -1,6 +1,9 @@
 package com.github.mythos.mythos.ability.mythos.skill.ultimate.lord;
 
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
+import com.github.manasmods.manascore.api.skills.SkillAPI;
+import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
+import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
 import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
@@ -63,6 +66,15 @@ public class Khaos extends Skill {
         if (!EnableUltimateSkillObtainment()) return false;
         return TensuraEPCapability.getCurrentEP(player) >= getObtainingEpCost() &&
                 SkillUtils.isSkillMastered(player, Skills.SHADOW_OF_THE_TESSERACT.get());
+    }
+
+    @Override
+    public void onLearnSkill(ManasSkillInstance instance, LivingEntity entity, UnlockSkillEvent event) {
+        if (entity instanceof Player player && !instance.isTemporarySkill()) {
+            SkillStorage storage = SkillAPI.getSkillsFrom(player);
+            Skill greedSkill = Skills.SHADOW_OF_THE_TESSERACT.get();
+            storage.getSkill(greedSkill).ifPresent(storage::forgetSkill);
+        }
     }
 
     @Override

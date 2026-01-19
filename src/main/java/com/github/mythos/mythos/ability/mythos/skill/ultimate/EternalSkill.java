@@ -1,6 +1,5 @@
 package com.github.mythos.mythos.ability.mythos.skill.ultimate;
 
-import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
@@ -62,13 +61,13 @@ public class EternalSkill extends Skill {
 
     public boolean meetEPRequirement(Player entity, double newEP) {
         if (!EnableUltimateSkillObtainment()) return false;
-        return (SkillUtils.isSkillMastered(entity, (ManasSkill) UniqueSkills.SURVIVOR.get()) && TensuraPlayerCapability.isTrueDemonLord(entity));
+        return (SkillUtils.isSkillMastered(entity, UniqueSkills.SURVIVOR.get()) && TensuraPlayerCapability.isTrueDemonLord(entity));
     }
 
     public void onLearnSkill(ManasSkillInstance instance, LivingEntity entity, UnlockSkillEvent event) {
         if (instance.getMastery() >= 0 && !instance.isTemporarySkill() && entity instanceof Player player) {
             SkillStorage storage = SkillAPI.getSkillsFrom(player);
-            Skill previousSkill = (Skill) UniqueSkills.SURVIVOR.get();
+            Skill previousSkill = UniqueSkills.SURVIVOR.get();
             Objects.requireNonNull(storage);
             storage.forgetSkill(previousSkill);
         }

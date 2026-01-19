@@ -1,9 +1,12 @@
 package com.github.mythos.mythos.ability.mythos.skill.ultimate.god;
 
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
+import com.github.manasmods.manascore.api.skills.SkillAPI;
+import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
 import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
 import com.github.manasmods.manascore.attribute.ManasCoreAttributes;
 import com.github.manasmods.tensura.ability.SkillHelper;
+import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
@@ -11,8 +14,10 @@ import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.entity.magic.TensuraProjectile;
 import com.github.manasmods.tensura.entity.magic.projectile.SeveranceCutterProjectile;
 import com.github.manasmods.tensura.registry.attribute.TensuraAttributeRegistry;
+import com.github.manasmods.tensura.registry.skill.UniqueSkills;
 import com.github.manasmods.tensura.util.TensuraAdvancementsHelper;
 import com.github.mythos.mythos.config.MythosSkillsConfig;
+import com.github.mythos.mythos.registry.skill.Skills;
 import com.github.mythos.mythos.util.MythosUtils;
 import com.github.mythos.mythos.util.damage.MythosDamageSources;
 import io.github.Memoires.trmysticism.registry.effects.MysticismMobEffects;
@@ -34,10 +39,13 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
+
+import static com.github.mythos.mythos.config.MythosSkillsConfig.EnableUltimateSkillObtainment;
 
 public class Kthanid extends Skill {
 
@@ -101,6 +109,36 @@ public class Kthanid extends Skill {
         if (!(entity.getLevel() instanceof ServerLevel serverLevel)) return;
         Component msg = Component.literal("Darkness writhes as a new presence shines upon the world. Fear nestles its way into the empty hearts of the unjust, knowing that the light is soon to swallow them for their misdoings. The God of Light, the true Justice, has been born unto the world.").withStyle(ChatFormatting.RED).withStyle(ChatFormatting.BOLD);
         serverLevel.players().forEach(player1 -> player1.displayClientMessage(msg, false));
+
+        if (entity instanceof Player player && !instance.isTemporarySkill()) {
+            SkillStorage storage = SkillAPI.getSkillsFrom(player);
+            Skill greedSkill = Skills.DIKE.get();
+            Skill greedSkill1 = UniqueSkills.INFINITY_PRISON.get();
+            Skill greedSkill2 = UniqueSkills.GREAT_SAGE.get();
+            Skill greedSkill3 = UniqueSkills.ABSOLUTE_SEVERANCE.get();
+            Skill greedSkill4 = UniqueSkills.MURDERER.get();
+            Skill greedSkill5 = UniqueSkills.UNYIELDING.get();
+            storage.getSkill(greedSkill).ifPresent(storage::forgetSkill);
+            storage.getSkill(greedSkill1).ifPresent(storage::forgetSkill);
+            storage.getSkill(greedSkill2).ifPresent(storage::forgetSkill);
+            storage.getSkill(greedSkill3).ifPresent(storage::forgetSkill);
+            storage.getSkill(greedSkill4).ifPresent(storage::forgetSkill);
+            storage.getSkill(greedSkill5).ifPresent(storage::forgetSkill);
+        }
+    }
+
+    public boolean meetEPRequirement(@NotNull Player player, double newEP) {
+        if (!EnableUltimateSkillObtainment()) return false;
+        double currentEP = TensuraEPCapability.getCurrentEP(player);
+        if (currentEP < getObtainingEpCost()) {
+            return false;
+        }
+        return SkillUtils.isSkillMastered(player, Skills.DIKE.get()) &&
+                SkillUtils.isSkillMastered(player, UniqueSkills.INFINITY_PRISON.get()) &&
+                SkillUtils.isSkillMastered(player, UniqueSkills.GREAT_SAGE.get()) &&
+                SkillUtils.isSkillMastered(player, UniqueSkills.ABSOLUTE_SEVERANCE.get()) &&
+                SkillUtils.isSkillMastered(player, UniqueSkills.MURDERER.get()) &&
+                SkillUtils.isSkillMastered(player, UniqueSkills.UNYIELDING.get());
     }
 
     private double getMaxEP(LivingEntity entity) {

@@ -2,6 +2,8 @@ package com.github.mythos.mythos.ability.mythos.skill.ultimate.prince;
 
 import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
+import com.github.manasmods.manascore.api.skills.SkillAPI;
+import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
 import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
 import com.github.manasmods.manascore.attribute.ManasCoreAttributes;
 import com.github.manasmods.tensura.ability.SkillHelper;
@@ -122,6 +124,12 @@ public class HaliSkill extends Skill {
 
         if (entity instanceof Player player) {
             triggerHaliLearningSequence(player);
+        }
+
+        if (entity instanceof Player player && !instance.isTemporarySkill()) {
+            SkillStorage storage = SkillAPI.getSkillsFrom(player);
+            Skill greedSkill = UltimateSkills.TSUKUYOMI.get();
+            storage.getSkill(greedSkill).ifPresent(storage::forgetSkill);
         }
     }
 
@@ -287,8 +295,10 @@ public class HaliSkill extends Skill {
 
             MobEffect domainEffect = isShifting ? MythosMobEffects.SUNRISE.get() : MythosMobEffects.SUNSET.get();
 
-            if (entity.hasEffect(MythosMobEffects.SUNSET.get()) && isShifting) entity.removeEffect(MythosMobEffects.SUNSET.get());
-            if (entity.hasEffect(MythosMobEffects.SUNRISE.get()) && !isShifting) entity.removeEffect(MythosMobEffects.SUNRISE.get());
+            if (entity.hasEffect(MythosMobEffects.SUNSET.get()) && isShifting)
+                entity.removeEffect(MythosMobEffects.SUNSET.get());
+            if (entity.hasEffect(MythosMobEffects.SUNRISE.get()) && !isShifting)
+                entity.removeEffect(MythosMobEffects.SUNRISE.get());
 
             entity.addEffect(new MobEffectInstance(domainEffect, 40, 0, false, false, true));
 
@@ -302,8 +312,7 @@ public class HaliSkill extends Skill {
 
                     if (!isShifting && isMoving) {
                         applyDrain(entity, target, 0.15, true);
-                    }
-                    else if (isShifting && !isMoving) {
+                    } else if (isShifting && !isMoving) {
                         applyDrain(entity, target, 0.15, false);
                     }
                 }
