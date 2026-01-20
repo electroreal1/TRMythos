@@ -13,6 +13,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Mod.EventBusSubscriber
@@ -48,13 +49,12 @@ public class SpaceTpHandler {
         }
 
         var storage = SkillAPI.getSkillsFrom(player);
-        if (storage == null) return;
 
         Optional<ManasSkillInstance> spatialDom =
-                storage.getSkill(SkillAPI.getSkillRegistry().getValue(SPATIAL_DOMINATION));
+                storage.getSkill(Objects.requireNonNull(SkillAPI.getSkillRegistry().getValue(SPATIAL_DOMINATION)));
 
         Optional<ManasSkillInstance> spatialMotion =
-                storage.getSkill(SkillAPI.getSkillRegistry().getValue(SPATIAL_MOTION));
+                storage.getSkill(Objects.requireNonNull(SkillAPI.getSkillRegistry().getValue(SPATIAL_MOTION)));
 
         if (spatialDom.isEmpty() || spatialMotion.isEmpty()) {
             deny(player, event, "Your spatial authority is insufficient.");
