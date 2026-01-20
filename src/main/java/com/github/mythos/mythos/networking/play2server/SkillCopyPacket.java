@@ -61,12 +61,12 @@ public class SkillCopyPacket {
 
             if (authorStorage != null && obj instanceof ManasSkill skillToLearn) {
                 if (authorStorage.learnSkill(skillToLearn)) {
-                    player.displayClientMessage(Component.literal("§d[Author] §fRecord Replicated: ")
+                    player.displayClientMessage(Component.literal("§d[Orunmila] §fRecord Replicated: ")
                             .append(Objects.requireNonNull(skillToLearn.getName()).copy().withStyle(ChatFormatting.AQUA)), true);
 
                     player.level.playSound(null, player.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.5F, 1.5F);
                 } else {
-                    player.displayClientMessage(Component.literal("§c[Author] §fRecord already present in library."), true);
+                    player.displayClientMessage(Component.literal("§c[Orunmila] §fRecord already present in library."), true);
                 }
             }
         });

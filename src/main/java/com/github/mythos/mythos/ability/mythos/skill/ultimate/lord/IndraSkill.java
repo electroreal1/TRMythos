@@ -204,42 +204,23 @@ public class IndraSkill extends Skill implements Transformation {
     public int nextMode(LivingEntity entity, TensuraSkillInstance instance, boolean reverse) {
         int var10000;
         if (reverse) {
-            switch (instance.getMode()) {
-                case 1:
-                    var10000 = this.isMastered(instance, entity) ? 4 : 3;
-                    break;
-                case 2:
-                    var10000 = 1;
-                    break;
-                case 3:
-                    var10000 = 2;
-                    break;
-                case 4:
-                    var10000 = 3;
-                    break;
-
-                default:
-                    var10000 = 0;
-            }
+            var10000 = switch (instance.getMode()) {
+                case 1 -> this.isMastered(instance, entity) ? 4 : 3;
+                case 2 -> 1;
+                case 3 -> 2;
+                case 4 -> 3;
+                default -> 0;
+            };
 
             return var10000;
         } else {
-            switch (instance.getMode()) {
-                case 1:
-                    var10000 = 2;
-                    break;
-                case 2:
-                    var10000 = 3;
-                    break;
-                case 3:
-                    var10000 = 4;
-                    break;
-                case 4:
-                    var10000 = this.isMastered(instance, entity) ? 4 : 1;
-                    break;
-                default:
-                    var10000 = 1;
-            }
+            var10000 = switch (instance.getMode()) {
+                case 1 -> 2;
+                case 2 -> 3;
+                case 3 -> 4;
+                case 4 -> this.isMastered(instance, entity) ? 4 : 1;
+                default -> 1;
+            };
 
             return var10000;
         }

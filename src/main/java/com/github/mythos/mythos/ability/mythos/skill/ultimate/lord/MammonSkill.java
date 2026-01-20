@@ -144,6 +144,8 @@ public class MammonSkill extends Skill implements ISpatialStorage {
         return var10000;
     }
 
+
+
     public void onTick(Player player, ManasSkillInstance instance, CompoundTag tag) {
         SkillStorage storage = SkillAPI.getSkillsFrom(player);
 

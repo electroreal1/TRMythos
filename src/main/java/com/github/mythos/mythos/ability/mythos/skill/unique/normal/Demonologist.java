@@ -1,7 +1,6 @@
 package com.github.mythos.mythos.ability.mythos.skill.unique.normal;
 
 import com.github.manasmods.manascore.api.attribute.AttributeModifierHelper;
-import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
@@ -10,7 +9,6 @@ import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
-import com.github.manasmods.tensura.ability.skill.unique.WrathSkill;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
@@ -160,20 +158,18 @@ public class Demonologist extends Skill {
 
                             ((ServerPlayer)player).teleportTo((ServerLevel)level, target.position().x, target.position().y, target.position().z, target.getYRot(), target.getXRot());
                             player.hurtMarked = true;
-                            level.playSound((Player)null, target.getX(), target.getY(), target.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundSource.PLAYERS, 1.0F, 1.0F);
+                            level.playSound(null, target.getX(), target.getY(), target.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundSource.PLAYERS, 1.0F, 1.0F);
                             TensuraParticleHelper.addServerParticlesAroundSelf(target, ParticleTypes.SQUID_INK, 2.0, 20);
                             this.copyStatsAndSkills(target, player);
                             CloneEntity.copyEffects(target, player);
-                            if (target instanceof CloneEntity) {
-                                CloneEntity clone = (CloneEntity)target;
+                            if (target instanceof CloneEntity clone) {
                                 if (clone.isOwnedBy(player)) {
                                     clone.copyEquipmentsOntoOwner(player, false);
-                                    clone.resetOwner((UUID)null);
+                                    clone.resetOwner(null);
                                 }
                             }
 
-                            if (target instanceof Player) {
-                                Player targetPlayer = (Player)target;
+                            if (target instanceof Player targetPlayer) {
                                 TensuraPlayerCapability.getFrom(targetPlayer).ifPresent((targetCap) -> {
                                     targetCap.setSpiritualForm(true);
                                     targetCap.applyBaseAttributeModifiers(targetPlayer);
@@ -181,10 +177,8 @@ public class Demonologist extends Skill {
                                     targetPlayer.getAbilities().flying = true;
                                     targetPlayer.onUpdateAbilities();
                                     SkillStorage storage = SkillAPI.getSkillsFrom(targetPlayer);
-                                    Iterator var3 = List.copyOf(storage.getLearnedSkills()).iterator();
 
-                                    while(var3.hasNext()) {
-                                        ManasSkillInstance temp = (ManasSkillInstance)var3.next();
+                                    for (ManasSkillInstance temp : List.copyOf(storage.getLearnedSkills())) {
                                         if (temp.isTemporarySkill()) {
                                             if (temp.getTag() != null) {
                                                 temp.getTag().remove("SpatialStorage");
@@ -214,9 +208,9 @@ public class Demonologist extends Skill {
                             }
                         } else {
                             double EP = TensuraEPCapability.getEP(owner);
-                            EntityType<CloneEntity> type = (EntityType) TensuraEntityTypes.CLONE_DEFAULT.get();
+                            EntityType<CloneEntity> type = TensuraEntityTypes.CLONE_DEFAULT.get();
                             CloneEntity clonex = new CloneEntity(type, level);
-                            clonex.setLife((Integer) TensuraConfig.INSTANCE.skillsConfig.bodyDespawnTick.get() * 20);
+                            clonex.setLife(TensuraConfig.INSTANCE.skillsConfig.bodyDespawnTick.get() * 20);
                             clonex.tame(player);
                             clonex.setSkill(this);
                             clonex.setImmobile(true);
@@ -258,7 +252,7 @@ public class Demonologist extends Skill {
                             }
 
                             cap.applyBaseAttributeModifiers(player);
-                            level.playSound((Player)null, owner.getX(), owner.getY(), owner.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
+                            level.playSound(null, owner.getX(), owner.getY(), owner.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
                             SkillStorage storage = SkillAPI.getSkillsFrom(player);
                             Iterator var23 = List.copyOf(storage.getLearnedSkills()).iterator();
 
@@ -286,7 +280,7 @@ public class Demonologist extends Skill {
     @Override
     public boolean onHeld(ManasSkillInstance instance, LivingEntity owner, int heldTicks) {
         if (instance.getMode() == 2) {
-            if (!(owner instanceof Player player)) return false;
+            if (!(owner instanceof Player)) return false;
             Level level = owner.level;
             if (!(level instanceof ServerLevel server)) return false;
 
@@ -376,8 +370,7 @@ public class Demonologist extends Skill {
         } else if (player.isCreative()) {
             return true;
         } else {
-            if (target instanceof CloneEntity) {
-                CloneEntity clone = (CloneEntity)target;
+            if (target instanceof CloneEntity clone) {
                 if (clone.getSkill() != this) {
                     return false;
                 }
@@ -387,23 +380,22 @@ public class Demonologist extends Skill {
                 }
             }
 
-            if (SkillUtils.isSkillToggled(target, (ManasSkill) ResistanceSkills.SPIRITUAL_ATTACK_NULLIFICATION.get())) {
+            if (SkillUtils.isSkillToggled(target, ResistanceSkills.SPIRITUAL_ATTACK_NULLIFICATION.get())) {
                 return false;
             } else {
                 double amplifier = 1.0;
-                if (SkillUtils.isSkillToggled(target, (ManasSkill)ResistanceSkills.SPIRITUAL_ATTACK_RESISTANCE.get())) {
+                if (SkillUtils.isSkillToggled(target, ResistanceSkills.SPIRITUAL_ATTACK_RESISTANCE.get())) {
                     amplifier = 0.5;
                 }
 
-                if (target instanceof Player) {
-                    Player targetPlayer = (Player)target;
+                if (target instanceof Player targetPlayer) {
                     if (!targetPlayer.isCreative() && !target.isSpectator()) {
                         int requirement = 0;
                         if ((double)target.getHealth() < (double)(target.getMaxHealth() * 0.1F) * amplifier) {
                             ++requirement;
                         }
 
-                        if (TensuraEPCapability.getSpiritualHealth(target) < target.getAttributeValue((Attribute) TensuraAttributeRegistry.MAX_SPIRITUAL_HEALTH.get()) * 0.10000000149011612 * amplifier) {
+                        if (TensuraEPCapability.getSpiritualHealth(target) < target.getAttributeValue(TensuraAttributeRegistry.MAX_SPIRITUAL_HEALTH.get()) * 0.10000000149011612 * amplifier) {
                             ++requirement;
                         }
 
@@ -417,7 +409,7 @@ public class Demonologist extends Skill {
 
                 if ((double)target.getHealth() < (double)target.getMaxHealth() * 0.1 * amplifier) {
                     return true;
-                } else if (TensuraEPCapability.getSpiritualHealth(target) < target.getAttributeValue((Attribute)TensuraAttributeRegistry.MAX_SPIRITUAL_HEALTH.get()) * 0.10000000149011612 * amplifier) {
+                } else if (TensuraEPCapability.getSpiritualHealth(target) < target.getAttributeValue(TensuraAttributeRegistry.MAX_SPIRITUAL_HEALTH.get()) * 0.10000000149011612 * amplifier) {
                     return true;
                 } else {
                     return TensuraEPCapability.getEP(target) < TensuraEPCapability.getEP(player) * 0.25 * amplifier;
@@ -429,9 +421,8 @@ public class Demonologist extends Skill {
     private boolean canCopySkill(ManasSkillInstance instance, LivingEntity target, boolean clone) {
         if (clone) {
             return instance.isTemporarySkill();
-        } else if (target instanceof Player) {
-            Player player = (Player)target;
-            return instance.isTemporarySkill() ? true : TensuraPlayerCapability.getIntrinsicList(player).contains(SkillUtils.getSkillId(instance.getSkill()));
+        } else if (target instanceof Player player) {
+            return instance.isTemporarySkill() || TensuraPlayerCapability.getIntrinsicList(player).contains(SkillUtils.getSkillId(instance.getSkill()));
         } else {
             return true;
         }
@@ -468,7 +459,7 @@ public class Demonologist extends Skill {
             }
 
             if (SkillUtils.learnSkill(owner, copy)) {
-                owner.displayClientMessage(Component.translatable("tensura.skill.temporary.success_drain", new Object[]{copy.getSkill().getName()}).setStyle(Style.EMPTY.withColor(ChatFormatting.GREEN)), false);
+                owner.displayClientMessage(Component.translatable("tensura.skill.temporary.success_drain", copy.getSkill().getName()).setStyle(Style.EMPTY.withColor(ChatFormatting.GREEN)), false);
             }
         }
     }
@@ -489,23 +480,23 @@ public class Demonologist extends Skill {
                 }
             }
 
-            if (((Attribute)map.getKey()).equals(Attributes.MOVEMENT_SPEED) && !(target instanceof Player)) {
+            if (map.getKey().equals(Attributes.MOVEMENT_SPEED) && !(target instanceof Player)) {
                 value = value / 0.23 * 0.1;
-            } else if (((Attribute)map.getKey()).equals(Attributes.ATTACK_DAMAGE) && !this.isOwnClone(owner, target)) {
-                value = Math.min(value, (Double)TensuraConfig.INSTANCE.racesConfig.maxAttackPossession.get());
-            } else if (((Attribute)map.getKey()).equals(Attributes.MAX_HEALTH) && !this.isOwnClone(owner, target)) {
-                value = Math.min(value, (Double)TensuraConfig.INSTANCE.racesConfig.maxHeathPossession.get());
+            } else if (map.getKey().equals(Attributes.ATTACK_DAMAGE) && !this.isOwnClone(owner, target)) {
+                value = Math.min(value, TensuraConfig.INSTANCE.racesConfig.maxAttackPossession.get());
+            } else if (map.getKey().equals(Attributes.MAX_HEALTH) && !this.isOwnClone(owner, target)) {
+                value = Math.min(value, TensuraConfig.INSTANCE.racesConfig.maxHeathPossession.get());
             }
         }
 
         AttributeInstance jumpStrength = target.getAttribute(Attributes.JUMP_STRENGTH);
         double jump;
         if (jumpStrength == null) {
-            AttributeInstance jumpPower = target.getAttribute((Attribute) ManasCoreAttributes.JUMP_POWER.get());
+            AttributeInstance jumpPower = target.getAttribute(ManasCoreAttributes.JUMP_POWER.get());
             if (jumpPower == null) {
                 jump = 0.42;
             } else {
-                jump = target.getAttributeBaseValue((Attribute)ManasCoreAttributes.JUMP_POWER.get());
+                jump = target.getAttributeBaseValue(ManasCoreAttributes.JUMP_POWER.get());
                 AttributeModifier raceStat = jumpPower.getModifier(TensuraAttributeModifierIds.RACE_JUMP_HEIGHT_MODIFIER_ID);
                 if (raceStat != null) {
                     jump += raceStat.getAmount();
@@ -515,7 +506,7 @@ public class Demonologist extends Skill {
             jump = Math.max(target.getAttributeBaseValue(Attributes.JUMP_STRENGTH) / 0.7 * 0.42, 0.42);
         }
 
-        AttributeModifierHelper.setModifier(owner, (Attribute)ManasCoreAttributes.JUMP_POWER.get(), new AttributeModifier(TensuraAttributeModifierIds.RACE_JUMP_HEIGHT_MODIFIER_ID, "tensura:race_jump_power", jump - owner.getAttributeBaseValue((Attribute)ManasCoreAttributes.JUMP_POWER.get()), AttributeModifier.Operation.ADDITION));
+        AttributeModifierHelper.setModifier(owner, ManasCoreAttributes.JUMP_POWER.get(), new AttributeModifier(TensuraAttributeModifierIds.RACE_JUMP_HEIGHT_MODIFIER_ID, "tensura:race_jump_power", jump - owner.getAttributeBaseValue(ManasCoreAttributes.JUMP_POWER.get()), AttributeModifier.Operation.ADDITION));
     }
 
     public boolean isOwnClone(LivingEntity owner, LivingEntity target) {
