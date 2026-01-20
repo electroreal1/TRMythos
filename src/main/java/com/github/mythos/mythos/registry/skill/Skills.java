@@ -99,6 +99,7 @@ public class Skills {
     public static final RegistryObject<YellowSign> YELLOW_SIGN;
     public static final RegistryObject<AuthorSkill> AUTHOR;
     public static final RegistryObject<CultistSkill> CULTIST;
+    public static final RegistryObject<LunaticSkill> LUNATIC;
     public static final RegistryObject<MegalomaniacSkill> MEGALOMANIAC;
     public static final RegistryObject<WatcherSkill> WATCHER;
     public static final RegistryObject<ControlFreakSkill> CONTROL_FREAK;
@@ -205,6 +206,7 @@ public class Skills {
         WATCHER = registery.register("watcher", () -> new WatcherSkill(Skill.SkillType.UNIQUE));
         CONTROL_FREAK = registery.register("control_freak", () -> new ControlFreakSkill(Skill.SkillType.UNIQUE));
         LOSER = registery.register("loser", () -> new LoserSkill(Skill.SkillType.UNIQUE));
+        LUNATIC = registery.register("lunatic", () -> new LunaticSkill(Skill.SkillType.UNIQUE));
 
         // vassal series
         UNITY = registery.register("unity", () -> new UnitySkill(Skill.SkillType.UNIQUE));
