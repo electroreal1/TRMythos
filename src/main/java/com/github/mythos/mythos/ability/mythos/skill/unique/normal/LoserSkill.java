@@ -26,7 +26,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -67,7 +66,6 @@ public class LoserSkill extends Skill {
 
     @Override
     public void onTick(ManasSkillInstance instance, LivingEntity entity) {
-        Player player;
         instance.addMasteryPoint(entity);
         if (SkillUtils.hasSkill(entity, UniqueSkills.CHOSEN_ONE.get())) {
             SkillStorage storage = SkillAPI.getSkillsFrom(entity);
@@ -141,10 +139,10 @@ public class LoserSkill extends Skill {
             SkillUtils.learnSkill(entity, UniqueSkills.OBSERVER.get());
         }
 
-        if ((TensuraPlayerCapability.isDemonLordSeed(player) || TensuraPlayerCapability.isHeroEgg(player)) &&
-                instance.isMastered(entity)) {
-            SkillStorage storage = SkillAPI.getSkillsFrom(entity);
-            SkillUtils.learnSkill(entity, Skills.TENACIOUS.get());
+        if (entity instanceof Player player) {
+            if ((TensuraPlayerCapability.isDemonLordSeed(player) || TensuraPlayerCapability.isHeroEgg(player)) && instance.isMastered(entity)) {
+                SkillUtils.learnSkill(entity, Skills.TENACIOUS.get());
+            }
         }
     }
 
