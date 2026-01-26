@@ -25,8 +25,6 @@ public class SpaceTpHandler {
     private static final ResourceLocation SPATIAL_MOTION =
             new ResourceLocation("tensura", "spatial_motion");
 
-    private static final ResourceLocation IN_COMBAT_EFFECT =
-            new ResourceLocation("tensura", "in_combat");
 
     @SubscribeEvent
     public static void onCommand(CommandEvent event) {
@@ -41,12 +39,6 @@ public class SpaceTpHandler {
 
         if (!input.startsWith("tp ") && !input.startsWith("teleport "))
             return;
-
-        MobEffect inCombat = ForgeRegistries.MOB_EFFECTS.getValue(IN_COMBAT_EFFECT);
-        if (inCombat != null && player.hasEffect(inCombat)) {
-            deny(player, event, "Space refuses to bend during combat.");
-            return;
-        }
 
         var storage = SkillAPI.getSkillsFrom(player);
 
