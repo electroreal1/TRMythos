@@ -297,7 +297,7 @@ public class BibliomaniaSkill extends Skill {
             if (heldTicks % 40 == 0 && heldTicks > 0) {
                 CompoundTag tag = instance.getOrCreateTag();
                 float currentP = tag.getFloat("recordPoints");
-                float updatedP = Math.min(currentP + 100.0F, 1000.0F);
+                float updatedP = Math.min(currentP + 2.0F, 1000.0F);
                 tag.putFloat("recordPoints", updatedP);
                 instance.markDirty();
             }

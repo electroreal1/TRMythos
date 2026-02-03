@@ -42,6 +42,7 @@ import com.github.mythos.mythos.race.GodlingLines.NorsePantheon.UulbornRace;
 import com.github.mythos.mythos.race.HydraLine.*;
 import com.github.mythos.mythos.race.JormungandrRaceLine.*;
 import com.github.mythos.mythos.race.MetalloidRaceLine.*;
+import com.github.mythos.mythos.race.PaperLine.PaperRace;
 import com.github.mythos.mythos.race.RevenantLine.*;
 import com.github.mythos.mythos.race.ValkyrieRaceLine.EnvoyOfValhallaRace;
 import com.github.mythos.mythos.race.ValkyrieRaceLine.MaidenRace;
@@ -165,6 +166,9 @@ public class MythosRaces {
     public static final ResourceLocation CHAOTIC_SPRITE = new ResourceLocation(Mythos.MOD_ID, "chaotic_sprite");
     public static final ResourceLocation VOID_APOSTLE = new ResourceLocation(Mythos.MOD_ID, "void_apostle");
     public static final ResourceLocation PRIMAL_CHAOS = new ResourceLocation(Mythos.MOD_ID, "primal_chaos");
+
+    // Paper Races
+    public static final ResourceLocation PAPER = new ResourceLocation(Mythos.MOD_ID, "paper");
     /**
      * Make sure that you register the race, otherwise it will not show up correctly in the selection menu
      * @param event
@@ -436,6 +440,10 @@ public class MythosRaces {
             helper.register("primal_chaos", new PrimalChaosRace());
         });
 
+        // Paper Races
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("paper", new PaperRace());
+        });
     }
 
 }
