@@ -3,39 +3,62 @@ package com.github.mythos.mythos.handler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
+import org.jetbrains.annotations.NotNull;
 
 public class GodClassHandler extends SavedData {
-    private static final String DENDRAHH_OBTAINED = "dendrahh_obtained";
+    private static final String DATA_NAME = "mythos_god_data";
+    private boolean dendrahhObtained = false;
+    private boolean khonsuObtained = false;
+    private boolean kthanidObtained = false;
 
-    private static boolean DendrahhObtained = false;
+    public GodClassHandler() {}
 
-    public GodClassHandler() {
+    // Getters
+    public boolean isDendrahhObtained() { return dendrahhObtained; }
+    public boolean isKhonsuObtained() { return khonsuObtained; }
+    public boolean isKthanidObtained() { return kthanidObtained; }
+
+    // Setters
+    public void setDendrahhObtained(boolean value) {
+        this.dendrahhObtained = value;
+        this.setDirty();
     }
 
-
-    public boolean isDendrahhObtained() {
-        return DendrahhObtained;
+    public void setKhonsuObtained(boolean value) {
+        this.khonsuObtained = value;
+        this.setDirty();
     }
 
-    public void setDendrahhObtained() {
-        DendrahhObtained = true;
-        setDirty();
+    public void setKthanidObtained(boolean value) {
+        this.kthanidObtained = value;
+        this.setDirty();
+    }
+
+    public void resetAllOwners() {
+        this.dendrahhObtained = false;
+        this.khonsuObtained = false;
+        this.kthanidObtained = false;
+        this.setDirty();
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag) {
-        tag.putBoolean("dendrahhObtained", DendrahhObtained);
-        return null;
+    public @NotNull CompoundTag save(CompoundTag tag) {
+        tag.putBoolean("dendrahhObtained", dendrahhObtained);
+        tag.putBoolean("khonsuObtained", khonsuObtained);
+        tag.putBoolean("kthanidObtained", kthanidObtained);
+        return tag;
     }
 
     public static GodClassHandler load(CompoundTag tag) {
-        GodClassHandler godClassHandler = new GodClassHandler();
-        godClassHandler.DendrahhObtained = tag.getBoolean("dendrahhObtained");
-        return godClassHandler;
+        GodClassHandler handler = new GodClassHandler();
+        handler.dendrahhObtained = tag.getBoolean("dendrahhObtained");
+        handler.khonsuObtained = tag.getBoolean("khonsuObtained");
+        handler.kthanidObtained = tag.getBoolean("kthanidObtained");
+        return handler;
     }
 
     public static GodClassHandler get(ServerLevel level) {
-        return level.getDataStorage().computeIfAbsent(GodClassHandler::load, GodClassHandler::new, DENDRAHH_OBTAINED);
+        return level.getServer().overworld().getDataStorage()
+                .computeIfAbsent(GodClassHandler::load, GodClassHandler::new, DATA_NAME);
     }
-
 }

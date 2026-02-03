@@ -22,6 +22,7 @@ import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.registry.entity.TensuraEntityTypes;
 import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
 import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
+import com.github.mythos.mythos.handler.GodClassHandler;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.registry.skill.Skills;
 import net.minecraft.ChatFormatting;
@@ -136,6 +137,9 @@ public class Khonsu extends Skill {
             Skill greedSkill = Skills.HALI.get();
             storage.getSkill(greedSkill).ifPresent(storage::forgetSkill);
         }
+        if (!(entity.level instanceof ServerLevel serverLevel)) return;
+        GodClassHandler.get(serverLevel).setKhonsuObtained(true);
+
     }
 
     private void triggerHaliLearningSequence(Player player) {

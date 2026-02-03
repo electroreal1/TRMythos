@@ -1,6 +1,7 @@
 package com.github.mythos.mythos;
 
 import com.github.mythos.mythos.client.screen.OrunScreen;
+import com.github.mythos.mythos.command.MythosResetCommand;
 import com.github.mythos.mythos.config.MythosConfig;
 import com.github.mythos.mythos.handler.*;
 import com.github.mythos.mythos.networking.MythosNetwork;
@@ -14,6 +15,7 @@ import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
@@ -63,6 +65,11 @@ public class Mythos {
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, MythosConfig.SPEC, getConfigFileName("mythos-common"));
         LOGGER.info("Mythos has been loaded!");
+    }
+
+    @SubscribeEvent
+    public static void onCommandsRegister(RegisterCommandsEvent event) {
+        MythosResetCommand.register(event.getDispatcher());
     }
 
 

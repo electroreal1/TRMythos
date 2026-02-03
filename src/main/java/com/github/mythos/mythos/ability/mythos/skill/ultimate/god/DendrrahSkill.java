@@ -98,8 +98,6 @@ public class DendrrahSkill extends Skill {
     public void onLearnSkill(ManasSkillInstance instance, LivingEntity entity, UnlockSkillEvent event) {
         if (!(entity instanceof Player player) || !(entity.level instanceof ServerLevel serverLevel)) return;
 
-        GodClassHandler godClassHandler = GodClassHandler.get(serverLevel);
-
         SkillStorage storage = SkillAPI.getSkillsFrom(player);
         SkillAPI.getSkillRegistry().forEach(skill -> {
             String skillName = Objects.requireNonNull(skill.getName()).getString().toLowerCase();
@@ -111,12 +109,12 @@ public class DendrrahSkill extends Skill {
         Component msg = Component.literal("Violence, suffering, bloodshed... The Apocalypse God has arisen. An indescribable rage fills the hearts of all life!").withStyle(ChatFormatting.RED, ChatFormatting.BOLD);
         serverLevel.players().forEach(p -> p.displayClientMessage(msg, false));
 
-        if (instance.isTemporarySkill()) {
+        if (!instance.isTemporarySkill()) {
             Skill greedSkill = Skills.ARES.get();
             storage.getSkill(greedSkill).ifPresent(storage::forgetSkill);
         }
 
-        godClassHandler.setDendrahhObtained();
+        GodClassHandler.get(serverLevel).setDendrahhObtained(true);
     }
 
     @SubscribeEvent

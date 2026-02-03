@@ -17,6 +17,7 @@ import com.github.manasmods.tensura.registry.attribute.TensuraAttributeRegistry;
 import com.github.manasmods.tensura.registry.skill.UniqueSkills;
 import com.github.manasmods.tensura.util.TensuraAdvancementsHelper;
 import com.github.mythos.mythos.config.MythosSkillsConfig;
+import com.github.mythos.mythos.handler.GodClassHandler;
 import com.github.mythos.mythos.registry.skill.Skills;
 import com.github.mythos.mythos.util.MythosUtils;
 import com.github.mythos.mythos.util.damage.MythosDamageSources;
@@ -125,6 +126,8 @@ public class Kthanid extends Skill {
             storage.getSkill(greedSkill4).ifPresent(storage::forgetSkill);
             storage.getSkill(greedSkill5).ifPresent(storage::forgetSkill);
         }
+
+        GodClassHandler.get(serverLevel).setKthanidObtained(true);
     }
 
     public boolean meetEPRequirement(@NotNull Player player, double newEP) {
