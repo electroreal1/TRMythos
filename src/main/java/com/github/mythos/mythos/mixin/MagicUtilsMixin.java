@@ -62,6 +62,6 @@ public class MagicUtilsMixin {
         }
 
 
-        return 1.0F / original;
+        return original;
     }
 }

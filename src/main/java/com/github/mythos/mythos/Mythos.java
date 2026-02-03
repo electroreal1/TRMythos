@@ -60,6 +60,8 @@ public class Mythos {
         MinecraftForge.EVENT_BUS.register(KhaosHandler.class);
         MinecraftForge.EVENT_BUS.register(AuthorLogicHandler.class);
 
+        MinecraftForge.EVENT_BUS.register(this);
+
         // 3. Safe Client Loading via Proxy
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientOnlyRegistrar::registerClientOnlyEvents);
 
@@ -69,6 +71,7 @@ public class Mythos {
 
     @SubscribeEvent
     public void onCommandsRegister(RegisterCommandsEvent event) {
+        LOGGER.info("Mythos: Attempting to register commands...");
         MythosResetCommand.register(event.getDispatcher());
         LOGGER.info("Mythos Commands Registered");
     }
