@@ -68,8 +68,9 @@ public class Mythos {
     }
 
     @SubscribeEvent
-    public static void onCommandsRegister(RegisterCommandsEvent event) {
+    public void onCommandsRegister(RegisterCommandsEvent event) {
         MythosResetCommand.register(event.getDispatcher());
+        LOGGER.info("Mythos Commands Registered");
     }
 
 

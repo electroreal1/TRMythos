@@ -118,6 +118,7 @@ public class Skills {
     public static final RegistryObject<AwakenedDao> AWAKENED_DAO;
     public static final RegistryObject<TrueDao> TRUE_DAO;
     public static final RegistryObject<PerseveranceSkill> PERSEVERANCE;
+    public static final RegistryObject<ArroganceSkill> ARROGANCE;
 //    public static final RegistryObject<ShadowSkill> SHADOW;
 
     // extra
@@ -224,6 +225,7 @@ public class Skills {
         TRUE_DAO = registery.register("true_dao", () -> new TrueDao(Skill.SkillType.UNIQUE));
         PERSEVERANCE = registery.register("perseverance", () -> new PerseveranceSkill(Skill.SkillType.UNIQUE));
         SHADOW_OF_THE_TESSERACT = registery.register("shadow_of_the_tesseract", () -> new ShadowOfTheTesseract(Skill.SkillType.UNIQUE));
+        ARROGANCE = registery.register("arrogance", () -> new ArroganceSkill(Skill.SkillType.UNIQUE));
         //SHADOW = registery.register("shadow", () -> new ShadowSkill(Skill.SkillType.UNIQUE));
 
         // extra

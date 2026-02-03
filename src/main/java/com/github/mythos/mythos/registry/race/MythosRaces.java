@@ -42,7 +42,6 @@ import com.github.mythos.mythos.race.GodlingLines.NorsePantheon.UulbornRace;
 import com.github.mythos.mythos.race.HydraLine.*;
 import com.github.mythos.mythos.race.JormungandrRaceLine.*;
 import com.github.mythos.mythos.race.MetalloidRaceLine.*;
-import com.github.mythos.mythos.race.PaperLine.PaperRace;
 import com.github.mythos.mythos.race.RevenantLine.*;
 import com.github.mythos.mythos.race.ValkyrieRaceLine.EnvoyOfValhallaRace;
 import com.github.mythos.mythos.race.ValkyrieRaceLine.MaidenRace;
@@ -439,11 +438,11 @@ public class MythosRaces {
         event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
             helper.register("primal_chaos", new PrimalChaosRace());
         });
-
-        // Paper Races
-        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
-            helper.register("paper", new PaperRace());
-        });
+//
+//        // Paper Races
+//        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+//            helper.register("paper", new Paper());
+//        });
     }
 
 }

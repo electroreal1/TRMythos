@@ -23,9 +23,10 @@ public class MythosSkillsConfig {
     public static ForgeConfigSpec.BooleanValue EnableUltimateSkillObtainment;
     public static ForgeConfigSpec.BooleanValue ApophisEmbodiment;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> racesThatCanCompeteForChildOfThePlane;
-    public static ForgeConfigSpec.ConfigValue<List<? extends  String>> GRAM_EXTRA_DAMAGE_RACES;
+    public static ForgeConfigSpec.ConfigValue<List<? extends String>> GRAM_EXTRA_DAMAGE_RACES;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> SAPLING_ENGRAVE_LIST;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> SAPLING_DISALLOWED_SKILLS;
+    public static ForgeConfigSpec.ConfigValue<List<? extends String>> ARROGANCE_BLACKLIST;
     public static ForgeConfigSpec.DoubleValue waterMultiplier;
     public static ForgeConfigSpec.DoubleValue waterMultiplier2;
 
@@ -41,7 +42,7 @@ public class MythosSkillsConfig {
                 .defineList(
                         "fakerSkillRestrictedItems",
                         Arrays.asList(
-                                "tensura:bronze_coin", "tensura:silver_coin", "tensura:gold_coin",  "tensura:stellar_gold_coin", "tensura:hihiirokane_nugget", "tensura:charybdis_core", "tensura:zane_blood",
+                                "tensura:bronze_coin", "tensura:silver_coin", "tensura:gold_coin", "tensura:stellar_gold_coin", "tensura:hihiirokane_nugget", "tensura:charybdis_core", "tensura:zane_blood",
                                 "tensura:battlewill_manual", "tensura:race_reset_reroll", "tensura:skill_reset_reroll", "tensura:character_reset_reroll",
                                 "tensura:supermassive_slime_spawn_egg", "tensura:shizu_spawn_egg", "tensura:ifrit_spawn_egg", "tensura:orc_lord_spawn_egg", "tensura:orc_disaster_spawn_egg",
                                 "tensura:hinata_sakaguchi_spawn_egg", "tensura_neb:carrion_spawn_egg", "tensura_neb:rimuru_ogre_fight_spawn_egg", "tensura_neb:luminous_valentine_spawn_egg",
@@ -56,7 +57,7 @@ public class MythosSkillsConfig {
                                 "btrultima:envy_shard", "btrultima:glutton_shard", "btrultima:greed_shard", "btrultima:hope_shard", "btrultima:justice_shard",
                                 "btrultima:lust_shard", "btrultima:patience_shard", "btrultima:pride_shard", "btrultima:slot_shard", "btrultima:wisdom_shard",
                                 "btrultima:wrath_shard", "btrultima:beast_essence", "anitensura:tainted_essence", "easy_villagers:villager", "virtuoso:atropos_sword",
-                                "virtuoso:ending_sealed_sword", "virtuoso:ending_unsealed_sword","mahoutsukai:attuned_diamond", "mahoutsukai:attuned_emerald",
+                                "virtuoso:ending_sealed_sword", "virtuoso:ending_unsealed_sword", "mahoutsukai:attuned_diamond", "mahoutsukai:attuned_emerald",
                                 "sophisticatedbackpacks:backpack", "sophisticatedbackpacks:copper_backpack", "sophisticatedbackpacks:diamond_backpack",
                                 "sophisticatedbackpacks:gold_backpack", "sophisticatedbackpacks:iron_backpack", "sophisticatedbackpacks:netherite_backpack",
                                 "minecraft:shulker_box", "minecraft:black_shulker_box", "minecraft:blue_shulker_box", "minecraft:brown_shulker_box", "minecraft:cyan_shulker_box",
@@ -88,7 +89,7 @@ public class MythosSkillsConfig {
                                 "tensura:crushing:2", "tensura:sturdy:3", "tensura:energy_steal:2", "tensura:elemental_boost:4",
                                 "tensura:elemental_resistance:4", "tensura:slotting:5", "tensura:swift:3"
 
-                                ),
+                        ),
                         obj -> obj instanceof String
                 );
         blacklistedEffects = builder
@@ -146,7 +147,7 @@ public class MythosSkillsConfig {
         racesThatCanCompeteForChildOfThePlane = builder
                 .comment("List of races that can compete for Child of the Plane.")
                 .defineList("racesThatCanCompeteForChildOfThePlane",
-                        List.of("trmythos:herald_of_ragnarok", "trmythos:hound_of_hades", "trmythos:jormungandr", "trmythos:king_of_divinity","trmythos:deus_ex_machina","trmythos:hydra"),
+                        List.of("trmythos:herald_of_ragnarok", "trmythos:hound_of_hades", "trmythos:jormungandr", "trmythos:king_of_divinity", "trmythos:deus_ex_machina", "trmythos:hydra"),
                         obj -> obj instanceof String
                 );
         GRAM_EXTRA_DAMAGE_RACES = builder
@@ -171,10 +172,17 @@ public class MythosSkillsConfig {
                 );
         SAPLING_DISALLOWED_SKILLS = builder
                 .comment("List of Unique Skills that cannot be granted by Blessing: Power.")
-                        .defineList("SAPLING_DISALLOWED_SKILLS",
-                                Arrays.asList(
-                                        "virtuoso:handler"
-                                ),
+                .defineList("SAPLING_DISALLOWED_SKILLS",
+                        Arrays.asList(
+                                "virtuoso:handler"
+                        ),
+                        obj -> obj instanceof String
+                );
+        ARROGANCE_BLACKLIST = builder
+                .comment("List of unique skills that cannot be copied by Arrogance.")
+                        .defineList("ARROGANCE_BLACKLIST", Arrays.asList(
+                                "tensura:pride"
+                        ),
                                 obj -> obj instanceof String
                                 );
 
@@ -187,36 +195,46 @@ public class MythosSkillsConfig {
     public static List<? extends String> getFakerSkillRestrictedItems() {
         return fakerSkillRestrictedItems.get();
     }
+
     public static List<? extends String> getFakerSkillReinforceEnchantments() {
         return fakerSkillReinforceEnchantments.get();
     }
+
     public static List<? extends String> blacklistedEffects() {
         return blacklistedEffects.get();
     }
+
     public static List<MobEffect> getPurityImmuneEffects() {
         return purityImmuneEffects.get().stream()
                 .map(id -> Registry.MOB_EFFECT.getOptional(new ResourceLocation((String) id)).orElse(null))
                 .filter(e -> e != null)
                 .collect(Collectors.toList());
     }
+
     public static boolean VampireAncestor() {
         return VampireAncestor.get();
     }
+
     public static boolean DeadApostleAncestor() {
         return DeadApostleAncestor.get();
     }
+
     public static boolean VampireCarnage() {
         return VampireCarnage.get();
     }
+
     public static boolean CarnageBloodDominion() {
         return CarnageBloodDominion.get();
     }
+
     public static boolean endOfEvilReset() {
         return endOfEvilReset.get();
     }
+
     public static boolean ApophisEmbodiment() {
         return ApophisEmbodiment.get();
     }
+
     public static boolean EnableUltimateSkillObtainment() {
         return EnableUltimateSkillObtainment.get();
     }
@@ -224,6 +242,7 @@ public class MythosSkillsConfig {
     public static List<? extends String> getRacesThatCanCompeteForChildOfThePlane() {
         return racesThatCanCompeteForChildOfThePlane.get();
     }
+
     public static List<? extends String> GRAM_EXTRA_DAMAGE_RACES() {
         return GRAM_EXTRA_DAMAGE_RACES.get();
     }
@@ -231,8 +250,12 @@ public class MythosSkillsConfig {
     public static List<? extends String> SAPLING_ENGRAVE_LIST() {
         return SAPLING_ENGRAVE_LIST.get();
     }
+
     public static List<? extends String> SAPLING_DISALLOWED_SKILLS() {
         return SAPLING_DISALLOWED_SKILLS.get();
+    }
+    public static List<? extends String> ARROGANCE_BLACKLIST() {
+        return ARROGANCE_BLACKLIST.get();
     }
 }
 
