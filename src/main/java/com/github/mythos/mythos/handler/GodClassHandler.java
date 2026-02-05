@@ -9,7 +9,7 @@ public class GodClassHandler extends SavedData {
 
     // Should Ultimate Skills be announced once obtained
     private boolean ultimateAnnouncementsEnabled = true;
-    public boolean areAnnouncementsEnabled() {
+    public boolean isAnnouncementsEnabled() {
         return ultimateAnnouncementsEnabled;
     }
     public void setAnnouncementsEnabled(boolean value) {

@@ -17,7 +17,7 @@ public class UltimateSkillTracker {
     public static void onSkillLearned(UnlockSkillEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
 
-        if (!GodClassHandler.get(player.getLevel()).areAnnouncementsEnabled()) return;
+        if (!GodClassHandler.get(player.getLevel()).isAnnouncementsEnabled()) return;
 
         ManasSkillInstance instance = event.getSkillInstance();
         Skill skill = (Skill) instance.getSkill();

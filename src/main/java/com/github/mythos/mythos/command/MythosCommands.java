@@ -2,6 +2,8 @@ package com.github.mythos.mythos.command;
 
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
+import com.github.manasmods.tensura.ability.skill.Skill;
+import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.mythos.mythos.config.MythosSkillsConfig;
 import com.github.mythos.mythos.handler.GodClassHandler;
 import com.github.mythos.mythos.registry.skill.Skills;
@@ -10,6 +12,7 @@ import com.github.mythos.mythos.voiceoftheworld.VoiceOfTheWorld;
 import com.github.mythos.mythos.voiceoftheworld.WorldTrialRegistry;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
+import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.minecraft.commands.CommandSourceStack;
@@ -19,6 +22,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -134,6 +138,21 @@ public class MythosCommands {
                                         })
                                 )
                         )
+                        .then(Commands.literal("reset_all")
+                                .requires(source -> source.hasPermission(4))
+                                .then(Commands.argument("target", EntityArgument.player()).executes(context -> {
+                                    ServerPlayer target = EntityArgument.getPlayer(context, "target");
+                                    CompoundTag tag = target.getPersistentData().getCompound(ServerPlayer.PERSISTED_NBT_TAG);
+
+                                    tag.getAllKeys().stream()
+                                            .filter(key -> key.startsWith("Trial_"))
+                                            .toList()
+                                            .forEach(tag::remove);
+
+                                    TrialManager.clearActiveTrial(target);
+                                    context.getSource().sendSuccess(Component.literal("§a[Mythos] All trial data purged for " + target.getScoreboardName()), true);
+                                    return 1;
+                                })))
                         // Set
                         .then(Commands.literal("set")
                                 .then(Commands.argument("target", EntityArgument.player())
@@ -160,6 +179,19 @@ public class MythosCommands {
                 // Config
                 .then(Commands.literal("config")
                         .requires(source -> source.hasPermission(4))
+                        .then(Commands.literal("status").executes(context -> {
+                            StringBuilder sb = new StringBuilder("§6--- Mythos Config Status ---\n");
+                            sb.append("§7Vampire Ancestor: ").append(MythosSkillsConfig.VampireAncestor.get() ? "§aON" : "§cOFF").append("\n");
+                            sb.append("§7Dead Apostle: ").append(MythosSkillsConfig.DeadApostleAncestor.get() ? "§aON" : "§cOFF").append("\n");
+                            sb.append("§7Ultimate Obtainment: ").append(MythosSkillsConfig.EnableUltimateSkillObtainment.get() ? "§aON" : "§cOFF");
+                            sb.append("§7Ultimate Obtainment: ").append(MythosSkillsConfig.endOfEvilReset.get() ? "§aON" : "§cOFF");
+                            sb.append("§7Ultimate Obtainment: ").append(MythosSkillsConfig.ApophisEmbodiment.get() ? "§aON" : "§cOFF");
+                            sb.append("§7Ultimate Obtainment: ").append(GodClassHandler.get(context.getSource().getLevel()).isAnnouncementsEnabled() ? "§aON" : "§cOFF");
+                            sb.append("§7Ultimate Obtainment: ").append(MythosSkillsConfig.endOfEvilReset.get() ? "§aON" : "§cOFF");
+                            sb.append("§7Ultimate Obtainment: ").append(MythosSkillsConfig.endOfEvilReset.get() ? "§aON" : "§cOFF");
+                            context.getSource().sendSuccess(Component.literal(sb.toString()), false);
+                            return 1;
+                        }))
                         // Vampire Ancestor
                         .then(Commands.literal("vampire_ancestor")
                                 .then(Commands.argument("value", BoolArgumentType.bool()).executes(context -> {
@@ -223,6 +255,101 @@ public class MythosCommands {
                                 }))
                         )
                 )
+
+                .then(Commands.literal("inspect")
+                        .requires(source -> source.hasPermission(4))
+                        .then(Commands.argument("target", EntityArgument.player()).executes(context -> {
+                            ServerPlayer target = EntityArgument.getPlayer(context, "target");
+                            CompoundTag tag = target.getPersistentData().getCompound(ServerPlayer.PERSISTED_NBT_TAG);
+
+                            context.getSource().sendSuccess(Component.literal("§b--- Inspecting " + target.getScoreboardName() + " ---"), false);
+                            context.getSource().sendSuccess(Component.literal("§7Active Trial: §f" + TrialManager.getActiveTrialID(target)), false);
+                            context.getSource().sendSuccess(Component.literal("§7First Login: §f" + tag.getBoolean("Mythos_FirstLoginHandled")), false);
+                            return 1;
+                        }))
+                )
+
+                .then(Commands.literal("ep")
+                        .requires(source -> source.hasPermission(4))
+                        .then(Commands.argument("target", EntityArgument.player())
+                                // Magicules
+                                .then(Commands.literal("magicules")
+                                        .then(Commands.argument("amount", DoubleArgumentType.doubleArg()).executes(context -> {
+                                            ServerPlayer target = EntityArgument.getPlayer(context, "target");
+                                            double amount = DoubleArgumentType.getDouble(context, "amount");
+                                            double current = TensuraPlayerCapability.getBaseMagicule(target);
+                                            TensuraPlayerCapability.setMagicule(target, current + amount);
+                                            context.getSource().sendSuccess(Component.literal("§b[EP] §fAdjusted Magicules for " + target.getScoreboardName() + " by " + amount), true);
+                                            return 1;
+                                        })))
+                                // Aura
+                                .then(Commands.literal("aura")
+                                        .then(Commands.argument("amount", DoubleArgumentType.doubleArg()).executes(context -> {
+                                            ServerPlayer target = EntityArgument.getPlayer(context, "target");
+                                            double amount = DoubleArgumentType.getDouble(context, "amount");
+                                            double current = TensuraPlayerCapability.getBaseAura(target);
+                                            TensuraPlayerCapability.setAura(target, current + amount);
+                                            context.getSource().sendSuccess(Component.literal("§e[EP] §fAdjusted Aura for " + target.getScoreboardName() + " by " + amount), true);
+                                            return 1;
+                                        })))
+                                // EP
+                                .then(Commands.literal("total")
+                                        .then(Commands.argument("amount", DoubleArgumentType.doubleArg()).executes(context -> {
+                                            ServerPlayer target = EntityArgument.getPlayer(context, "target");
+                                            double amount = DoubleArgumentType.getDouble(context, "amount");
+                                            double split = amount / 2.0;
+
+                                            TensuraPlayerCapability.setMagicule(target, TensuraPlayerCapability.getBaseMagicule(target) + split);
+                                            TensuraPlayerCapability.setAura(target, TensuraPlayerCapability.getBaseAura(target) + split);
+
+                                            context.getSource().sendSuccess(Component.literal("§a[EP] §fDistributed " + amount + " EP evenly to " + target.getScoreboardName()), true);
+                                            return 1;
+                                        })))
+                        )
+                )
+
+                .then(Commands.literal("soulscan")
+                        .requires(source -> source.hasPermission(4))
+                        .then(Commands.argument("target", EntityArgument.player()).executes(context -> {
+                            ServerPlayer target = EntityArgument.getPlayer(context, "target");
+
+                            String raceName = Objects.requireNonNull(Objects.requireNonNull(TensuraPlayerCapability.getRace(target)).getRegistryName()).toString();
+                            double mag = TensuraPlayerCapability.getBaseMagicule(target);
+                            double aura = TensuraPlayerCapability.getBaseAura(target);
+                            boolean isSeed = TensuraPlayerCapability.isDemonLordSeed(target);
+                            boolean isEgg = TensuraPlayerCapability.isHeroEgg(target);
+
+                            StringBuilder uniqueSkills = new StringBuilder();
+                            StringBuilder ultimateSkills = new StringBuilder();
+
+                            SkillAPI.getSkillsFrom(target).getLearnedSkills().forEach(instance -> {
+                                Skill skill = (Skill) instance.getSkill();
+                                String displayName = Objects.requireNonNull(skill.getColoredName()).getString();
+
+                                if (skill.getType() == Skill.SkillType.ULTIMATE) {
+                                    ultimateSkills.append("§6[").append(displayName).append("] ");
+                                } else if (skill.getType() == Skill.SkillType.UNIQUE) {
+                                    uniqueSkills.append("§d[").append(displayName).append("] ");
+                                }
+                            });
+
+                            StringBuilder sb = new StringBuilder();
+                            sb.append("§b--- Soul Signature: §f").append(target.getScoreboardName()).append(" §b---\n");
+                            sb.append("§7Race: §d").append(raceName).append("\n");
+                            sb.append("§7Energy: §b").append(String.format("%.0f", mag)).append("M §f/ §e").append(String.format("%.0f", aura)).append("A\n");
+
+                            sb.append("§7Potential: ");
+                            if (isSeed) sb.append("§4[Demon Lord Seed] ");
+                            if (isEgg) sb.append("§6[Hero's Egg] ");
+                            if (!isSeed && !isEgg) sb.append("§8None");
+                            sb.append("\n");
+
+                            sb.append("§7Ultimates: ").append(!ultimateSkills.isEmpty() ? ultimateSkills : "§8None").append("\n");
+                            sb.append("§7Uniques: ").append(!uniqueSkills.isEmpty() ? uniqueSkills : "§8None");
+
+                            context.getSource().sendSuccess(Component.literal(sb.toString()), false);
+                            return 1;
+                        })))
         );
     }
 }
