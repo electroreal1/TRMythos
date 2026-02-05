@@ -5,7 +5,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-
 import java.util.function.Consumer;
 
 public class WorldTrial {
@@ -23,49 +22,57 @@ public class WorldTrial {
         this.onComplete = onComplete;
     }
 
-    public String getId() {
-        return this.id;
-    }
-
-    public String getName() {
-        return this.name;
-    }
+    public String getId() { return this.id; }
+    public String getName() { return this.name; }
 
     public void checkProgress(ServerPlayer player, int current) {
         CompoundTag tag = player.getPersistentData();
+        String activeTrial = TrialManager.getActiveTrialID(player);
 
-        String completionKey = "Trial_Complete_" + this.id;
-        if (tag.getBoolean(completionKey)) return;
+        if (!activeTrial.isEmpty() && !activeTrial.equals(this.id)) return;
 
-        String activeKey = "Trial_Active_" + this.id;
-        if (!tag.contains(activeKey)) {
-            tag.putBoolean(activeKey, true);
-            VoiceOfTheWorld.delayedAnnouncement(player, "Notice.", "Trial: [" + name + "] initiated.");
+        if (tag.getBoolean("Trial_Complete_" + this.id)) return;
+
+        if (activeTrial.isEmpty()) {
+            if (TrialManager.initiateTrial(player, this.id)) {
+                VoiceOfTheWorld.delayedAnnouncement(player, "Notice.", "Hidden Condition met.", "Trial: [" + name + "] initiated.");
+            } else return;
         }
 
         if (current < requirement) {
-            VoiceOfTheWorld.announceToPlayer(player,
-                    "Calamity Entity suppressed. Progress: [" + current + "/" + requirement + "].");
+            if (requirement < 100 || current % (requirement / 100) == 0 || current == 1) {
+                String progressStr = formatRequirement(current) + " / " + formatRequirement(requirement);
+                VoiceOfTheWorld.announceToPlayer(player, "Progress: [" + progressStr + "].");
+                player.playNotifySound(SoundEvents.ZOMBIE_ATTACK_IRON_DOOR, SoundSource.MASTER, 0.5f, 0.5f);
+            }
+        } else {
+            tag.putBoolean("Trial_Complete_" + this.id, true);
 
-            player.playNotifySound(SoundEvents.ZOMBIE_ATTACK_IRON_DOOR, SoundSource.MASTER, 1.0f, 0.5f);
-        } else  {
-            tag.putBoolean(completionKey, true);
+            double mag = TensuraPlayerCapability.getBaseMagicule(player);
+            double aura = TensuraPlayerCapability.getBaseAura(player);
+            TensuraPlayerCapability.setMagicule(player, mag + ((double) epReward / 2));
+            TensuraPlayerCapability.setAura(player, aura + ((double) epReward / 2));
 
-            double Magicules = TensuraPlayerCapability.getBaseMagicule(player);
-            double Aura = TensuraPlayerCapability.getBaseAura(player);
+            VoiceOfTheWorld.screenShake(player, 1.0f, 40);
+            TrialManager.clearActiveTrial(player);
 
-            TensuraPlayerCapability.setMagicule(player, Magicules + ((double) this.epReward / 2));
-            TensuraPlayerCapability.setAura(player, Aura + ((double) this.epReward / 2));
-
-            VoiceOfTheWorld.screenShake(player, 1.0f, 20);
-
-            VoiceOfTheWorld.delayedAnnouncement(player,
-                    "Notice.",
-                    "Trial: [" + name + "] cleared.",
-                    "Confirmed. Existence Points increased by §a" + String.format("%,d", epReward) + " EP§f."
-            );
-
+            VoiceOfTheWorld.delayedAnnouncement(player, "Notice.", "Trial: [" + name + "] cleared.");
             onComplete.accept(player);
         }
+    }
+
+
+     // Formats ticks into human-readable time strings, or raw numbers for kills.
+
+    private String formatRequirement(int value) {
+        if (id.equals("observer") || id.equals("breather") || id.equals("pacifist")) {
+            int seconds = value / 20;
+            if (seconds < 60) return seconds + "s";
+            int minutes = seconds / 60;
+            if (minutes < 60) return minutes + "m " + (seconds % 60) + "s";
+            int hours = minutes / 60;
+            return hours + "h " + (minutes % 60) + "m";
+        }
+        return String.valueOf(value);
     }
 }

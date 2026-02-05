@@ -2,7 +2,6 @@ package com.github.mythos.mythos.voiceoftheworld;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.npc.Villager;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -17,7 +16,9 @@ public class TrialCombatHandler {
             String activeID = TrialManager.getActiveTrialID(player);
 
             if (victim.getMaxHealth() >= (player.getMaxHealth() * 10)) {
-                process(player, "giant_slayer", 1);
+                if (activeID.isEmpty() || activeID.equals("giant_slayer")) {
+                    process(player, "giant_slayer", 1);
+                }
             }
 
             if ("pacifist".equals(activeID)) {

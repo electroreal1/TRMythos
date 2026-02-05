@@ -49,7 +49,7 @@ public class VoiceOfTheWorld {
         if (server == null) return;
 
         for (int i = 0; i < messages.length; i++) {
-            int delay = i * 30;
+            int delay = i * 60;
             String msg = messages[i];
 
             server.tell(new TickTask(server.getTickCount() + delay, () -> {

@@ -3,6 +3,8 @@ package com.github.mythos.mythos.voiceoftheworld;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -28,7 +30,16 @@ public class TrialTickHandler {
 
             if ("observer".equals(activeID)) {
                 if (player.getDeltaMovement().lengthSqr() < 0.0001) {
-                    incrementAndProcess(player, "observer", tag);
+                    int prog = tag.getInt("Trial_Progress_observer") + 1;
+                    tag.putInt("Trial_Progress_observer", prog);
+                    process(player, "observer", prog);
+                } else {
+                    int currentProg = tag.getInt("Trial_Progress_observer");
+                    if (currentProg > 0) {
+                        tag.putInt("Trial_Progress_observer", 0);
+                        VoiceOfTheWorld.delayedAnnouncement(player, "Notice.", "§cMovement detected.", "Meditation interrupted. Progress reset.");
+                        player.playNotifySound(SoundEvents.GENERIC_EXTINGUISH_FIRE, SoundSource.MASTER, 1.0f, 1.0f);
+                    }
                 }
             }
 
