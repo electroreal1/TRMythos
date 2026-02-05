@@ -48,21 +48,29 @@ public class ShaderPacket {
                 } else {
                     mc.gameRenderer.loadEffect(new ResourceLocation(msg.shaderLocation));
 
-                    if (mc.gameRenderer.currentEffect() != null) {
+                    net.minecraft.client.renderer.PostChain effect = mc.gameRenderer.currentEffect();
+                    if (effect != null) {
                         try {
-                            java.lang.reflect.Field passesField = net.minecraft.client.renderer.PostChain.class.getDeclaredField("f_110011_"); // 'passes'
+                            java.lang.reflect.Field passesField;
+                            try {
+                                passesField = net.minecraft.client.renderer.PostChain.class.getDeclaredField("passes");
+                            } catch (NoSuchFieldException e) {
+                                passesField = net.minecraft.client.renderer.PostChain.class.getDeclaredField("f_110011_");
+                            }
+
                             passesField.setAccessible(true);
-                            @SuppressWarnings("unchecked")
-                            java.util.List<net.minecraft.client.renderer.PostPass> passes = (java.util.List<net.minecraft.client.renderer.PostPass>) passesField.get(mc.gameRenderer.currentEffect());
+                            java.util.List<net.minecraft.client.renderer.PostPass> passes =
+                                    (java.util.List<net.minecraft.client.renderer.PostPass>) passesField.get(effect);
 
                             for (net.minecraft.client.renderer.PostPass pass : passes) {
+                                // getEffect() is public and provides the uniform interface
                                 var uniform = pass.getEffect().getUniform("TintRGB");
                                 if (uniform != null) {
                                     uniform.set(msg.r, msg.g, msg.b);
                                 }
                             }
                         } catch (Exception e) {
-                            System.err.println("Mythos Shader Error: Could not access shader passes via reflection.");
+                            e.printStackTrace();
                         }
                     }
                 }
