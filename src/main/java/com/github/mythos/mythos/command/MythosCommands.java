@@ -488,7 +488,7 @@ public class MythosCommands {
                                                     VoiceOfTheWorld.delayedAnnouncement(player, priority, message)
                                             );
 
-                                            context.getSource().sendSuccess(Component.literal("§a[Mythos] Queued global announcement."), true);
+                                            // context.getSource().sendSuccess(Component.literal("§a[Mythos] Queued global announcement."), true);
                                             return 1;
                                         }))))
 
