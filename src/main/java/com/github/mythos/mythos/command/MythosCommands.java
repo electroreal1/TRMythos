@@ -6,6 +6,8 @@ import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.mythos.mythos.config.MythosSkillsConfig;
 import com.github.mythos.mythos.handler.GodClassHandler;
+import com.github.mythos.mythos.networking.MythosNetwork;
+import com.github.mythos.mythos.networking.play2server.ShaderPacket;
 import com.github.mythos.mythos.registry.skill.Skills;
 import com.github.mythos.mythos.voiceoftheworld.TrialManager;
 import com.github.mythos.mythos.voiceoftheworld.VoiceOfTheWorld;
@@ -22,6 +24,7 @@ import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.network.PacketDistributor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -140,73 +143,73 @@ public class MythosCommands {
                                             return 1;
                                         }))))
 
-                        .then(Commands.literal("simulate")
-                                .requires(source -> source.hasPermission(4))
-                                .then(Commands.argument("target", EntityArgument.player())
-                                        .then(Commands.argument("trialId", StringArgumentType.word())
-                                                .executes(context -> {
-                                                    ServerPlayer target = EntityArgument.getPlayer(context, "target");
-                                                    String trialId = StringArgumentType.getString(context, "trialId");
-                                                    WorldTrial trial = WorldTrialRegistry.TRIALS.get(trialId);
-
-                                                    if (trial != null) {
-                                                        trial.checkProgress(target, trial.getRequirement());
-                                                        context.getSource().sendSuccess(Component.literal("§a[Mythos] Simulated completion of " + trialId + " for " + target.getScoreboardName()), true);
-                                                    } else {
-                                                        context.getSource().sendFailure(Component.literal("§cError: Trial not found."));
-                                                    }
-                                                    return 1;
-                                                }))))
-
+                .then(Commands.literal("simulate")
                         .requires(source -> source.hasPermission(4))
-                        // Clear
-                        .then(Commands.literal("clear")
-                                .then(Commands.argument("target", EntityArgument.player())
+                        .then(Commands.argument("target", EntityArgument.player())
+                                .then(Commands.argument("trialId", StringArgumentType.word())
                                         .executes(context -> {
                                             ServerPlayer target = EntityArgument.getPlayer(context, "target");
+                                            String trialId = StringArgumentType.getString(context, "trialId");
+                                            WorldTrial trial = WorldTrialRegistry.TRIALS.get(trialId);
+
+                                            if (trial != null) {
+                                                trial.checkProgress(target, trial.getRequirement());
+                                                context.getSource().sendSuccess(Component.literal("§a[Mythos] Simulated completion of " + trialId + " for " + target.getScoreboardName()), true);
+                                            } else {
+                                                context.getSource().sendFailure(Component.literal("§cError: Trial not found."));
+                                            }
+                                            return 1;
+                                        }))))
+
+                .requires(source -> source.hasPermission(4))
+                // Clear
+                .then(Commands.literal("clear")
+                        .then(Commands.argument("target", EntityArgument.player())
+                                .executes(context -> {
+                                    ServerPlayer target = EntityArgument.getPlayer(context, "target");
+                                    TrialManager.clearActiveTrial(target);
+                                    context.getSource().sendSuccess(Component.literal("§a[Mythos] Cleared active trials for " + target.getScoreboardName()), true);
+                                    return 1;
+                                })
+                        )
+                )
+                .then(Commands.literal("reset_all")
+                        .requires(source -> source.hasPermission(4))
+                        .then(Commands.argument("target", EntityArgument.player()).executes(context -> {
+                            ServerPlayer target = EntityArgument.getPlayer(context, "target");
+                            CompoundTag tag = target.getPersistentData().getCompound(ServerPlayer.PERSISTED_NBT_TAG);
+
+                            tag.getAllKeys().stream()
+                                    .filter(key -> key.startsWith("Trial_"))
+                                    .toList()
+                                    .forEach(tag::remove);
+
+                            TrialManager.clearActiveTrial(target);
+                            context.getSource().sendSuccess(Component.literal("§a[Mythos] All trial data purged for " + target.getScoreboardName()), true);
+                            return 1;
+                        })))
+                // Set
+                .then(Commands.literal("set")
+                        .then(Commands.argument("target", EntityArgument.player())
+                                .then(Commands.argument("trialId", StringArgumentType.word())
+                                        .executes(context -> {
+                                            ServerPlayer target = EntityArgument.getPlayer(context, "target");
+                                            String trialId = StringArgumentType.getString(context, "trialId");
+
+                                            if (!WorldTrialRegistry.TRIALS.containsKey(trialId)) {
+                                                context.getSource().sendFailure(Component.literal("§cError: Trial ID '" + trialId + "' not found in registry."));
+                                                return 0;
+                                            }
+
                                             TrialManager.clearActiveTrial(target);
-                                            context.getSource().sendSuccess(Component.literal("§a[Mythos] Cleared active trials for " + target.getScoreboardName()), true);
+                                            TrialManager.initiateTrial(target, trialId);
+
+                                            context.getSource().sendSuccess(Component.literal("§a[Mythos] Forced trial '" + trialId + "' onto " + target.getScoreboardName()), true);
                                             return 1;
                                         })
                                 )
                         )
-                        .then(Commands.literal("reset_all")
-                                .requires(source -> source.hasPermission(4))
-                                .then(Commands.argument("target", EntityArgument.player()).executes(context -> {
-                                    ServerPlayer target = EntityArgument.getPlayer(context, "target");
-                                    CompoundTag tag = target.getPersistentData().getCompound(ServerPlayer.PERSISTED_NBT_TAG);
-
-                                    tag.getAllKeys().stream()
-                                            .filter(key -> key.startsWith("Trial_"))
-                                            .toList()
-                                            .forEach(tag::remove);
-
-                                    TrialManager.clearActiveTrial(target);
-                                    context.getSource().sendSuccess(Component.literal("§a[Mythos] All trial data purged for " + target.getScoreboardName()), true);
-                                    return 1;
-                                })))
-                        // Set
-                        .then(Commands.literal("set")
-                                .then(Commands.argument("target", EntityArgument.player())
-                                        .then(Commands.argument("trialId", StringArgumentType.word())
-                                                .executes(context -> {
-                                                    ServerPlayer target = EntityArgument.getPlayer(context, "target");
-                                                    String trialId = StringArgumentType.getString(context, "trialId");
-
-                                                    if (!WorldTrialRegistry.TRIALS.containsKey(trialId)) {
-                                                        context.getSource().sendFailure(Component.literal("§cError: Trial ID '" + trialId + "' not found in registry."));
-                                                        return 0;
-                                                    }
-
-                                                    TrialManager.clearActiveTrial(target);
-                                                    TrialManager.initiateTrial(target, trialId);
-
-                                                    context.getSource().sendSuccess(Component.literal("§a[Mythos] Forced trial '" + trialId + "' onto " + target.getScoreboardName()), true);
-                                                    return 1;
-                                                })
-                                        )
-                                )
-                        )
+                )
 
                 // Config
                 .then(Commands.literal("config")
@@ -352,6 +355,8 @@ public class MythosCommands {
                             double aura = TensuraPlayerCapability.getBaseAura(target);
                             boolean isSeed = TensuraPlayerCapability.isDemonLordSeed(target);
                             boolean isEgg = TensuraPlayerCapability.isHeroEgg(target);
+                            boolean isDemon = TensuraPlayerCapability.isTrueDemonLord(target);
+                            boolean isHero = TensuraPlayerCapability.isTrueHero(target);
 
                             StringBuilder uniqueSkills = new StringBuilder();
                             StringBuilder ultimateSkills = new StringBuilder();
@@ -375,7 +380,9 @@ public class MythosCommands {
                             sb.append("§7Potential: ");
                             if (isSeed) sb.append("§4[Demon Lord Seed] ");
                             if (isEgg) sb.append("§6[Hero's Egg] ");
-                            if (!isSeed && !isEgg) sb.append("§8None");
+                            if (isDemon) sb.append("§4[True Demon Lord] ");
+                            if (isHero) sb.append("§6[True Hero] ");
+                            if (!isSeed && !isEgg && !isHero && !isDemon) sb.append("§8None");
                             sb.append("\n");
 
                             sb.append("§7Ultimates: ").append(!ultimateSkills.isEmpty() ? ultimateSkills : "§8None").append("\n");
@@ -423,6 +430,26 @@ public class MythosCommands {
                             context.getSource().sendSuccess(Component.literal(sb.toString()), false);
                             return 1;
                         }))
+
+                .then(Commands.literal("visuals")
+                        .then(Commands.literal("tint")
+                                .then(Commands.argument("r", FloatArgumentType.floatArg(0, 1))
+                                        .then(Commands.argument("g", FloatArgumentType.floatArg(0, 1))
+                                                .then(Commands.argument("b", FloatArgumentType.floatArg(0, 1))
+                                                        .then(Commands.argument("targets", EntityArgument.players())
+                                                                .executes(context -> {
+                                                                    float r = FloatArgumentType.getFloat(context, "r");
+                                                                    float g = FloatArgumentType.getFloat(context, "g");
+                                                                    float b = FloatArgumentType.getFloat(context, "b");
+                                                                    var players = EntityArgument.getPlayers(context, "targets");
+
+                                                                    players.forEach(p -> {
+                                                                        MythosNetwork.INSTANCE.send(PacketDistributor.PLAYER.with(() -> p),
+                                                                                new ShaderPacket("trmythos:shaders/post/colorful_sky.json", r, g, b));
+                                                                    });
+                                                                    return 1;
+                                                                })))))))
+
 
 
         );

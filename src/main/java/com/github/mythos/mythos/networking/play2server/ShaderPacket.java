@@ -11,17 +11,27 @@ import java.util.function.Supplier;
 
 public class ShaderPacket {
     private final String shaderLocation;
+    private final float r, g, b;
 
-    public ShaderPacket(String shaderLocation) {
+    public ShaderPacket(String shaderLocation, float r, float g, float b) {
         this.shaderLocation = shaderLocation;
+        this.r = r;
+        this.g = g;
+        this.b = b;
     }
 
     public ShaderPacket(FriendlyByteBuf buf) {
         this.shaderLocation = buf.readUtf();
+        this.r = buf.readFloat();
+        this.g = buf.readFloat();
+        this.b = buf.readFloat();
     }
 
     public void encode(FriendlyByteBuf buf) {
         buf.writeUtf(this.shaderLocation);
+        buf.writeFloat(this.r);
+        buf.writeFloat(this.g);
+        buf.writeFloat(this.b);
     }
 
     public static ShaderPacket decode(FriendlyByteBuf buf) {
@@ -33,12 +43,27 @@ public class ShaderPacket {
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
                 Minecraft mc = Minecraft.getInstance();
 
-                if (mc.gameRenderer != null && mc.level != null) {
-                    try {
-                        mc.gameRenderer.loadEffect(new ResourceLocation(msg.shaderLocation));
-                    } catch (Exception e) {
-                        System.err.println("Failed to load shader: " + msg.shaderLocation);
-                        mc.gameRenderer.shutdownEffect();
+                if (msg.shaderLocation.equals("none")) {
+                    mc.gameRenderer.shutdownEffect();
+                } else {
+                    mc.gameRenderer.loadEffect(new ResourceLocation(msg.shaderLocation));
+
+                    if (mc.gameRenderer.currentEffect() != null) {
+                        try {
+                            java.lang.reflect.Field passesField = net.minecraft.client.renderer.PostChain.class.getDeclaredField("f_110011_"); // 'passes'
+                            passesField.setAccessible(true);
+                            @SuppressWarnings("unchecked")
+                            java.util.List<net.minecraft.client.renderer.PostPass> passes = (java.util.List<net.minecraft.client.renderer.PostPass>) passesField.get(mc.gameRenderer.currentEffect());
+
+                            for (net.minecraft.client.renderer.PostPass pass : passes) {
+                                var uniform = pass.getEffect().getUniform("TintRGB");
+                                if (uniform != null) {
+                                    uniform.set(msg.r, msg.g, msg.b);
+                                }
+                            }
+                        } catch (Exception e) {
+                            System.err.println("Mythos Shader Error: Could not access shader passes via reflection.");
+                        }
                     }
                 }
             });
