@@ -57,7 +57,7 @@ public class WorldTrial {
             TensuraPlayerCapability.setMagicule(player, Magicules + ((double) this.epReward / 2));
             TensuraPlayerCapability.setAura(player, Aura + ((double) this.epReward / 2));
 
-            VoiceOfTheWorld.screenShake(player, 1.0f);
+            VoiceOfTheWorld.screenShake(player, 1.0f, 20);
 
             VoiceOfTheWorld.delayedAnnouncement(player,
                     "Notice.",
