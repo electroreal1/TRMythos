@@ -9,6 +9,7 @@ import com.github.mythos.mythos.handler.GodClassHandler;
 import com.github.mythos.mythos.registry.skill.Skills;
 import com.github.mythos.mythos.voiceoftheworld.TrialManager;
 import com.github.mythos.mythos.voiceoftheworld.VoiceOfTheWorld;
+import com.github.mythos.mythos.voiceoftheworld.WorldTrial;
 import com.github.mythos.mythos.voiceoftheworld.WorldTrialRegistry;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
@@ -22,6 +23,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -126,6 +129,35 @@ public class MythosCommands {
                             return 1;
                         }))
 
+                        .then(Commands.literal("pause")
+                                .requires(source -> source.hasPermission(4))
+                                .then(Commands.argument("state", BoolArgumentType.bool())
+                                        .executes(context -> {
+                                            boolean state = BoolArgumentType.getBool(context, "state");
+                                            TrialManager.setPaused(state);
+                                            String msg = state ? "§cPAUSED" : "§aRESUMED";
+                                            context.getSource().sendSuccess(Component.literal("§6[Mythos] §fWorld Trials are now " + msg), true);
+                                            return 1;
+                                        }))))
+
+                        .then(Commands.literal("simulate")
+                                .requires(source -> source.hasPermission(4))
+                                .then(Commands.argument("target", EntityArgument.player())
+                                        .then(Commands.argument("trialId", StringArgumentType.word())
+                                                .executes(context -> {
+                                                    ServerPlayer target = EntityArgument.getPlayer(context, "target");
+                                                    String trialId = StringArgumentType.getString(context, "trialId");
+                                                    WorldTrial trial = WorldTrialRegistry.TRIALS.get(trialId);
+
+                                                    if (trial != null) {
+                                                        trial.checkProgress(target, trial.getRequirement());
+                                                        context.getSource().sendSuccess(Component.literal("§a[Mythos] Simulated completion of " + trialId + " for " + target.getScoreboardName()), true);
+                                                    } else {
+                                                        context.getSource().sendFailure(Component.literal("§cError: Trial not found."));
+                                                    }
+                                                    return 1;
+                                                }))))
+
                         .requires(source -> source.hasPermission(4))
                         // Clear
                         .then(Commands.literal("clear")
@@ -175,7 +207,7 @@ public class MythosCommands {
                                         )
                                 )
                         )
-                )
+
                 // Config
                 .then(Commands.literal("config")
                         .requires(source -> source.hasPermission(4))
@@ -255,6 +287,8 @@ public class MythosCommands {
                                 }))
                         )
                 )
+
+                // ADMIN COMMANDS
 
                 .then(Commands.literal("inspect")
                         .requires(source -> source.hasPermission(4))
@@ -350,6 +384,47 @@ public class MythosCommands {
                             context.getSource().sendSuccess(Component.literal(sb.toString()), false);
                             return 1;
                         })))
+
+                .then(Commands.literal("announce")
+                        .requires(source -> source.hasPermission(4))
+                        .then(Commands.argument("priority", StringArgumentType.word())
+                                .suggests((ctx, builder) -> {
+                                    builder.suggest("WORLD").suggest("ACQUISITION").suggest("PROGRESS");
+                                    return builder.buildFuture();
+                                })
+                                .then(Commands.argument("message", StringArgumentType.greedyString())
+                                        .executes(context -> {
+                                            String priorityStr = StringArgumentType.getString(context, "priority");
+                                            String message = StringArgumentType.getString(context, "message");
+                                            VoiceOfTheWorld.Priority priority = VoiceOfTheWorld.Priority.valueOf(priorityStr.toUpperCase());
+
+                                            // Broadcast to all players
+                                            context.getSource().getServer().getPlayerList().getPlayers().forEach(player ->
+                                                    VoiceOfTheWorld.delayedAnnouncement(player, priority, message)
+                                            );
+
+                                            context.getSource().sendSuccess(Component.literal("§a[Mythos] Queued global announcement."), true);
+                                            return 1;
+                                        }))))
+
+                .then(Commands.literal("dimension_stats")
+                        .requires(source -> source.hasPermission(2))
+                        .executes(context -> {
+                            var players = context.getSource().getServer().getPlayerList().getPlayers();
+                            Map<String, Integer> counts = new HashMap<>();
+
+                            for (ServerPlayer p : players) {
+                                String dim = p.level.dimension().location().toString();
+                                counts.put(dim, counts.getOrDefault(dim, 0) + 1);
+                            }
+
+                            StringBuilder sb = new StringBuilder("§b--- Dimension Population ---\n");
+                            counts.forEach((dim, count) -> sb.append("§7").append(dim).append(": §f").append(count).append("\n"));
+                            context.getSource().sendSuccess(Component.literal(sb.toString()), false);
+                            return 1;
+                        }))
+
+
         );
     }
 }

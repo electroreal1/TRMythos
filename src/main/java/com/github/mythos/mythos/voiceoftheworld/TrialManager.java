@@ -9,9 +9,13 @@ import java.util.Map;
 public class TrialManager {
     private static final Map<String, WorldTrial> REGISTERED_TRIALS = new HashMap<>();
     private static final String ACTIVE_TRIAL_KEY = "Mythos_ActiveTrialID";
+    private static boolean trialsPaused = false;
 
-    public static void registerTrial(WorldTrial trial) {
-        REGISTERED_TRIALS.put(trial.getId(), trial);
+    public static boolean isPaused() {
+        return trialsPaused;
+    }
+    public static void setPaused(boolean state) {
+        trialsPaused = state;
     }
 
     public static boolean hasActiveTrial(ServerPlayer player) {

@@ -15,6 +15,7 @@ public class TrialTickHandler {
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (event.side.isServer() && event.phase == TickEvent.Phase.END) {
+            if (TrialManager.isPaused()) return;
             ServerPlayer player = (ServerPlayer) event.player;
             String activeID = TrialManager.getActiveTrialID(player);
             CompoundTag tag = player.getPersistentData();
