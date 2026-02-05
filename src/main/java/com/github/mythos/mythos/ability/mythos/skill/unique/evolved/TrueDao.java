@@ -2,6 +2,7 @@ package com.github.mythos.mythos.ability.mythos.skill.unique.evolved;
 
 import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
+import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
 import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.skill.Skill;
@@ -11,6 +12,7 @@ import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.registry.attribute.TensuraAttributeRegistry;
 import com.github.manasmods.tensura.registry.items.TensuraMobDropItems;
 import com.github.mythos.mythos.registry.skill.Skills;
+import com.github.mythos.mythos.voiceoftheworld.VoiceOfTheWorld;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -41,6 +43,14 @@ public class TrueDao extends Skill {
             return false; // not enough EP
         }
         return SkillUtils.isSkillMastered(player, (ManasSkill) Skills.AWAKENED_DAO.get());
+    }
+
+    @Override
+    public void onLearnSkill(ManasSkillInstance instance, LivingEntity living, UnlockSkillEvent event) {
+        if (living instanceof Player player && !instance.isTemporarySkill()) {
+            VoiceOfTheWorld.announceToPlayer(player,
+                    "Confirmed. Skill [Awakened Dao] has successfully evolved into the Skill [True Dao].");
+        }
     }
 
     @Override

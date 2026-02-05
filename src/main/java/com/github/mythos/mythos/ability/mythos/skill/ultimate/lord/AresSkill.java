@@ -9,6 +9,7 @@ import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.registry.skill.UniqueSkills;
 import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
+import com.github.mythos.mythos.voiceoftheworld.VoiceOfTheWorld;
 import com.mojang.math.Vector3f;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.server.level.ServerLevel;
@@ -51,6 +52,9 @@ public class AresSkill extends Skill {
             SkillStorage storage = SkillAPI.getSkillsFrom(player);
             Skill greedSkill = UniqueSkills.DIVINE_BERSERKER.get();
             storage.getSkill(greedSkill).ifPresent(storage::forgetSkill);
+
+            VoiceOfTheWorld.announceToPlayer(player,
+                    "Confirmed. Skill [Divine Berserker] has successfully evolved into the Skill [Ares, Lord of War].");
         }
     }
 

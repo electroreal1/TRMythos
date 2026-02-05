@@ -10,6 +10,7 @@ import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.registry.skill.UniqueSkills;
+import com.github.mythos.mythos.voiceoftheworld.VoiceOfTheWorld;
 import io.github.Memoires.trmysticism.registry.effects.MysticismMobEffects;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
@@ -50,6 +51,9 @@ public class MercurySkill extends Skill {
             Skill greedSkill1 = UniqueSkills.USURPER.get();
             storage.getSkill(greedSkill).ifPresent(storage::forgetSkill);
             storage.getSkill(greedSkill1).ifPresent(storage::forgetSkill);
+
+            VoiceOfTheWorld.announceToPlayer(player,
+                    "Confirmed. Skill [Traveler] and the Skill [Usurper] have successfully fused and evolved into the Skill [Mercury, Lord of Freedom].");
         }
     }
 

@@ -23,6 +23,7 @@ import com.github.mythos.mythos.entity.projectile.VajraBreathProjectile;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.registry.skill.Skills;
 import com.github.mythos.mythos.util.damage.MythosDamageSources;
+import com.github.mythos.mythos.voiceoftheworld.VoiceOfTheWorld;
 import com.mojang.math.Vector3f;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
@@ -78,6 +79,9 @@ public class IndraSkill extends Skill implements Transformation {
             SkillStorage storage = SkillAPI.getSkillsFrom(player);
             Skill greedSkill = Skills.HEAVENS_WRATH.get();
             storage.getSkill(greedSkill).ifPresent(storage::forgetSkill);
+
+            VoiceOfTheWorld.announceToPlayer(player,
+                    "Confirmed. Skill [Heaven's Wrath] has successfully evolved into the Skill [Indra, Lord of Thunderstorm].");
         }
     }
 

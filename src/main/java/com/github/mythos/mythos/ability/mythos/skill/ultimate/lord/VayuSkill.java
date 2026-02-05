@@ -9,6 +9,7 @@ import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
 import com.github.mythos.mythos.registry.skill.Skills;
+import com.github.mythos.mythos.voiceoftheworld.VoiceOfTheWorld;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -41,6 +42,8 @@ public class VayuSkill extends Skill {
             SkillStorage storage = SkillAPI.getSkillsFrom(player);
             Skill greedSkill = Skills.ZEPHYROS.get();
             storage.getSkill(greedSkill).ifPresent(storage::forgetSkill);
+            VoiceOfTheWorld.announceToPlayer(player,
+                    "Confirmed. Skill [Zephyros] has successfully evolved into the Skill [Vayu, Lord of Heavenly Wind].");
         }
     }
 

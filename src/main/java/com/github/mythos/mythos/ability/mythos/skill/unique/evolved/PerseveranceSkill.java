@@ -20,6 +20,7 @@ import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSource;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.registry.skill.Skills;
+import com.github.mythos.mythos.voiceoftheworld.VoiceOfTheWorld;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -52,7 +53,10 @@ import java.util.UUID;
 import java.util.function.Predicate;
 
 public class PerseveranceSkill extends Skill {
-    public PerseveranceSkill(SkillType type) {super(SkillType.UNIQUE);}
+    public PerseveranceSkill(SkillType type) {
+        super(SkillType.UNIQUE);
+    }
+
     public static final UUID WILLPOWER = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
 
     @Override
@@ -60,7 +64,9 @@ public class PerseveranceSkill extends Skill {
         return new ResourceLocation("trmythos", "textures/skill/unique/perseverance.png");
     }
 
-    public int getMaxMastery() {return 5000;}
+    public int getMaxMastery() {
+        return 5000;
+    }
 
     public boolean canBeToggled(ManasSkillInstance instance, LivingEntity living) {
         return true;
@@ -75,10 +81,10 @@ public class PerseveranceSkill extends Skill {
     }
 
     public boolean meetEPRequirement(Player entity, double newEP) {
-        SkillStorage storage = SkillAPI.getSkillsFrom((Entity)entity);
-        ManasSkill PrideSkill = (ManasSkill)SkillAPI.getSkillRegistry().getValue(Skills.TENACIOUS.getId());
-        return ((Boolean)storage.getSkill(PrideSkill)
-                .map(instance -> Boolean.valueOf(instance.isMastered((LivingEntity)entity)))
+        SkillStorage storage = SkillAPI.getSkillsFrom((Entity) entity);
+        ManasSkill PrideSkill = (ManasSkill) SkillAPI.getSkillRegistry().getValue(Skills.TENACIOUS.getId());
+        return ((Boolean) storage.getSkill(PrideSkill)
+                .map(instance -> Boolean.valueOf(instance.isMastered((LivingEntity) entity)))
                 .orElse(Boolean.valueOf(false))).booleanValue();
     }
 
@@ -88,10 +94,16 @@ public class PerseveranceSkill extends Skill {
             Skill previousSkill = (Skill) Skills.PERSEVERANCE.get();
             Objects.requireNonNull(storage);
             storage.forgetSkill(previousSkill);
+
+
+            VoiceOfTheWorld.announceToPlayer(player,
+                    "Confirmed. Skill [Tenacious] has successfully evolved into the Skill [Perseverance].");
         }
     }
 
-    public int modes() {return 2;}
+    public int modes() {
+        return 2;
+    }
 
     public int nextMode(LivingEntity entity, TensuraSkillInstance instance, boolean reverse) {
         if (reverse)
@@ -128,14 +140,14 @@ public class PerseveranceSkill extends Skill {
     }
 
     public void onToggleOff(ManasSkillInstance skillInstance, LivingEntity entity) {
-        AttributeInstance instance = entity.getAttribute((Attribute)ManasCoreAttributes.CRIT_CHANCE.get());
+        AttributeInstance instance = entity.getAttribute((Attribute) ManasCoreAttributes.CRIT_CHANCE.get());
     }
 
     public void onTick(ManasSkillInstance instance, LivingEntity entity) {
         if (instance.isToggled()) {
             entity.addEffect(new MobEffectInstance((MobEffect) MythosMobEffects.EMPOWERMENT_REGENERATION.get(), 1200, 1, false, false, false));
             if (entity instanceof Player) {
-                Player player = (Player)entity;
+                Player player = (Player) entity;
                 empowermentHandler(player);
             }
         }
@@ -151,14 +163,14 @@ public class PerseveranceSkill extends Skill {
             if (armor != null)
                 if (armor.getModifier(WILLPOWER) != null) {
                     armor.removeModifier(WILLPOWER);
-                    entity.level.playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ARMOR_EQUIP_GENERIC, SoundSource.PLAYERS, 1.0F, 1.0F);
+                    entity.level.playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ARMOR_EQUIP_GENERIC, SoundSource.PLAYERS, 1.0F, 1.0F);
                 } else {
                     AttributeModifier armorModifier = new AttributeModifier(WILLPOWER, "Willpower", getArmor(EP), AttributeModifier.Operation.ADDITION);
                     armor.addTransientModifier(armorModifier);
-                    entity.level.playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ARMOR_EQUIP_NETHERITE, SoundSource.PLAYERS, 1.0F, 1.0F);
-                    entity.level.playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.GENERIC_EXPLODE, SoundSource.PLAYERS, 1.0F, 1.0F);
-                    TensuraParticleHelper.addServerParticlesAroundSelf((Entity)entity, (ParticleOptions) TensuraParticles.DARK_RED_LIGHTNING_SPARK.get(), 2.0D);
-                    TensuraParticleHelper.addServerParticlesAroundSelf((Entity)entity, (ParticleOptions)TensuraParticles.DARK_PURPLE_LIGHTNING_SPARK.get(), 2.0D);
+                    entity.level.playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ARMOR_EQUIP_NETHERITE, SoundSource.PLAYERS, 1.0F, 1.0F);
+                    entity.level.playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.GENERIC_EXPLODE, SoundSource.PLAYERS, 1.0F, 1.0F);
+                    TensuraParticleHelper.addServerParticlesAroundSelf((Entity) entity, (ParticleOptions) TensuraParticles.DARK_RED_LIGHTNING_SPARK.get(), 2.0D);
+                    TensuraParticleHelper.addServerParticlesAroundSelf((Entity) entity, (ParticleOptions) TensuraParticles.DARK_PURPLE_LIGHTNING_SPARK.get(), 2.0D);
                     addMasteryPoint(instance, entity);
                     instance.setCoolDown(10);
                 }
@@ -179,7 +191,7 @@ public class PerseveranceSkill extends Skill {
         }
         // Persistent
         if (instance.getMode() == 2) {
-            if (entity.hasEffect((MobEffect)TensuraMobEffects.SEVERANCE_BLADE.get()))
+            if (entity.hasEffect((MobEffect) TensuraMobEffects.SEVERANCE_BLADE.get()))
                 return;
             entity.swing(InteractionHand.MAIN_HAND, true);
             entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
@@ -193,7 +205,7 @@ public class PerseveranceSkill extends Skill {
             return;
         if (event.getSource().getEntity() == entity && DamageSourceHelper.isPhysicalAttack(event.getSource())) {
             LivingEntity t = event.getEntity();
-            int durabilityBreak = (int)Math.max(1.0F, event.getAmount() / 4.0F);
+            int durabilityBreak = (int) Math.max(1.0F, event.getAmount() / 4.0F);
             for (EquipmentSlot slot : EquipmentSlot.values()) {
                 if (!slot.getType().equals(EquipmentSlot.Type.HAND) ||
                         t.getItemBySlot(slot).canPerformAction(ToolActions.SHIELD_BLOCK)) {
@@ -209,7 +221,7 @@ public class PerseveranceSkill extends Skill {
             return;
         Entity entity = e.getSource().getDirectEntity();
         if (entity instanceof LivingEntity) {
-            LivingEntity source = (LivingEntity)entity;
+            LivingEntity source = (LivingEntity) entity;
             source.getItemInHand(InteractionHand.MAIN_HAND).hurtAndBreak(5, source, attacker -> attacker.swing(InteractionHand.MAIN_HAND));
         }
     }

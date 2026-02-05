@@ -2,11 +2,13 @@ package com.github.mythos.mythos.ability.mythos.skill.unique.evolved;
 
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.event.SkillActivationEvent;
+import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.registry.skill.UniqueSkills;
 import com.github.mythos.mythos.config.MythosSkillsConfig;
+import com.github.mythos.mythos.voiceoftheworld.VoiceOfTheWorld;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -68,6 +70,14 @@ public class ArroganceSkill extends Skill {
             return false;
         }
         return SkillUtils.isSkillMastered(player, UniqueSkills.PRIDE.get());
+    }
+
+    @Override
+    public void onLearnSkill(ManasSkillInstance instance, LivingEntity living, UnlockSkillEvent event) {
+        if (living instanceof Player player && !instance.isTemporarySkill()) {
+            VoiceOfTheWorld.announceToPlayer(player,
+                    "Confirmed. Sin Series Skill [Pride] has successfully evolved into Sin Series Skill [Arrogance].");
+        }
     }
 
     public void onPressed(ManasSkillInstance instance, LivingEntity entity) {

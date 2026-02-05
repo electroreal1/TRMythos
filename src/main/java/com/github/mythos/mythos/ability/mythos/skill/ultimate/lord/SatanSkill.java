@@ -12,6 +12,8 @@ import com.github.manasmods.tensura.registry.dimensions.TensuraDimensions;
 import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
 import com.github.manasmods.tensura.registry.skill.UniqueSkills;
 import com.github.manasmods.tensura.world.TensuraGameRules;
+import com.github.mythos.mythos.registry.skill.Skills;
+import com.github.mythos.mythos.voiceoftheworld.VoiceOfTheWorld;
 import com.mojang.math.Vector3f;
 import io.github.Memoires.trmysticism.registry.effects.MysticismMobEffects;
 import net.minecraft.core.BlockPos;
@@ -36,11 +38,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import static com.github.mythos.mythos.config.MythosSkillsConfig.EnableUltimateSkillObtainment;
 
 public class SatanSkill extends Skill {
     public SatanSkill(SkillType type) {
@@ -50,11 +55,24 @@ public class SatanSkill extends Skill {
     private final Map<BlockPos, BlockState> originalBlocks = new HashMap<>();
     private final Map<BlockPos, Integer> restorationTimers = new HashMap<>();
 
+    public boolean meetEPRequirement(@NotNull Player player, double newEP) {
+        if (!EnableUltimateSkillObtainment()) return false;
+        double currentEP = TensuraEPCapability.getCurrentEP(player);
+        if (currentEP < getObtainingEpCost()) {
+            return false;
+        }
+        return SkillUtils.isSkillMastered(player, Skills.DEMONOLOGIST.get());
+    }
+
     @Override
     public void onLearnSkill(ManasSkillInstance instance, LivingEntity entity, UnlockSkillEvent event) {
         if (instance.isTemporarySkill()) return;
 
         SkillUtils.learnSkill(entity, UniqueSkills.GREAT_SAGE.get());
+
+        if (!(entity instanceof Player player)) return;
+        VoiceOfTheWorld.announceToPlayer(player,
+                "Confirmed. Skill [Demonologist] has successfully evolved into the Skill [Satan, Lord of Wickedness].");
     }
 
     @Override

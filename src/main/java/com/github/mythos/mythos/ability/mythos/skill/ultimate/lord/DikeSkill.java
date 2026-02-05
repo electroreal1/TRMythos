@@ -1,6 +1,5 @@
 package com.github.mythos.mythos.ability.mythos.skill.ultimate.lord;
 
-import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
@@ -19,6 +18,7 @@ import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSources;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.registry.skill.Skills;
+import com.github.mythos.mythos.voiceoftheworld.VoiceOfTheWorld;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -63,7 +63,7 @@ public class DikeSkill extends Skill {
         if (currentEP < getObtainingEpCost()) {
             return false;
         }
-        return SkillUtils.isSkillMastered(player, (ManasSkill) Skills.PURITY_SKILL.get()) && TensuraPlayerCapability.isTrueHero(player);
+        return SkillUtils.isSkillMastered(player, Skills.PURITY_SKILL.get()) && TensuraPlayerCapability.isTrueHero(player);
     }
 
     @Override
@@ -72,6 +72,9 @@ public class DikeSkill extends Skill {
             SkillStorage storage = SkillAPI.getSkillsFrom(player);
             Skill greedSkill = Skills.PURITY_SKILL.get();
             storage.getSkill(greedSkill).ifPresent(storage::forgetSkill);
+
+            VoiceOfTheWorld.announceToPlayer(player,
+                    "Confirmed. Skill [Purity] has successfully evolved into the Skill [Dike, Lord of Pure Annihilation].");
         }
     }
 

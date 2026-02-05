@@ -12,6 +12,7 @@
     "MagicUtilsMixin",
     "MixinRobotnicSkill",
     "PossessionSkillMixin",
+    "ResetScrollItemMixin",
     "ResistSkillMixin",
     "SkillHelperMixin",
     "SkillUtilsMixin",

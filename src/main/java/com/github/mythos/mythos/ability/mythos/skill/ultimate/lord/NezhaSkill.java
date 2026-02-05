@@ -12,6 +12,7 @@ import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.registry.skill.Skills;
+import com.github.mythos.mythos.voiceoftheworld.VoiceOfTheWorld;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -55,6 +56,9 @@ public class NezhaSkill extends Skill {
             Skill previousSkill = (Skill) Skills.ETERNAL.get();
             Objects.requireNonNull(storage);
             storage.forgetSkill(previousSkill);
+
+            VoiceOfTheWorld.announceToPlayer(player,
+                    "Confirmed. Skill [Eternal, The Deathless] has successfully evolved into the Skill [Nezha, Lord of Eternity].");
         }
     }
 

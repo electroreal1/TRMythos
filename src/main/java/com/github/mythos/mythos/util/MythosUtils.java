@@ -13,6 +13,7 @@ import com.github.mythos.mythos.ability.mythos.skill.unique.normal.CrimsonTyrant
 import com.github.mythos.mythos.ability.mythos.skill.unique.normal.EltnamSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.normal.UnderworldPrince;
 import com.github.mythos.mythos.registry.skill.Skills;
+import com.github.mythos.mythos.voiceoftheworld.VoiceOfTheWorld;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -49,6 +50,8 @@ public class MythosUtils extends SkillUtils {
             // If player is logging in for the first time
             if (!loginData.getBoolean("firstLogin")) {
                 loginData.putBoolean("firstLogin", true);
+
+                VoiceOfTheWorld.welcomeNewIndividual(player);
 
                 var playerRace = TensuraPlayerCapability.getRace(serverPlayer);
                 if (TensuraPlayerCapability.getRace((LivingEntity)player) == TensuraRaces.WIGHT.get() && (

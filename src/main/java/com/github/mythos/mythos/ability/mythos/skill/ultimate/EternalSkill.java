@@ -12,6 +12,7 @@ import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.registry.skill.UniqueSkills;
 import com.github.mythos.mythos.registry.MythosMobEffects;
+import com.github.mythos.mythos.voiceoftheworld.VoiceOfTheWorld;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -70,7 +71,12 @@ public class EternalSkill extends Skill {
             Skill previousSkill = UniqueSkills.SURVIVOR.get();
             Objects.requireNonNull(storage);
             storage.forgetSkill(previousSkill);
+
+
+            VoiceOfTheWorld.announceToPlayer(player,
+                        "Confirmed. Skill [Survivor] has successfully evolved into the Ultimate Skill [Eternal, The Endless].");
         }
+
     }
 
     public boolean canBeSlotted(ManasSkillInstance instance) {

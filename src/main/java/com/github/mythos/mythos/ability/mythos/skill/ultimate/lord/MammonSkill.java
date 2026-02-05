@@ -25,6 +25,7 @@ import com.github.manasmods.tensura.registry.skill.UniqueSkills;
 import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSources;
 import com.github.mythos.mythos.registry.MythosMobEffects;
+import com.github.mythos.mythos.voiceoftheworld.VoiceOfTheWorld;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -101,6 +102,9 @@ public class MammonSkill extends Skill implements ISpatialStorage {
             SkillStorage storage = SkillAPI.getSkillsFrom(player);
             Skill greedSkill = UniqueSkills.GREED.get();
             storage.getSkill(greedSkill).ifPresent(storage::forgetSkill);
+
+            VoiceOfTheWorld.announceToPlayer(player,
+                    "Confirmed. Skill [Greed] has successfully evolved into the Skill [Mammon, Lord of Greed].");
         }
     }
 

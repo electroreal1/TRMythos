@@ -4,6 +4,7 @@ import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.mythos.mythos.handler.GodClassHandler;
 import com.github.mythos.mythos.registry.skill.Skills;
+import com.github.mythos.mythos.voiceoftheworld.VoiceOfTheWorld;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import net.minecraft.commands.CommandSourceStack;
@@ -15,18 +16,22 @@ import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Optional;
 
+import static com.github.mythos.mythos.voiceoftheworld.WorldTrialRegistry.getActiveTrials;
+
 public class MythosCommands {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("mythos")
 
-                // GODCLASS
+                // Godclass
                 .then(Commands.literal("godclass")
                         .requires(source -> source.hasPermission(4))
                         .then(Commands.literal("reset")
                                 .then(Commands.literal("all").executes(context -> {
                                     GodClassHandler.get(context.getSource().getLevel()).resetAllOwners();
                                     context.getSource().sendSuccess(Component.literal("§c[Mythos] All God statuses have been wiped."), true);
+                                    VoiceOfTheWorld.broadcast(context.getSource().getServer(),
+                                            "Notice. All Divine Authorities have been withdrawn. The seats of the Gods are now vacant.");
                                     return 1;
                                 }))
                                 .then(Commands.literal("dendrahh").executes(context -> {
@@ -54,7 +59,7 @@ public class MythosCommands {
                         }))
                 )
 
-                // BIBLIOMANIA
+                // Bibliomania
                 .then(Commands.literal("bibliomania")
                         .then(Commands.literal("get").executes(context -> {
                             if (!(context.getSource().getEntity() instanceof ServerPlayer player)) {
@@ -98,6 +103,19 @@ public class MythosCommands {
                                 )
                         )
                 )
+
+
+                // Voice of the World
+                .then(Commands.literal("inquire").executes(context -> {
+                    ServerPlayer player = context.getSource().getPlayerOrException();
+
+                    VoiceOfTheWorld.delayedAnnouncement(player,
+                            "Inquiry received.",
+                            "Scanning internal soul progress...",
+                            "Current Trials: " + getActiveTrials(player)
+                    );
+                    return 1;
+                }))
         );
     }
 }

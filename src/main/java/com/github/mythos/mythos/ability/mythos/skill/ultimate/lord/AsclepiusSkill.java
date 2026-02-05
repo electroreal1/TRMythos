@@ -13,6 +13,7 @@ import com.github.manasmods.tensura.registry.skill.CommonSkills;
 import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
 import com.github.manasmods.tensura.registry.skill.UniqueSkills;
 import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
+import com.github.mythos.mythos.voiceoftheworld.VoiceOfTheWorld;
 import io.github.Memoires.trmysticism.registry.effects.MysticismMobEffects;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -64,12 +65,14 @@ public class AsclepiusSkill extends Skill {
             storage.getSkill(greedSkill1).ifPresent(storage::forgetSkill);
             storage.getSkill(greedSkill2).ifPresent(storage::forgetSkill);
             storage.getSkill(greedSkill3).ifPresent(storage::forgetSkill);
+
+            VoiceOfTheWorld.announceToPlayer(player,
+                    "Confirmed. Skill [Healer] has successfully evolved into the Skill [Asclepius, Lord of Medicine].");
         }
     }
 
     @Override
     public void onTick(ManasSkillInstance instance, LivingEntity entity) {
-
         entity.getActiveEffects().forEach(effectInstance -> {
             MobEffect effect = effectInstance.getEffect();
             if (effect.isBeneficial()) return;

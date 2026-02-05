@@ -20,6 +20,7 @@ import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSources;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.registry.skill.Skills;
+import com.github.mythos.mythos.voiceoftheworld.VoiceOfTheWorld;
 import io.github.Memoires.trmysticism.registry.effects.MysticismMobEffects;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -92,6 +93,8 @@ public class RavanaSkill extends Skill {
             SkillStorage storage = SkillAPI.getSkillsFrom(player);
             Skill greedSkill = Skills.CARNAGE.get();
             storage.getSkill(greedSkill).ifPresent(storage::forgetSkill);
+            VoiceOfTheWorld.announceToPlayer(player,
+                    "Confirmed. Skill [Carnage] has successfully evolved into the Skill [Ravana, Lord of Carnage].");
         }
     }
 

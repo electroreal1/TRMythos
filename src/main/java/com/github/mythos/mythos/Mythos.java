@@ -11,11 +11,14 @@ import com.github.mythos.mythos.registry.MythosRegistery;
 import com.github.mythos.mythos.registry.menu.MythosMenuTypes;
 import com.github.mythos.mythos.registry.race.MythosRaces;
 import com.github.mythos.mythos.shaders.ClientShaderHandler;
+import com.github.mythos.mythos.voiceoftheworld.VoiceOfTheWorld;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
@@ -76,6 +79,15 @@ public class Mythos {
         LOGGER.info("Mythos Commands Registered");
     }
 
+    @SubscribeEvent
+    public void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        if (event.side.isServer() && event.phase == TickEvent.Phase.START) {
+            if (event.player.tickCount % 10 == 0 && event.player instanceof ServerPlayer serverPlayer) {
+                VoiceOfTheWorld.checkAwakeningStatus(serverPlayer); // True Hero and True Demon Lord
+                VoiceOfTheWorld.checkHeroEggOrDemonLordSeed(serverPlayer); // Hero Egg and Demon Lord Seed
+            }
+        }
+    }
 
     public static Logger getLogger() {
         return LOGGER;
@@ -87,7 +99,6 @@ public class Mythos {
     @SubscribeEvent
     public void onCommonSetup(FMLCommonSetupEvent event) {
         LOGGER.info("Common Setup");
-       // FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
         event.enqueueWork(MythosNetwork::register);
         if (this.isFirstLaunch()) {
             this.editTOMLFile();

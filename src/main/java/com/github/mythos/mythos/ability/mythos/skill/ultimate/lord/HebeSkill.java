@@ -12,6 +12,7 @@ import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.registry.skill.Skills;
+import com.github.mythos.mythos.voiceoftheworld.VoiceOfTheWorld;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -50,9 +51,11 @@ public class HebeSkill extends Skill {
     public void onLearnSkill(ManasSkillInstance instance, LivingEntity entity, UnlockSkillEvent event) {
         if (instance.getMastery() >= 0 && !instance.isTemporarySkill() && entity instanceof Player player) {
             SkillStorage storage = SkillAPI.getSkillsFrom(player);
-            Skill previousSkill = (Skill) Skills.IMMORTAL.get();
+            Skill previousSkill = Skills.IMMORTAL.get();
             Objects.requireNonNull(storage);
             storage.forgetSkill(previousSkill);
+            VoiceOfTheWorld.announceToPlayer(player,
+                    "Confirmed. Skill [Immortal, The Deathless] has successfully evolved into the Skill [Hebe, Lord of Undeath].");
         }
     }
 

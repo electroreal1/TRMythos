@@ -15,6 +15,7 @@ import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.mythos.mythos.menu.OrunMenu;
 import com.github.mythos.mythos.registry.skill.Skills;
+import com.github.mythos.mythos.voiceoftheworld.VoiceOfTheWorld;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -79,6 +80,8 @@ public class OrunmilaSkill extends Skill {
         if (entity instanceof Player player) {
             SkillStorage storage = SkillAPI.getSkillsFrom(player);
             storage.forgetSkill(Skills.OMNISCIENT_EYE.get());
+            VoiceOfTheWorld.announceToPlayer(player,
+                    "Confirmed. Skill [Omniscient Eye] has successfully evolved into the Skill [Orunmila, Lord of Records].");
         }
     }
 

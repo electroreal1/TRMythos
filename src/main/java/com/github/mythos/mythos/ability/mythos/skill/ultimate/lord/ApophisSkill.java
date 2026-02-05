@@ -18,6 +18,7 @@ import com.github.manasmods.tensura.race.RaceHelper;
 import com.github.manasmods.tensura.registry.skill.UniqueSkills;
 import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
 import com.github.mythos.mythos.registry.skill.Skills;
+import com.github.mythos.mythos.voiceoftheworld.VoiceOfTheWorld;
 import io.github.Memoires.trmysticism.util.damage.MysticismDamageSources;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
@@ -72,7 +73,6 @@ public class ApophisSkill extends Skill {
         return SkillUtils.isSkillMastered(player, Skills.PROFANITY.get());
     }
 
-
     @Override
     public void onLearnSkill(ManasSkillInstance instance, LivingEntity entity, UnlockSkillEvent event) {
         TensuraEPCapability.getFrom(entity).ifPresent((cap) -> {
@@ -85,8 +85,12 @@ public class ApophisSkill extends Skill {
             Skill previousSkill = Skills.PROFANITY.get();
             Objects.requireNonNull(storage);
             storage.forgetSkill(previousSkill);
+
+            VoiceOfTheWorld.announceToPlayer(player,
+                    "Confirmed. Skill [Profanity] has successfully evolved into the Skill [Apophis, Lord of Sin].");
+            }
         }
-    }
+
 
     public int modes() {
         return 4;

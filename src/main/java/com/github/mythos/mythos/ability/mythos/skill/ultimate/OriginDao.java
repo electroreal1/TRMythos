@@ -14,6 +14,7 @@ import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.registry.attribute.TensuraAttributeRegistry;
 import com.github.manasmods.tensura.registry.items.TensuraMobDropItems;
 import com.github.mythos.mythos.registry.skill.Skills;
+import com.github.mythos.mythos.voiceoftheworld.VoiceOfTheWorld;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
@@ -62,6 +63,8 @@ public class OriginDao extends Skill {
             SkillStorage storage = SkillAPI.getSkillsFrom(player);
             Skill greedSkill = Skills.TRUE_DAO.get();
             storage.getSkill(greedSkill).ifPresent(storage::forgetSkill);
+            VoiceOfTheWorld.announceToPlayer(player,
+                    "Confirmed. Skill [True Dao] has successfully evolved into the Ultimate Skill [Origin Dao].");
         }
     }
 
