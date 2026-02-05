@@ -16,6 +16,7 @@ public class ResetScrollItemMixin {
     @Inject(method = "resetEverything", at = @At("HEAD"), remap = false)
     private static void onResetEverything(ServerPlayer player, CallbackInfo ci) {
         mythos$clearEvolutionFlags(player);
+        mythos$clearLoginFlag(player);
 
         VoiceOfTheWorld.delayedAnnouncement(player,
                 "Notice.",
@@ -39,6 +40,12 @@ public class ResetScrollItemMixin {
         tag.remove("Mythos_AcknowledgedHero");
         tag.remove("Mythos_SeedNotified");
         tag.remove("Mythos_EggNotified");
+    }
+
+    @Unique
+    private static void mythos$clearLoginFlag(ServerPlayer player) {
+        CompoundTag tag = player.getPersistentData();
+        tag.remove("Mythos_FirstLoginHandled");
     }
 
 }

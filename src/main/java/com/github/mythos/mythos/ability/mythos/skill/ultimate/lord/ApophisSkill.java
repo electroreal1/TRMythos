@@ -87,7 +87,7 @@ public class ApophisSkill extends Skill {
             storage.forgetSkill(previousSkill);
 
             VoiceOfTheWorld.announceToPlayer(player,
-                    "Confirmed. Skill [Profanity] has successfully evolved into the Skill [Apophis, Lord of Sin].");
+                    "Confirmed. Skill §5[Profanity] §fhas successfully evolved into the Skill [Apophis, Lord of Sin].");
             }
         }
 
@@ -154,7 +154,7 @@ public class ApophisSkill extends Skill {
                     List<Skill> sinSkill = Arrays.asList(
                             UniqueSkills.WRATH.get(), UniqueSkills.ENVY.get(), UniqueSkills.GREED.get(),
                             UniqueSkills.PRIDE.get(), UniqueSkills.LUST.get(), UniqueSkills.GLUTTONY.get(),
-                            UniqueSkills.SLOTH.get(), Skills.CARNAGE.get());
+                            UniqueSkills.SLOTH.get(), Skills.CRIMSON_TYRANT.get());
 
                     Skill chosenSkill = sinSkill.get(new java.util.Random().nextInt(sinSkill.size()));
 
@@ -165,7 +165,7 @@ public class ApophisSkill extends Skill {
                         instance.setMastery(0);
                     }
 
-                    entity.sendSystemMessage(Component.literal("You have acquired the Sin Series Skill: " + chosenSkill.getName()));
+                    entity.sendSystemMessage(Component.literal("You have acquired the Sin Series Skill: " + chosenSkill.getColoredName()));
 
                     storage.syncAll();
 

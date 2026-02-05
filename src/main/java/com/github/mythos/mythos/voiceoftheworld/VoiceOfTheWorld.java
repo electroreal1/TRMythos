@@ -18,6 +18,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.network.PacketDistributor;
 
 import java.util.Objects;
+import java.util.PriorityQueue;
+import java.util.UUID;
 
 public class VoiceOfTheWorld {
 
@@ -28,6 +30,58 @@ public class VoiceOfTheWorld {
     private static final String EGG_COLOR = "§e";    // Pale Yellow
     private static final String SEED_COLOR = "§c";   // Pale Red
     private static final String HARVEST_COLOR = "§5"; // Dark Purple
+    private static final PriorityQueue<QueuedMessage> MESSAGE_QUEUE = new PriorityQueue<>();
+    private static int ticksUntilNextMessage = 0;
+
+    public enum Priority {
+        WORLD(0),      // Highest
+        ACQUISITION(1),
+        PROGRESS(2);    // Lowest
+
+        final int level;
+        Priority(int level) { this.level = level; }
+    }
+
+    private record QueuedMessage(UUID playerUUID, String message, Priority priority, long timestamp)
+            implements Comparable<QueuedMessage> {
+        @Override
+        public int compareTo(QueuedMessage other) {
+            if (this.priority != other.priority) {
+                return Integer.compare(this.priority.level, other.priority.level);
+            }
+            return Long.compare(this.timestamp, other.timestamp);
+        }
+    }
+
+    public static void tickQueue(MinecraftServer server) {
+        if (ticksUntilNextMessage > 0) {
+            ticksUntilNextMessage--;
+            return;
+        }
+
+        if (!MESSAGE_QUEUE.isEmpty()) {
+            QueuedMessage next = MESSAGE_QUEUE.poll();
+            ServerPlayer player = server.getPlayerList().getPlayer(next.playerUUID());
+
+            if (player != null) {
+                announceToPlayer(player, next.message());
+                ticksUntilNextMessage = 60;
+            }
+        }
+    }
+
+    public static void delayedAnnouncement(ServerPlayer player, Priority priority, String... messages) {
+        if (player == null) return;
+        long time = System.currentTimeMillis();
+        for (String msg : messages) {
+            MESSAGE_QUEUE.add(new QueuedMessage(player.getUUID(), msg, priority, time++));
+        }
+    }
+
+    public static void delayedAnnouncement(ServerPlayer player, String... messages) {
+        delayedAnnouncement(player, Priority.PROGRESS, messages);
+    }
+
 
     public static void broadcast(MinecraftServer server, String message) {
         Component text = Component.literal(PREFIX + message);
@@ -41,22 +95,6 @@ public class VoiceOfTheWorld {
         if (player instanceof ServerPlayer serverPlayer) {
             serverPlayer.sendSystemMessage(Component.literal(PREFIX + message));
             serverPlayer.playNotifySound(SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.MASTER, 1.0f, 0.5f);
-        }
-    }
-
-    public static void delayedAnnouncement(ServerPlayer player, String... messages) {
-        MinecraftServer server = player.getServer();
-        if (server == null) return;
-
-        for (int i = 0; i < messages.length; i++) {
-            int delay = i * 60;
-            String msg = messages[i];
-
-            server.tell(new TickTask(server.getTickCount() + delay, () -> {
-                if (player.isAlive()) {
-                    announceToPlayer(player, msg);
-                }
-            }));
         }
     }
 
@@ -90,7 +128,7 @@ public class VoiceOfTheWorld {
     }
 
     private static void triggerSeedAcquisition(ServerPlayer player) {
-        VoiceOfTheWorld.delayedAnnouncement(player,
+        VoiceOfTheWorld.delayedAnnouncement(player, Priority.ACQUISITION,
                 "Confirmed.",
                 "Condition met. Individual: " + player.getName().getString() + " has acquired the " + SEED_COLOR + "[Demon Lord Seed].",
                 "The path to the " + HARVEST_COLOR + "[Harvest Festival] " + "§fis now accessible."
@@ -99,7 +137,7 @@ public class VoiceOfTheWorld {
     }
 
     private static void triggerEggAcquisition(ServerPlayer player) {
-        VoiceOfTheWorld.delayedAnnouncement(player,
+        VoiceOfTheWorld.delayedAnnouncement(player, Priority.ACQUISITION,
                 "Confirmed.",
                 "The " + EGG_COLOR + "[Hero's Egg] " + "§fhas been manifested within the soul.",
                 "Fulfill your duties to hatch the potential of a " + HERO_COLOR + "[True Hero]."
@@ -127,7 +165,7 @@ public class VoiceOfTheWorld {
         VoiceOfTheWorld.broadcast(Objects.requireNonNull(player.getServer()),
                 "Notice. Individual: " + player.getName().getString() + " has begun the " + HARVEST_COLOR + "[Harvest Festival].");
 
-        VoiceOfTheWorld.delayedAnnouncement(player,
+        VoiceOfTheWorld.delayedAnnouncement(player, Priority.WORLD,
                 "Requirement fulfilled. Soul transition initiated.",
                 "Beginning gift distribution to subordinates...",
                 "Successful. Evolution to " + TDL_COLOR + "[True Demon Lord] " + "§fis complete."
@@ -151,7 +189,7 @@ public class VoiceOfTheWorld {
 
     public static void welcomeNewIndividual(Player player) {
         if (player instanceof ServerPlayer serverPlayer) {
-            delayedAnnouncement(serverPlayer,
+            delayedAnnouncement(serverPlayer, Priority.PROGRESS,
                     "Notice.",
                     "New Individual detected within the world.",
                     "Registering soul signature...",

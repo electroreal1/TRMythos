@@ -1,10 +1,7 @@
 package com.github.mythos.mythos.util;
 
-//import com.github.lucifel.virtuoso.registry.skill.IntrinsicSkills;
-
 import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
-import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.registry.race.TensuraRaces;
@@ -15,47 +12,55 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 import java.util.Optional;
 import java.util.Random;
-
-public class MythosUtils extends SkillUtils {
+@Mod.EventBusSubscriber(modid = "trmythos")
+public class MythosUtils  {
 
     public MythosUtils() {
     }
     @SubscribeEvent
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer serverPlayer) {
-            CompoundTag persistentData = serverPlayer.getPersistentData();
+            CompoundTag forgeData = serverPlayer.getPersistentData();
+            CompoundTag persistentData;
+
+            if (!forgeData.contains(Player.PERSISTED_NBT_TAG)) {
+                persistentData = new CompoundTag();
+                forgeData.put(Player.PERSISTED_NBT_TAG, persistentData);
+            } else {
+                persistentData = forgeData.getCompound(Player.PERSISTED_NBT_TAG);
+            }
 
             if (!persistentData.getBoolean("Mythos_FirstLoginHandled")) {
                 persistentData.putBoolean("Mythos_FirstLoginHandled", true);
 
-                // Trigger Voice of the World Announcement
+                forgeData.put(Player.PERSISTED_NBT_TAG, persistentData);
+
                 VoiceOfTheWorld.welcomeNewIndividual(serverPlayer);
 
                 var race = TensuraPlayerCapability.getRace(serverPlayer);
-
-                if (race == TensuraRaces.WIGHT.get()) {
+                if (race != null && race.equals(TensuraRaces.WIGHT.get())) {
                     Random random = new Random();
 
-                    // Check for Eltnam (10% chance)
                     if (random.nextInt(100) < 10) {
                         grantStarterSkill(serverPlayer, Skills.ELTNAM.get(),
                                 Component.translatable("trmythos.skill.eltnam.obtained").withStyle(ChatFormatting.RED));
                     }
 
-                    // Check for Crimson Tyrant (10% chance)
                     if (random.nextInt(100) < 10) {
                         grantStarterSkill(serverPlayer, Skills.CRIMSON_TYRANT.get(),
                                 Component.literal("The Crimson Moon Far Away Extends Its Bloody Blessing, Let the Carnage Begin!").withStyle(ChatFormatting.DARK_RED));
                     }
 
-                    // Check for Underworld Prince (10% chance)
                     if (random.nextInt(100) < 10) {
                         grantStarterSkill(serverPlayer, Skills.UNDERWORLD_PRINCE.get(),
                                 Component.literal("The Underworld Beckons you to embrace souls of the damned!").withStyle(ChatFormatting.BLACK));
@@ -66,12 +71,13 @@ public class MythosUtils extends SkillUtils {
     }
 
     private static void grantStarterSkill(ServerPlayer player, ManasSkill skill, Component message) {
+        if (skill == null) return;
         TensuraSkillInstance skillInstance = new TensuraSkillInstance(skill);
-
         skillInstance.getOrCreateTag().putBoolean("NoMagiculeCost", true);
 
         if (SkillAPI.getSkillsFrom(player).learnSkill(skillInstance)) {
             player.sendSystemMessage(message);
+            SkillAPI.getSkillsFrom(player).syncPlayer(player);
         }
     }
 
@@ -97,6 +103,13 @@ public class MythosUtils extends SkillUtils {
         }
         return nearest;
 
+    }
+
+    @SubscribeEvent
+    public static void onServerTick(TickEvent.ServerTickEvent event) {
+        if (event.phase == TickEvent.Phase.END) {
+            VoiceOfTheWorld.tickQueue(event.getServer());
+        }
     }
 
 }

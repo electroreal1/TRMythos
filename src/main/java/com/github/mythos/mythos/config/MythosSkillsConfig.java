@@ -132,10 +132,6 @@ public class MythosSkillsConfig {
                         "note: THIS CANNOT REVERSE SOMEONE WHO WAS ALREADY RESET")
                 .define("endOfEvilReset", false);
 
-        CarnageBloodDominion = builder
-                .comment("if true, then carnage will be able to convert players and mobs into the vampire race.")
-                .define("CarnageBloodDominion", true);
-
         ApophisEmbodiment = builder
                 .comment("if True Apophis, Lord of Sin will be capable of creating Sin Series Unique Skills once per Mastery.")
                 .define("ApophisEmbodiment", true);
@@ -221,10 +217,6 @@ public class MythosSkillsConfig {
 
     public static boolean VampireCarnage() {
         return VampireCarnage.get();
-    }
-
-    public static boolean CarnageBloodDominion() {
-        return CarnageBloodDominion.get();
     }
 
     public static boolean endOfEvilReset() {

@@ -5,6 +5,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+
+import java.util.Set;
 import java.util.function.Consumer;
 
 public class WorldTrial {
@@ -12,18 +14,45 @@ public class WorldTrial {
     private final String name;
     private final int requirement;
     private final int epReward;
-    private final transient Consumer<ServerPlayer> onComplete;
+    private final Set<TrialType> types;
+    private final String metadata;
+    private final Consumer<ServerPlayer> onComplete;
 
-    public WorldTrial(String id, String name, int requirement, int epReward, Consumer<ServerPlayer> onComplete) {
+    public WorldTrial(String id, String name, Set<TrialType> types, int requirement, int epReward, String metadata, Consumer<ServerPlayer> onComplete) {
         this.id = id;
         this.name = name;
+        this.types = types;
         this.requirement = requirement;
         this.epReward = epReward;
+        this.metadata = metadata;
         this.onComplete = onComplete;
     }
 
-    public String getId() { return this.id; }
-    public String getName() { return this.name; }
+    public enum TrialType {
+        KILL,
+        STILLNESS,
+        DIMENSION,
+        EP_THRESHOLD,
+        Y_LEVEL,
+        PASSIVE
+    }
+
+    public boolean hasType(TrialType type) {
+        return types.contains(type);
+    }
+
+    public String getId() {
+        return this.id;
+    }
+    public String getName() {
+        return this.name;
+    }
+    public int getRequirement() {
+        return this.requirement;
+    }
+    public String  getMetadata() {
+        return this.metadata;
+    }
 
     public void checkProgress(ServerPlayer player, int current) {
         CompoundTag tag = player.getPersistentData();
@@ -64,7 +93,7 @@ public class WorldTrial {
 
      // Formats ticks into human-readable time strings, or raw numbers for kills.
 
-    private String formatRequirement(int value) {
+    String formatRequirement(int value) {
         if (id.equals("observer") || id.equals("breather") || id.equals("pacifist")) {
             int seconds = value / 20;
             if (seconds < 60) return seconds + "s";

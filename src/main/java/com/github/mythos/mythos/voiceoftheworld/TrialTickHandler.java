@@ -19,47 +19,61 @@ public class TrialTickHandler {
             String activeID = TrialManager.getActiveTrialID(player);
             CompoundTag tag = player.getPersistentData();
 
-            if (player.getY() <= -100000) {
-                process(player, "void_walker", 1);
-            }
-
             double ep = TensuraPlayerCapability.getBaseMagicule(player) + TensuraPlayerCapability.getBaseAura(player);
             if (ep >= 1000000000L) {
                 process(player, "stability", 1);
             }
 
-            if ("observer".equals(activeID)) {
-                if (player.getDeltaMovement().lengthSqr() < 0.0001) {
-                    int prog = tag.getInt("Trial_Progress_observer") + 1;
-                    tag.putInt("Trial_Progress_observer", prog);
-                    process(player, "observer", prog);
-                } else {
-                    int currentProg = tag.getInt("Trial_Progress_observer");
-                    if (currentProg > 0) {
-                        tag.putInt("Trial_Progress_observer", 0);
-                        VoiceOfTheWorld.delayedAnnouncement(player, "Notice.", "§cMovement detected.", "Meditation interrupted. Progress reset.");
+            if (player.getY() <= -10000) {
+                process(player, "void_walker", 1);
+            }
+
+            if (activeID.isEmpty()) return;
+            WorldTrial trial = WorldTrialRegistry.TRIALS.get(activeID);
+            if (trial == null) return;
+
+            String progKey = "Trial_Progress_" + activeID;
+            boolean requirementsMet = true;
+
+            if (trial.hasType(WorldTrial.TrialType.DIMENSION)) {
+                if (!player.level.dimension().location().getPath().contains(trial.getMetadata())) {
+                    requirementsMet = false;
+                }
+            }
+
+            if (trial.hasType(WorldTrial.TrialType.Y_LEVEL)) {
+                try {
+                    double targetY = Double.parseDouble(trial.getMetadata());
+                    if (player.getY() > targetY) requirementsMet = false;
+                } catch (NumberFormatException e) {
+                    requirementsMet = false;
+                }
+            }
+
+            if (requirementsMet) {
+                if (trial.hasType(WorldTrial.TrialType.STILLNESS)) {
+                    if (player.getDeltaMovement().lengthSqr() < 0.001) {
+                        incrementAndProcess(player, trial, tag, progKey);
+                    } else if (tag.getInt(progKey) > 0) {
+                        tag.putInt(progKey, 0);
+                        VoiceOfTheWorld.delayedAnnouncement(player, VoiceOfTheWorld.Priority.ACQUISITION,
+                                "Notice.", "§cMovement detected.", "Meditation interrupted. Progress reset.");
                         player.playNotifySound(SoundEvents.GENERIC_EXTINGUISH_FIRE, SoundSource.MASTER, 1.0f, 1.0f);
                     }
                 }
-            }
-
-            if ("breather".equals(activeID)) {
-                String dim = player.level.dimension().location().getPath();
-                if (dim.contains("labyrinth") || dim.contains("hell")) {
-                    incrementAndProcess(player, "breather", tag);
+                else if (trial.hasType(WorldTrial.TrialType.PASSIVE) ||
+                        trial.hasType(WorldTrial.TrialType.DIMENSION) ||
+                        trial.hasType(WorldTrial.TrialType.Y_LEVEL)) {
+                    incrementAndProcess(player, trial, tag, progKey);
                 }
-            }
-
-            if ("pacifist".equals(activeID)) {
-                incrementAndProcess(player, "pacifist", tag);
             }
         }
     }
 
-    private static void incrementAndProcess(ServerPlayer player, String id, CompoundTag tag) {
-        int prog = tag.getInt("Trial_Progress_" + id) + 1;
-        tag.putInt("Trial_Progress_" + id, prog);
-        process(player, id, prog);
+    private static void incrementAndProcess(ServerPlayer player, WorldTrial trial, CompoundTag tag, String progKey) {
+        int prog = tag.getInt(progKey) + 1;
+        tag.putInt(progKey, prog);
+        trial.checkProgress(player, prog);
     }
 
     private static void process(ServerPlayer player, String id, int progress) {

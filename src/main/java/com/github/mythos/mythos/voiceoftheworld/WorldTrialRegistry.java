@@ -12,7 +12,7 @@ public class WorldTrialRegistry {
         TRIALS.put(trial.getId(), trial);
     }
 
-    public static String getActiveTrials(Player player) {
+    public static String getActiveTrialStatus(Player player) {
         String activeID = TrialManager.getActiveTrialID((net.minecraft.server.level.ServerPlayer) player);
 
         if (activeID.isEmpty()) {
@@ -25,6 +25,9 @@ public class WorldTrialRegistry {
         CompoundTag tag = player.getPersistentData();
         int progress = tag.getInt("Trial_Progress_" + activeID);
 
-        return "§eCurrent Trial: §f" + trial.getName() + " §7[" + progress + " / ???]";
+        String currentStr = trial.formatRequirement(progress);
+        String maxStr = trial.formatRequirement(trial.getRequirement());
+
+        return "§eCurrent Trial: §f" + trial.getName() + " §7[" + currentStr + " / " + maxStr + "]";
     }
 }

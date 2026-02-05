@@ -2,6 +2,12 @@ package com.github.mythos.mythos.voiceoftheworld;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -15,30 +21,54 @@ public class TrialCombatHandler {
             LivingEntity victim = event.getEntity();
             String activeID = TrialManager.getActiveTrialID(player);
 
-            if (victim.getMaxHealth() >= (player.getMaxHealth() * 10)) {
-                if (activeID.isEmpty() || activeID.equals("giant_slayer")) {
+            if (activeID.isEmpty()) {
+                if (isCalamityEntity(player, victim)) {
                     process(player, "giant_slayer", 1);
+                }
+                return;
+            }
+
+            WorldTrial activeTrial = WorldTrialRegistry.TRIALS.get(activeID);
+            if (activeTrial == null) return;
+
+            CompoundTag tag = player.getPersistentData();
+            String progKey = "Trial_Progress_" + activeID;
+
+            if (activeTrial.hasType(WorldTrial.TrialType.KILL)) {
+                if (isCalamityEntity(player, victim)) {
+                    int current = tag.getInt(progKey) + 1;
+                    tag.putInt(progKey, current);
+                    activeTrial.checkProgress(player, current);
                 }
             }
 
-            if ("pacifist".equals(activeID)) {
-                if (victim instanceof net.minecraft.world.entity.npc.Villager || victim instanceof ServerPlayer) {
-                    player.getPersistentData().putInt("Trial_Progress_pacifist", 0);
+            if (activeTrial.hasType(WorldTrial.TrialType.PASSIVE)) {
+                if (victim instanceof Villager || victim instanceof ServerPlayer) {
+                    tag.putInt(progKey, 0);
 
-                    VoiceOfTheWorld.delayedAnnouncement(player, "Notice.",
-                            "§cConfirmed. Pacifist vows broken.",
-                            "Soul core destabilized due to hostile intent.",
+                    player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 1200, 2));
+                    player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 600, 1));
+
+                    VoiceOfTheWorld.delayedAnnouncement(player, VoiceOfTheWorld.Priority.ACQUISITION,
+                            "Notice.",
+                            "§cConfirmed. Vows broken.",
+                            "Spiritual Backlash detected. Soul core destabilized.",
                             "Trial progress reset to zero.");
 
-                    player.playNotifySound(net.minecraft.sounds.SoundEvents.WITHER_SPAWN,
-                            net.minecraft.sounds.SoundSource.MASTER, 1.0f, 0.5f);
+                    player.playNotifySound(SoundEvents.WITHER_SPAWN, SoundSource.MASTER, 0.8f, 0.5f);
                 }
             }
         }
     }
 
+    private static boolean isCalamityEntity(ServerPlayer player, LivingEntity victim) {
+        return victim.getMaxHealth() >= (player.getMaxHealth() * 10);
+    }
+
     private static void process(ServerPlayer player, String id, int progress) {
         WorldTrial trial = WorldTrialRegistry.TRIALS.get(id);
-        if (trial != null) trial.checkProgress(player, progress);
+        if (trial != null) {
+            trial.checkProgress(player, progress);
+        }
     }
 }
