@@ -311,6 +311,30 @@ public class MythosCommands {
                         .requires(source -> source.hasPermission(4))
                         .then(Commands.argument("target", EntityArgument.player())
 
+                                .then(Commands.literal("remove")
+                                        .then(Commands.literal("mp").then(Commands.argument("amount", DoubleArgumentType.doubleArg(0)).executes(context -> {
+                                            ServerPlayer target = EntityArgument.getPlayer(context, "target");
+                                            double result = Math.max(0, TensuraPlayerCapability.getBaseMagicule(target) - DoubleArgumentType.getDouble(context, "amount"));
+                                            TensuraPlayerCapability.setMagicule(target, result);
+                                            context.getSource().sendSuccess(Component.literal("§c[EP] §fReduced MP for " + target.getScoreboardName()), true);
+                                            return 1;
+                                        })))
+                                        .then(Commands.literal("ap").then(Commands.argument("amount", DoubleArgumentType.doubleArg(0)).executes(context -> {
+                                            ServerPlayer target = EntityArgument.getPlayer(context, "target");
+                                            double result = Math.max(0, TensuraPlayerCapability.getBaseAura(target) - DoubleArgumentType.getDouble(context, "amount"));
+                                            TensuraPlayerCapability.setAura(target, result);
+                                            context.getSource().sendSuccess(Component.literal("§c[EP] §fReduced AP for " + target.getScoreboardName()), true);
+                                            return 1;
+                                        })))
+                                        .then(Commands.literal("total").then(Commands.argument("amount", DoubleArgumentType.doubleArg(0)).executes(context -> {
+                                            ServerPlayer target = EntityArgument.getPlayer(context, "target");
+                                            double sub = DoubleArgumentType.getDouble(context, "amount") / 2.0;
+                                            TensuraPlayerCapability.setMagicule(target, Math.max(0, TensuraPlayerCapability.getBaseMagicule(target) - sub));
+                                            TensuraPlayerCapability.setAura(target, Math.max(0, TensuraPlayerCapability.getBaseAura(target) - sub));
+                                            context.getSource().sendSuccess(Component.literal("§c[EP] §fReduced total EP for " + target.getScoreboardName()), true);
+                                            return 1;
+                                        })))
+
                                 .then(Commands.literal("get")
                                         .executes(context -> {
                                             ServerPlayer target = EntityArgument.getPlayer(context, "target");
@@ -324,6 +348,8 @@ public class MythosCommands {
                                             context.getSource().sendSuccess(Component.literal("§7Total EP: §a" + String.format("%.0f", total)), false);
                                             return 1;
                                         }))
+
+
 
                                 .then(Commands.literal("set")
                                         .then(Commands.literal("magicules")
@@ -383,7 +409,7 @@ public class MythosCommands {
                                                 })))
                                 )
                         )
-                )
+                ))
 
                 .then(Commands.literal("soulscan")
                         .requires(source -> source.hasPermission(4))
