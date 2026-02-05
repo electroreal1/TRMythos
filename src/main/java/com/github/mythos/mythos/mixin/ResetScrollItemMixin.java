@@ -24,7 +24,7 @@ public class ResetScrollItemMixin {
                 "Beginning reincarnation process..."
         );
 
-        VoiceOfTheWorld.screenShake(player, 2.0f);
+        VoiceOfTheWorld.screenShake(player, 2.0f, 20);
     }
 
     @Inject(method = "resetRace", at = @At("HEAD"), remap = false)
