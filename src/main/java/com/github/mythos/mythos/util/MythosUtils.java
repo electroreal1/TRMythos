@@ -3,24 +3,18 @@ package com.github.mythos.mythos.util;
 //import com.github.lucifel.virtuoso.registry.skill.IntrinsicSkills;
 
 import com.github.manasmods.manascore.api.skills.ManasSkill;
-import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.registry.race.TensuraRaces;
-import com.github.mythos.mythos.ability.mythos.skill.unique.normal.CrimsonTyrantSkill;
-import com.github.mythos.mythos.ability.mythos.skill.unique.normal.EltnamSkill;
-import com.github.mythos.mythos.ability.mythos.skill.unique.normal.UnderworldPrince;
 import com.github.mythos.mythos.registry.skill.Skills;
 import com.github.mythos.mythos.voiceoftheworld.VoiceOfTheWorld;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -33,55 +27,51 @@ public class MythosUtils extends SkillUtils {
 
     public MythosUtils() {
     }
-
-
     @SubscribeEvent
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
-        Player player = event.getEntity();
-        if (player instanceof ServerPlayer serverPlayer) {
+        if (event.getEntity() instanceof ServerPlayer serverPlayer) {
             CompoundTag persistentData = serverPlayer.getPersistentData();
-            CompoundTag loginData;
-            if (!persistentData.contains("checkFirstLogin")) {
-                loginData = new CompoundTag();
-                persistentData.put("checkFirstLogin", loginData);
-            } else {
-                loginData = persistentData.getCompound("checkFirstLogin");
-            }
-            // If player is logging in for the first time
-            if (!loginData.getBoolean("firstLogin")) {
-                loginData.putBoolean("firstLogin", true);
 
-                VoiceOfTheWorld.welcomeNewIndividual(player);
+            if (!persistentData.getBoolean("Mythos_FirstLoginHandled")) {
+                persistentData.putBoolean("Mythos_FirstLoginHandled", true);
 
-                var playerRace = TensuraPlayerCapability.getRace(serverPlayer);
-                if (TensuraPlayerCapability.getRace((LivingEntity)player) == TensuraRaces.WIGHT.get() && (
-                        new Random()).nextInt(100) < 10) {
-                    EltnamSkill eltnam = (EltnamSkill) Skills.ELTNAM.get();
-                    TensuraSkillInstance noCost = new TensuraSkillInstance((ManasSkill)eltnam);
-                    noCost.getOrCreateTag().putBoolean("NoMagiculeCost", true);
-                    if (SkillAPI.getSkillsFrom((Entity)player).learnSkill((ManasSkillInstance)noCost)) {
-                        serverPlayer.sendSystemMessage(Component.translatable("trmythos.skill.eltnam.obtained").withStyle(ChatFormatting.RED));
+                // Trigger Voice of the World Announcement
+                VoiceOfTheWorld.welcomeNewIndividual(serverPlayer);
+
+                var race = TensuraPlayerCapability.getRace(serverPlayer);
+
+                if (race == TensuraRaces.WIGHT.get()) {
+                    Random random = new Random();
+
+                    // Check for Eltnam (10% chance)
+                    if (random.nextInt(100) < 10) {
+                        grantStarterSkill(serverPlayer, Skills.ELTNAM.get(),
+                                Component.translatable("trmythos.skill.eltnam.obtained").withStyle(ChatFormatting.RED));
                     }
-                }
-                if (TensuraPlayerCapability.getRace((LivingEntity)player) == TensuraRaces.WIGHT.get() && (
-                        new Random()).nextInt(100) < 10) {
-                    CrimsonTyrantSkill crimson = (CrimsonTyrantSkill) Skills.CRIMSON_TYRANT.get();
-                    TensuraSkillInstance noCost = new TensuraSkillInstance((ManasSkill)crimson);
-                    noCost.getOrCreateTag().putBoolean("NoMagiculeCost", true);
-                    if (SkillAPI.getSkillsFrom((Entity)player).learnSkill((ManasSkillInstance)noCost)) {
-                        serverPlayer.sendSystemMessage(Component.literal("The Crimson Moon Far Away Extends It's Bloody Blessing, Let the Carnage Begin!").withStyle(ChatFormatting.DARK_RED));
+
+                    // Check for Crimson Tyrant (10% chance)
+                    if (random.nextInt(100) < 10) {
+                        grantStarterSkill(serverPlayer, Skills.CRIMSON_TYRANT.get(),
+                                Component.literal("The Crimson Moon Far Away Extends Its Bloody Blessing, Let the Carnage Begin!").withStyle(ChatFormatting.DARK_RED));
                     }
-                }
-                if (TensuraPlayerCapability.getRace((LivingEntity)player) == TensuraRaces.WIGHT.get() && (
-                        new Random()).nextInt(100) < 10) {
-                    UnderworldPrince underworld = (UnderworldPrince) Skills.UNDERWORLD_PRINCE.get();
-                    TensuraSkillInstance noCost = new TensuraSkillInstance((ManasSkill)underworld);
-                    noCost.getOrCreateTag().putBoolean("NoMagiculeCost", true);
-                    if (SkillAPI.getSkillsFrom((Entity)player).learnSkill((ManasSkillInstance)noCost)) {
-                        serverPlayer.sendSystemMessage(Component.literal("The Underworld Beckons you to embrace souls of the damned!").withStyle(ChatFormatting.BLACK));
+
+                    // Check for Underworld Prince (10% chance)
+                    if (random.nextInt(100) < 10) {
+                        grantStarterSkill(serverPlayer, Skills.UNDERWORLD_PRINCE.get(),
+                                Component.literal("The Underworld Beckons you to embrace souls of the damned!").withStyle(ChatFormatting.BLACK));
                     }
                 }
             }
+        }
+    }
+
+    private static void grantStarterSkill(ServerPlayer player, ManasSkill skill, Component message) {
+        TensuraSkillInstance skillInstance = new TensuraSkillInstance(skill);
+
+        skillInstance.getOrCreateTag().putBoolean("NoMagiculeCost", true);
+
+        if (SkillAPI.getSkillsFrom(player).learnSkill(skillInstance)) {
+            player.sendSystemMessage(message);
         }
     }
 

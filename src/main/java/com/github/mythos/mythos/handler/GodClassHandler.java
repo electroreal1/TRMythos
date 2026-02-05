@@ -3,7 +3,6 @@ package com.github.mythos.mythos.handler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
-import org.jetbrains.annotations.NotNull;
 
 public class GodClassHandler extends SavedData {
     private static final String DATA_NAME = "mythos_god_data";
@@ -42,18 +41,18 @@ public class GodClassHandler extends SavedData {
     }
 
     @Override
-    public @NotNull CompoundTag save(CompoundTag tag) {
-        tag.putBoolean("dendrahhObtained", dendrahhObtained);
-        tag.putBoolean("khonsuObtained", khonsuObtained);
-        tag.putBoolean("kthanidObtained", kthanidObtained);
+    public CompoundTag save(CompoundTag tag) {
+        tag.putBoolean("dendrahh", this.dendrahhObtained);
+        tag.putBoolean("khonsu", this.khonsuObtained);
+        tag.putBoolean("kthanid", this.kthanidObtained);
         return tag;
     }
 
     public static GodClassHandler load(CompoundTag tag) {
         GodClassHandler handler = new GodClassHandler();
-        handler.dendrahhObtained = tag.getBoolean("dendrahhObtained");
-        handler.khonsuObtained = tag.getBoolean("khonsuObtained");
-        handler.kthanidObtained = tag.getBoolean("kthanidObtained");
+        handler.dendrahhObtained = tag.getBoolean("dendrahh");
+        handler.khonsuObtained = tag.getBoolean("khonsu");
+        handler.kthanidObtained = tag.getBoolean("kthanid");
         return handler;
     }
 

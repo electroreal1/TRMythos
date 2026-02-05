@@ -4,9 +4,12 @@ import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.mythos.mythos.handler.GodClassHandler;
 import com.github.mythos.mythos.registry.skill.Skills;
+import com.github.mythos.mythos.voiceoftheworld.TrialManager;
 import com.github.mythos.mythos.voiceoftheworld.VoiceOfTheWorld;
+import com.github.mythos.mythos.voiceoftheworld.WorldTrialRegistry;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.FloatArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -105,17 +108,54 @@ public class MythosCommands {
                 )
 
 
-                // Voice of the World
-                .then(Commands.literal("inquire").executes(context -> {
-                    ServerPlayer player = context.getSource().getPlayerOrException();
+                // World Trials
+                .then(Commands.literal("trials")
+                        .then(Commands.literal("get").executes(context -> {
+                            ServerPlayer player = context.getSource().getPlayerOrException();
 
-                    VoiceOfTheWorld.delayedAnnouncement(player,
-                            "Inquiry received.",
-                            "Scanning internal soul progress...",
-                            "Current Trials: " + getActiveTrials(player)
-                    );
-                    return 1;
-                }))
+                            VoiceOfTheWorld.delayedAnnouncement(player,
+                                    "Inquiry received.",
+                                    "Scanning internal soul progress...",
+                                    "Current Trials: " + getActiveTrials(player)
+                            );
+                            return 1;
+                        }))
+
+                        .requires(source -> source.hasPermission(4))
+                        // Clear
+                        .then(Commands.literal("clear")
+                                .then(Commands.argument("target", EntityArgument.player())
+                                        .executes(context -> {
+                                            ServerPlayer target = EntityArgument.getPlayer(context, "target");
+                                            TrialManager.clearActiveTrial(target);
+                                            context.getSource().sendSuccess(Component.literal("§a[Mythos] Cleared active trial lock for " + target.getScoreboardName()), true);
+                                            return 1;
+                                        })
+                                )
+                        )
+                        // Set
+                        .then(Commands.literal("set")
+                                .then(Commands.argument("target", EntityArgument.player())
+                                        .then(Commands.argument("trialId", StringArgumentType.word())
+                                                .executes(context -> {
+                                                    ServerPlayer target = EntityArgument.getPlayer(context, "target");
+                                                    String trialId = StringArgumentType.getString(context, "trialId");
+
+                                                    if (!WorldTrialRegistry.TRIALS.containsKey(trialId)) {
+                                                        context.getSource().sendFailure(Component.literal("§cError: Trial ID '" + trialId + "' not found in registry."));
+                                                        return 0;
+                                                    }
+
+                                                    TrialManager.clearActiveTrial(target);
+                                                    TrialManager.initiateTrial(target, trialId);
+
+                                                    context.getSource().sendSuccess(Component.literal("§a[Mythos] Forced trial '" + trialId + "' onto " + target.getScoreboardName()), true);
+                                                    return 1;
+                                                })
+                                        )
+                                )
+                        )
+                )
         );
     }
 }

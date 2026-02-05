@@ -21,7 +21,13 @@ import java.util.Objects;
 
 public class VoiceOfTheWorld {
 
-    private static final String PREFIX = "§8<< §eVoice of the World §8>> §f";
+    private static final String PREFIX = "§8<< §bVoice of the World §8>> §f";
+
+    private static final String TDL_COLOR = "§4";    // Dark Red
+    private static final String HERO_COLOR = "§6";   // Golden Yellow
+    private static final String EGG_COLOR = "§e";    // Pale Yellow
+    private static final String SEED_COLOR = "§c";   // Pale Red
+    private static final String HARVEST_COLOR = "§5"; // Dark Purple
 
     public static void broadcast(MinecraftServer server, String message) {
         Component text = Component.literal(PREFIX + message);
@@ -54,21 +60,29 @@ public class VoiceOfTheWorld {
         }
     }
 
-    public static void screenShake(ServerPlayer player, float intensity) {
+    public static void screenShake(ServerPlayer player, float intensity, int durationTicks) {
+        MinecraftServer server = player.getServer();
+        if (server == null) return;
+
         MythosNetwork.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player),
                 new ScreenShakePacket(intensity));
+
+        server.tell(new TickTask(server.getTickCount() + durationTicks, () -> {
+            if (player.isAlive()) {
+                MythosNetwork.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player),
+                        new ScreenShakePacket(0));
+            }
+        }));
     }
 
     public static void checkHeroEggOrDemonLordSeed(ServerPlayer player) {
         CompoundTag tag = player.getPersistentData();
 
-        // DEMON LORD SEED CHECK
         if (TensuraPlayerCapability.isDemonLordSeed(player) && !tag.getBoolean("Mythos_SeedNotified")) {
             triggerSeedAcquisition(player);
             tag.putBoolean("Mythos_SeedNotified", true);
         }
 
-        // HERO'S EGG CHECK
         if (TensuraPlayerCapability.isHeroEgg(player) && !tag.getBoolean("Mythos_EggNotified")) {
             triggerEggAcquisition(player);
             tag.putBoolean("Mythos_EggNotified", true);
@@ -78,8 +92,8 @@ public class VoiceOfTheWorld {
     private static void triggerSeedAcquisition(ServerPlayer player) {
         VoiceOfTheWorld.delayedAnnouncement(player,
                 "Confirmed.",
-                "Condition met. Individual: " + player.getName().getString() + " has acquired the [Demon Lord Seed].",
-                "The path to the [Harvest Festival] is now accessible."
+                "Condition met. Individual: " + player.getName().getString() + " has acquired the " + SEED_COLOR + "[Demon Lord Seed].",
+                "The path to the " + HARVEST_COLOR + "[Harvest Festival] " + "§fis now accessible."
         );
         player.playNotifySound(SoundEvents.WITHER_SPAWN, SoundSource.MASTER, 0.4f, 0.5f);
     }
@@ -87,8 +101,8 @@ public class VoiceOfTheWorld {
     private static void triggerEggAcquisition(ServerPlayer player) {
         VoiceOfTheWorld.delayedAnnouncement(player,
                 "Confirmed.",
-                "The [Hero's Egg] has been manifested within the soul.",
-                "Fulfill your duties to hatch the potential of a [True Hero]."
+                "The " + EGG_COLOR + "[Hero's Egg] " + "§fhas been manifested within the soul.",
+                "Fulfill your duties to hatch the potential of a " + HERO_COLOR + "[True Hero]."
         );
         player.playNotifySound(SoundEvents.BEACON_ACTIVATE, SoundSource.MASTER, 0.6f, 1.2f);
     }
@@ -96,14 +110,12 @@ public class VoiceOfTheWorld {
     public static void checkAwakeningStatus(ServerPlayer player) {
         CompoundTag tag = player.getPersistentData();
 
-        // True Demon Lord Check
         boolean isTDL = TensuraPlayerCapability.isTrueDemonLord(player);
         if (isTDL && !tag.getBoolean("Mythos_AcknowledgedTDL")) {
             triggerHarvestFestival(player);
             tag.putBoolean("Mythos_AcknowledgedTDL", true);
         }
 
-        // True Hero Check
         boolean isHero = TensuraPlayerCapability.isTrueHero(player);
         if (isHero && !tag.getBoolean("Mythos_AcknowledgedHero")) {
             triggerHeroAwakening(player);
@@ -113,24 +125,24 @@ public class VoiceOfTheWorld {
 
     private static void triggerHarvestFestival(ServerPlayer player) {
         VoiceOfTheWorld.broadcast(Objects.requireNonNull(player.getServer()),
-                "Notice. Individual: " + player.getName().getString() + " has begun the [Harvest Festival].");
+                "Notice. Individual: " + player.getName().getString() + " has begun the " + HARVEST_COLOR + "[Harvest Festival].");
 
         VoiceOfTheWorld.delayedAnnouncement(player,
                 "Requirement fulfilled. Soul transition initiated.",
                 "Beginning gift distribution to subordinates...",
-                "Successful. Evolution to [True Demon Lord] is complete."
+                "Successful. Evolution to " + TDL_COLOR + "[True Demon Lord] " + "§fis complete."
         );
 
-        VoiceOfTheWorld.screenShake(player, 100);
+        VoiceOfTheWorld.screenShake(player, 1.5f, 100); // Intensity reduced from 100 (which is extreme) to 1.5
         player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 400, 0, false, false));
         player.playNotifySound(SoundEvents.END_PORTAL_SPAWN, SoundSource.MASTER, 1.0f, 0.8f);
     }
 
     private static void triggerHeroAwakening(ServerPlayer player) {
         VoiceOfTheWorld.broadcast(Objects.requireNonNull(player.getServer()),
-                "Announcement. The [Hero's Egg] has hatched. A new [True Hero] has been birthed.");
+                "Announcement. The " + EGG_COLOR + "[Hero's Egg] " + "§fhas hatched. A new " + HERO_COLOR + "[True Hero] " + "§fhas been birthed.");
 
-        VoiceOfTheWorld.screenShake(player, 100);
+        VoiceOfTheWorld.screenShake(player, 1.5f, 100);
         player.playNotifySound(SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.MASTER, 0.5f, 1.5f);
 
         ServerLevel level = player.getLevel();
@@ -138,11 +150,13 @@ public class VoiceOfTheWorld {
     }
 
     public static void welcomeNewIndividual(Player player) {
-        delayedAnnouncement((ServerPlayer) player,
-                "Notice.",
-                "New Individual detected within the world.",
-                "Registering soul signature...",
-                "Successful. Welcome to the world, " + player.getName().getString() + "."
-        );
+        if (player instanceof ServerPlayer serverPlayer) {
+            delayedAnnouncement(serverPlayer,
+                    "Notice.",
+                    "New Individual detected within the world.",
+                    "Registering soul signature...",
+                    "Successful. Welcome to the world, " + player.getName().getString() + "."
+            );
+        }
     }
 }
