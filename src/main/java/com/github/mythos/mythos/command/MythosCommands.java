@@ -208,6 +208,20 @@ public class MythosCommands {
                                     context.getSource().sendSuccess(Component.literal("§6[Mythos Config] §fEnableUltimateSkillObtainment set to: " + val), true);
                                     return 1;
                                 })))
+
+                        .then(Commands.literal("announce_ultimates")
+                                .requires(source -> source.hasPermission(4))
+                                .then(Commands.literal("on").executes(context -> {
+                                    GodClassHandler.get(context.getSource().getLevel()).setAnnouncementsEnabled(true);
+                                    context.getSource().sendSuccess(Component.literal("§a[Mythos] Announce Ultimate Skills is now enabled."), true);
+                                    return 1;
+                                }))
+                                .then(Commands.literal("off").executes(context -> {
+                                    GodClassHandler.get(context.getSource().getLevel()).setAnnouncementsEnabled(false);
+                                    context.getSource().sendSuccess(Component.literal("§c[Mythos] Announce Ultimate Skills is now disabled."), true);
+                                    return 1;
+                                }))
+                        )
                 )
         );
     }
