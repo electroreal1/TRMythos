@@ -80,7 +80,7 @@ public class ArroganceSkill extends Skill {
 
         if (entity.isShiftKeyDown() && instance.isMastered(entity)) {
             for (int i = 0; i < attackList.size(); i++) {
-                castVanity(entity, attackList.getString(i));
+                castVanity(entity, String.valueOf(attackList));
             }
             tag.remove("RegisteredAttacks");
         } else {
@@ -226,6 +226,7 @@ public class ArroganceSkill extends Skill {
 
         player.displayClientMessage(Component.literal("§6Arrogance: §fMirrored §e" +
                 Objects.requireNonNull(targetSkill.getName()).getString()), true);
+        SkillUtils.learnSkill(player, targetSkill);
         instance.setCoolDown(Math.max(100000, cooldownTicks));
     }
 

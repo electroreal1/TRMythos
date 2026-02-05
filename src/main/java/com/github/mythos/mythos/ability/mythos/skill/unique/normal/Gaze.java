@@ -46,20 +46,26 @@ public class Gaze extends Skill {
 
     @Override
     public void onTick(ManasSkillInstance instance, LivingEntity entity) {
+        if (SkillHelper.outOfMagicule(entity, instance)) {
+            if (instance.isToggled()) instance.setToggled(false);
+            return;
+        }
+
         if (instance.isToggled()) {
-            entity.addEffect(new MobEffectInstance(TensuraMobEffects.PRESENCE_SENSE.get(), 200, 1, false, false, false));
-            entity.addEffect(new MobEffectInstance(TensuraMobEffects.HEAT_SENSE.get(), 200, 0, false, false, false));
-            entity.addEffect(new MobEffectInstance(TensuraMobEffects.AUDITORY_SENSE.get(), 200, 0, false, false, false));
+            entity.addEffect(new MobEffectInstance(TensuraMobEffects.PRESENCE_SENSE.get(), 20, 1, false, false, false));
+            entity.addEffect(new MobEffectInstance(TensuraMobEffects.HEAT_SENSE.get(), 20, 0, false, false, false));
+            entity.addEffect(new MobEffectInstance(TensuraMobEffects.AUDITORY_SENSE.get(), 20, 0, false, false, false));
+
         }
 
         if (this.isInSlot(entity)) {
             LivingEntity target = MythosUtils.getLookedAtEntity(entity, 30);
 
             if (target != null) {
-                SkillHelper.checkThenAddEffectSource(target, entity, new MobEffectInstance(MythosMobEffects.SPATIAL_DYSPHORIA.get(), 200,
-                        1, false, false, false));
-                SkillHelper.checkThenAddEffectSource(target, entity, new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200,
-                        2, false, false, false));
+                if (!target.isAlliedTo(entity)) {
+                    SkillHelper.checkThenAddEffectSource(target, entity, MythosMobEffects.SPATIAL_DYSPHORIA.get(), 100, 1);
+                    SkillHelper.checkThenAddEffectSource(target, entity, MobEffects.MOVEMENT_SLOWDOWN, 100, 2);
+                }
             }
         }
     }

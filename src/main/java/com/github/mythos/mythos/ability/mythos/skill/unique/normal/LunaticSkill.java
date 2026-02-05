@@ -41,8 +41,8 @@ public class LunaticSkill extends Skill {
 
     public void onTick(ManasSkillInstance instance, LivingEntity entity) {
         if (instance.isToggled()) {
-            int level = instance.isMastered(entity) ? 5 : 3;
-            entity.addEffect(new MobEffectInstance(TensuraMobEffects.INSANITY.get(), 200, level - 1, false, false, true));
+            int amplifier = instance.isMastered(entity) ? 4 : 2;
+            entity.addEffect(new MobEffectInstance(TensuraMobEffects.INSANITY.get(), 20, amplifier, false, false, true));
         }
     }
 
@@ -86,7 +86,7 @@ public class LunaticSkill extends Skill {
     public void onPressed(ManasSkillInstance instance, LivingEntity entity) {
         if (!SkillHelper.outOfMagicule(entity, instance)) {
             if (entity instanceof Player) {
-                Player player = (Player)entity;
+                Player player = (Player) entity;
                 switch (instance.getMode()) {
                     case 1 -> {
                         this.momentOfLucidity(player);
@@ -103,22 +103,19 @@ public class LunaticSkill extends Skill {
     }
 
     public void onHeld(ManasSkillInstance instance, Player player, int tickCount) {
-        int mode = instance.getMode();
-        if (mode == 3) {
-            int playerInsanity = this.getInsanity(player);
+        if (instance.getMode() == 3) {
+            int playerInsanity = getInsanity(player);
             if (playerInsanity >= 2) {
-                List<LivingEntity> affected = player.level.getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(10.0),
-                        (e) -> e != player && e.isAlive() && !(e instanceof Player));
+                List<LivingEntity> affected = player.level.getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(10.0), (e) -> e != player && e.isAlive());
 
-                int insanitySpread = (int)Math.ceil((double)playerInsanity / 2.0);
+                int targetAmplifier = (playerInsanity / 2) - 1;
 
                 for (LivingEntity target : affected) {
-                    target.addEffect(new MobEffectInstance(TensuraMobEffects.INSANITY.get(), 100, insanitySpread - 1,
-                            false, false, true));
+                    target.addEffect(new MobEffectInstance(TensuraMobEffects.INSANITY.get(), 100, Math.max(0, targetAmplifier), false, false, true));
 
-                    if (this.getInsanity(target) >= 2 && tickCount % 200 == 0) {
+                    if (getInsanity(target) >= 2 && tickCount % 20 == 0) {
                         TensuraEPCapability.getFrom(target).ifPresent((cap) -> {
-                            cap.setSpiritualHealth(cap.getSpiritualHealth() - 10.0);
+                            cap.setSpiritualHealth(cap.getSpiritualHealth() - 1.0);
                         });
                     }
                 }
@@ -127,40 +124,51 @@ public class LunaticSkill extends Skill {
     }
 
     private int getInsanity(LivingEntity entity) {
-        return entity.getPersistentData().getInt("trn.lunatic.insanity");
+        MobEffectInstance effect = entity.getEffect(TensuraMobEffects.INSANITY.get());
+        if (effect != null) {
+            return effect.getAmplifier() + 1;
+        }
+        return 0;
     }
 
     private void setInsanity(LivingEntity entity, int level) {
-        int clampedLevel = Math.max(0, Math.min(level, 5));
-        entity.getPersistentData().putInt("trn.lunatic.insanity", clampedLevel);
+        if (level <= 0) {
+            entity.removeEffect(TensuraMobEffects.INSANITY.get());
+            return;
+        }
+
+        int clampedLevel = Math.max(1, Math.min(level, 5));
+
+
+        entity.addEffect(new MobEffectInstance(TensuraMobEffects.INSANITY.get(), 600,
+                clampedLevel - 1, false, false, true));
     }
 
     private void momentOfLucidity(Player player) {
-        int insanity = this.getInsanity(player);
+        int currentLevel = this.getInsanity(player);
 
-        if (insanity > 0) {
-            this.setInsanity(player, insanity - 1);
+        if (currentLevel > 0) {
+            this.setInsanity(player, currentLevel - 1);
 
-            player.displayClientMessage(Component.literal("You grasp onto a fleeting moment of clarity.").withStyle(ChatFormatting.LIGHT_PURPLE), true);;
+            player.displayClientMessage(Component.literal("You grasp onto a fleeting moment of clarity.")
+                    .withStyle(ChatFormatting.LIGHT_PURPLE), true);
         }
     }
 
     private void Delirium(Player player) {
         LivingEntity target = this.getTarget(player, 15.0);
-
         if (target != null) {
-            target.addEffect(new MobEffectInstance(TensuraMobEffects.INSANITY.get(), 600, 0));
+            int playerInsanity = getInsanity(player);
 
-            player.displayClientMessage(
-                    Component.translatable("trmythos.skill.lunatic.delirium", target.getDisplayName())
-                            .withStyle(ChatFormatting.DARK_PURPLE),
-                    true
-            );
+            int targetAmplifier = Math.max(0, (playerInsanity / 2) - 1);
+
+            target.addEffect(new MobEffectInstance(TensuraMobEffects.INSANITY.get(), 600, targetAmplifier));
+
+            player.displayClientMessage(Component.literal("Your madness infects " + target.getDisplayName().getString()).withStyle(ChatFormatting.DARK_PURPLE), true);
         }
     }
 
     private LivingEntity getTarget(Player player, double range) {
-        return player.level.getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(range),
-                (entity) -> entity != player && entity.isAlive()).stream().findFirst().orElse(null);
+        return player.level.getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(range), (entity) -> entity != player && entity.isAlive()).stream().findFirst().orElse(null);
     }
 }

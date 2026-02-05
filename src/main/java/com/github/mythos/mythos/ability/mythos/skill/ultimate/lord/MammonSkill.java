@@ -116,7 +116,16 @@ public class MammonSkill extends Skill implements ISpatialStorage {
 
     @Override
     public int modes() {
-        return 4;
+        return 3;
+    }
+
+    @Override
+    public int nextMode(LivingEntity entity, TensuraSkillInstance instance, boolean reverse) {
+        if (reverse) {
+            return instance.getMode() <= 1 ? 4 : instance.getMode() - 1;
+        } else {
+            return instance.getMode() >= 4 ? 1 : instance.getMode() + 1;
+        }
     }
 
     @Nullable

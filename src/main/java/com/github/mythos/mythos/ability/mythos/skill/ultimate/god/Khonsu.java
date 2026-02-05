@@ -789,23 +789,30 @@ public class Khonsu extends Skill {
     }
 
     public void eyeOfTheMoon(ManasSkillInstance instance, LivingEntity entity) {
-        if (!entity.hasEffect((MobEffect) TensuraMobEffects.SHADOW_STEP.get())) {
+        Level level = entity.getLevel();
+
+        if (!entity.hasEffect(TensuraMobEffects.SHADOW_STEP.get())) {
             if (SkillHelper.outOfMagicule(entity, instance)) {
                 return;
             }
 
             this.addMasteryPoint(instance, entity);
-            entity.getLevel().playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
-            entity.addEffect(new MobEffectInstance((MobEffect) TensuraMobEffects.SHADOW_STEP.get(), 6000, 0, false, false, false));
-            entity.addEffect(new MobEffectInstance((MobEffect) TensuraMobEffects.PRESENCE_CONCEALMENT.get(), 6000, 5, false, false, false));
-            entity.addEffect(new MobEffectInstance((MobEffect) MythosMobEffects.KHONSU.get(), 6000, 0, false, false, false));
-        } else {
-            entity.removeEffect((MobEffect) TensuraMobEffects.SHADOW_STEP.get());
-            entity.removeEffect(TensuraMobEffects.PRESENCE_CONCEALMENT.get());
-            entity.removeEffect(MythosMobEffects.KHONSU.get());
-            entity.getLevel().playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 0.5F);
-        }
 
+            level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
+                    SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
+
+            entity.addEffect(new MobEffectInstance(TensuraMobEffects.SHADOW_STEP.get(), 6000, 0,
+                    false, false, false));
+            entity.addEffect(new MobEffectInstance(TensuraMobEffects.PRESENCE_CONCEALMENT.get(), 6000,
+                    3, false, false, false));
+            entity.addEffect(new MobEffectInstance(MythosMobEffects.KHONSU.get(), 6000, 0, false, false, false));
+        } else {
+            entity.removeEffect(TensuraMobEffects.SHADOW_STEP.get());
+            entity.removeEffect(MythosMobEffects.KHONSU.get());
+            entity.removeEffect(TensuraMobEffects.PRESENCE_CONCEALMENT.get());
+            level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
+                    SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 0.5F);
+        }
     }
 
 

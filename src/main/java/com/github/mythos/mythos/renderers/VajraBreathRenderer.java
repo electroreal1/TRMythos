@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class VajraBreathRenderer extends EntityRenderer<VajraBreathProjectile> {
 
-    protected VajraBreathRenderer(EntityRendererProvider.Context pContext) {
+    public VajraBreathRenderer(EntityRendererProvider.Context pContext) {
         super(pContext);
     }
 

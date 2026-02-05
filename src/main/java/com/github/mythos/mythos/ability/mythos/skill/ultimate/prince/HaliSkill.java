@@ -91,8 +91,7 @@ public class HaliSkill extends Skill {
     @Nullable
     @Override
     public MutableComponent getName() {
-        return Component.literal("Hali").withStyle(YELLOW)
-                .append(", ").withStyle(WHITE).append(Component.literal("Sunken Sun").withStyle(BLACK));
+        return Component.literal("Hali").withStyle(YELLOW).append(", ").withStyle(WHITE).append(Component.literal("Sunken Sun").withStyle(BLACK));
     }
 
     @Override
@@ -573,21 +572,28 @@ public class HaliSkill extends Skill {
     }
 
     public void eyeOfTheMoon(ManasSkillInstance instance, LivingEntity entity) {
-        if (!entity.hasEffect((MobEffect) TensuraMobEffects.SHADOW_STEP.get())) {
+        Level level = entity.getLevel();
+
+        if (!entity.hasEffect(TensuraMobEffects.SHADOW_STEP.get())) {
             if (SkillHelper.outOfMagicule(entity, instance)) {
                 return;
             }
 
             this.addMasteryPoint(instance, entity);
-            entity.getLevel().playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
-            entity.addEffect(new MobEffectInstance((MobEffect) TensuraMobEffects.SHADOW_STEP.get(), 6000, 0, false, false, false));
-            entity.addEffect(new MobEffectInstance((MobEffect) TensuraMobEffects.PRESENCE_CONCEALMENT.get(), 6000, 3, false, false, false));
-        } else {
-            entity.removeEffect((MobEffect) TensuraMobEffects.SHADOW_STEP.get());
-            entity.removeEffect(TensuraMobEffects.PRESENCE_CONCEALMENT.get());
-            entity.getLevel().playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 0.5F);
-        }
 
+            level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
+                    SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
+
+            entity.addEffect(new MobEffectInstance(TensuraMobEffects.SHADOW_STEP.get(), 6000, 0,
+                    false, false, false));
+            entity.addEffect(new MobEffectInstance(TensuraMobEffects.PRESENCE_CONCEALMENT.get(), 6000,
+                    3, false, false, false));
+        } else {
+            entity.removeEffect(TensuraMobEffects.SHADOW_STEP.get());
+            entity.removeEffect(TensuraMobEffects.PRESENCE_CONCEALMENT.get());
+            level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
+                    SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 0.5F);
+        }
     }
 
 

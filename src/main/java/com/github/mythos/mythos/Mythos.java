@@ -1,7 +1,7 @@
 package com.github.mythos.mythos;
 
 import com.github.mythos.mythos.client.screen.OrunScreen;
-import com.github.mythos.mythos.command.MythosResetCommand;
+import com.github.mythos.mythos.command.MythosCommands;
 import com.github.mythos.mythos.config.MythosConfig;
 import com.github.mythos.mythos.handler.*;
 import com.github.mythos.mythos.networking.MythosNetwork;
@@ -72,7 +72,7 @@ public class Mythos {
     @SubscribeEvent
     public void onCommandsRegister(RegisterCommandsEvent event) {
         LOGGER.info("Mythos: Attempting to register commands...");
-        MythosResetCommand.register(event.getDispatcher());
+        MythosCommands.register(event.getDispatcher());
         LOGGER.info("Mythos Commands Registered");
     }
 

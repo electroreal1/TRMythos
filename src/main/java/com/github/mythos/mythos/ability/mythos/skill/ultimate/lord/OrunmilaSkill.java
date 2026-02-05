@@ -125,13 +125,15 @@ public class OrunmilaSkill extends Skill {
                         int mode = (cap.getAnalysisMode() + 1) % 3;
                         cap.setAnalysisMode(mode);
                         TensuraSkillCapability.sync(player);
-                        entity.getLevel().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
+                        entity.getLevel().playSound(null, entity.getX(), entity.getY(), entity.getZ(),
+                                SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
                     } else {
                         int level = instance.isMastered(entity) ? 200 : 100;
                         cap.setAnalysisLevel(cap.getAnalysisLevel() == level ? 0 : level);
                         cap.setAnalysisDistance(instance.isMastered(entity) ? 128 : 90);
                         TensuraSkillCapability.sync(player);
-                        entity.getLevel().playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
+                        entity.getLevel().playSound(null, entity.getX(), entity.getY(), entity.getZ(),
+                                SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
                     }
                 });
             }
@@ -140,6 +142,7 @@ public class OrunmilaSkill extends Skill {
             LivingEntity target = SkillHelper.getTargetingEntity(LivingEntity.class, entity, 15.0, 0.2, false, true);
             if (target != null && !(target instanceof CloneEntity)) {
                 openSkillRepository(player, target);
+                instance.setCoolDown(60);
             } else {
                 player.displayClientMessage(Component.literal("No record found in sight.").withStyle(ChatFormatting.RED), true);
             }
@@ -186,7 +189,6 @@ public class OrunmilaSkill extends Skill {
 
     private void openSkillRepository(ServerPlayer player, LivingEntity target) {
         SkillStorage storage = SkillAPI.getSkillsFrom(target);
-        if (storage == null) return;
 
         List<ResourceLocation> copyableSkills = storage.getLearnedSkills().stream()
                 .filter(inst -> inst.getSkill() instanceof Skill s && s.getType() != Skill.SkillType.ULTIMATE)

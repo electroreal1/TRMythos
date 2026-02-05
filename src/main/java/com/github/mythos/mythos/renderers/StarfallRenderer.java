@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 public class StarfallRenderer extends EntityRenderer<StarFallProjectile> {
 
 
-    protected StarfallRenderer(EntityRendererProvider.Context pContext) {
+    public StarfallRenderer(EntityRendererProvider.Context pContext) {
         super(pContext);
     }
 

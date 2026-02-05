@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 
 public class IntrovertBarrierRenderer extends EntityRenderer<IntrovertBarrier> {
-    protected IntrovertBarrierRenderer(EntityRendererProvider.Context pContext) {
+    public IntrovertBarrierRenderer(EntityRendererProvider.Context pContext) {
         super(pContext);
     }
 
