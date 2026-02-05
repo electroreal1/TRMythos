@@ -6,6 +6,17 @@ import net.minecraft.world.level.saveddata.SavedData;
 
 public class GodClassHandler extends SavedData {
     private static final String DATA_NAME = "mythos_god_data";
+
+    // Should Ultimate Skills be announced once obtained
+    private boolean ultimateAnnouncementsEnabled = true;
+    public boolean areAnnouncementsEnabled() {
+        return ultimateAnnouncementsEnabled;
+    }
+    public void setAnnouncementsEnabled(boolean value) {
+        this.ultimateAnnouncementsEnabled = value;
+        this.setDirty();
+    }
+
     private boolean dendrahhObtained = false;
     private boolean khonsuObtained = false;
     private boolean kthanidObtained = false;
@@ -45,6 +56,7 @@ public class GodClassHandler extends SavedData {
         tag.putBoolean("dendrahh", this.dendrahhObtained);
         tag.putBoolean("khonsu", this.khonsuObtained);
         tag.putBoolean("kthanid", this.kthanidObtained);
+        tag.putBoolean("ultimateAnnouncements", this.ultimateAnnouncementsEnabled);
         return tag;
     }
 
@@ -53,6 +65,7 @@ public class GodClassHandler extends SavedData {
         handler.dendrahhObtained = tag.getBoolean("dendrahh");
         handler.khonsuObtained = tag.getBoolean("khonsu");
         handler.kthanidObtained = tag.getBoolean("kthanid");
+        handler.ultimateAnnouncementsEnabled = tag.getBoolean("ultimateAnnouncements");
         return handler;
     }
 

@@ -156,6 +156,21 @@ public class MythosCommands {
                                 )
                         )
                 )
+
+                // Announce Ultimate Skills
+                .then(Commands.literal("announce_ultimates")
+                        .requires(source -> source.hasPermission(4))
+                        .then(Commands.literal("on").executes(context -> {
+                            GodClassHandler.get(context.getSource().getLevel()).setAnnouncementsEnabled(true);
+                            context.getSource().sendSuccess(Component.literal("§a[Mythos] Ultimate Skill Announcements enabled."), true);
+                            return 1;
+                        }))
+                        .then(Commands.literal("off").executes(context -> {
+                            GodClassHandler.get(context.getSource().getLevel()).setAnnouncementsEnabled(false);
+                            context.getSource().sendSuccess(Component.literal("§c[Mythos] Ultimate Skill Announcements disabled."), true);
+                            return 1;
+                        }))
+                )
         );
     }
 }
