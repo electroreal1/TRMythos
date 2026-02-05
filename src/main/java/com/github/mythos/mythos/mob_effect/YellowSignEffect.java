@@ -53,7 +53,7 @@ public class YellowSignEffect extends MobEffect {
 
     @Override
     public void applyEffectTick(LivingEntity entity, int pAmplifier) {
-        if (SkillUtils.isSkillToggled(entity, (ManasSkill) ResistanceSkills.ABNORMAL_CONDITION_RESISTANCE.get())) {
+        if (SkillUtils.isSkillToggled(entity, ResistanceSkills.ABNORMAL_CONDITION_RESISTANCE.get())) {
             pAmplifier -= 2;
         }
 

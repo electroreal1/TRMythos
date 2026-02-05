@@ -130,7 +130,7 @@ public class ZeroSkill extends Skill {
             for (ServerPlayer target : player.server.getPlayerList().getPlayers()) {
                 target.playNotifySound(SoundEvents.ENDER_CHEST_CLOSE, SoundSource.AMBIENT, 1.0f, 0.1f);
                 MythosNetwork.sendToPlayer(new ScreenShakePacket(15.0f), target);
-                MythosNetwork.sendToPlayer(new ShaderPacket("minecraft:shaders/post/blobs.json"), target);
+                MythosNetwork.sendToPlayer(new ShaderPacket("minecraft:shaders/post/blobs.json", 1.0f, 1.0f, 1.0f), target);
             }
         }
 
