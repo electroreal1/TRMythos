@@ -20,4 +20,18 @@ public class MythosDamageSourceHelper {
             return true;
         } else return false;
     }
+
+    public static boolean isSound(DamageSource damageSource) {
+        if (damageSource.getMsgId().contains("sound")) {
+            return true;
+        } else if (damageSource.getMsgId().contains("music")) {
+            return true;
+        } else if (damageSource.getMsgId().contains("sonic")) {
+            return true;
+        } else if (damageSource.getMsgId().contains("tensura.mind_requiem")) {
+            return true;
+        } else if (damageSource.getMsgId().contains("roar")) {
+            return true;
+        } else return false;
+    }
 }
