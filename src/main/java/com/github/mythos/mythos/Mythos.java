@@ -1,12 +1,10 @@
 package com.github.mythos.mythos;
 
 import com.github.mythos.mythos.client.screen.OrunScreen;
-import com.github.mythos.mythos.client.screen.SoundSwapperScreen;
 import com.github.mythos.mythos.command.MythosCommands;
 import com.github.mythos.mythos.config.MythosConfig;
 import com.github.mythos.mythos.handler.*;
 import com.github.mythos.mythos.networking.MythosNetwork;
-import com.github.mythos.mythos.networking.play2server.SyncSoundMapPacket;
 import com.github.mythos.mythos.registry.ClientOnlyRegistrar;
 import com.github.mythos.mythos.registry.MythosParticles;
 import com.github.mythos.mythos.registry.MythosRegistery;
@@ -21,7 +19,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
@@ -32,7 +29,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -77,14 +73,6 @@ public class Mythos {
     }
 
     @SubscribeEvent
-    public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
-        if (event.getEntity() instanceof ServerPlayer player) {
-            MythosNetwork.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player),
-                    new SyncSoundMapPacket(GlobalSoundMap.getMap()));
-        }
-    }
-
-    @SubscribeEvent
     public void onCommandsRegister(RegisterCommandsEvent event) {
         LOGGER.info("Mythos: Attempting to register commands...");
         MythosCommands.register(event.getDispatcher());
@@ -104,7 +92,6 @@ public class Mythos {
     public static Logger getLogger() {
         return LOGGER;
     }
-
     private String getConfigFileName(String name) {
         return String.format("%s/%s.toml", "tensura-reincarnated", name);
     }
@@ -124,19 +111,16 @@ public class Mythos {
 
     }
 
-    @SubscribeEvent
-    public void onClientSetup(FMLClientSetupEvent event) {
+    private void onClientSetup(FMLClientSetupEvent event) {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
         MenuScreens.register(MythosMenuTypes.ORUN_MENU.get(), OrunScreen::new);
-        event.enqueueWork(() -> {
-            MenuScreens.register(MythosMenuTypes.SOUND_MENU.get(), SoundSwapperScreen::new);
-        });
         MinecraftForge.EVENT_BUS.register(ClientShaderHandler.class);
         MinecraftForge.EVENT_BUS.register(YellowSignOverlayHandler.class);
         MinecraftForge.EVENT_BUS.register(HaliShaderHandler.class);
         MinecraftForge.EVENT_BUS.register(GlobalEffectHandler.class);
         MinecraftForge.EVENT_BUS.register(KhaosHandler.class);
     }
+
 
 
     private boolean isFirstLaunch() {
@@ -170,7 +154,7 @@ public class Mythos {
 
             String line;
             try {
-                while ((line = reader.readLine()) != null) {
+                while((line = reader.readLine()) != null) {
                     contentBuilder.append(line).append(System.lineSeparator());
                 }
             } catch (Throwable var19) {
@@ -193,10 +177,10 @@ public class Mythos {
 
 
         String content = contentBuilder.toString();
-        String[] newStarting = new String[]{"trmythos:canine", "trmythos:maiden", "trmythos:lesser_serpent", "trmythos:godling", "trmythos:metalloid", "trmythos:revenant"};
-        String[] newRandom = new String[]{"trmythos:canine", "trmythos:maiden", "trmythos:lesser_serpent", "trmythos:godling", "trmythos:metalloid", "trmythos:revenant"};
-        String[] newSkills = new String[]{"trmythos:omniscient_eye", "trmythos:faker", "trmythos:purity", "trmythos:bloodsucker", "trmythos:profanity", "trmythos:opportunist", "trmythos:sporeblood", "trmythos:fragarach", "trmythos:excalibur", "trmythos:gram", "trmythos:heavens_wrath", "trmythos:zephyros", "trmythos:introvert", "trmythos:stargazer", "trmythos:tenacious", "trmythos:demonologist", "trmythos:sagittarius", "trmythos:npc_life", "trmythos:celestial_path_blue", "trmythos:celestial_cultivation_orange", "trmythos:celestial_mutation_red", "trmythos:author", "trmythos:alchemist", "trmythos:hoarder", "trmythos:nights_thief", "trmythos:pretender_king", "trmythos:false_hero", "trmythos:crimson_arcanist", "trmythos:gaze", "trmythos:yellow_sign", "trmythos:author"};
-        String[] creatorSkills = new String[]{"trmythos:opportunist", "trmythos:heavens_wrath", "trmythos:zephyros", "trmythos:introvert", "trmythos:stargazer", "trmythos:tenacious", "trmythos:demonologist"};
+        String[] newStarting = new String[]{"trmythos:canine", "trmythos:maiden", "trmythos:lesser_serpent","trmythos:godling","trmythos:metalloid", "trmythos:revenant"};
+        String[] newRandom = new String[]{"trmythos:canine", "trmythos:maiden", "trmythos:lesser_serpent","trmythos:godling","trmythos:metalloid", "trmythos:revenant"};
+        String[] newSkills = new String[]{"trmythos:omniscient_eye", "trmythos:faker", "trmythos:purity","trmythos:bloodsucker", "trmythos:profanity","trmythos:opportunist","trmythos:sporeblood","trmythos:fragarach","trmythos:excalibur","trmythos:gram", "trmythos:heavens_wrath","trmythos:zephyros","trmythos:introvert","trmythos:stargazer","trmythos:tenacious","trmythos:demonologist","trmythos:sagittarius", "trmythos:npc_life", "trmythos:celestial_path_blue", "trmythos:celestial_cultivation_orange", "trmythos:celestial_mutation_red", "trmythos:author", "trmythos:alchemist", "trmythos:hoarder", "trmythos:nights_thief", "trmythos:pretender_king", "trmythos:false_hero", "trmythos:crimson_arcanist", "trmythos:gaze", "trmythos:yellow_sign", "trmythos:author"};
+        String[] creatorSkills = new String[]{"trmythos:opportunist", "trmythos:heavens_wrath","trmythos:zephyros","trmythos:introvert","trmythos:stargazer","trmythos:tenacious","trmythos:demonologist"};
         String startingRacesKey = "startingRaces = [";
         String randomRacesKey = "possibleRandomRaces = [";
         String reincarnationSkillsKey = "reincarnationSkills = [";
@@ -432,7 +416,7 @@ public class Mythos {
                 String[] var7 = newItems;
                 int var8 = newItems.length;
 
-                for (int var9 = 0; var9 < var8; ++var9) {
+                for(int var9 = 0; var9 < var8; ++var9) {
                     String newItem = var7[var9];
                     if (!listContent.contains(newItem)) {
                         listContent = listContent.replace("]", ", \"" + newItem + "\"]");
