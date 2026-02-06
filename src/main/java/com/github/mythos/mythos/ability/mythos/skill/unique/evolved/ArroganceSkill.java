@@ -237,7 +237,7 @@ public class ArroganceSkill extends Skill {
         player.displayClientMessage(Component.literal("§6Arrogance: §fMirrored §e" +
                 Objects.requireNonNull(targetSkill.getName()).getString()), true);
         SkillUtils.learnSkill(player, targetSkill);
-        instance.setCoolDown(Math.max(100000, cooldownTicks));
+        instance.setCoolDown(cooldownTicks);
     }
 
     private boolean isBlacklisted(Skill skill) {
@@ -254,7 +254,6 @@ public class ArroganceSkill extends Skill {
     @SubscribeEvent
     public static void onSkillActivate(SkillActivationEvent event) {
         if (event.getEntity().level.isClientSide) return;
-
         CompoundTag persistentData = event.getEntity().getPersistentData();
         persistentData.putString("Arrogance_RecentSkill", Objects.requireNonNull(event.getSkillInstance().getSkill().getName()).toString());
         persistentData.putInt("Arrogance_SkillTimer", 2);
