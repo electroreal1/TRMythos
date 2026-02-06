@@ -19,12 +19,11 @@ public class NonEuclideanStepEffect extends MobEffect {
         if (entity.horizontalCollision) {
             Vec3 move = entity.getDeltaMovement();
 
-            if (Math.abs(move.x) > 0.005 || Math.abs(move.z) > 0.005) {
 
-                entity.setDeltaMovement(move.x, 0.25, move.z);
+            entity.setDeltaMovement(move.x, 0.5, move.z);
 
-                entity.setOnGround(true);
-            }
+            entity.setOnGround(true);
+
         }
     }
 

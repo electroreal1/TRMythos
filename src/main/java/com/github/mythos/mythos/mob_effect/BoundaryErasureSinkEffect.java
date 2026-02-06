@@ -16,15 +16,15 @@ public class BoundaryErasureSinkEffect extends MobEffect {
         entity.noPhysics = true;
 
         Vec3 move = entity.getDeltaMovement();
-        entity.setDeltaMovement(move.x * 0.5, -0.08, move.z * 0.5);
+        entity.setDeltaMovement(move.x * 0.5, -0.3, move.z * 0.5);
 
         if (entity.getDeltaMovement().y > 0 && entity.isOnGround()) {
-            entity.setDeltaMovement(entity.getDeltaMovement().add(0, -(0.5 + entity.getJumpBoostPower()), 0));
+            entity.setDeltaMovement(entity.getDeltaMovement().add(0, -(1 + entity.getJumpBoostPower()), 0));
         }
 
         if (entity instanceof Player player) {
             if (player.zza > 0) {
-                player.setDeltaMovement(entity.getDeltaMovement().add(0,  -(0.5 + player.getJumpBoostPower()), 0));
+                player.setDeltaMovement(entity.getDeltaMovement().add(0,  -(1 + player.getJumpBoostPower()), 0));
             }
         }
     }
