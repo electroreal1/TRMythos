@@ -149,6 +149,7 @@ public class ZeroSkill extends Skill {
         entity.addEffect(new MobEffectInstance(MythosMobEffects.NON_EUCLIDEAN_STEP.get(), 200, 0, false, false,
                 false));
         if (instance.isToggled()) {
+            entity.addEffect(new MobEffectInstance(MythosMobEffects.NON_EUCLIDEAN_STEP.get(), 200, 0, false, false, false));
             entity.getPersistentData().putBoolean("AuraOfUnmadeActive", true);
             if (entity.isSprinting()) {
                 entity.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 10, 0, false, false, false));
