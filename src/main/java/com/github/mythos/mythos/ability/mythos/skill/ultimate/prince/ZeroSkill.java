@@ -4,7 +4,6 @@ import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
 import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
-import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
@@ -15,6 +14,7 @@ import com.github.manasmods.tensura.registry.dimensions.TensuraDimensions;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSources;
+import com.github.mythos.mythos.ability.mythos.skill.ultimate.lord.Khaos;
 import com.github.mythos.mythos.handler.KhaosHandler;
 import com.github.mythos.mythos.networking.MythosNetwork;
 import com.github.mythos.mythos.networking.play2server.GreatSilencePacket;
@@ -67,8 +67,7 @@ public class ZeroSkill extends Skill {
 
     @Override
     public boolean meetEPRequirement(Player player, double newEP) {
-        return TensuraEPCapability.getCurrentEP(player) >= getObtainingEpCost() &&
-                SkillUtils.isSkillMastered(player, Skills.KHAOS.get());
+        return TensuraEPCapability.getCurrentEP(player) >= getObtainingEpCost() && SkillUtils.isSkillMastered(player, Skills.KHAOS.get());
     }
 
 
@@ -111,13 +110,7 @@ public class ZeroSkill extends Skill {
     @Override
     public void onLearnSkill(ManasSkillInstance instance, LivingEntity living, UnlockSkillEvent event) {
         if (living instanceof ServerPlayer player) {
-            List<String> lines = List.of(
-                    "§7« ... »",
-                    "§f0.00% System Integrity.",
-                    "§l[Zero], Singularity of the End §ronline.",
-                    "§7Concepts deleted. Everything is §k000§r§7.",
-                    "§fGoodnight."
-            );
+            List<String> lines = List.of("§7« ... »", "§f0.00% System Integrity.", "§l[Zero], Singularity of the End §ronline.", "§7Concepts deleted. Everything is §k000§r§7.", "§fGoodnight.");
 
             for (int i = 0; i < lines.size(); i++) {
                 final String line = lines.get(i);
@@ -146,8 +139,7 @@ public class ZeroSkill extends Skill {
         entity.addEffect(new MobEffectInstance(TensuraMobEffects.PRESENCE_SENSE.get(), 200, 9, false, false));
         entity.addEffect(new MobEffectInstance(TensuraMobEffects.HEAT_SENSE.get(), 200, 0, false, false));
         entity.addEffect(new MobEffectInstance(TensuraMobEffects.AUDITORY_SENSE.get(), 200, 0, false, false));
-        entity.addEffect(new MobEffectInstance(MythosMobEffects.NON_EUCLIDEAN_STEP.get(), 200, 0, false, false,
-                false));
+        entity.addEffect(new MobEffectInstance(MythosMobEffects.NON_EUCLIDEAN_STEP.get(), 200, 0, false, false, false));
         if (instance.isToggled()) {
             entity.addEffect(new MobEffectInstance(MythosMobEffects.NON_EUCLIDEAN_STEP.get(), 200, 0, false, false, false));
             entity.getPersistentData().putBoolean("AuraOfUnmadeActive", true);
@@ -158,11 +150,20 @@ public class ZeroSkill extends Skill {
             entity.getPersistentData().putBoolean("AuraOfUnmadeActive", false);
         }
 
+        if (entity.level.isClientSide) return;
         if (this.isInSlot(entity)) {
             LivingEntity target = MythosUtils.getLookedAtEntity(entity, 40);
+
             if (target != null) {
-                SkillHelper.checkThenAddEffectSource(target, entity, new MobEffectInstance(MythosMobEffects.SPATIAL_DYSPHORIA.get(), 200, 1, false, false));
-                SkillHelper.checkThenAddEffectSource(target, entity, new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 19, false, false));
+                target.addEffect(new MobEffectInstance(MythosMobEffects.SPATIAL_DYSPHORIA.get(), 200, 1, false,
+                        false, false));
+
+                target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 19, false,
+                        false));
+
+                if (entity.tickCount % 5 == 0 && entity instanceof Player player && !player.level.isClientSide) {
+                    Khaos.handleAuraOfUnmade(player);
+                }
             }
         }
     }

@@ -2,7 +2,6 @@ package com.github.mythos.mythos.ability.mythos.skill.unique.evolved;
 
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
-import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
@@ -123,14 +122,14 @@ public class ShadowOfTheTesseract extends Skill {
         }
 
         if (this.isInSlot(entity)) {
-            if (entity.isSprinting()) {
-                entity.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 10, 0, false, false, false));
-            }
+            LivingEntity target = MythosUtils.getLookedAtEntity(entity, 40);
 
-            LivingEntity target = MythosUtils.getLookedAtEntity(entity, 30);
             if (target != null) {
-                SkillHelper.checkThenAddEffectSource(target, entity, new MobEffectInstance(MythosMobEffects.SPATIAL_DYSPHORIA.get(), 200, 1, false, false));
-                SkillHelper.checkThenAddEffectSource(target, entity, new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 4, false, false)); // Slowness 5
+                target.addEffect(new MobEffectInstance(MythosMobEffects.SPATIAL_DYSPHORIA.get(), 200, 1, false,
+                        false, false));
+
+                target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 19, false,
+                        false));
             }
         }
     }

@@ -4,7 +4,6 @@ import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
 import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
-import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
@@ -117,18 +116,22 @@ public class Khaos extends Skill {
 
         if (this.isInSlot(entity)) {
             LivingEntity target = MythosUtils.getLookedAtEntity(entity, 40);
-            if (target != null) {
-                SkillHelper.checkThenAddEffectSource(target, entity, new MobEffectInstance(MythosMobEffects.SPATIAL_DYSPHORIA.get(), 200, 1, false, false));
-                SkillHelper.checkThenAddEffectSource(target, entity, new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 9, false, false)); // Slowness 10
-            }
 
-            if (entity.tickCount % 5 == 0 && entity instanceof Player player && !player.level.isClientSide) {
-                handleAuraOfUnmade(player);
+            if (target != null) {
+                target.addEffect(new MobEffectInstance(MythosMobEffects.SPATIAL_DYSPHORIA.get(), 200, 1, false,
+                        false, false));
+
+                target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 19, false,
+                        false));
+
+                if (entity.tickCount % 5 == 0 && entity instanceof Player player && !player.level.isClientSide) {
+                    handleAuraOfUnmade(player);
+                }
             }
         }
     }
 
-    private void handleAuraOfUnmade(Player player) {
+    public static void handleAuraOfUnmade(Player player) {
         BlockPos pos = player.blockPosition();
         int r = 15;
         for (int i = 0; i < 20; i++) {

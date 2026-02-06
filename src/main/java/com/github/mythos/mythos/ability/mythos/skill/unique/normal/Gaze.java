@@ -65,13 +65,14 @@ public class Gaze extends Skill {
         }
 
         if (this.isInSlot(entity)) {
-            LivingEntity target = MythosUtils.getLookedAtEntity(entity, 30);
+            LivingEntity target = MythosUtils.getLookedAtEntity(entity, 40);
 
             if (target != null) {
-                if (!target.isAlliedTo(entity)) {
-                    SkillHelper.checkThenAddEffectSource(target, entity, MythosMobEffects.SPATIAL_DYSPHORIA.get(), 100, 1);
-                    SkillHelper.checkThenAddEffectSource(target, entity, MobEffects.MOVEMENT_SLOWDOWN, 100, 2);
-                }
+                target.addEffect(new MobEffectInstance(MythosMobEffects.SPATIAL_DYSPHORIA.get(), 200, 1, false,
+                        false, false));
+
+                target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 19, false,
+                        false));
             }
         }
     }
