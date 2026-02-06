@@ -10,6 +10,7 @@ import com.github.mythos.mythos.ability.mythos.skill.ultimate.*;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.god.DendrrahSkill;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.god.Khonsu;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.god.Kthanid;
+import com.github.mythos.mythos.ability.mythos.skill.ultimate.king.OrpheusSkill;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.lord.*;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.prince.HaliSkill;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.prince.ZeroSkill;
@@ -52,6 +53,9 @@ public class Skills {
     // Prince Class
     public static final RegistryObject<ZeroSkill> ZERO;
     public static final RegistryObject<HaliSkill> HALI;
+
+    // King Class
+    public static final RegistryObject<OrpheusSkill> ORPHEUS;
 
     // God Class
     public static final RegistryObject<DendrrahSkill> DENDRRAH;
@@ -159,6 +163,9 @@ public class Skills {
         // Prince Class
         ZERO = registery.register("zero", () -> new ZeroSkill(Skill.SkillType.ULTIMATE));
         HALI = registery.register("hali", () -> new HaliSkill(Skill.SkillType.ULTIMATE));
+
+        // King Class
+        ORPHEUS = registery.register("orpheus", () -> new OrpheusSkill(Skill.SkillType.ULTIMATE));
 
         // god Class
         DENDRRAH = registery.register("dendrahh", () -> new DendrrahSkill(Skill.SkillType.ULTIMATE));

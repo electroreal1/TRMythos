@@ -1,5 +1,6 @@
 package com.github.mythos.mythos.voiceoftheworld;
 
+import com.github.mythos.mythos.config.MythosConfig;
 import com.github.mythos.mythos.config.MythosSkillsConfig;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -7,6 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
+
 import java.util.Map;
 
 public class TrialDataLoader extends SimpleJsonResourceReloadListener {
@@ -18,7 +20,14 @@ public class TrialDataLoader extends SimpleJsonResourceReloadListener {
 
     @Override
     protected void apply(Map<ResourceLocation, JsonElement> pObject, ResourceManager pResourceManager, ProfilerFiller pProfiler) {
-        if (!MythosSkillsConfig.voice_of_the_world.get()) return;
+        boolean isConfigLoaded = MythosConfig.SPEC.isLoaded();
+
+        if (isConfigLoaded) {
+            boolean votw = !MythosSkillsConfig.voice_of_the_world.get();
+            if (votw) {
+                return;
+            }
+        }
         WorldTrialRegistry.TRIALS.clear();
 
         TrialDefinitions.init();

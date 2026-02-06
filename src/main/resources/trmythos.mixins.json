@@ -16,6 +16,7 @@
     "ResistSkillMixin",
     "SkillHelperMixin",
     "SkillUtilsMixin",
+    "SoundLevelMixin",
     "UrielBypassMixinMythos",
     "VampireEvoMixin",
     "WeaponEPHandlerMixin"

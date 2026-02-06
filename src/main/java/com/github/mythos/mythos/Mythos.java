@@ -1,10 +1,12 @@
 package com.github.mythos.mythos;
 
 import com.github.mythos.mythos.client.screen.OrunScreen;
+import com.github.mythos.mythos.client.screen.SoundSwapperScreen;
 import com.github.mythos.mythos.command.MythosCommands;
 import com.github.mythos.mythos.config.MythosConfig;
 import com.github.mythos.mythos.handler.*;
 import com.github.mythos.mythos.networking.MythosNetwork;
+import com.github.mythos.mythos.networking.play2server.SyncSoundMapPacket;
 import com.github.mythos.mythos.registry.ClientOnlyRegistrar;
 import com.github.mythos.mythos.registry.MythosParticles;
 import com.github.mythos.mythos.registry.MythosRegistery;
@@ -19,6 +21,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
@@ -29,6 +32,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -73,6 +77,14 @@ public class Mythos {
     }
 
     @SubscribeEvent
+    public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            MythosNetwork.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player),
+                    new SyncSoundMapPacket(GlobalSoundMap.getMap()));
+        }
+    }
+
+    @SubscribeEvent
     public void onCommandsRegister(RegisterCommandsEvent event) {
         LOGGER.info("Mythos: Attempting to register commands...");
         MythosCommands.register(event.getDispatcher());
@@ -92,6 +104,7 @@ public class Mythos {
     public static Logger getLogger() {
         return LOGGER;
     }
+
     private String getConfigFileName(String name) {
         return String.format("%s/%s.toml", "tensura-reincarnated", name);
     }
@@ -111,16 +124,19 @@ public class Mythos {
 
     }
 
-    private void onClientSetup(FMLClientSetupEvent event) {
+    @SubscribeEvent
+    public void onClientSetup(FMLClientSetupEvent event) {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
         MenuScreens.register(MythosMenuTypes.ORUN_MENU.get(), OrunScreen::new);
+        event.enqueueWork(() -> {
+            MenuScreens.register(MythosMenuTypes.SOUND_MENU.get(), SoundSwapperScreen::new);
+        });
         MinecraftForge.EVENT_BUS.register(ClientShaderHandler.class);
         MinecraftForge.EVENT_BUS.register(YellowSignOverlayHandler.class);
         MinecraftForge.EVENT_BUS.register(HaliShaderHandler.class);
         MinecraftForge.EVENT_BUS.register(GlobalEffectHandler.class);
         MinecraftForge.EVENT_BUS.register(KhaosHandler.class);
     }
-
 
 
     private boolean isFirstLaunch() {
@@ -154,7 +170,7 @@ public class Mythos {
 
             String line;
             try {
-                while((line = reader.readLine()) != null) {
+                while ((line = reader.readLine()) != null) {
                     contentBuilder.append(line).append(System.lineSeparator());
                 }
             } catch (Throwable var19) {
@@ -177,10 +193,10 @@ public class Mythos {
 
 
         String content = contentBuilder.toString();
-        String[] newStarting = new String[]{"trmythos:canine", "trmythos:maiden", "trmythos:lesser_serpent","trmythos:godling","trmythos:metalloid", "trmythos:revenant"};
-        String[] newRandom = new String[]{"trmythos:canine", "trmythos:maiden", "trmythos:lesser_serpent","trmythos:godling","trmythos:metalloid", "trmythos:revenant"};
-        String[] newSkills = new String[]{"trmythos:omniscient_eye", "trmythos:faker", "trmythos:purity","trmythos:bloodsucker", "trmythos:profanity","trmythos:opportunist","trmythos:sporeblood","trmythos:fragarach","trmythos:excalibur","trmythos:gram", "trmythos:heavens_wrath","trmythos:zephyros","trmythos:introvert","trmythos:stargazer","trmythos:tenacious","trmythos:demonologist","trmythos:sagittarius", "trmythos:npc_life", "trmythos:celestial_path_blue", "trmythos:celestial_cultivation_orange", "trmythos:celestial_mutation_red", "trmythos:author", "trmythos:alchemist", "trmythos:hoarder", "trmythos:nights_thief", "trmythos:pretender_king", "trmythos:false_hero", "trmythos:crimson_arcanist", "trmythos:gaze", "trmythos:yellow_sign", "trmythos:author"};
-        String[] creatorSkills = new String[]{"trmythos:opportunist", "trmythos:heavens_wrath","trmythos:zephyros","trmythos:introvert","trmythos:stargazer","trmythos:tenacious","trmythos:demonologist"};
+        String[] newStarting = new String[]{"trmythos:canine", "trmythos:maiden", "trmythos:lesser_serpent", "trmythos:godling", "trmythos:metalloid", "trmythos:revenant"};
+        String[] newRandom = new String[]{"trmythos:canine", "trmythos:maiden", "trmythos:lesser_serpent", "trmythos:godling", "trmythos:metalloid", "trmythos:revenant"};
+        String[] newSkills = new String[]{"trmythos:omniscient_eye", "trmythos:faker", "trmythos:purity", "trmythos:bloodsucker", "trmythos:profanity", "trmythos:opportunist", "trmythos:sporeblood", "trmythos:fragarach", "trmythos:excalibur", "trmythos:gram", "trmythos:heavens_wrath", "trmythos:zephyros", "trmythos:introvert", "trmythos:stargazer", "trmythos:tenacious", "trmythos:demonologist", "trmythos:sagittarius", "trmythos:npc_life", "trmythos:celestial_path_blue", "trmythos:celestial_cultivation_orange", "trmythos:celestial_mutation_red", "trmythos:author", "trmythos:alchemist", "trmythos:hoarder", "trmythos:nights_thief", "trmythos:pretender_king", "trmythos:false_hero", "trmythos:crimson_arcanist", "trmythos:gaze", "trmythos:yellow_sign", "trmythos:author"};
+        String[] creatorSkills = new String[]{"trmythos:opportunist", "trmythos:heavens_wrath", "trmythos:zephyros", "trmythos:introvert", "trmythos:stargazer", "trmythos:tenacious", "trmythos:demonologist"};
         String startingRacesKey = "startingRaces = [";
         String randomRacesKey = "possibleRandomRaces = [";
         String reincarnationSkillsKey = "reincarnationSkills = [";
@@ -219,73 +235,73 @@ public class Mythos {
         File tomlFile = new File("defaultconfigs/tensura-reincarnated/common.toml");
         StringBuilder contentBuilder = new StringBuilder();
 
-    //    try {
-      //      BufferedReader reader = new BufferedReader(new FileReader(tomlFile));
+        //    try {
+        //      BufferedReader reader = new BufferedReader(new FileReader(tomlFile));
 
-       //     String line;
-      //      try {
+        //     String line;
+        //      try {
         //        while((line = reader.readLine()) != null) {
-          //          contentBuilder.append(line).append(System.lineSeparator());
+        //          contentBuilder.append(line).append(System.lineSeparator());
         //        }
-       //     } catch (Throwable var21) {
-          //      try {
-         //           reader.close();
-           //     } catch (Throwable var17) {
-          //          var21.addSuppressed(var17);
-         //       }
+        //     } catch (Throwable var21) {
+        //      try {
+        //           reader.close();
+        //     } catch (Throwable var17) {
+        //          var21.addSuppressed(var17);
+        //       }
 
-         //       throw var21;
-            }
+        //       throw var21;
+    }
 //
-       //     reader.close();
-      //  } catch (IOException var22) {
-       //     IOException e = var22;
-      //      e.printStackTrace();
-     //       System.out.println("Error reading the TOML file: " + e.getMessage());
+    //     reader.close();
+    //  } catch (IOException var22) {
+    //     IOException e = var22;
+    //      e.printStackTrace();
+    //       System.out.println("Error reading the TOML file: " + e.getMessage());
     //        return;
-   //     }
+    //     }
 
-      //  String content = contentBuilder.toString();
-      //  String[] commonEngraveNew = new String[0];
-     //   String[] uncommonEngraveNew = new String[0];
-   //     String[] rareEngraveNew = new String[0];
+    //  String content = contentBuilder.toString();
+    //  String[] commonEngraveNew = new String[0];
+    //   String[] uncommonEngraveNew = new String[0];
+    //     String[] rareEngraveNew = new String[0];
     //    String[] veryRareEngraveNew = new String[0];
-     //   String[] blacklistedEngraveNew = new String[]{""};
-     //   String commonKey = "enchantments.commonEngrave";
-       // String uncommonKey = "enchantments.uncommonEngrave";
-     //   String rareKey = "enchantments.rareEngrave";
-     //   String veryRareKey = "enchantments.veryRareEngrave";
-     //   String blacklistedKey = "enchantments.researcherEnchant";
-     //   content = this.addItemsToTOMLEngravings(content, commonKey, commonEngraveNew);
-     //   content = this.addItemsToTOMLEngravings(content, uncommonKey, uncommonEngraveNew);
-     //   content = this.addItemsToTOMLEngravings(content, rareKey, rareEngraveNew);
-     //   content = this.addItemsToTOMLEngravings(content, veryRareKey, veryRareEngraveNew);
-      //  content = this.addBlacklistToTOMLEngravings(content, blacklistedKey, blacklistedEngraveNew);
+    //   String[] blacklistedEngraveNew = new String[]{""};
+    //   String commonKey = "enchantments.commonEngrave";
+    // String uncommonKey = "enchantments.uncommonEngrave";
+    //   String rareKey = "enchantments.rareEngrave";
+    //   String veryRareKey = "enchantments.veryRareEngrave";
+    //   String blacklistedKey = "enchantments.researcherEnchant";
+    //   content = this.addItemsToTOMLEngravings(content, commonKey, commonEngraveNew);
+    //   content = this.addItemsToTOMLEngravings(content, uncommonKey, uncommonEngraveNew);
+    //   content = this.addItemsToTOMLEngravings(content, rareKey, rareEngraveNew);
+    //   content = this.addItemsToTOMLEngravings(content, veryRareKey, veryRareEngraveNew);
+    //  content = this.addBlacklistToTOMLEngravings(content, blacklistedKey, blacklistedEngraveNew);
 
     //   try {
-     //       BufferedWriter writer = new BufferedWriter(new FileWriter(tomlFile));
+    //       BufferedWriter writer = new BufferedWriter(new FileWriter(tomlFile));
 
-     //       try {
-         //       writer.write(content);
-        //    } catch (Throwable var19) {
-       //         try {
-       //             writer.close();
-        //        } catch (Throwable var18) {
-         //           var19.addSuppressed(var18);
-        //        }
+    //       try {
+    //       writer.write(content);
+    //    } catch (Throwable var19) {
+    //         try {
+    //             writer.close();
+    //        } catch (Throwable var18) {
+    //           var19.addSuppressed(var18);
+    //        }
 
-         //       throw var19;
-       //     }
+    //       throw var19;
+    //     }
 
-        //    writer.close();
-     //   } catch (IOException var20) {
-       //     IOException e = var20;
-      //      e.printStackTrace();
-       //     System.out.println("Error writing to the TOML file: " + e.getMessage());
-       // }
+    //    writer.close();
+    //   } catch (IOException var20) {
+    //     IOException e = var20;
+    //      e.printStackTrace();
+    //     System.out.println("Error writing to the TOML file: " + e.getMessage());
+    // }
 
-     //   System.out.println("Engraving enchantments added to TOML successfully.");
- //   }
+    //   System.out.println("Engraving enchantments added to TOML successfully.");
+    //   }
 
 //    private String addItemsToTOMLEngravings(String content, String enchantmentSection, String[] newItems) {
 //        int sectionIndex = content.indexOf("[" + enchantmentSection + "]");
@@ -416,7 +432,7 @@ public class Mythos {
                 String[] var7 = newItems;
                 int var8 = newItems.length;
 
-                for(int var9 = 0; var9 < var8; ++var9) {
+                for (int var9 = 0; var9 < var8; ++var9) {
                     String newItem = var7[var9];
                     if (!listContent.contains(newItem)) {
                         listContent = listContent.replace("]", ", \"" + newItem + "\"]");
