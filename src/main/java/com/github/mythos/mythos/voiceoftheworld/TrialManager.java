@@ -1,5 +1,6 @@
 package com.github.mythos.mythos.voiceoftheworld;
 
+import com.github.mythos.mythos.config.MythosSkillsConfig;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -24,6 +25,7 @@ public class TrialManager {
     }
 
     public static boolean initiateTrial(ServerPlayer player, String trialID) {
+        if (!MythosSkillsConfig.voice_of_the_world.get()) return false;
         if (player.level.isClientSide()) return false;
 
         if (hasActiveTrial(player)) return false;

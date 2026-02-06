@@ -1,6 +1,7 @@
 package com.github.mythos.mythos.voiceoftheworld;
 
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
+import com.github.mythos.mythos.config.MythosSkillsConfig;
 import com.github.mythos.mythos.networking.MythosNetwork;
 import com.github.mythos.mythos.networking.play2server.ScreenShakePacket;
 import net.minecraft.core.particles.ParticleTypes;
@@ -71,6 +72,7 @@ public class VoiceOfTheWorld {
     }
 
     public static void delayedAnnouncement(ServerPlayer player, Priority priority, String... messages) {
+        if (!MythosSkillsConfig.voice_of_the_world.get()) return;
         if (player == null) return;
         long time = System.currentTimeMillis();
         for (String msg : messages) {
@@ -79,11 +81,13 @@ public class VoiceOfTheWorld {
     }
 
     public static void delayedAnnouncement(ServerPlayer player, String... messages) {
+        if (!MythosSkillsConfig.voice_of_the_world.get()) return;
         delayedAnnouncement(player, Priority.PROGRESS, messages);
     }
 
 
     public static void broadcast(MinecraftServer server, String message) {
+        if (!MythosSkillsConfig.voice_of_the_world.get()) return;
         Component text = Component.literal(PREFIX + message);
         server.getPlayerList().getPlayers().forEach(player -> {
             player.sendSystemMessage(text);
@@ -92,6 +96,7 @@ public class VoiceOfTheWorld {
     }
 
     public static void announceToPlayer(Player player, String message) {
+        if (!MythosSkillsConfig.voice_of_the_world.get()) return;
         if (player instanceof ServerPlayer serverPlayer) {
             serverPlayer.sendSystemMessage(Component.literal(PREFIX + message));
             serverPlayer.playNotifySound(SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.MASTER, 1.0f, 0.5f);
@@ -99,6 +104,7 @@ public class VoiceOfTheWorld {
     }
 
     public static void screenShake(ServerPlayer player, float intensity, int durationTicks) {
+        if (!MythosSkillsConfig.voice_of_the_world.get()) return;
         MinecraftServer server = player.getServer();
         if (server == null) return;
 
@@ -114,6 +120,7 @@ public class VoiceOfTheWorld {
     }
 
     public static void checkHeroEggOrDemonLordSeed(ServerPlayer player) {
+        if (!MythosSkillsConfig.voice_of_the_world.get()) return;
         CompoundTag tag = player.getPersistentData();
 
         if (TensuraPlayerCapability.isDemonLordSeed(player) && !tag.getBoolean("Mythos_SeedNotified")) {
@@ -130,8 +137,8 @@ public class VoiceOfTheWorld {
     private static void triggerSeedAcquisition(ServerPlayer player) {
         VoiceOfTheWorld.delayedAnnouncement(player, Priority.ACQUISITION,
                 "Confirmed.",
-                "Condition met. Individual: " + player.getName().getString() + " has acquired the " + SEED_COLOR + "[Demon Lord Seed].",
-                "The path to the " + HARVEST_COLOR + "[Harvest Festival] " + "§fis now accessible."
+                "Condition met. Individual: " + player.getName().getString() + " has acquired the [" + SEED_COLOR + "Demon Lord Seed" + "§f].",
+                "The path to the [" + HARVEST_COLOR + "Harvest Festival" + "§f] is now accessible."
         );
         player.playNotifySound(SoundEvents.WITHER_SPAWN, SoundSource.MASTER, 0.4f, 0.5f);
     }
@@ -139,13 +146,14 @@ public class VoiceOfTheWorld {
     private static void triggerEggAcquisition(ServerPlayer player) {
         VoiceOfTheWorld.delayedAnnouncement(player, Priority.ACQUISITION,
                 "Confirmed.",
-                "The " + EGG_COLOR + "[Hero's Egg] " + "§fhas been manifested within the soul.",
-                "Fulfill your duties to hatch the potential of a " + HERO_COLOR + "[True Hero]."
+                "The [" + EGG_COLOR + "Hero's Egg " + "§f] has been manifested within the soul.",
+                "Fulfill your duties to hatch the potential of a [" + HERO_COLOR + "True Hero" + "§f]."
         );
         player.playNotifySound(SoundEvents.BEACON_ACTIVATE, SoundSource.MASTER, 0.6f, 1.2f);
     }
 
     public static void checkAwakeningStatus(ServerPlayer player) {
+        if (!MythosSkillsConfig.voice_of_the_world.get()) return;
         CompoundTag tag = player.getPersistentData();
 
         boolean isTDL = TensuraPlayerCapability.isTrueDemonLord(player);
@@ -163,12 +171,12 @@ public class VoiceOfTheWorld {
 
     private static void triggerHarvestFestival(ServerPlayer player) {
         VoiceOfTheWorld.broadcast(Objects.requireNonNull(player.getServer()),
-                "Notice. Individual: " + player.getName().getString() + " has begun the " + HARVEST_COLOR + "[Harvest Festival].");
+                "Notice. Individual: " + player.getName().getString() + " has begun the [" + HARVEST_COLOR + "Harvest Festival" + "§f].");
 
         VoiceOfTheWorld.delayedAnnouncement(player, Priority.WORLD,
                 "Requirement fulfilled. Soul transition initiated.",
                 "Beginning gift distribution to subordinates...",
-                "Successful. Evolution to " + TDL_COLOR + "[True Demon Lord] " + "§fis complete."
+                "Successful. Evolution to [" + TDL_COLOR + "True Demon Lord" + "§f] is complete."
         );
 
         VoiceOfTheWorld.screenShake(player, 1.5f, 100); // Intensity reduced from 100 (which is extreme) to 1.5
@@ -178,7 +186,7 @@ public class VoiceOfTheWorld {
 
     private static void triggerHeroAwakening(ServerPlayer player) {
         VoiceOfTheWorld.broadcast(Objects.requireNonNull(player.getServer()),
-                "Announcement. The " + EGG_COLOR + "[Hero's Egg] " + "§fhas hatched. A new " + HERO_COLOR + "[True Hero] " + "§fhas been birthed.");
+                "Announcement. The [" + EGG_COLOR + "Hero's Egg" + "§f] has hatched. A new [" + HERO_COLOR + "True Hero" + "§f] has been born.");
 
         VoiceOfTheWorld.screenShake(player, 1.5f, 100);
         player.playNotifySound(SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.MASTER, 0.5f, 1.5f);

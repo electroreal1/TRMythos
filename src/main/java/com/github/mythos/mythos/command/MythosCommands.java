@@ -14,18 +14,15 @@ import com.github.mythos.mythos.voiceoftheworld.VoiceOfTheWorld;
 import com.github.mythos.mythos.voiceoftheworld.WorldTrial;
 import com.github.mythos.mythos.voiceoftheworld.WorldTrialRegistry;
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.BoolArgumentType;
-import com.mojang.brigadier.arguments.DoubleArgumentType;
-import com.mojang.brigadier.arguments.FloatArgumentType;
-import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.arguments.*;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraftforge.network.PacketDistributor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -144,82 +141,83 @@ public class MythosCommands {
                                 context.getSource().sendSuccess(Component.literal("§7- §f" + id + " §8(§d" + trial.getName() + "§8)"), false);
                             });
                             return 1;
-                        })))
+                        }))
 
-                .then(Commands.literal("pause")
-                        .requires(source -> source.hasPermission(4))
-                        .then(Commands.argument("state", BoolArgumentType.bool())
-                                .executes(context -> {
-                                    boolean state = BoolArgumentType.getBool(context, "state");
-                                    TrialManager.setPaused(state);
-                                    String msg = state ? "§cPAUSED" : "§aRESUMED";
-                                    context.getSource().sendSuccess(Component.literal("§6[Mythos] §fWorld Trials are now " + msg), true);
-                                    return 1;
-                                })))
-                .then(Commands.literal("simulate")
-                        .requires(source -> source.hasPermission(4))
-                        .then(Commands.argument("target", EntityArgument.player())
-                                .then(Commands.argument("trialId", StringArgumentType.word())
+                        .then(Commands.literal("pause")
+                                .requires(source -> source.hasPermission(4))
+                                .then(Commands.argument("state", BoolArgumentType.bool())
                                         .executes(context -> {
-                                            ServerPlayer target = EntityArgument.getPlayer(context, "target");
-                                            String trialId = StringArgumentType.getString(context, "trialId");
-                                            WorldTrial trial = WorldTrialRegistry.TRIALS.get(trialId);
-
-                                            if (trial != null) {
-                                                trial.checkProgress(target, trial.getRequirement());
-                                                context.getSource().sendSuccess(Component.literal("§a[Mythos] Simulated completion of " + trialId + " for " + target.getScoreboardName()), true);
-                                            } else {
-                                                context.getSource().sendFailure(Component.literal("§cError: Trial not found."));
-                                            }
+                                            boolean state = BoolArgumentType.getBool(context, "state");
+                                            TrialManager.setPaused(state);
+                                            String msg = state ? "§cPAUSED" : "§aRESUMED";
+                                            context.getSource().sendSuccess(Component.literal("§6[Mythos] §fWorld Trials are now " + msg), true);
                                             return 1;
-                                        }))))
+                                        })))
+                        .then(Commands.literal("simulate")
+                                .requires(source -> source.hasPermission(4))
+                                .then(Commands.argument("target", EntityArgument.player())
+                                        .then(Commands.argument("trialId", StringArgumentType.word())
+                                                .executes(context -> {
+                                                    ServerPlayer target = EntityArgument.getPlayer(context, "target");
+                                                    String trialId = StringArgumentType.getString(context, "trialId");
+                                                    WorldTrial trial = WorldTrialRegistry.TRIALS.get(trialId);
 
-                .requires(source -> source.hasPermission(4))
-                // Clear
-                .then(Commands.literal("clear")
-                        .then(Commands.argument("target", EntityArgument.player())
-                                .executes(context -> {
-                                    ServerPlayer target = EntityArgument.getPlayer(context, "target");
-                                    TrialManager.clearActiveTrial(target);
-                                    context.getSource().sendSuccess(Component.literal("§a[Mythos] Cleared active trials for " + target.getScoreboardName()), true);
-                                    return 1;
-                                })
-                        )
-                )
-                .then(Commands.literal("reset_all")
+                                                    if (trial != null) {
+                                                        trial.checkProgress(target, trial.getRequirement());
+                                                        context.getSource().sendSuccess(Component.literal("§a[Mythos] Simulated completion of " + trialId + " for " + target.getScoreboardName()), true);
+                                                    } else {
+                                                        context.getSource().sendFailure(Component.literal("§cError: Trial not found."));
+                                                    }
+                                                    return 1;
+                                                }))))
+
                         .requires(source -> source.hasPermission(4))
-                        .then(Commands.argument("target", EntityArgument.player()).executes(context -> {
-                            ServerPlayer target = EntityArgument.getPlayer(context, "target");
-                            CompoundTag tag = target.getPersistentData().getCompound(ServerPlayer.PERSISTED_NBT_TAG);
-
-                            tag.getAllKeys().stream()
-                                    .filter(key -> key.startsWith("Trial_"))
-                                    .toList()
-                                    .forEach(tag::remove);
-
-                            TrialManager.clearActiveTrial(target);
-                            context.getSource().sendSuccess(Component.literal("§a[Mythos] All trial data purged for " + target.getScoreboardName()), true);
-                            return 1;
-                        })))
-                // Set
-                .then(Commands.literal("set")
-                        .then(Commands.argument("target", EntityArgument.player())
-                                .then(Commands.argument("trialId", StringArgumentType.word())
+                        // Clear
+                        .then(Commands.literal("clear")
+                                .then(Commands.argument("target", EntityArgument.player())
                                         .executes(context -> {
                                             ServerPlayer target = EntityArgument.getPlayer(context, "target");
-                                            String trialId = StringArgumentType.getString(context, "trialId");
-
-                                            if (!WorldTrialRegistry.TRIALS.containsKey(trialId)) {
-                                                context.getSource().sendFailure(Component.literal("§cError: Trial ID '" + trialId + "' not found in registry."));
-                                                return 0;
-                                            }
-
                                             TrialManager.clearActiveTrial(target);
-                                            TrialManager.initiateTrial(target, trialId);
-
-                                            context.getSource().sendSuccess(Component.literal("§a[Mythos] Forced trial '" + trialId + "' onto " + target.getScoreboardName()), true);
+                                            context.getSource().sendSuccess(Component.literal("§a[Mythos] Cleared active trials for " + target.getScoreboardName()), true);
                                             return 1;
                                         })
+                                )
+                        )
+                        .then(Commands.literal("reset_all")
+                                .requires(source -> source.hasPermission(4))
+                                .then(Commands.argument("target", EntityArgument.player()).executes(context -> {
+                                    ServerPlayer target = EntityArgument.getPlayer(context, "target");
+                                    CompoundTag tag = target.getPersistentData().getCompound(ServerPlayer.PERSISTED_NBT_TAG);
+
+                                    tag.getAllKeys().stream()
+                                            .filter(key -> key.startsWith("Trial_"))
+                                            .toList()
+                                            .forEach(tag::remove);
+
+                                    TrialManager.clearActiveTrial(target);
+                                    context.getSource().sendSuccess(Component.literal("§a[Mythos] All trial data purged for " + target.getScoreboardName()), true);
+                                    return 1;
+                                })))
+                        // Set
+                        .then(Commands.literal("set")
+                                .then(Commands.argument("target", EntityArgument.player())
+                                        .then(Commands.argument("trialId", StringArgumentType.word())
+                                                .executes(context -> {
+                                                    ServerPlayer target = EntityArgument.getPlayer(context, "target");
+                                                    String trialId = StringArgumentType.getString(context, "trialId");
+
+                                                    if (!WorldTrialRegistry.TRIALS.containsKey(trialId)) {
+                                                        context.getSource().sendFailure(Component.literal("§cError: Trial ID '" + trialId + "' not found in registry."));
+                                                        return 0;
+                                                    }
+
+                                                    TrialManager.clearActiveTrial(target);
+                                                    TrialManager.initiateTrial(target, trialId);
+
+                                                    context.getSource().sendSuccess(Component.literal("§a[Mythos] Forced trial '" + trialId + "' onto " + target.getScoreboardName()), true);
+                                                    return 1;
+                                                })
+                                        )
                                 )
                         )
                 )
@@ -232,15 +230,22 @@ public class MythosCommands {
                             StringBuilder sb = new StringBuilder("§6--- Mythos Config Status ---\n");
                             sb.append("§7Vampire Ancestor: ").append(MythosSkillsConfig.VampireAncestor.get() ? "§aON" : "§cOFF").append("\n");
                             sb.append("§7Dead Apostle: ").append(MythosSkillsConfig.DeadApostleAncestor.get() ? "§aON" : "§cOFF").append("\n");
-                            sb.append("§7Ultimate Obtainment: ").append(MythosSkillsConfig.EnableUltimateSkillObtainment.get() ? "§aON" : "§cOFF");
-                            sb.append("§7Ultimate Obtainment: ").append(MythosSkillsConfig.endOfEvilReset.get() ? "§aON" : "§cOFF");
-                            sb.append("§7Ultimate Obtainment: ").append(MythosSkillsConfig.ApophisEmbodiment.get() ? "§aON" : "§cOFF");
-                            sb.append("§7Ultimate Obtainment: ").append(GodClassHandler.get(context.getSource().getLevel()).isAnnouncementsEnabled() ? "§aON" : "§cOFF");
-                            sb.append("§7Ultimate Obtainment: ").append(MythosSkillsConfig.endOfEvilReset.get() ? "§aON" : "§cOFF");
-                            sb.append("§7Ultimate Obtainment: ").append(MythosSkillsConfig.endOfEvilReset.get() ? "§aON" : "§cOFF");
+                            sb.append("§7Ultimate Obtainment: ").append(MythosSkillsConfig.EnableUltimateSkillObtainment.get() ? "§aON" : "§cOFF").append("\n");
+                            sb.append("§7End of Evil: ").append(MythosSkillsConfig.endOfEvilReset.get() ? "§aON" : "§cOFF").append("\n");
+                            sb.append("§7Apophis Embodiment: ").append(MythosSkillsConfig.ApophisEmbodiment.get() ? "§aON" : "§cOFF").append("\n");
+                            sb.append("§7Announce Ultimates: ").append(GodClassHandler.get(context.getSource().getLevel()).isAnnouncementsEnabled() ? "§aON" : "§cOFF").append("\n");
+                            sb.append("§7Voice of the World: ").append(MythosSkillsConfig.voice_of_the_world.get() ? "§aON" : "§cOFF");
                             context.getSource().sendSuccess(Component.literal(sb.toString()), false);
                             return 1;
                         }))
+                        .requires(source -> source.hasPermission(4))
+                        .then(Commands.literal("voice_of_the_world")
+                                .then(Commands.argument("value", BoolArgumentType.bool()).executes(context -> {
+                                    boolean val = BoolArgumentType.getBool(context, "value");
+                                    MythosSkillsConfig.voice_of_the_world.set(val);
+                                    context.getSource().sendSuccess(Component.literal("§6[Mythos Config] §fVoice of the World set to: " + val), true);
+                                    return 1;
+                                })))
                         // Vampire Ancestor
                         .then(Commands.literal("vampire_ancestor")
                                 .then(Commands.argument("value", BoolArgumentType.bool()).executes(context -> {
@@ -323,6 +328,77 @@ public class MythosCommands {
                 .then(Commands.literal("ep")
                         .requires(source -> source.hasPermission(4))
                         .then(Commands.argument("target", EntityArgument.player())
+                                .then(Commands.literal("get")
+                                        .executes(context -> {
+                                            ServerPlayer target = EntityArgument.getPlayer(context, "target");
+                                            double mp = TensuraPlayerCapability.getBaseMagicule(target);
+                                            double ap = TensuraPlayerCapability.getBaseAura(target);
+                                            double total = mp + ap;
+
+                                            context.getSource().sendSuccess(Component.literal("§b--- EP Status: " + target.getScoreboardName() + " ---"), false);
+                                            context.getSource().sendSuccess(Component.literal("§7Magicules (MP): §b" + String.format("%.0f", mp)), false);
+                                            context.getSource().sendSuccess(Component.literal("§7Aura (AP): §e" + String.format("%.0f", ap)), false);
+                                            context.getSource().sendSuccess(Component.literal("§7Total EP: §a" + String.format("%.0f", total)), false);
+                                            return 1;
+                                        }))
+
+                                .then(Commands.literal("set")
+                                        .then(Commands.literal("mp").then(Commands.argument("amount", DoubleArgumentType.doubleArg(0)).executes(context -> {
+                                            ServerPlayer target = EntityArgument.getPlayer(context, "target");
+                                            double amount = DoubleArgumentType.getDouble(context, "amount");
+                                            TensuraPlayerCapability.setMagicule(target, amount);
+                                            context.getSource().sendSuccess(Component.literal("§b[EP] §fSet Magicules for " + target.getScoreboardName() + " to " + amount), true);
+                                            TensuraPlayerCapability.sync(target);
+                                            return 1;
+                                        })))
+                                        .then(Commands.literal("ap").then(Commands.argument("amount", DoubleArgumentType.doubleArg(0)).executes(context -> {
+                                            ServerPlayer target = EntityArgument.getPlayer(context, "target");
+                                            double amount = DoubleArgumentType.getDouble(context, "amount");
+                                            TensuraPlayerCapability.setAura(target, amount);
+                                            context.getSource().sendSuccess(Component.literal("§e[EP] §fSet Aura for " + target.getScoreboardName() + " to " + amount), true);
+                                            TensuraPlayerCapability.sync(target);
+                                            return 1;
+                                        })))
+                                        .then(Commands.literal("total").then(Commands.argument("amount", DoubleArgumentType.doubleArg(0)).executes(context -> {
+                                            ServerPlayer target = EntityArgument.getPlayer(context, "target");
+                                            double amount = DoubleArgumentType.getDouble(context, "amount");
+                                            double split = amount / 2.0;
+                                            TensuraPlayerCapability.setMagicule(target, split);
+                                            TensuraPlayerCapability.setAura(target, split);
+                                            context.getSource().sendSuccess(Component.literal("§a[EP] §fSet Total EP for " + target.getScoreboardName() + " to " + amount + " (50/50 split)"), true);
+                                            TensuraPlayerCapability.sync(target);
+                                            return 1;
+                                        })))
+                                )
+
+                                .then(Commands.literal("add")
+                                        .then(Commands.literal("mp").then(Commands.argument("amount", DoubleArgumentType.doubleArg(0)).executes(context -> {
+                                            ServerPlayer target = EntityArgument.getPlayer(context, "target");
+                                            double amount = DoubleArgumentType.getDouble(context, "amount");
+                                            TensuraPlayerCapability.setMagicule(target, TensuraPlayerCapability.getBaseMagicule(target) + amount);
+                                            context.getSource().sendSuccess(Component.literal("§b[EP] §fAdded " + amount + " Magicules to " + target.getScoreboardName()), true);
+                                            TensuraPlayerCapability.sync(target);
+                                            return 1;
+                                        })))
+                                        .then(Commands.literal("ap").then(Commands.argument("amount", DoubleArgumentType.doubleArg(0)).executes(context -> {
+                                            ServerPlayer target = EntityArgument.getPlayer(context, "target");
+                                            double amount = DoubleArgumentType.getDouble(context, "amount");
+                                            TensuraPlayerCapability.setAura(target, TensuraPlayerCapability.getBaseAura(target) + amount);
+                                            context.getSource().sendSuccess(Component.literal("§e[EP] §fAdded " + amount + " Aura to " + target.getScoreboardName()), true);
+                                            TensuraPlayerCapability.sync(target);
+                                            return 1;
+                                        })))
+                                        .then(Commands.literal("total").then(Commands.argument("amount", DoubleArgumentType.doubleArg(0)).executes(context -> {
+                                            ServerPlayer target = EntityArgument.getPlayer(context, "target");
+                                            double amount = DoubleArgumentType.getDouble(context, "amount");
+                                            double split = amount / 2.0;
+                                            TensuraPlayerCapability.setMagicule(target, TensuraPlayerCapability.getBaseMagicule(target) + split);
+                                            TensuraPlayerCapability.setAura(target, TensuraPlayerCapability.getBaseAura(target) + split);
+                                            context.getSource().sendSuccess(Component.literal("§a[EP] §fAdded " + amount + " Total EP to " + target.getScoreboardName()), true);
+                                            TensuraPlayerCapability.sync(target);
+                                            return 1;
+                                        })))
+                                )
 
                                 .then(Commands.literal("remove")
                                         .then(Commands.literal("mp").then(Commands.argument("amount", DoubleArgumentType.doubleArg(0)).executes(context -> {
@@ -330,6 +406,7 @@ public class MythosCommands {
                                             double result = Math.max(0, TensuraPlayerCapability.getBaseMagicule(target) - DoubleArgumentType.getDouble(context, "amount"));
                                             TensuraPlayerCapability.setMagicule(target, result);
                                             context.getSource().sendSuccess(Component.literal("§c[EP] §fReduced MP for " + target.getScoreboardName()), true);
+                                            TensuraPlayerCapability.sync(target);
                                             return 1;
                                         })))
                                         .then(Commands.literal("ap").then(Commands.argument("amount", DoubleArgumentType.doubleArg(0)).executes(context -> {
@@ -337,91 +414,9 @@ public class MythosCommands {
                                             double result = Math.max(0, TensuraPlayerCapability.getBaseAura(target) - DoubleArgumentType.getDouble(context, "amount"));
                                             TensuraPlayerCapability.setAura(target, result);
                                             context.getSource().sendSuccess(Component.literal("§c[EP] §fReduced AP for " + target.getScoreboardName()), true);
+                                            TensuraPlayerCapability.sync(target);
                                             return 1;
-                                        })))
-                                        .then(Commands.literal("total").then(Commands.argument("amount", DoubleArgumentType.doubleArg(0)).executes(context -> {
-                                            ServerPlayer target = EntityArgument.getPlayer(context, "target");
-                                            double sub = DoubleArgumentType.getDouble(context, "amount") / 2.0;
-                                            TensuraPlayerCapability.setMagicule(target, Math.max(0, TensuraPlayerCapability.getBaseMagicule(target) - sub));
-                                            TensuraPlayerCapability.setAura(target, Math.max(0, TensuraPlayerCapability.getBaseAura(target) - sub));
-                                            context.getSource().sendSuccess(Component.literal("§c[EP] §fReduced total EP for " + target.getScoreboardName()), true);
-                                            return 1;
-                                        })))
-
-                                        .then(Commands.literal("get")
-                                                .executes(context -> {
-                                                    ServerPlayer target = EntityArgument.getPlayer(context, "target");
-                                                    double mp = TensuraPlayerCapability.getBaseMagicule(target);
-                                                    double ap = TensuraPlayerCapability.getBaseAura(target);
-                                                    double total = mp + ap;
-
-                                                    context.getSource().sendSuccess(Component.literal("§b--- EP Status: " + target.getScoreboardName() + " ---"), false);
-                                                    context.getSource().sendSuccess(Component.literal("§7Magicules (MP): §b" + String.format("%.0f", mp)), false);
-                                                    context.getSource().sendSuccess(Component.literal("§7Aura (AP): §e" + String.format("%.0f", ap)), false);
-                                                    context.getSource().sendSuccess(Component.literal("§7Total EP: §a" + String.format("%.0f", total)), false);
-                                                    return 1;
-                                                }))
-
-
-                                        .then(Commands.literal("set")
-                                                .then(Commands.literal("magicules")
-                                                        .then(Commands.argument("amount", DoubleArgumentType.doubleArg(0)).executes(context -> {
-                                                            ServerPlayer target = EntityArgument.getPlayer(context, "target");
-                                                            double amount = DoubleArgumentType.getDouble(context, "amount");
-                                                            TensuraPlayerCapability.setMagicule(target, amount);
-                                                            context.getSource().sendSuccess(Component.literal("§b[EP] §fSet Magicules for " + target.getScoreboardName() + " to " + amount), true);
-                                                            return 1;
-                                                        })))
-                                                .then(Commands.literal("aura")
-                                                        .then(Commands.argument("amount", DoubleArgumentType.doubleArg(0)).executes(context -> {
-                                                            ServerPlayer target = EntityArgument.getPlayer(context, "target");
-                                                            double amount = DoubleArgumentType.getDouble(context, "amount");
-                                                            TensuraPlayerCapability.setAura(target, amount);
-                                                            context.getSource().sendSuccess(Component.literal("§e[EP] §fSet Aura for " + target.getScoreboardName() + " to " + amount), true);
-                                                            return 1;
-                                                        })))
-                                                .then(Commands.literal("total")
-                                                        .then(Commands.argument("amount", DoubleArgumentType.doubleArg(0)).executes(context -> {
-                                                            ServerPlayer target = EntityArgument.getPlayer(context, "target");
-                                                            double amount = DoubleArgumentType.getDouble(context, "amount");
-                                                            double split = amount / 2.0;
-                                                            TensuraPlayerCapability.setMagicule(target, split);
-                                                            TensuraPlayerCapability.setAura(target, split);
-                                                            context.getSource().sendSuccess(Component.literal("§a[EP] §fSet Total EP for " + target.getScoreboardName() + " to " + amount + " (50/50 split)"), true);
-                                                            return 1;
-                                                        })))
-                                        )
-
-                                        .then(Commands.literal("add")
-                                                .then(Commands.literal("magicules")
-                                                        .then(Commands.argument("amount", DoubleArgumentType.doubleArg()).executes(context -> {
-                                                            ServerPlayer target = EntityArgument.getPlayer(context, "target");
-                                                            double amount = DoubleArgumentType.getDouble(context, "amount");
-                                                            TensuraPlayerCapability.setMagicule(target, TensuraPlayerCapability.getBaseMagicule(target) + amount);
-                                                            context.getSource().sendSuccess(Component.literal("§b[EP] §fAdded " + amount + " Magicules to " + target.getScoreboardName()), true);
-                                                            return 1;
-                                                        })))
-                                                .then(Commands.literal("aura")
-                                                        .then(Commands.argument("amount", DoubleArgumentType.doubleArg()).executes(context -> {
-                                                            ServerPlayer target = EntityArgument.getPlayer(context, "target");
-                                                            double amount = DoubleArgumentType.getDouble(context, "amount");
-                                                            TensuraPlayerCapability.setAura(target, TensuraPlayerCapability.getBaseAura(target) + amount);
-                                                            context.getSource().sendSuccess(Component.literal("§e[EP] §fAdded " + amount + " Aura to " + target.getScoreboardName()), true);
-                                                            return 1;
-                                                        })))
-                                                .then(Commands.literal("total")
-                                                        .then(Commands.argument("amount", DoubleArgumentType.doubleArg()).executes(context -> {
-                                                            ServerPlayer target = EntityArgument.getPlayer(context, "target");
-                                                            double amount = DoubleArgumentType.getDouble(context, "amount");
-                                                            double split = amount / 2.0;
-                                                            TensuraPlayerCapability.setMagicule(target, TensuraPlayerCapability.getBaseMagicule(target) + split);
-                                                            TensuraPlayerCapability.setAura(target, TensuraPlayerCapability.getBaseAura(target) + split);
-                                                            context.getSource().sendSuccess(Component.literal("§a[EP] §fAdded " + amount + " Total EP to " + target.getScoreboardName()), true);
-                                                            return 1;
-                                                        })))
-                                        )
-                                )
-                        ))
+                                        }))))))
 
                 .then(Commands.literal("soulscan")
                         .requires(source -> source.hasPermission(4))
@@ -453,7 +448,7 @@ public class MythosCommands {
                             StringBuilder sb = new StringBuilder();
                             sb.append("§b--- Soul Signature: §f").append(target.getScoreboardName()).append(" §b---\n");
                             sb.append("§7Race: §d").append(raceName).append("\n");
-                            sb.append("§7Energy: §b").append(String.format("%.0f", mag)).append("M §f/ §e").append(String.format("%.0f", aura)).append("A\n");
+                            sb.append("§7EP: §b").append(String.format("%.0f", mag)).append(" Magicules §f/ §e").append(String.format("%.0f", aura)).append(" Aura\n");
 
                             sb.append("§7Potential: ");
                             if (isSeed) sb.append("§4[Demon Lord Seed] ");
@@ -510,84 +505,84 @@ public class MythosCommands {
                         }))
 
                 .then(Commands.literal("world")
-                        .requires(source -> source.hasPermission(4))
                         .then(Commands.literal("shaders")
+                                .requires(source -> source.hasPermission(4))
+                                // 1. TINT COMMAND
                                 .then(Commands.literal("tint")
-                                        .then(Commands.argument("r", FloatArgumentType.floatArg(0, 1))
-                                                .then(Commands.argument("g", FloatArgumentType.floatArg(0, 1))
-                                                        .then(Commands.argument("b", FloatArgumentType.floatArg(0, 1))
+                                        .then(Commands.argument("r", IntegerArgumentType.integer(0, 255))
+                                                .then(Commands.argument("g", IntegerArgumentType.integer(0, 255))
+                                                        .then(Commands.argument("b", IntegerArgumentType.integer(0, 255))
                                                                 .then(Commands.argument("targets", EntityArgument.players())
                                                                         .executes(context -> {
-                                                                            float r = FloatArgumentType.getFloat(context, "r");
-                                                                            float g = FloatArgumentType.getFloat(context, "g");
-                                                                            float b = FloatArgumentType.getFloat(context, "b");
+                                                                            float r = IntegerArgumentType.getInteger(context, "r") / 255.0f;
+                                                                            float g = IntegerArgumentType.getInteger(context, "g") / 255.0f;
+                                                                            float b = IntegerArgumentType.getInteger(context, "b") / 255.0f;
+
                                                                             var players = EntityArgument.getPlayers(context, "targets");
+                                                                            for (ServerPlayer p : players) {
+                                                                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/master_sky.json", r, g, b), p);
+                                                                            }
 
-                                                                            players.forEach(p -> {
-                                                                                MythosNetwork.INSTANCE.send(PacketDistributor.PLAYER.with(() -> p),
-                                                                                        new ShaderPacket("trmythos:shaders/post/master_sky.json", r, g, b));
-                                                                            });
+                                                                            context.getSource().sendSuccess(Component.literal("§b[Mythos] Sky/Fog tint set."), true);
                                                                             return 1;
-                                                                        })))))))
+                                                                        })))))
 
-                        .requires(source -> source.hasPermission(4))
-                        .then(Commands.literal("scream").executes(context -> {
-                            for (ServerPlayer player : context.getSource().getServer().getPlayerList().getPlayers()) {
-                                VoiceOfTheWorld.delayedAnnouncement(player, VoiceOfTheWorld.Priority.WORLD,
-                                        "§4[ CRITICAL ERROR ]",
-                                        "§cSoul-Space partition dissolved.",
-                                        "§4Entering the Void.");
+                                        .then(Commands.literal("scream").executes(context -> {
+                                            for (ServerPlayer player : context.getSource().getServer().getPlayerList().getPlayers()) {
+                                                VoiceOfTheWorld.delayedAnnouncement(player, VoiceOfTheWorld.Priority.WORLD,
+                                                        "§4[ CRITICAL ERROR ]", "§cSoul-Space partition dissolved.", "§4Entering the Void.");
 
-                                player.playNotifySound(net.minecraft.sounds.SoundEvents.ENDER_DRAGON_DEATH, SoundSource.MASTER, 1.2f, 0.1f);
-                                player.playNotifySound(net.minecraft.sounds.SoundEvents.GHAST_SCREAM, SoundSource.MASTER, 0.8f, 0.5f);
-                                player.playNotifySound(net.minecraft.sounds.SoundEvents.WITHER_SPAWN, SoundSource.MASTER, 1.0f, 0.2f);
+                                                player.playNotifySound(SoundEvents.ENDER_DRAGON_DEATH, SoundSource.MASTER, 1.2f, 0.1f);
+                                                player.playNotifySound(SoundEvents.GHAST_SCREAM, SoundSource.MASTER, 0.8f, 0.5f);
+                                                player.playNotifySound(SoundEvents.WITHER_SPAWN, SoundSource.MASTER, 1.0f, 0.2f);
 
-                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/master_sky.json", 0.6f, 0.0f, 0.0f), player);
 
-                                new Thread(() -> {
-                                    try {
-                                        Thread.sleep(3500);
-                                        MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/master_sky.json", 0.0f, 0.0f, 0.0f), player);
-                                    } catch (InterruptedException e) { e.printStackTrace(); }
-                                }).start();
-                            }
-                            return 1;
-                        }))
+                                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/master_sky.json", 0.7f, 0.0f, 0.0f), player);
+                                                VoiceOfTheWorld.screenShake(player, 60, 5);
+                                            }
+                                            return 1;
+                                        }))
 
-                        .requires(source -> source.hasPermission(4))
-                        .then(Commands.literal("restore").executes(context -> {
-                            for (ServerPlayer player : context.getSource().getServer().getPlayerList().getPlayers()) {
+                                        .requires(source -> source.hasPermission(4))
+                                        .then(Commands.literal("restore").executes(context -> {
+                                            for (ServerPlayer player : context.getSource().getServer().getPlayerList().getPlayers()) {
+                                                VoiceOfTheWorld.delayedAnnouncement(player, VoiceOfTheWorld.Priority.WORLD,
+                                                        "§b[ SYSTEM RECOVERY ]", "§fRe-establishing soul-space partitions...",
+                                                        "§7Calibrating visual sensors.");
 
-                                VoiceOfTheWorld.delayedAnnouncement(player, VoiceOfTheWorld.Priority.WORLD,
-                                        "§b[ SYSTEM RECOVERY ]",
-                                        "§fRe-establishing soul-space partitions...",
-                                        "§7Calibrating visual sensors.");
+                                                new Thread(() -> {
+                                                    try {
+                                                        Thread.sleep(2000);
 
-                                new Thread(() -> {
-                                    try {
-                                        Thread.sleep(2000);
+                                                        MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/master_sky.json", 0.2f, 0.2f, 0.2f), player);
 
-                                        MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/master_sky.json", 0.2f, 0.2f, 0.2f), player);
-                                        player.playNotifySound(net.minecraft.sounds.SoundEvents.BEACON_ACTIVATE, net.minecraft.sounds.SoundSource.MASTER, 0.5f, 0.5f);
-                                        Thread.sleep(3000);
+                                                        player.playNotifySound(net.minecraft.sounds.SoundEvents.BEACON_ACTIVATE, net.minecraft.sounds.SoundSource.MASTER, 0.5f, 0.5f);
 
-                                        MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/master_sky.json", 0.5f, 0.5f, 0.6f), player);
-                                        Thread.sleep(3000);
+                                                        Thread.sleep(3000);
 
-                                        MythosNetwork.sendToPlayer(new ShaderPacket("none", 1.0f, 1.0f, 1.0f), player);
-                                        player.playNotifySound(net.minecraft.sounds.SoundEvents.PLAYER_LEVELUP, net.minecraft.sounds.SoundSource.MASTER, 0.8f, 1.2f);
+                                                        MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/master_sky.json", 0.5f, 0.5f, 0.6f), player);
 
-                                        VoiceOfTheWorld.delayedAnnouncement(player, VoiceOfTheWorld.Priority.WORLD,
-                                                "§aNotice.",
-                                                "§fWorld stability restored.",
-                                                "§7Soul core synchronized.");
+                                                        Thread.sleep(3000);
 
-                                    } catch (InterruptedException e) { e.printStackTrace(); }
-                                }).start();
-                            }
-                            return 1;
-                        })))
+                                                        MythosNetwork.sendToPlayer(new ShaderPacket("none", 1.0f, 1.0f, 1.0f), player);
 
+                                                        player.playNotifySound(net.minecraft.sounds.SoundEvents.PLAYER_LEVELUP, net.minecraft.sounds.SoundSource.MASTER, 0.8f, 1.2f);
+
+                                                        VoiceOfTheWorld.delayedAnnouncement(player, VoiceOfTheWorld.Priority.WORLD, "§aNotice.", "§fWorld stability restored.", "§7Soul core synchronized.");
+                                                    } catch (InterruptedException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                }).start();
+                                            }
+                                            return 1;
+                                        }))
+
+                                        .then(Commands.literal("reset").executes(context -> {
+                                            for (ServerPlayer player : context.getSource().getServer().getPlayerList().getPlayers()) {
+                                                MythosNetwork.sendToPlayer(new ShaderPacket("none", 1.0f, 1.0f, 1.0f), player);
+                                            }
+                                            return 1;
+                                        })))))
         );
     }
 }

@@ -1,5 +1,6 @@
 package com.github.mythos.mythos.voiceoftheworld;
 
+import com.github.mythos.mythos.config.MythosSkillsConfig;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.TickEvent;
@@ -12,6 +13,7 @@ public class TrialTriggers {
 
     @SubscribeEvent
     public static void onEntityKill(LivingDeathEvent event) {
+        if (!MythosSkillsConfig.voice_of_the_world.get()) return;
         if (event.getSource().getEntity() instanceof ServerPlayer player) {
             LivingEntity victim = event.getEntity();
 
@@ -27,6 +29,7 @@ public class TrialTriggers {
 
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        if (!MythosSkillsConfig.voice_of_the_world.get()) return;
         if (event.side.isServer() && event.phase == TickEvent.Phase.END) {
             ServerPlayer player = (ServerPlayer) event.player;
 

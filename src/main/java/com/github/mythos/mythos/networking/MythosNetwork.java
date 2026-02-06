@@ -77,4 +77,6 @@ public class MythosNetwork {
     public static <MSG> void sendToAllTrackingAndSelf(MSG msg, LivingEntity tracked) {
         INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> tracked), msg);
     }
+
+
 }

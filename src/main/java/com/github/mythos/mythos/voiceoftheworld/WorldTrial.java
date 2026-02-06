@@ -1,6 +1,7 @@
 package com.github.mythos.mythos.voiceoftheworld;
 
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
+import com.github.mythos.mythos.config.MythosSkillsConfig;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -55,6 +56,7 @@ public class WorldTrial {
     }
 
     public void checkProgress(ServerPlayer player, int current) {
+        if (!MythosSkillsConfig.voice_of_the_world.get()) return;
         CompoundTag tag = player.getPersistentData();
         String activeTrial = TrialManager.getActiveTrialID(player);
 

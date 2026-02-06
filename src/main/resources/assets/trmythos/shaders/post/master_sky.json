@@ -8,10 +8,7 @@
       "intarget": "minecraft:main",
       "outtarget": "swap",
       "uniforms": [
-        {
-          "name": "TintRGB",
-          "values": [ 1.0, 1.0, 1.0 ]
-        }
+        { "name": "TintRGB", "values": [ 1.0, 1.0, 1.0 ] }
       ]
     },
     {

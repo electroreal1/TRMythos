@@ -22,6 +22,7 @@ public class MythosSkillsConfig {
     public static ForgeConfigSpec.BooleanValue CarnageBloodDominion;
     public static ForgeConfigSpec.BooleanValue EnableUltimateSkillObtainment;
     public static ForgeConfigSpec.BooleanValue ApophisEmbodiment;
+    public static ForgeConfigSpec.BooleanValue voice_of_the_world;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> racesThatCanCompeteForChildOfThePlane;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> GRAM_EXTRA_DAMAGE_RACES;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> SAPLING_ENGRAVE_LIST;
@@ -122,6 +123,10 @@ public class MythosSkillsConfig {
         VampireAncestor = builder
                 .comment("if true, then on unlocking Crimson Tyrant you will be set to vampire race.")
                 .define("VampireAncestor", true);
+
+        voice_of_the_world = builder
+                .comment("if true, then the voice of the world system will be enabled.")
+                .define("voice_of_the_world", true);
 
         VampireCarnage = builder
                 .comment("if true, then on learning Carnage you will be set to vampire baron race.")

@@ -1,6 +1,7 @@
 package com.github.mythos.mythos.voiceoftheworld;
 
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
+import com.github.mythos.mythos.config.MythosSkillsConfig;
 import com.github.mythos.mythos.networking.MythosNetwork;
 import com.github.mythos.mythos.networking.play2server.ShaderPacket;
 import net.minecraft.nbt.CompoundTag;
@@ -17,6 +18,7 @@ public class TrialTickHandler {
 
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        if (!MythosSkillsConfig.voice_of_the_world.get()) return;
         if (event.side.isServer() && event.phase == TickEvent.Phase.END) {
             if (TrialManager.isPaused()) return;
             ServerPlayer player = (ServerPlayer) event.player;

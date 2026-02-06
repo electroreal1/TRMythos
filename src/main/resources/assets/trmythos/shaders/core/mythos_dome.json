@@ -1,0 +1,12 @@
+{
+  "blend": { "func": "add", "srcfactor": "src_alpha", "dstfactor": "one_minus_src_alpha" },
+  "vertex": "trmythos:mythos_dome",
+  "fragment": "trmythos:mythos_dome",
+  "attributes": [ "Position", "Color", "UV0" ],
+  "samplers": [ { "name": "Sampler0" } ],
+  "uniforms": [
+    { "name": "ModelViewMat", "type": "matrix4x4", "count": 16, "values": [ 1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1 ] },
+    { "name": "ProjMat", "type": "matrix4x4", "count": 16, "values": [ 1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1 ] },
+    { "name": "TintColor", "type": "float", "count": 3, "values": [ 1.0, 1.0, 1.0 ] }
+  ]
+}

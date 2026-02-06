@@ -1,23 +1,25 @@
-#version 110
+#version 150
 
 uniform sampler2D DiffuseSampler;
-varying vec2 texCoord;
-
+in vec2 texCoord;
 uniform vec3 TintRGB;
-uniform float Time;
+out vec4 fragColor;
+
+vec3 overlay(vec3 base, vec3 blend) {
+    return mix(1.0 - 2.0 * (1.0 - base) * (1.0 - blend), 2.0 * base * blend, step(base, vec3(0.5)));
+}
 
 void main() {
-    vec4 color = texture2D(DiffuseSampler, texCoord);
+    vec4 color = texture(DiffuseSampler, texCoord);
 
-    float luminance = dot(color.rgb, vec3(0.2126, 0.7152, 0.0722));
+    float luma = dot(color.rgb, vec3(0.2126, 0.7152, 0.0722));
 
-    float pulse = (sin(Time * 1.2) * 0.1) + 0.9;
 
-    vec3 tinted = mix(color.rgb, (TintRGB * luminance) * pulse, 0.85);
-    gl_FragColor = vec4(tinted * TintRGB, color.a);
+    float mask = smoothstep(0.1, 0.8, luma);
 
-    float dist = distance(texCoord, vec2(0.5, 0.5));
-    float vignette = smoothstep(0.7, 0.3, dist);
+    vec3 tinted = overlay(color.rgb, TintRGB);
 
-    gl_FragColor = vec4(tinted * vignette, color.a);
+    vec3 finalRGB = mix(color.rgb, tinted, mask * 0.85);
+
+    fragColor = vec4(finalRGB, color.a);
 }

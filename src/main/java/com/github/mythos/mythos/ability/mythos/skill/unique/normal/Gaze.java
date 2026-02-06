@@ -24,6 +24,12 @@ public class Gaze extends Skill {
         super(SkillType.UNIQUE);
     }
 
+    @Nullable
+    @Override
+    public MutableComponent getColoredName() {
+        return Component.literal("Gaze");
+    }
+
     @Override
     public double getObtainingEpCost() {
         return 90000;

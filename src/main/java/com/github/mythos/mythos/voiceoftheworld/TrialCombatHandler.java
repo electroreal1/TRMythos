@@ -1,5 +1,6 @@
 package com.github.mythos.mythos.voiceoftheworld;
 
+import com.github.mythos.mythos.config.MythosSkillsConfig;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.npc.Villager;
@@ -17,6 +18,7 @@ public class TrialCombatHandler {
 
     @SubscribeEvent
     public static void onLivingDeath(LivingDeathEvent event) {
+        if (!MythosSkillsConfig.voice_of_the_world.get()) return;
         if (event.getSource().getEntity() instanceof ServerPlayer player) {
             LivingEntity victim = event.getEntity();
             String activeID = TrialManager.getActiveTrialID(player);
