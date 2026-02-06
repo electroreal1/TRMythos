@@ -31,9 +31,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.List;
 
 public class AuthorLogicHandler {
-
     private static boolean isInternalProcessing = false;
-
     @SubscribeEvent
     public static void onServerChat(ServerChatEvent event) {
         if (isInternalProcessing) return;
@@ -73,46 +71,42 @@ public class AuthorLogicHandler {
 
     private static void executeEnvision(ServerPlayer author, String script) {
         String separator = "will encounter a";
-        int index = script.toLowerCase().indexOf(separator);
+        String lowerScript = script.toLowerCase();
+        int index = lowerScript.indexOf(separator);
+
         if (index == -1) return;
 
         String targetName = script.substring(0, index).trim();
-        String effectType = script.substring(index + separator.length()).toLowerCase().trim();
+        String effectType = lowerScript.substring(index + separator.length()).trim();
 
-        ServerPlayer target = null;
-        for (ServerPlayer p : author.server.getPlayerList().getPlayers()) {
-            if (p.getName().getString().equalsIgnoreCase(targetName)) {
-                target = p;
-                break;
-            }
-        }
+        ServerPlayer target = author.server.getPlayerList().getPlayerByName(targetName);
 
         if (target != null) {
-            author.sendSystemMessage(Component.literal("§d[Author] §fWriting event: §b" + effectType + " §ffor §e" + target.getName().getString() + "..."));
+            author.sendSystemMessage(Component.literal("§d[Author] §fWriting destiny for §e" + target.getName().getString() + "..."));
 
             BlockPos pos = target.blockPosition();
             ServerLevel level = target.getLevel();
 
-            // SCRIPTED EVENTS
             if (effectType.contains("lightning")) {
                 EntityType.LIGHTNING_BOLT.spawn(level, null, null, pos, MobSpawnType.COMMAND, true, true);
             } else if (effectType.contains("fire")) {
                 level.setBlockAndUpdate(pos, Blocks.FIRE.defaultBlockState());
-            } else if (effectType.contains("explosion")) {
-                level.explode(null, pos.getX(), pos.getY(), pos.getZ(), 3.0f, false, Explosion.BlockInteraction.NONE);
-            } else if (effectType.contains("hurricane")) {
-                executeHurricane(target);
-            } else if (effectType.contains("earthquake")) {
-                executeEarthquake(target);
-            } else if (effectType.contains("sinkhole")) {
-                executeSinkhole(target);
+                level.setBlockAndUpdate(pos.north(), Blocks.FIRE.defaultBlockState());
             } else if (effectType.contains("meteor")) {
                 executeMeteor(level, pos);
+            } else if (effectType.contains("earthquake")) {
+                executeEarthquake(target);
+            } else if (effectType.contains("hurricane")) {
+                executeHurricane(target);
+            } else if (effectType.contains("sinkhole")) {
+                executeSinkhole(target);
+            } else if (effectType.contains("explosion")) {
+                level.explode(null, pos.getX(), pos.getY(), pos.getZ(), 4.0f, Explosion.BlockInteraction.NONE);
             }
 
-            author.level.playSound(null, author.blockPosition(), SoundEvents.BOOK_PAGE_TURN, SoundSource.PLAYERS, 1.0f, 1.0f);
+            level.playSound(null, author.blockPosition(), SoundEvents.BOOK_PAGE_TURN, SoundSource.PLAYERS, 1.0f, 1.0f);
         } else {
-            author.sendSystemMessage(Component.literal("§c[Author] Character '" + targetName + "' not found."));
+            author.sendSystemMessage(Component.literal("§c[Author] The character '" + targetName + "' is not present in this chapter."));
         }
     }
 
