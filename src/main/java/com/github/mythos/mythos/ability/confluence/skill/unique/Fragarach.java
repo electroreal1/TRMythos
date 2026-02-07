@@ -149,49 +149,52 @@ public class Fragarach extends Skill {
 
     public void onPressed(ManasSkillInstance instance, LivingEntity entity) {
         if (entity.level.isClientSide) return;
-        if (SkillHelper.outOfMagicule(entity, instance)) return;
-
-        if (instance.getOrCreateTag().getBoolean("FragarachCreated")) {
-            if (entity instanceof Player player) {
-                player.displayClientMessage(
-                        Component.literal("You have already created Fragarach.")
-                                .setStyle(Style.EMPTY.withColor(ChatFormatting.RED)),
-                        false
-                );
-                instance.setCoolDown(instance.isMastered(player) ? 15 : 30);
-            }
+        if (SkillHelper.outOfMagicule(entity, instance)) {
             return;
-        }
+        } else {
 
-        boolean given = false;
-
-        if (entity.getMainHandItem().isEmpty()) {
-            spawnDummySword(instance, entity, InteractionHand.MAIN_HAND);
-            given = true;
-        } else if (entity.getOffhandItem().isEmpty()) {
-            spawnDummySword(instance, entity, InteractionHand.OFF_HAND);
-            given = true;
-        } else if (entity instanceof Player player) {
-            ItemStack blade = new ItemStack(MythosItems.FRAGARACH.get());
-            if (player.getInventory().add(blade)) {
-                player.inventoryMenu.broadcastChanges();
-                player.swing(InteractionHand.MAIN_HAND, true);
-                player.level.playSound(null, player.getX(), player.getY(), player.getZ(),
-                        SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0f, 1.0f);
-                given = true;
-            } else {
-                player.displayClientMessage(
-                        Component.literal("Both hands and inventory are full!")
-                                .setStyle(Style.EMPTY.withColor(ChatFormatting.RED)),
-                        false
-                );
+            if (instance.getOrCreateTag().getBoolean("FragarachCreated")) {
+                if (entity instanceof Player player) {
+                    player.displayClientMessage(
+                            Component.literal("You have already created Fragarach.")
+                                    .setStyle(Style.EMPTY.withColor(ChatFormatting.RED)),
+                            false
+                    );
+                    instance.setCoolDown(instance.isMastered(player) ? 15 : 30);
+                }
+                return;
             }
+
+            boolean given = false;
+
+            if (entity.getMainHandItem().isEmpty()) {
+                spawnDummySword(instance, entity, InteractionHand.MAIN_HAND);
+                given = true;
+            } else if (entity.getOffhandItem().isEmpty()) {
+                spawnDummySword(instance, entity, InteractionHand.OFF_HAND);
+                given = true;
+            } else if (entity instanceof Player player) {
+                ItemStack blade = new ItemStack(MythosItems.FRAGARACH.get());
+                if (player.getInventory().add(blade)) {
+                    player.inventoryMenu.broadcastChanges();
+                    player.swing(InteractionHand.MAIN_HAND, true);
+                    player.level.playSound(null, player.getX(), player.getY(), player.getZ(),
+                            SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0f, 1.0f);
+                    given = true;
+                } else {
+                    player.displayClientMessage(
+                            Component.literal("Both hands and inventory are full!")
+                                    .setStyle(Style.EMPTY.withColor(ChatFormatting.RED)),
+                            false
+                    );
+                }
+            }
+
+            if (!given) return;
+
+            instance.getOrCreateTag().putBoolean("FragarachCreated", true);
+            instance.setCoolDown(100);
         }
-
-        if (!given) return;
-
-        instance.getOrCreateTag().putBoolean("FragarachCreated", true);
-        instance.setCoolDown(100);
     }
 
     private void spawnDummySword(ManasSkillInstance instance, LivingEntity entity, InteractionHand hand) {
