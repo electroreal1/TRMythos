@@ -149,10 +149,7 @@ public class Fragarach extends Skill {
 
     public void onPressed(ManasSkillInstance instance, LivingEntity entity) {
         if (entity.level.isClientSide) return;
-        if (SkillHelper.outOfMagicule(entity, instance)) {
-            return;
-        } else {
-
+        if (!SkillHelper.outOfMagicule(entity, instance)) {
             if (instance.getOrCreateTag().getBoolean("FragarachCreated")) {
                 if (entity instanceof Player player) {
                     player.displayClientMessage(

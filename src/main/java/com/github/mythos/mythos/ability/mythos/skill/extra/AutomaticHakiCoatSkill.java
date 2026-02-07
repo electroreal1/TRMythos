@@ -1,8 +1,6 @@
 package com.github.mythos.mythos.ability.mythos.skill.extra;
 
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
-import com.github.manasmods.manascore.api.skills.SkillAPI;
-import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
 import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.skill.Skill;
@@ -29,7 +27,6 @@ public class AutomaticHakiCoatSkill extends Skill {
 
 
     public boolean meetEPRequirement(Player entity, double newEP) {
-        SkillStorage storage = SkillAPI.getSkillsFrom(entity);
         Skill HeroHaki = ExtraSkills.HERO_HAKI.get();
         Skill DemonLordHaki = ExtraSkills.DEMON_LORD_HAKI.get();
         double currentEP = TensuraEPCapability.getCurrentEP(entity);
@@ -40,9 +37,7 @@ public class AutomaticHakiCoatSkill extends Skill {
 
         if (SkillUtils.hasSkill(entity, HeroHaki)) {
             return true;
-        } else if (SkillUtils.hasSkill(entity, DemonLordHaki)) {
-            return true;
-        } else return false;
+        } else return SkillUtils.hasSkill(entity, DemonLordHaki);
     }
 
     public double learningCost() {
@@ -68,8 +63,13 @@ public class AutomaticHakiCoatSkill extends Skill {
     }
 
     @Override
+    public void onTick(ManasSkillInstance instance, LivingEntity living) {
+        this.onToggleOn(instance, living);
+    }
+
+    @Override
     public void onToggleOn(ManasSkillInstance instance, LivingEntity entity) {
-        if (!entity.hasEffect((MobEffect) TensuraMobEffects.HAKI_COAT.get())) {
+        if (!entity.hasEffect(TensuraMobEffects.HAKI_COAT.get())) {
             if (SkillHelper.outOfMagicule(entity, instance)) {
                 return;
             }
