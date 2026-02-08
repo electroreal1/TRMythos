@@ -31,83 +31,87 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.List;
 
 public class AuthorLogicHandler {
-    private static boolean isInternalProcessing = false;
+    private static final String SEPARATOR = "will encounter a";
+
     @SubscribeEvent
     public static void onServerChat(ServerChatEvent event) {
-        if (isInternalProcessing) return;
-
-        if (event.isCanceled() || event.getRawText() == null || event.getRawText().isEmpty()) return;
-
         ServerPlayer talker = event.getPlayer();
-        String rawMessage = event.getRawText();
-        String lowercaseMessage = rawMessage.toLowerCase();
+        String message = event.getRawText();
+        String lowerMessage = message.toLowerCase();
 
-        isInternalProcessing = true;
-        try {
-            ManasSkillInstance inst = SkillUtils.getSkillOrNull(talker, Skills.AUTHOR.get());
-            if (inst != null && inst.getOrCreateTag().getBoolean("isWriting")) {
-                if (lowercaseMessage.contains("will encounter a")) {
-                    event.setCanceled(true);
-                    executeEnvision(talker, rawMessage);
-                    return;
-                }
+        ManasSkillInstance inst = SkillUtils.getSkillOrNull(talker, Skills.AUTHOR.get());
+        if (inst != null && inst.getOrCreateTag().getBoolean("isWriting")) {
+            if (lowerMessage.contains(SEPARATOR)) {
+                event.setCanceled(true);
+                executeEnvision(talker, message);
+                return;
             }
-
-            for (ServerPlayer potentialAuthor : talker.server.getPlayerList().getPlayers()) {
-                if (SkillUtils.hasSkill(potentialAuthor, Skills.AUTHOR.get())) {
-                    String authorName = potentialAuthor.getName().getString().toLowerCase();
-
-                    if (lowercaseMessage.contains(authorName) && talker != potentialAuthor) {
-                        potentialAuthor.sendSystemMessage(Component.literal("§d[Meta-Awareness] §f" + talker.getName().getString() + " mentioned you at: ")
-                                .append(Component.literal(talker.blockPosition().toShortString()).withStyle(ChatFormatting.YELLOW)));
-                        potentialAuthor.playNotifySound(SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 0.5f, 1.5f);
-                    }
-                }
-            }
-        } finally {
-            isInternalProcessing = false;
         }
+
+        talker.server.getPlayerList().getPlayers().forEach(potentialAuthor -> {
+            if (potentialAuthor != talker && SkillUtils.hasSkill(potentialAuthor, Skills.AUTHOR.get())) {
+                String authorName = potentialAuthor.getName().getString().toLowerCase();
+                if (lowerMessage.contains(authorName)) {
+                    potentialAuthor.sendSystemMessage(Component.literal("§d[Meta-Awareness] §e" + talker.getName().getString() + " §fplotted at: ")
+                            .append(Component.literal(talker.blockPosition().toShortString()).withStyle(ChatFormatting.YELLOW)));
+                    potentialAuthor.playNotifySound(SoundEvents.UI_TOAST_IN, SoundSource.PLAYERS, 0.4f, 1.2f);
+                }
+            }
+        });
     }
 
     private static void executeEnvision(ServerPlayer author, String script) {
-        String separator = "will encounter a";
-        String lowerScript = script.toLowerCase();
-        int index = lowerScript.indexOf(separator);
+        int index = script.toLowerCase().indexOf(SEPARATOR);
+        String namePart = script.substring(0, index).trim();
+        String effectType = script.toLowerCase().substring(index + SEPARATOR.length()).trim();
 
-        if (index == -1) return;
-
-        String targetName = script.substring(0, index).trim();
-        String effectType = lowerScript.substring(index + separator.length()).trim();
-
-        ServerPlayer target = author.server.getPlayerList().getPlayerByName(targetName);
+        ServerPlayer target = namePart.equalsIgnoreCase("me") ? author : author.server.getPlayerList().getPlayerByName(namePart);
 
         if (target != null) {
-            author.sendSystemMessage(Component.literal("§d[Author] §fWriting destiny for §e" + target.getName().getString() + "..."));
+            author.sendSystemMessage(Component.literal("§d[Author] §fThe ink flows... §b" + target.getName().getString() + "§f's destiny is rewritten."));
 
-            BlockPos pos = target.blockPosition();
             ServerLevel level = target.getLevel();
+            BlockPos pos = target.blockPosition();
 
-            if (effectType.contains("lightning")) {
-                EntityType.LIGHTNING_BOLT.spawn(level, null, null, pos, MobSpawnType.COMMAND, true, true);
-            } else if (effectType.contains("fire")) {
-                level.setBlockAndUpdate(pos, Blocks.FIRE.defaultBlockState());
-                level.setBlockAndUpdate(pos.north(), Blocks.FIRE.defaultBlockState());
-            } else if (effectType.contains("meteor")) {
-                executeMeteor(level, pos);
-            } else if (effectType.contains("earthquake")) {
-                executeEarthquake(target);
-            } else if (effectType.contains("hurricane")) {
-                executeHurricane(target);
-            } else if (effectType.contains("sinkhole")) {
-                executeSinkhole(target);
-            } else if (effectType.contains("explosion")) {
-                level.explode(null, pos.getX(), pos.getY(), pos.getZ(), 4.0f, Explosion.BlockInteraction.NONE);
+            level.sendParticles(ParticleTypes.ENCHANT, target.getX(), target.getY() + 1, target.getZ(), 50, 0.5, 1.0, 0.5, 0.1);
+
+            switch (getMatchedEffect(effectType)) {
+                case "lightning" -> EntityType.LIGHTNING_BOLT.spawn(level, null, null, pos, MobSpawnType.COMMAND, true, true);
+                case "fire" -> spawnFireCircle(level, pos);
+                case "meteor" -> executeMeteor(level, pos);
+                case "earthquake" -> executeEarthquake(target);
+                case "hurricane" -> executeHurricane(target);
+                case "sinkhole" -> executeSinkhole(target);
+                case "explosion" -> level.explode(null, pos.getX(), pos.getY(), pos.getZ(), 5.0f, Explosion.BlockInteraction.NONE);
+                case "healing" -> target.heal((float) (target.getMaxHealth() * 0.1));
+                default -> author.sendSystemMessage(Component.literal("§c[Author] §7The ink fades... that destiny is not yet written."));
             }
 
-            level.playSound(null, author.blockPosition(), SoundEvents.BOOK_PAGE_TURN, SoundSource.PLAYERS, 1.0f, 1.0f);
+            level.playSound(null, author.blockPosition(), SoundEvents.BOOK_PAGE_TURN, SoundSource.PLAYERS, 1.5f, 0.8f);
         } else {
-            author.sendSystemMessage(Component.literal("§c[Author] The character '" + targetName + "' is not present in this chapter."));
+            assert author != null;
+            author.sendSystemMessage(Component.literal("§c[Author] §7Character '" + namePart + "' is not in this chapter."));
         }
+    }
+
+    private static String getMatchedEffect(String input) {
+        if (input.contains("lightning")) return "lightning";
+        if (input.contains("fire") || input.contains("flame")) return "fire";
+        if (input.contains("meteor") || input.contains("star")) return "meteor";
+        if (input.contains("quake") || input.contains("earthquake")) return "earthquake";
+        if (input.contains("wind") || input.contains("hurricane")) return "hurricane";
+        if (input.contains("hole") || input.contains("sinkhole")) return "sinkhole";
+        if (input.contains("boom") || input.contains("explosion")) return "explosion";
+        return "none";
+    }
+
+    private static void spawnFireCircle(ServerLevel level, BlockPos pos) {
+        for (int i = 0; i < 8; i++) {
+            double angle = i * Math.PI / 4;
+            BlockPos firePos = pos.offset(Math.cos(angle) * 2, 0, Math.sin(angle) * 2);
+            if (level.isEmptyBlock(firePos)) level.setBlockAndUpdate(firePos, Blocks.FIRE.defaultBlockState());
+        }
+        level.setBlockAndUpdate(pos, Blocks.FIRE.defaultBlockState());
     }
 
 
