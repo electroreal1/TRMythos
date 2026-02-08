@@ -1,6 +1,5 @@
 package com.github.mythos.mythos.ability.mythos.skill.ultimate.lord;
 
-import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
@@ -39,12 +38,12 @@ public class MercurySkill extends Skill {
         if (currentEP < getObtainingEpCost()) {
             return false;
         }
-        return SkillUtils.isSkillMastered(player, (ManasSkill) UniqueSkills.TRAVELER.get()) &&
-                SkillUtils.isSkillMastered(player, (ManasSkill) UniqueSkills.USURPER.get());
+        return SkillUtils.isSkillMastered(player, UniqueSkills.TRAVELER.get()) &&
+                SkillUtils.isSkillMastered(player, UniqueSkills.USURPER.get());
     }
 
     @Override
-    public void onLearnSkill(ManasSkillInstance instance, LivingEntity entity, UnlockSkillEvent event) {
+    public void onLearnSkill(@NotNull ManasSkillInstance instance, @NotNull LivingEntity entity, @NotNull UnlockSkillEvent event) {
         if (entity instanceof Player player && !instance.isTemporarySkill()) {
             SkillStorage storage = SkillAPI.getSkillsFrom(player);
             Skill greedSkill = UniqueSkills.TRAVELER.get();
@@ -58,20 +57,20 @@ public class MercurySkill extends Skill {
     }
 
     @Override
-    public boolean canBeToggled(ManasSkillInstance instance, LivingEntity entity) {
+    public boolean canBeToggled(@NotNull ManasSkillInstance instance, @NotNull LivingEntity entity) {
         return true;
     }
 
     public @NotNull List<MobEffect> getImmuneEffects(ManasSkillInstance instance, @NotNull LivingEntity entity) {
         List<MobEffect> list = new ArrayList<>();
         if (instance.isToggled()) {
-            list.add((MobEffect) TensuraMobEffects.INFINITE_IMPRISONMENT.get());
-            list.add((MobEffect) TensuraMobEffects.MAGIC_INTERFERENCE.get());
-            list.add((MobEffect) TensuraMobEffects.SPATIAL_BLOCKADE.get());
-            list.add((MobEffect) TensuraMobEffects.ENERGY_BLOCKADE.get());
-            list.add((MobEffect) TensuraMobEffects.PARALYSIS.get());
-            list.add((MobEffect) MysticismMobEffects.TIMESTOP.get());
-            list.add((MobEffect) MysticismMobEffects.TIMESTOP_CORE.get());
+            list.add(TensuraMobEffects.INFINITE_IMPRISONMENT.get());
+            list.add(TensuraMobEffects.MAGIC_INTERFERENCE.get());
+            list.add(TensuraMobEffects.SPATIAL_BLOCKADE.get());
+            list.add(TensuraMobEffects.ENERGY_BLOCKADE.get());
+            list.add(TensuraMobEffects.PARALYSIS.get());
+            list.add(MysticismMobEffects.TIMESTOP.get());
+            list.add(MysticismMobEffects.TIMESTOP_CORE.get());
             list.add(MobEffects.WEAKNESS);
             list.add(MobEffects.MOVEMENT_SLOWDOWN);
             list.add(MobEffects.DIG_SLOWDOWN);

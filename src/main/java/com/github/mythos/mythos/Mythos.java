@@ -3,6 +3,7 @@ package com.github.mythos.mythos;
 import com.github.mythos.mythos.client.screen.OrunScreen;
 import com.github.mythos.mythos.command.MythosCommands;
 import com.github.mythos.mythos.config.MythosConfig;
+import com.github.mythos.mythos.config.MythosSkillsConfig;
 import com.github.mythos.mythos.handler.*;
 import com.github.mythos.mythos.networking.MythosNetwork;
 import com.github.mythos.mythos.registry.ClientOnlyRegistrar;
@@ -81,8 +82,9 @@ public class Mythos {
 
     @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.side.isServer() && event.phase == TickEvent.Phase.START) {
-            if (event.player.tickCount % 10 == 0 && event.player instanceof ServerPlayer serverPlayer) {
+        if (!MythosSkillsConfig.voice_of_the_world.get()) return;
+        if (event.side.isServer() && event.phase == TickEvent.Phase.END) {
+            if (event.player.tickCount % 1000 == 0 && event.player instanceof ServerPlayer serverPlayer) {
                 VoiceOfTheWorld.checkAwakeningStatus(serverPlayer); // True Hero and True Demon Lord
                 VoiceOfTheWorld.checkHeroEggOrDemonLordSeed(serverPlayer); // Hero Egg and Demon Lord Seed
             }

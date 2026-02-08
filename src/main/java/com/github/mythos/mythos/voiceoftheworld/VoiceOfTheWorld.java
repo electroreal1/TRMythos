@@ -152,6 +152,7 @@ public class VoiceOfTheWorld {
         player.playNotifySound(SoundEvents.BEACON_ACTIVATE, SoundSource.MASTER, 0.6f, 1.2f);
     }
 
+
     public static void checkAwakeningStatus(ServerPlayer player) {
         if (!MythosSkillsConfig.voice_of_the_world.get()) return;
         CompoundTag tag = player.getPersistentData();
