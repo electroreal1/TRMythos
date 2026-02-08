@@ -23,6 +23,7 @@ public class MythosSkillsConfig {
     public static ForgeConfigSpec.BooleanValue EnableUltimateSkillObtainment;
     public static ForgeConfigSpec.BooleanValue ApophisEmbodiment;
     public static ForgeConfigSpec.BooleanValue voice_of_the_world;
+    public static ForgeConfigSpec.BooleanValue ALLOW_ULTIMATE_COPYING;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> racesThatCanCompeteForChildOfThePlane;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> GRAM_EXTRA_DAMAGE_RACES;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> SAPLING_ENGRAVE_LIST;
@@ -144,6 +145,10 @@ public class MythosSkillsConfig {
         EnableUltimateSkillObtainment = builder
                 .comment("If true ultimate skill will be obtainable.")
                 .define("EnableUltimateSkillObtainment", true);
+
+        ALLOW_ULTIMATE_COPYING = builder
+                .comment("If true any skills that are capable of copying ultimates can copy ultimates.")
+                .define("ALLOW_ULTIMATE_COPYING", false);
 
         racesThatCanCompeteForChildOfThePlane = builder
                 .comment("List of races that can compete for Child of the Plane.")

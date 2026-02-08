@@ -2,12 +2,13 @@ package com.github.mythos.mythos.handler;
 
 import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.tensura.ability.SkillUtils;
+import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.event.SkillPlunderEvent;
+import com.github.mythos.mythos.config.MythosSkillsConfig;
 import com.github.mythos.mythos.registry.skill.Skills;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -17,41 +18,53 @@ import java.util.Set;
 
 @Mod.EventBusSubscriber(modid = "trmythos")
 public class UncopyableSkills {
-    public static final Set<ResourceLocation> BLOCKED_SKILLS = new HashSet<>();
+    private static final Set<ResourceLocation> PERMANENTLY_BLOCKED = new HashSet<>();
 
+    public static boolean isPlunderBlocked(ManasSkill skill) {
+        if (skill == null) return false;
+        ResourceLocation loc = skill.getRegistryName();
+        if (loc == null) return false;
 
+        if (PERMANENTLY_BLOCKED.contains(loc)) return true;
 
-    public static boolean isBlocked(ManasSkill skill) {
-        if (skill == null || skill.getRegistryName() == null) return false;
-        return BLOCKED_SKILLS.contains(skill.getRegistryName());
+        if (skill instanceof Skill tensuraSkill) {
+            if (tensuraSkill.getType() == Skill.SkillType.ULTIMATE) {
+                return !MythosSkillsConfig.ALLOW_ULTIMATE_COPYING.get();
+            }
+        }
+
+        return false;
     }
 
     @SubscribeEvent
     public static void onSkillPlunder(SkillPlunderEvent event) {
-        ManasSkill skill = event.getSkill();
-        if (!isBlocked(skill)) return;
-
-        event.setCanceled(true);
-
-        if (event.getPlunderer() instanceof Player player) {
-            player.displayClientMessage(Component.literal("This power cannot be plundered.").withStyle(ChatFormatting.DARK_RED), true);
+        if (SkillUtils.hasSkill(event.getTarget(), Skills.UNITY.get())) {
+            event.setCanceled(true);
+            notifyPlunderer(event.getPlunderer());
+            return;
         }
 
-        Entity target = event.getTarget();
-        if (SkillUtils.hasSkill(target, Skills.UNITY.get())) {
+        if (isPlunderBlocked(event.getSkill())) {
             event.setCanceled(true);
+            notifyPlunderer(event.getPlunderer());
+        }
+    }
+
+    private static void notifyPlunderer(Object entity) {
+        if (entity instanceof Player player) {
+            player.displayClientMessage(Component.literal("This power is beyond your reach.")
+                    .withStyle(ChatFormatting.DARK_RED), true);
         }
     }
 
     static {
-        BLOCKED_SKILLS.add(new ResourceLocation("trmythos", "npc_life"));
-        BLOCKED_SKILLS.add(new ResourceLocation("trmythos", "wavebreaker"));
-        BLOCKED_SKILLS.add(new ResourceLocation("trmythos", "megalomaniac"));
-        BLOCKED_SKILLS.add(new ResourceLocation("trmythos", "watcher"));
-        BLOCKED_SKILLS.add(new ResourceLocation("trmythos", "unity"));
-        BLOCKED_SKILLS.add(new ResourceLocation("trmythos", "evolution"));
-        BLOCKED_SKILLS.add(new ResourceLocation("trmythos", "balance"));
-        BLOCKED_SKILLS.add(new ResourceLocation("trmythos", "cycle"));
-        BLOCKED_SKILLS.add(new ResourceLocation("trmythos", "foundation"));
+        // High-level conceptual or NPC-only skills that should never be copied
+        PERMANENTLY_BLOCKED.add(new ResourceLocation("trmythos", "npc_life"));
+        PERMANENTLY_BLOCKED.add(new ResourceLocation("trmythos", "unity"));
+        PERMANENTLY_BLOCKED.add(new ResourceLocation("trmythos", "evolution"));
+        PERMANENTLY_BLOCKED.add(new ResourceLocation("trmythos", "balance"));
+        PERMANENTLY_BLOCKED.add(new ResourceLocation("trmythos", "cycle"));
+        PERMANENTLY_BLOCKED.add(new ResourceLocation("trmythos", "foundation"));
+        PERMANENTLY_BLOCKED.add(new ResourceLocation("trmythos", "watcher"));
     }
 }

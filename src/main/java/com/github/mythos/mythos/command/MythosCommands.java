@@ -235,9 +235,19 @@ public class MythosCommands {
                             sb.append("§7Apophis Embodiment: ").append(MythosSkillsConfig.ApophisEmbodiment.get() ? "§aON" : "§cOFF").append("\n");
                             sb.append("§7Announce Ultimates: ").append(GodClassHandler.get(context.getSource().getLevel()).isAnnouncementsEnabled() ? "§aON" : "§cOFF").append("\n");
                             sb.append("§7Voice of the World: ").append(MythosSkillsConfig.voice_of_the_world.get() ? "§aON" : "§cOFF");
+                            sb.append("§7Allow Ultimate Copying: ").append(MythosSkillsConfig.ALLOW_ULTIMATE_COPYING.get() ? "§aON" : "§cOFF");
                             context.getSource().sendSuccess(Component.literal(sb.toString()), false);
                             return 1;
                         }))
+                        .requires(source -> source.hasPermission(4))
+                        .then(Commands.literal("allow_ultimate_copying")
+                                .then(Commands.argument("value", BoolArgumentType.bool()).executes(context -> {
+                                    boolean val = BoolArgumentType.getBool(context, "value");
+                                    MythosSkillsConfig.ALLOW_ULTIMATE_COPYING.set(val);
+                                    context.getSource().sendSuccess(Component.literal("§6[Mythos Config] §fAllow Ultimate Copying: " + val), true);
+                                    return 1;
+                                })))
+                        // Voice of the World
                         .requires(source -> source.hasPermission(4))
                         .then(Commands.literal("voice_of_the_world")
                                 .then(Commands.argument("value", BoolArgumentType.bool()).executes(context -> {
