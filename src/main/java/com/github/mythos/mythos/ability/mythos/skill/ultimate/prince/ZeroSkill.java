@@ -62,7 +62,7 @@ public class ZeroSkill extends Skill {
 
     @Override
     public double getObtainingEpCost() {
-        return 2500000;
+        return 15000000;
     }
 
     @Override
