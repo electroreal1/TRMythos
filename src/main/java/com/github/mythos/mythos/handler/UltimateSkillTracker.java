@@ -20,14 +20,18 @@ public class UltimateSkillTracker {
         if (!GodClassHandler.get(player.getLevel()).isAnnouncementsEnabled()) return;
 
         ManasSkillInstance instance = event.getSkillInstance();
-        Skill skill = (Skill) instance.getSkill();
 
-        if (skill.getType() == Skill.SkillType.ULTIMATE && !instance.isTemporarySkill()) {
-            String skillName = Objects.requireNonNull(skill.getColoredName()).getString();
+        if (instance.getSkill() instanceof Skill skill) {
 
-            VoiceOfTheWorld.broadcast(Objects.requireNonNull(player.getServer()),
-                    "Confirmed. Individual: " + player.getName().getString() +
-                            " has acquired Ultimate Skill: " + "§6[" + skillName + "]§f.");
+            if (skill.getType() == Skill.SkillType.ULTIMATE && !instance.isTemporarySkill()) {
+
+                var coloredName = skill.getColoredName();
+                String skillName = (coloredName != null) ? coloredName.getString() : Objects.requireNonNull(skill.getName()).getString();
+
+                VoiceOfTheWorld.broadcast(Objects.requireNonNull(player.getServer()),
+                        "Confirmed. Individual: " + player.getName().getString() +
+                                " has acquired Ultimate Skill: " + "§6[" + skillName + "]§f.");
+            }
         }
     }
 }
