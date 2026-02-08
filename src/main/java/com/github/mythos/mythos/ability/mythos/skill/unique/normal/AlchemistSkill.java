@@ -15,7 +15,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -55,17 +54,27 @@ public class AlchemistSkill extends Skill {
     }
 
     @Override
+    public Component getModeName(int mode) {
+        return switch (mode) {
+            case 1 -> Component.literal("Health Alchemy");
+            case 2 -> Component.literal("Barrier Alchemy");
+            case 3 -> Component.literal("Soul Condensation");
+            default -> Component.empty();
+        };
+    }
+
+    @Override
     public void onPressed(ManasSkillInstance instance, LivingEntity entity) {
-        AttributeInstance attributeInstance2 = (AttributeInstance) Objects.requireNonNull(entity.getAttribute(Attributes.MAX_HEALTH));
-        AttributeInstance attributeInstance1 = (AttributeInstance) Objects.requireNonNull(entity.getAttribute((Attribute) TensuraAttributeRegistry.MAX_SPIRITUAL_HEALTH.get()));
-        AttributeInstance attributeInstance = (AttributeInstance) Objects.requireNonNull(entity.getAttribute((Attribute) TensuraAttributeRegistry.BARRIER.get()));
+        AttributeInstance attributeInstance2 = Objects.requireNonNull(entity.getAttribute(Attributes.MAX_HEALTH));
+        AttributeInstance attributeInstance1 = Objects.requireNonNull(entity.getAttribute(TensuraAttributeRegistry.MAX_SPIRITUAL_HEALTH.get()));
+        AttributeInstance attributeInstance = Objects.requireNonNull(entity.getAttribute(TensuraAttributeRegistry.BARRIER.get()));
         if (instance.getMode() == 2) {
             if (SkillHelper.outOfMagicule(entity, instance)) return;
             this.addMasteryPoint(instance, entity);
             instance.setCoolDown(10);
             double barrierPoints = 50;
             attributeInstance.addPermanentModifier(new AttributeModifier(MULTILAYER, "Multilayer Barrier", barrierPoints, AttributeModifier.Operation.ADDITION));
-            entity.getLevel().playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.BEACON_ACTIVATE, SoundSource.PLAYERS, 1.0F, 1.0F);
+            entity.getLevel().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.BEACON_ACTIVATE, SoundSource.PLAYERS, 1.0F, 1.0F);
         }
 
         if (instance.getMode() == 1) {
@@ -98,12 +107,12 @@ public class AlchemistSkill extends Skill {
                     Skill cracked = Skills.CRACKED_PHILOSOPHER_STONE.get();
                     if (storage.getSkill(cracked).isPresent()) return;
                     if (cracked.getObtainingEpCost() > currentEP) {
-                        player.sendSystemMessage(Component.literal("Not Enough EP To Acquire Celestial Path - Blue Mask").withStyle(ChatFormatting.RED));
+                        player.sendSystemMessage(Component.literal("Not Enough EP to Obtain Cracked Philospher's Stone.").withStyle(ChatFormatting.RED));
                     } else if (cracked.getObtainingEpCost() < currentEP) {
                         storage.learnSkill(cracked);
                         instance.setCoolDown(60);
                         this.addMasteryPoint(instance, entity);
-                        player.sendSystemMessage(Component.literal("You have Acquired Celestial Path - Blue Mask").withStyle(ChatFormatting.BLUE));
+                        player.sendSystemMessage(Component.literal("You have Acquired Cracked Philospher's Stone.").withStyle(ChatFormatting.BLUE));
                         }
                     }
                 });
