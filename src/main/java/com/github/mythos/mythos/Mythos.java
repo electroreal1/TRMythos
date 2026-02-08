@@ -84,7 +84,7 @@ public class Mythos {
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (!MythosSkillsConfig.voice_of_the_world.get()) return;
         if (event.side.isServer() && event.phase == TickEvent.Phase.END) {
-            if (event.player.tickCount % 1000 == 0 && event.player instanceof ServerPlayer serverPlayer) {
+            if (event.player.tickCount % 10000 == 0 && event.player instanceof ServerPlayer serverPlayer) {
                 VoiceOfTheWorld.checkAwakeningStatus(serverPlayer); // True Hero and True Demon Lord
                 VoiceOfTheWorld.checkHeroEggOrDemonLordSeed(serverPlayer); // Hero Egg and Demon Lord Seed
             }
