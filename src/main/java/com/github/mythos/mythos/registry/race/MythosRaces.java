@@ -1,5 +1,6 @@
 package com.github.mythos.mythos.registry.race;
 
+import com.github.manasmods.tensura.race.Race;
 import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.mythos.mythos.Mythos;
 import com.github.mythos.mythos.race.CanineRaceLines.CanineRace;
@@ -31,6 +32,7 @@ import com.github.mythos.mythos.race.DivinityLine.WaterGod.LesserGodOfWaterRace;
 import com.github.mythos.mythos.race.DivinityLine.WindGod.GodOfWindRace;
 import com.github.mythos.mythos.race.DivinityLine.WindGod.GreaterGodOfWindRace;
 import com.github.mythos.mythos.race.DivinityLine.WindGod.LesserGodOfWindRace;
+import com.github.mythos.mythos.race.FableRaceLine.*;
 import com.github.mythos.mythos.race.GodlingLines.BuddingDemigodRace;
 import com.github.mythos.mythos.race.GodlingLines.EgyptianPantheon.DivineHostRace;
 import com.github.mythos.mythos.race.GodlingLines.EgyptianPantheon.NetjeruRace;
@@ -165,6 +167,13 @@ public class MythosRaces {
     public static final ResourceLocation CHAOTIC_SPRITE = new ResourceLocation(Mythos.MOD_ID, "chaotic_sprite");
     public static final ResourceLocation VOID_APOSTLE = new ResourceLocation(Mythos.MOD_ID, "void_apostle");
     public static final ResourceLocation PRIMAL_CHAOS = new ResourceLocation(Mythos.MOD_ID, "primal_chaos");
+
+    // Fableborn Races
+    public static final ResourceLocation FALBLEBORN = new ResourceLocation(Mythos.MOD_ID, "fableborn");
+    public static final ResourceLocation FABLEWEAVER = new ResourceLocation(Mythos.MOD_ID, "fableweaver");
+    public static final ResourceLocation LIVING_LEGEND = new ResourceLocation(Mythos.MOD_ID, "living_legend");
+    public static final ResourceLocation GENESIS_MYTH = new ResourceLocation(Mythos.MOD_ID, "genesis_myth");
+    public static final ResourceLocation AKASHIC_LEGEND = new ResourceLocation(Mythos.MOD_ID, "akashic_legend");
 
     // Paper Races
     public static final ResourceLocation PAPER = new ResourceLocation(Mythos.MOD_ID, "paper");
@@ -437,6 +446,24 @@ public class MythosRaces {
         });
         event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
             helper.register("primal_chaos", new PrimalChaosRace());
+        });
+
+        // Fableborn Races
+
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("fableborn", new FablebornRace(Race.Difficulty.EASY));
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("fableweaver", new FableweaverRace(Race.Difficulty.EASY));
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("living_legend", new LivingLegendRace(Race.Difficulty.EASY));
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("akashic_legend", new AkashicLegend(Race.Difficulty.EASY));
+        });
+        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
+            helper.register("genesis_myth", new GenesisMyth(Race.Difficulty.EASY));
         });
 //
 //        // Paper Races
