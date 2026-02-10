@@ -31,15 +31,11 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 import java.util.List;
 
 public class PuritySkill extends Skill {
-
-    private boolean active = false;
-
     public PuritySkill(SkillType type) {
         super(SkillType.UNIQUE);
     }
@@ -68,9 +64,19 @@ public class PuritySkill extends Skill {
         return true;
     }
 
-    private static double rotation = 0;
+    private static final double rotation = 0;
 
     public void onTick(ManasSkillInstance instance, LivingEntity entity) {
+        List<MobEffect> immune = MythosSkillsConfig.getPurityImmuneEffects();
+
+        entity.getActiveEffects().forEach(effectInstance -> {
+            MobEffect effect = effectInstance.getEffect();
+            if (immune.contains(effect) && effect.isBeneficial()) return;
+            if (!immune.contains(effect) && !effect.isBeneficial()) {
+                entity.removeEffect(effect);
+            }
+        });
+
         TensuraEPCapability.getFrom(entity).ifPresent((cap) -> {
             if (!cap.isChaos() || cap.isMajin()) {
                 cap.setMajin(false);
@@ -101,29 +107,9 @@ public class PuritySkill extends Skill {
         }
     }
 
-
     @Override
     public boolean canBeToggled(ManasSkillInstance instance, LivingEntity living) {
         return true;
-    }
-
-    @Override
-    public void onToggleOn(ManasSkillInstance instance, LivingEntity entity) {
-        MinecraftForge.EVENT_BUS.register(this);
-        List<MobEffect> immune = MythosSkillsConfig.getPurityImmuneEffects();
-
-        entity.getActiveEffects().forEach(effectInstance -> {
-            MobEffect effect = effectInstance.getEffect();
-            if (immune.contains(effect) && effect.isBeneficial()) return;
-            if (!immune.contains(effect) && !effect.isBeneficial()) {
-                entity.removeEffect(effect);
-            }
-        });
-    }
-
-    @Override
-    public void onToggleOff(ManasSkillInstance instance, LivingEntity entity) {
-        MinecraftForge.EVENT_BUS.unregister(this);
     }
 
     private void spawnLightArrows(ManasSkillInstance instance, LivingEntity entity, Vec3 pos, int arrowAmount, double distance) {
@@ -157,13 +143,13 @@ public class PuritySkill extends Skill {
 
     public void onDamageEntity(ManasSkillInstance instance, LivingEntity living, LivingHurtEvent e) {
         if (instance.isToggled()) {
-                if (DamageSourceHelper.isLightDamage(e.getSource())) {
-                    if (instance.isMastered(living)) {
-                        e.setAmount(e.getAmount() * 4.0F);
-                    } else {
-                        e.setAmount(e.getAmount() * 3.0F);
-                    }
+            if (DamageSourceHelper.isLightDamage(e.getSource())) {
+                if (instance.isMastered(living)) {
+                    e.setAmount(e.getAmount() * 4.0F);
+                } else {
+                    e.setAmount(e.getAmount() * 3.0F);
                 }
+            }
             if (DamageSourceHelper.isHoly(e.getSource())) {
                 if (instance.isMastered(living)) {
                     e.setAmount(e.getAmount() * 4.0F);
@@ -264,12 +250,12 @@ public class PuritySkill extends Skill {
             this.addMasteryPoint(instance, entity);
             level = entity.getLevel();
             int distance = instance.isMastered(entity) ? 30 : 20;
-            Entity target = SkillHelper.getTargetingEntity(entity, (double)distance, false, true);
+            Entity target = SkillHelper.getTargetingEntity(entity, distance, false, true);
             Vec3 pos;
             if (target != null) {
                 pos = target.getEyePosition();
             } else {
-                BlockHitResult result = SkillHelper.getPlayerPOVHitResult(entity.level, entity, ClipContext.Fluid.NONE, (double)distance);
+                BlockHitResult result = SkillHelper.getPlayerPOVHitResult(entity.level, entity, ClipContext.Fluid.NONE, distance);
                 pos = result.getLocation().add(0.0, 0.5, 0.0);
             }
 
@@ -280,8 +266,9 @@ public class PuritySkill extends Skill {
                 this.spawnLightArrows(instance, entity, pos, 10, 3.0);
             }
 
-            level.playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ILLUSIONER_CAST_SPELL, SoundSource.PLAYERS, 1.0F, 1.0F);
+            level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ILLUSIONER_CAST_SPELL, SoundSource.PLAYERS, 1.0F, 1.0F);
             instance.setCoolDown(10);
         }
     }
 }
+

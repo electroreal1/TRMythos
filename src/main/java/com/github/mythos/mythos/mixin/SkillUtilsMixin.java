@@ -87,9 +87,6 @@ public abstract class SkillUtilsMixin {
         if (SkillUtils.hasSkill(entity, Skills.KTHANID.get()) && !(instance.getSkill() instanceof Kthanid)) {
             point += 9999;
         }
-        if (SkillUtils.hasSkill(entity, Skills.AUTHOR.get())) {
-            point += 10;
-        }
 
 
         return point;
@@ -146,9 +143,6 @@ public abstract class SkillUtilsMixin {
         }
         if (SkillUtils.hasSkill(entity, Skills.KTHANID.get()) && !(instance.getSkill() instanceof Kthanid)) {
             point += 9999;
-        }
-        if (SkillUtils.hasSkill(entity, Skills.AUTHOR.get())) {
-            point += 10;
         }
 
 

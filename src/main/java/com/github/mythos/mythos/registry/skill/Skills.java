@@ -101,8 +101,6 @@ public class Skills {
     public static final RegistryObject<CrimsonArcanistSkill> CRIMSON_ARCANIST;
     public static final RegistryObject<Gaze> GAZE;
     public static final RegistryObject<ShadowOfTheTesseract> SHADOW_OF_THE_TESSERACT;
-    public static final RegistryObject<YellowSign> YELLOW_SIGN;
-    public static final RegistryObject<AuthorSkill> AUTHOR;
     public static final RegistryObject<CultistSkill> CULTIST;
     public static final RegistryObject<LunaticSkill> LUNATIC;
     public static final RegistryObject<MegalomaniacSkill> MEGALOMANIAC;
@@ -209,8 +207,6 @@ public class Skills {
         EARTHSHAKER = registery.register("earthshaker", () -> new EarthshakerSkill(Skill.SkillType.UNIQUE));
         CRIMSON_ARCANIST = registery.register("crimson_arcanist", () -> new CrimsonArcanistSkill(Skill.SkillType.UNIQUE));
         GAZE = registery.register("gaze", () -> new Gaze(Skill.SkillType.UNIQUE));
-        YELLOW_SIGN = registery.register("yellow_sign", () -> new YellowSign(Skill.SkillType.UNIQUE));
-        AUTHOR = registery.register("author", () -> new AuthorSkill(Skill.SkillType.UNIQUE));
         CULTIST = registery.register("cultist", () -> new CultistSkill(Skill.SkillType.UNIQUE));
         MEGALOMANIAC = registery.register("megalomaniac", () -> new MegalomaniacSkill(Skill.SkillType.UNIQUE));
         WATCHER = registery.register("watcher", () -> new WatcherSkill(Skill.SkillType.UNIQUE));

@@ -62,7 +62,6 @@ public class Mythos {
         MinecraftForge.EVENT_BUS.register(CrimsonTyrantHandler.class);
         MinecraftForge.EVENT_BUS.register(CarnageHandler.class);
         MinecraftForge.EVENT_BUS.register(KhaosHandler.class);
-        MinecraftForge.EVENT_BUS.register(AuthorLogicHandler.class);
 
         MinecraftForge.EVENT_BUS.register(this);
 
