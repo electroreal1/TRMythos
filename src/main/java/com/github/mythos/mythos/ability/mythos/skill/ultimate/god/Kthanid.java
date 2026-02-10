@@ -22,6 +22,7 @@ import com.github.mythos.mythos.registry.skill.Skills;
 import com.github.mythos.mythos.util.MythosUtils;
 import com.github.mythos.mythos.util.damage.MythosDamageSources;
 import io.github.Memoires.trmysticism.registry.effects.MysticismMobEffects;
+import io.github.Memoires.trmysticism.registry.skill.UltimateSkills;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -114,11 +115,11 @@ public class Kthanid extends Skill {
         if (entity instanceof Player player && !instance.isTemporarySkill()) {
             SkillStorage storage = SkillAPI.getSkillsFrom(player);
             Skill greedSkill = Skills.DIKE.get();
-            Skill greedSkill1 = UniqueSkills.INFINITY_PRISON.get();
+            Skill greedSkill1 = UltimateSkills.URIEL.get();
             Skill greedSkill2 = UniqueSkills.GREAT_SAGE.get();
             Skill greedSkill3 = UniqueSkills.ABSOLUTE_SEVERANCE.get();
-            Skill greedSkill4 = UniqueSkills.MURDERER.get();
-            Skill greedSkill5 = UniqueSkills.UNYIELDING.get();
+            Skill greedSkill4 = UltimateSkills.SANDALPHON.get();
+            Skill greedSkill5 = UltimateSkills.SARIEL.get();
             storage.getSkill(greedSkill).ifPresent(storage::forgetSkill);
             storage.getSkill(greedSkill1).ifPresent(storage::forgetSkill);
             storage.getSkill(greedSkill2).ifPresent(storage::forgetSkill);
@@ -137,11 +138,11 @@ public class Kthanid extends Skill {
             return false;
         }
         return SkillUtils.isSkillMastered(player, Skills.DIKE.get()) &&
-                SkillUtils.isSkillMastered(player, UniqueSkills.INFINITY_PRISON.get()) &&
+                SkillUtils.isSkillMastered(player, UltimateSkills.URIEL.get()) &&
                 SkillUtils.isSkillMastered(player, UniqueSkills.GREAT_SAGE.get()) &&
                 SkillUtils.isSkillMastered(player, UniqueSkills.ABSOLUTE_SEVERANCE.get()) &&
-                SkillUtils.isSkillMastered(player, UniqueSkills.MURDERER.get()) &&
-                SkillUtils.isSkillMastered(player, UniqueSkills.UNYIELDING.get());
+                SkillUtils.isSkillMastered(player, UltimateSkills.SANDALPHON.get()) &&
+                SkillUtils.isSkillMastered(player, UltimateSkills.SARIEL.get());
     }
 
     private double getMaxEP(LivingEntity entity) {
