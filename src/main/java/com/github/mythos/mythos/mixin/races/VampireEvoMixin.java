@@ -1,4 +1,4 @@
- package com.github.mythos.mythos.mixin;
+ package com.github.mythos.mythos.mixin.races;
 
  import com.github.manasmods.tensura.race.Race;
  import com.github.manasmods.tensura.race.vampire.VampireRace;

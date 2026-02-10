@@ -18,8 +18,9 @@
     "SkillUtilsMixin",
     "SoundLevelMixin",
     "UrielBypassMixinMythos",
-    "VampireEvoMixin",
-    "WeaponEPHandlerMixin"
+    "WeaponEPHandlerMixin",
+    "races.RaceMixin",
+    "races.VampireEvoMixin"
   ],
   "client": [],
   "injectors": {
