@@ -85,7 +85,10 @@ public class MythosMobEffects {
             new MammonFlareEffect(MobEffectCategory.NEUTRAL, (new Color(255, 165, 15)).getRGB()));
     public static final RegistryObject<MobEffect> ENCHAIN_EFFECT = registry.register("enchain", () ->
             new EnchainEffect(MobEffectCategory.HARMFUL, (new Color(20, 50, 105).getRGB())));
-
+    public static final RegistryObject<MobEffect> ARES_BERSERKER = registry.register("ares_berserker", () ->
+            new AresBerserkerEffect(MobEffectCategory.NEUTRAL, (new Color(255, 165, 15)).getRGB()));
+    public static final RegistryObject<MobEffect> LONGEVITY_REGENERATION = registry.register("longevity_regeneration", () ->
+            new LongevityRegenerationEffect(MobEffectCategory.BENEFICIAL, (new Color(100, 0, 0)).getRGB()));
 
     public static void init(IEventBus modEventBus) {
         registry.register(modEventBus);
