@@ -126,7 +126,6 @@ minecraft {
 
 mixin {
     add sourceSets.main, "trmythos.refmap.json"
-
     config "${mod_id}.mixins.json"
 }
 
@@ -159,6 +158,15 @@ repositories {
             includeGroup "curse.maven"
         }
     }
+    maven {
+        name = "Curios Maven"
+        url = "https://maven.theillusivec4.top/"
+    }
+
+    maven {
+        name = "BlameJared"
+        url = "https://maven.blamejared.com"
+    }
 
     maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven' }
     maven { url 'https://dl.cloudsmith.io/public/manasmods/manascore/maven/' }
@@ -183,6 +191,10 @@ dependencies {
    // implementation fg.deobf("com.github.hvnbael:trnightmare:${minecraft_version}-${nightmareVersion}")
     implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.19:3.1.40')
    // implementation fg.deobf("curse.maven:gecko-${geckoVersion}")
+    implementation fg.deobf("blank:EnigmaticLegacy:2.26.5")
+    implementation fg.deobf("vazkii.patchouli:Patchouli:1.19.2-77")
+    implementation fg.deobf("top.theillusivec4.curios:curios-forge:1.19.2-5.1.6.4")
+    implementation fg.deobf("top.theillusivec4.caelus:caelus-forge:1.19.2-3.0.0.6")
     implementation fg.deobf('com.github.glitchfiend:TerraBlender-forge:1.19.2-2.0.1.162')
     compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.5.0"))
     implementation(jarJar("io.github.llamalad7:mixinextras-forge:0.5.0")) {
@@ -215,11 +227,19 @@ dependencies {
 // When "copyIdeResources" is enabled, this will also run before the game launches in IDE environments.
 // See https://docs.gradle.org/current/dsl/org.gradle.language.jvm.tasks.ProcessResources.html
 tasks.named('processResources', ProcessResources).configure {
-    var replaceProperties = [minecraft_version   : minecraft_version, minecraft_version_range: minecraft_version_range,
-                             forge_version       : forge_version, forge_version_range: forge_version_range,
-                             loader_version_range: loader_version_range,
-                             mod_id              : mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
-                             mod_authors         : mod_authors, mod_description: mod_description,]
+    var replaceProperties = [
+            minecraft_version   : minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            forge_version       : forge_version,
+            forge_version_range : forge_version_range,
+            loader_version_range: loader_version_range,
+            mod_id              : mod_id,
+            mod_name            : mod_name,
+            mod_license         : mod_license,
+            mod_version         : mod_version,
+            mod_authors         : mod_authors,
+            mod_description     : mod_description,
+    ]
 
     inputs.properties replaceProperties
 

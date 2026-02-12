@@ -47,11 +47,11 @@ public class BibliomaniaChatHandler {
     private static final int TEMP_DURATION = 20 * 600; // 10 minutes
 
     private static final Map<String, Integer> WORD_COSTS = Map.of(
-            "Blind", 20,
-            "Heal", 10,
-            "Explode", 30,
+            "Blind", 30,
+            "Heal", 30,
+            "Explode", 50,
             "Study", 75,
-            "Alter", 30
+            "Alter", 60
     );
 
     @SubscribeEvent
@@ -101,14 +101,14 @@ public class BibliomaniaChatHandler {
                     }
 
                     tag.putFloat("recordPoints", rp - REVERSE_COST);
-                    list.remove(i); // 🔥 REMOVE AFTER USE
+                    list.remove(i);
                     tag.put(COPIED_SKILLS, list);
                     instance.markDirty();
 
                     SkillUtils.learnSkill(player, skill, -TEMP_DURATION);
 
                     player.displayClientMessage(
-                            Component.literal("The record answers, then fades.")
+                            Component.literal("The page answers, then crumbles.")
                                     .withStyle(ChatFormatting.DARK_PURPLE),
                             false
                     );
@@ -189,7 +189,6 @@ public class BibliomaniaChatHandler {
 
                     try {
                         if (mastered && args.length == 5) {
-                            // DIMENSION TELEPORT
                             ResourceLocation dimId = new ResourceLocation(args[1]);
                             double x = Double.parseDouble(args[2]);
                             double y = Double.parseDouble(args[3]);

@@ -7,7 +7,7 @@ public class TestSkill extends Skill {
         super(SkillType.ULTIMATE);
     }
 
-
+    //Spooky
     @Override
     public double getObtainingEpCost() {
         return 2000000000;

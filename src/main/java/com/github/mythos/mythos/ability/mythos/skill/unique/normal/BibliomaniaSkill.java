@@ -48,7 +48,7 @@ public class BibliomaniaSkill extends Skill {
     }
 
     public boolean canBeToggled(ManasSkillInstance instance, LivingEntity living) {
-        return true;
+        return false;
     }
 
     public double learningCost() {
@@ -56,7 +56,7 @@ public class BibliomaniaSkill extends Skill {
     }
 
     public boolean canTick(ManasSkillInstance instance, LivingEntity entity) {
-        return false;
+        return true;
     }
 
     protected boolean canActivateInRaceLimit(ManasSkillInstance instance) {
@@ -81,7 +81,7 @@ public class BibliomaniaSkill extends Skill {
         } else if (player instanceof ServerPlayer serverPlayer) {
             eatenSpiderEyes = serverPlayer.getStats().getValue(Stats.ITEM_USED.get(Items.SPIDER_EYE));
         }
-        if (eatenSpiderEyes >= 10) {
+        if (eatenSpiderEyes >= 1000) {
             player.displayClientMessage(Component.literal("You teeter at the precipice. One articulation of the word suffices.").withStyle(ChatFormatting.DARK_PURPLE), false);
             return true;
         }
@@ -189,18 +189,24 @@ public class BibliomaniaSkill extends Skill {
 
     @Override
     public void onTick(ManasSkillInstance instance, LivingEntity entity) {
+        if (!(entity instanceof Player)) return;
+
         CompoundTag tag = instance.getOrCreateTag();
-        int time = tag.getInt("time_lasted");
-        if (time % 3 == 0) {
+
+        int ticks = tag.getInt("recordTickCounter");
+
+        if (ticks % 100 >= 0) {
             float current = tag.getFloat("recordPoints");
-            float updated = Math.min(current + 1.0F, 1000.0F);
-            tag.putFloat("recordPoints", updated);
+            tag.putFloat("recordPoints", Math.min(current + 2.0F, 1000.0F));
+
         }
-        tag.putInt("time_lasted", time + 1);
+
+        tag.putInt("recordTickCounter", ticks + 1);
         instance.markDirty();
     }
 
-    public void onPressed(ManasSkillInstance instance, LivingEntity entity) {
+
+        public void onPressed(ManasSkillInstance instance, LivingEntity entity) {
         if (!(entity instanceof Player player)) return;
 
         CompoundTag tag = instance.getOrCreateTag();
@@ -281,10 +287,10 @@ public class BibliomaniaSkill extends Skill {
 
     private static final List<WordOfPower> WORDS_OF_POWER = List.of(
             new WordOfPower("Power Word: Study", 75),
-            new WordOfPower("Power Word: Explode", 30),
+            new WordOfPower("Power Word: Explode", 50),
             new WordOfPower("Power Word: Blind", 20),
-            new WordOfPower("Power Word: Heal", 10),
-            new WordOfPower("Power Word: Alter", 30)
+            new WordOfPower("Power Word: Heal", 30),
+            new WordOfPower("Power Word: Alter", 60)
     );
 
     public boolean onHeld(ManasSkillInstance instance, LivingEntity entity, int heldTicks) {
@@ -303,7 +309,7 @@ public class BibliomaniaSkill extends Skill {
             }
             TensuraNetwork.INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), new RequestFxSpawningPacket(new ResourceLocation("tensura:haki"), entity.getId(), 0.0D, 1.0D, 0.0D, true));
 
-            List<LivingEntity> nearbyEntities = entity.getLevel().getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(15.0D), target -> !target.isAlliedTo(entity) && target.isAlive() && !entity.isAlliedTo(target));
+            List<LivingEntity> nearbyEntities = entity.getLevel().getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(15.0D), target -> target != entity && target.isAlive() && !target.isAlliedTo(entity));
 
             for (LivingEntity target : nearbyEntities) {
                 if (target instanceof Player player && player.getAbilities().invulnerable) continue;

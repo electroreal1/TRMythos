@@ -67,6 +67,13 @@ versionRange = "[1.0.0.6.5.6,)"
 ordering = "NONE"
 side = "BOTH"
 [[dependencies.trmythos]]
+modId="enigmaticlegacy"
+mandatory=true
+versionRange="2.26.5"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.trmythos]]
 modId = "minecraft"
 mandatory = true
 # This version range declares a minimum of the current minecraft version up to but not including the next major version

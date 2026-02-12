@@ -597,7 +597,6 @@ public class TatariSkill extends Skill {
 
                 owner.displayClientMessage(Component.literal("Tatari engulfs the world for 10 minutes.").withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD), true);
 
-                // ===== POST-13 USE EFFECT =====
                 if (uses + 1 == 13) {
                     instance.setMastery(0);
 

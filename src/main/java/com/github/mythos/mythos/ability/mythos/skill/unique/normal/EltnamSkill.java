@@ -247,7 +247,6 @@ public class EltnamSkill extends Skill {
                 if (target != null) {
                     if (!SkillHelper.outOfMagicule(player, instance)) {
 
-                        // Instead of teleporting → send location message
                         player.displayClientMessage(
                                 Component.literal("Target '" + name + "' found at: "
                                                 + "X=" + target.getX() + ", "

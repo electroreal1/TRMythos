@@ -68,12 +68,16 @@ public class VampireBaron extends VampireRace implements Transformation {
 
     @Override
     public double getJumpHeight() {
-        return 1.2;
+        return 1;
     }
 
     @Override
     public double getMovementSpeed() {
-        return 0.22;
+        return 0.2;
+    }
+
+    public double getSprintSpeed() {
+        return 0.25;
     }
 
     private double auraMin = 100000;
