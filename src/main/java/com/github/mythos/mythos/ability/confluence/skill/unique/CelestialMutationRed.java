@@ -100,7 +100,7 @@ public class CelestialMutationRed extends Skill {
         if (living instanceof Player player) {
             SkillStorage storage = SkillAPI.getSkillsFrom(player);
             Skill blue = ConfluenceUniques.CELESTIAL_PATH_BLUE.get();
-            if (SkillUtils.fullyHasSkill(player, blue)) {
+            if (!SkillUtils.fullyHasSkill(player, blue)) {
                 double chance = 0.01;
                 double currentEP = TensuraEPCapability.getCurrentEP(player);
 

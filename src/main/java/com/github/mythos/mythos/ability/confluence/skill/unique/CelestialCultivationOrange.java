@@ -13,7 +13,6 @@ import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.mythos.mythos.ability.confluence.skill.ConfluenceUniques;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -66,13 +65,13 @@ public class CelestialCultivationOrange extends Skill {
                 TensuraPlayerCapability.sync(player);
             }
 
-            entity.addEffect(new MobEffectInstance((MobEffect) TensuraMobEffects.PRESENCE_SENSE.get(), 200, 3, false, false, false));
+            entity.addEffect(new MobEffectInstance(TensuraMobEffects.PRESENCE_SENSE.get(), 200, 3, false, false, false));
         }
 
         if (entity instanceof Player player) {
                 SkillStorage storage = SkillAPI.getSkillsFrom(player);
                 Skill blue = ConfluenceUniques.CELESTIAL_PATH_BLUE.get();
-                if (SkillUtils.fullyHasSkill(player, blue)) {
+                if (!SkillUtils.fullyHasSkill(player, blue)) {
                     double chance = 0.01;
                     double currentEP = TensuraEPCapability.getCurrentEP(player);
 

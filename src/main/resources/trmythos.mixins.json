@@ -16,7 +16,6 @@
     "ResistSkillMixin",
     "SkillHelperMixin",
     "SkillUtilsMixin",
-    "SoundLevelMixin",
     "UrielBypassMixinMythos",
     "WeaponEPHandlerMixin",
     "races.RaceMixin",
