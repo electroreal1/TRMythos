@@ -351,18 +351,22 @@ public class Kthanid extends Skill {
             }
 
             if (ticks >= 160) {
-                playerList.getPlayers().forEach(p -> {
+
+                AABB area = entity.getBoundingBox().inflate(1000.0);
+                List<LivingEntity> nearbyMobs = serverLevel.getEntitiesOfClass(LivingEntity.class, area, mob -> !(mob instanceof Player));
+                List<Player> nearbyPlayers = serverLevel.getEntitiesOfClass(Player.class, area);
+
+                for (Player p : nearbyPlayers) {
                     if (TensuraPlayerCapability.isDemonLordSeed(p) || TensuraPlayerCapability.isTrueDemonLord(p) || TensuraEPCapability.isMajin(p)) {
                         p.die(MythosDamageSources.EndOfEvil());
                         if (MythosSkillsConfig.endOfEvilReset.get()) {
                             TensuraEPCapability.resetEverything(p);
                         }
                     }
-                    p.playNotifySound(SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.AMBIENT, 1.0f, 1.0f);
-                });
 
-                AABB area = entity.getBoundingBox().inflate(1000.0);
-                List<LivingEntity> nearbyMobs = serverLevel.getEntitiesOfClass(LivingEntity.class, area, mob -> !(mob instanceof Player));
+                    p.playNotifySound(SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.AMBIENT, 1.0f, 1.0f);
+
+                }
 
                 for (LivingEntity mob : nearbyMobs) {
                     if (TensuraEPCapability.isMajin(mob)) {
@@ -380,4 +384,13 @@ public class Kthanid extends Skill {
         return true;
     }
 
+    @Override
+    public int getMaxHeldTime(ManasSkillInstance instance, LivingEntity living) {
+        int e = 0;
+        if (instance.getMode() == 3) {
+            e = 25;
+        }
+
+        return e;
+    }
 }
