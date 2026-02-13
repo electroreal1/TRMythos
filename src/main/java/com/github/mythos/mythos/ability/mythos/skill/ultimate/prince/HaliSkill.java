@@ -67,6 +67,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
+import static com.github.mythos.mythos.config.MythosSkillsConfig.EnableUltimateSkillObtainment;
 import static net.minecraft.ChatFormatting.*;
 
 public class HaliSkill extends Skill {
@@ -110,6 +111,7 @@ public class HaliSkill extends Skill {
     }
 
     public boolean meetEPRequirement(Player player, double newEP) {
+        if (!EnableUltimateSkillObtainment()) return false;
         double currentEP = TensuraEPCapability.getCurrentEP(player);
         if (currentEP < getObtainingEpCost()) {
             return false;

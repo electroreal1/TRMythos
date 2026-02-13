@@ -53,6 +53,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import static com.github.mythos.mythos.config.MythosSkillsConfig.EnableGodClassObtainment;
 import static com.github.mythos.mythos.config.MythosSkillsConfig.EnableUltimateSkillObtainment;
 
 public class DendrrahSkill extends Skill {
@@ -92,9 +93,10 @@ public class DendrrahSkill extends Skill {
 
     @Override
     public boolean meetEPRequirement(Player player, double newEP) {
+        if (!EnableGodClassObtainment()) return false;
+        if (!EnableUltimateSkillObtainment()) return false;
         if (!(player.level instanceof ServerLevel world)) return false;
         GodClassHandler godClassHandler = GodClassHandler.get(world);
-        if (!EnableUltimateSkillObtainment()) return false;
 
         return TensuraEPCapability.getCurrentEP(player) >= getObtainingEpCost() && SkillUtils.isSkillMastered(player, Skills.ARES.get()) && SkillUtils.isSkillMastered(player, Skills.RAVANA.get()) && !godClassHandler.isDendrahhObtained();
     }

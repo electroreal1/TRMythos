@@ -21,6 +21,7 @@ public class MythosSkillsConfig {
     public static ForgeConfigSpec.BooleanValue endOfEvilReset;
     public static ForgeConfigSpec.BooleanValue CarnageBloodDominion;
     public static ForgeConfigSpec.BooleanValue EnableUltimateSkillObtainment;
+    public static ForgeConfigSpec.BooleanValue EnableGodClassUltimates;
     public static ForgeConfigSpec.BooleanValue ApophisEmbodiment;
     public static ForgeConfigSpec.BooleanValue voice_of_the_world;
     public static ForgeConfigSpec.BooleanValue ALLOW_ULTIMATE_COPYING;
@@ -146,6 +147,10 @@ public class MythosSkillsConfig {
                 .comment("If true ultimate skill will be obtainable.")
                 .define("EnableUltimateSkillObtainment", true);
 
+        EnableGodClassUltimates = builder
+                .comment("If true ultimate god class skills will be obtainable.")
+                .define("EnableGodClassUltimates", true);
+
         ALLOW_ULTIMATE_COPYING = builder
                 .comment("If true any skills that are capable of copying ultimates can copy ultimates.")
                 .define("ALLOW_ULTIMATE_COPYING", false);
@@ -239,6 +244,9 @@ public class MythosSkillsConfig {
 
     public static boolean EnableUltimateSkillObtainment() {
         return EnableUltimateSkillObtainment.get();
+    }
+    public static boolean EnableGodClassObtainment() {
+        return EnableGodClassUltimates.get();
     }
 
     public static List<? extends String> getRacesThatCanCompeteForChildOfThePlane() {

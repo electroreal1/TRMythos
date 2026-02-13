@@ -47,7 +47,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-import static com.github.mythos.mythos.config.MythosSkillsConfig.EnableUltimateSkillObtainment;
+import static com.github.mythos.mythos.config.MythosSkillsConfig.*;
 
 public class Kthanid extends Skill {
 
@@ -132,6 +132,7 @@ public class Kthanid extends Skill {
     }
 
     public boolean meetEPRequirement(@NotNull Player player, double newEP) {
+        if (!EnableGodClassObtainment()) return false;
         if (!EnableUltimateSkillObtainment()) return false;
         double currentEP = TensuraEPCapability.getCurrentEP(player);
         if (currentEP < getObtainingEpCost()) {

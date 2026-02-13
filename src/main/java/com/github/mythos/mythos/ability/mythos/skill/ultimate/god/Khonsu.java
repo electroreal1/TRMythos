@@ -72,6 +72,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 import static com.github.mythos.mythos.ability.mythos.skill.ultimate.prince.HaliSkill.applyDrain;
+import static com.github.mythos.mythos.config.MythosSkillsConfig.EnableGodClassObtainment;
+import static com.github.mythos.mythos.config.MythosSkillsConfig.EnableUltimateSkillObtainment;
 import static net.minecraft.ChatFormatting.*;
 
 public class Khonsu extends Skill {
@@ -115,13 +117,14 @@ public class Khonsu extends Skill {
     }
 
     public boolean meetEPRequirement(Player player, double newEP) {
+        if (!EnableGodClassObtainment()) return false;
+        if (!EnableUltimateSkillObtainment()) return false;
         double currentEP = TensuraEPCapability.getCurrentEP(player);
         if (currentEP < getObtainingEpCost()) {
             return false;
         }
         return SkillUtils.isSkillMastered(player, Skills.HALI.get());
     }
-
 
 
     @Override
@@ -410,8 +413,10 @@ public class Khonsu extends Skill {
 
             MobEffect domainEffect = isShifting ? MythosMobEffects.SUNRISE.get() : MythosMobEffects.SUNSET.get();
 
-            if (entity.hasEffect(MythosMobEffects.SUNSET.get()) && isShifting) entity.removeEffect(MythosMobEffects.SUNSET.get());
-            if (entity.hasEffect(MythosMobEffects.SUNRISE.get()) && !isShifting) entity.removeEffect(MythosMobEffects.SUNRISE.get());
+            if (entity.hasEffect(MythosMobEffects.SUNSET.get()) && isShifting)
+                entity.removeEffect(MythosMobEffects.SUNSET.get());
+            if (entity.hasEffect(MythosMobEffects.SUNRISE.get()) && !isShifting)
+                entity.removeEffect(MythosMobEffects.SUNRISE.get());
 
             entity.addEffect(new MobEffectInstance(domainEffect, 40, 0, false, false, true));
 
@@ -425,8 +430,7 @@ public class Khonsu extends Skill {
 
                     if (!isShifting && isMoving) {
                         applyDrain(entity, target, 0.25, true);
-                    }
-                    else if (isShifting && !isMoving) {
+                    } else if (isShifting && !isMoving) {
                         applyDrain(entity, target, 0.25, false);
                     }
                 }
@@ -791,27 +795,23 @@ public class Khonsu extends Skill {
     public void eyeOfTheMoon(ManasSkillInstance instance, LivingEntity entity) {
         Level level = entity.getLevel();
 
-        if (!entity.hasEffect(TensuraMobEffects.SHADOW_STEP.get())) {
+        if (!entity.hasEffect(TensuraMobEffects.SHADOW_STEP.get()) || !entity.hasEffect(MythosMobEffects.KHONSU.get())) {
             if (SkillHelper.outOfMagicule(entity, instance)) {
                 return;
             }
 
             this.addMasteryPoint(instance, entity);
 
-            level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
-                    SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
+            level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
 
-            entity.addEffect(new MobEffectInstance(TensuraMobEffects.SHADOW_STEP.get(), 6000, 0,
-                    false, false, false));
-            entity.addEffect(new MobEffectInstance(TensuraMobEffects.PRESENCE_CONCEALMENT.get(), 6000,
-                    3, false, false, false));
+            entity.addEffect(new MobEffectInstance(TensuraMobEffects.SHADOW_STEP.get(), 6000, 0, false, false, false));
+            entity.addEffect(new MobEffectInstance(TensuraMobEffects.PRESENCE_CONCEALMENT.get(), 6000, 3, false, false, false));
             entity.addEffect(new MobEffectInstance(MythosMobEffects.KHONSU.get(), 6000, 0, false, false, false));
         } else {
             entity.removeEffect(TensuraMobEffects.SHADOW_STEP.get());
             entity.removeEffect(MythosMobEffects.KHONSU.get());
             entity.removeEffect(TensuraMobEffects.PRESENCE_CONCEALMENT.get());
-            level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
-                    SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 0.5F);
+            level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 0.5F);
         }
     }
 
