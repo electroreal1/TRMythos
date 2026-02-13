@@ -163,7 +163,7 @@ public class Skills {
         // King Class
 
         // god Class
-        DENDRRAH = registery.register("dendrahh", () -> new DendrrahSkill(Skill.SkillType.ULTIMATE));
+        DENDRRAH = registery.register("dendrahh", DendrrahSkill::new);
         KHONSU = registery.register("khonsu", () -> new Khonsu(Skill.SkillType.ULTIMATE));
         KTHANID = registery.register("kthanid", () -> new Kthanid(Skill.SkillType.ULTIMATE));
 

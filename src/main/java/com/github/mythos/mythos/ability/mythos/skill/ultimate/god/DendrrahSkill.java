@@ -60,7 +60,7 @@ public class DendrrahSkill extends Skill {
     private static final UUID DENDRRAH_SPEED_UUID = UUID.fromString("4b8ae36b-3740-4690-84cd-694db333ca1a");
     private static final UUID DENDRRAH_ARMOR_UUID = UUID.fromString("4b8ae90b-3740-4690-84cd-694db333ca1a");
 
-    public DendrrahSkill(SkillType type) {
+    public DendrrahSkill() {
         super(SkillType.ULTIMATE);
     }
 
@@ -83,6 +83,11 @@ public class DendrrahSkill extends Skill {
     @Override
     public double getObtainingEpCost() {
         return 10000000;
+    }
+
+    @Override
+    public int getMaxMastery() {
+        return 3000;
     }
 
     @Override

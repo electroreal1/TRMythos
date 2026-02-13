@@ -2,6 +2,7 @@ package com.github.mythos.mythos.registry;
 
 import com.github.mythos.mythos.entity.IntrovertBarrier;
 import com.github.mythos.mythos.entity.ThunderStorm;
+import com.github.mythos.mythos.entity.boss.DendrrahEntity;
 import com.github.mythos.mythos.entity.projectile.DragonFireBreathProjectile;
 import com.github.mythos.mythos.entity.projectile.StarFallProjectile;
 import com.github.mythos.mythos.entity.projectile.VajraBreathProjectile;
@@ -22,6 +23,7 @@ public class MythosEntityTypes {
     public static final RegistryObject<EntityType<VajraBreathProjectile>> VAJRA_BREATH;
     public static final RegistryObject<EntityType<IntrovertBarrier>> INTROVERT_BARRIER;
     public static final RegistryObject<EntityType<StarFallProjectile>> STARFALL;
+    public static final RegistryObject<EntityType<DendrrahEntity>> DENDRAHH;
     public static void register(IEventBus modEventBus) {
     registry.register(modEventBus);
 }
@@ -59,6 +61,11 @@ public class MythosEntityTypes {
                                 .sized(1.0f, 1.0f)
                                 .clientTrackingRange(64)
                                 .build(new ResourceLocation("trmythos", "introvert_barrier").toString()));
+        DENDRAHH = registry.register("dendrahh",
+                () -> EntityType.Builder.<DendrrahEntity>of(DendrrahEntity::new, MobCategory.MISC).sized(1, 2)
+                        .clientTrackingRange(64)
+                        .build(new ResourceLocation("trmythos", "dendrahh").toString()));
+
     }
 
 
