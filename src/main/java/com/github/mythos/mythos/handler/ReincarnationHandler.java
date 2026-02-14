@@ -4,27 +4,47 @@ import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
+import com.github.manasmods.manascore.api.skills.event.RemoveSkillEvent;
 import com.github.manasmods.tensura.ability.SkillUtils;
+import com.github.manasmods.tensura.ability.TensuraSkillInstance;
+import com.github.manasmods.tensura.ability.magic.Magic;
+import com.github.manasmods.tensura.ability.skill.resist.ResistSkill;
+import com.github.manasmods.tensura.ability.skill.unique.CookSkill;
+import com.github.manasmods.tensura.capability.effects.TensuraEffectsCapability;
+import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
-import com.github.manasmods.tensura.race.Race;
-import com.github.mythos.mythos.config.MythosSkillsConfig;
+import com.github.manasmods.tensura.capability.skill.TensuraSkillCapability;
+import com.github.manasmods.tensura.menu.RaceSelectionMenu;
+import com.github.manasmods.tensura.registry.skill.UniqueSkills;
 import com.github.mythos.mythos.registry.skill.Skills;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.ServerStatsCounter;
+import net.minecraft.stats.StatType;
+import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.Iterator;
 import java.util.List;
+
+import static com.github.manasmods.tensura.item.custom.ResetScrollItem.*;
 
 @Mod.EventBusSubscriber(modid = "trmythos")
 public class ReincarnationHandler {
@@ -63,7 +83,7 @@ public class ReincarnationHandler {
 
             toForget.forEach(storage::forgetSkill);
 
-            randomizeRace(player);
+            resetRace(player);
         }
     }
 
@@ -84,28 +104,80 @@ public class ReincarnationHandler {
         }
     }
 
-    private static void randomizeRace(ServerPlayer player) {
-        List<? extends String> racePool = MythosSkillsConfig.REINCARNATION_RACES.get();
-        if (racePool.isEmpty()) return;
-
-        String randomRaceId = racePool.get(player.getRandom().nextInt(racePool.size()));
-        ResourceLocation raceLoc = new ResourceLocation(randomRaceId);
-
-        var registry = player.level.registryAccess()
-                .registry(ResourceKey.createRegistryKey(new ResourceLocation("tensura", "races")))
-                .orElse(null);
-
-        if (registry != null) {
-            Race selectedRace = (Race) registry.get(raceLoc);
-
-            if (selectedRace != null) {
-                TensuraPlayerCapability.getFrom(player).ifPresent(cap -> {
-                    cap.setRace(player, selectedRace, true);
-
-                    TensuraPlayerCapability.sync(player);
-                });
-                playReincarnationSound(player);
-            }
+    private static <T> void resetStatType(Player player, ServerStatsCounter stats, StatType<T> type) {
+        for (T value : type.getRegistry()) {
+            stats.setValue(player, type.get(value), 0);
         }
+    }
+
+    public static void resetRace(ServerPlayer player) {
+        MinecraftServer server = player.getServer();
+        if (server != null) {
+            ServerStatsCounter stats = server.getPlayerList().getPlayerStats(player);
+
+            for (StatType<?> type : ForgeRegistries.STAT_TYPES) {
+                resetStatType(player, stats, type);
+            }
+
+            stats.markAllDirty();
+        }
+
+        resetRaceFailsafe(player);
+        TensuraPlayerCapability.getFrom(player).ifPresent((cap) -> {
+            if (cap.getRace() != null) {
+                SkillStorage storage = SkillAPI.getSkillsFrom(player);
+                Iterator<ManasSkillInstance> iterator = storage.getLearnedSkills().iterator();
+
+                label37:
+                while(true) {
+                    TensuraSkillInstance instance;
+                    do {
+                        Object patt12668$temp;
+                        do {
+                            if (!iterator.hasNext()) {
+                                storage.syncAll();
+                                break label37;
+                            }
+                            patt12668$temp = iterator.next();
+                        } while(!(patt12668$temp instanceof TensuraSkillInstance));
+
+                        instance = (TensuraSkillInstance)patt12668$temp;
+
+                        // --- REINCARNATOR PROTECTION ---
+                        ResourceLocation skillId = instance.getSkill().getRegistryName();
+                        if (skillId != null && skillId.getNamespace().equals("trmythos") && skillId.getPath().equals("reincarnator")) {
+                            continue;
+                        }
+                        // -------------------------------
+
+                    } while(!isIntrinsicSkills(player, cap, cap.getRace(), instance) && !(instance.getSkill() instanceof Magic) && !(instance.getSkill() instanceof ResistSkill));
+
+                    if (!MinecraftForge.EVENT_BUS.post(new RemoveSkillEvent(instance, player))) {
+                        iterator.remove();
+                    }
+                }
+            }
+
+            cap.clearIntrinsicSkills();
+            TensuraPlayerCapability.resetEverything(player);
+            if (SkillUtils.hasSkill(player, UniqueSkills.CHOSEN_ONE.get())) {
+                cap.setBlessed(true);
+                TensuraPlayerCapability.sync(player);
+            }
+        });
+
+        CookSkill.removeCookedHP(player, null);
+        TensuraEPCapability.resetEverything(player);
+        TensuraSkillCapability.resetEverything(player, false, true);
+        TensuraEffectsCapability.resetEverything(player, true, true);
+        player.setRespawnPosition(Level.OVERWORLD, null, 0.0F, false, false);
+        List<ResourceLocation> races = TensuraPlayerCapability.loadRaces();
+        NetworkHooks.openScreen(player, new SimpleMenuProvider(RaceSelectionMenu::new, Component.translatable("tensura.race.selection")), (buf) -> {
+            buf.writeBoolean(true);
+            buf.writeCollection(races, FriendlyByteBuf::writeResourceLocation);
+        });
+        RaceSelectionMenu.grantLearningResistance(player);
+        resetFlight(player);
+        playReincarnationSound(player);
     }
 }
