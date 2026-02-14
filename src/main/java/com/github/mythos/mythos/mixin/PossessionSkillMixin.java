@@ -3,20 +3,19 @@ package com.github.mythos.mythos.mixin;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.skill.intrinsic.PossessionSkill;
 import com.github.mythos.mythos.registry.skill.Skills;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin({PossessionSkill.class})
 public class PossessionSkillMixin {
 
-    @Inject(
+    @ModifyReturnValue(
             method = {"canPossess"},
             at = {@At("HEAD")},
-            cancellable = true,
             remap = false
     )
     private void addHaliPossessionCheck(LivingEntity target, Player player, CallbackInfoReturnable<Boolean> cir) {

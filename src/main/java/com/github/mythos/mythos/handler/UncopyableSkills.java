@@ -66,5 +66,6 @@ public class UncopyableSkills {
         PERMANENTLY_BLOCKED.add(new ResourceLocation("trmythos", "cycle"));
         PERMANENTLY_BLOCKED.add(new ResourceLocation("trmythos", "foundation"));
         PERMANENTLY_BLOCKED.add(new ResourceLocation("trmythos", "watcher"));
+        PERMANENTLY_BLOCKED.add(new ResourceLocation("trmythos", "reincarnator"));
     }
 }

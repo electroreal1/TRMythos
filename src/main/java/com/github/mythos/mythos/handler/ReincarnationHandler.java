@@ -8,6 +8,7 @@ import com.github.manasmods.manascore.api.skills.event.RemoveSkillEvent;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.ability.magic.Magic;
+import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.ability.skill.resist.ResistSkill;
 import com.github.manasmods.tensura.ability.skill.unique.CookSkill;
 import com.github.manasmods.tensura.capability.effects.TensuraEffectsCapability;
@@ -17,6 +18,7 @@ import com.github.manasmods.tensura.capability.skill.TensuraSkillCapability;
 import com.github.manasmods.tensura.menu.RaceSelectionMenu;
 import com.github.manasmods.tensura.registry.skill.UniqueSkills;
 import com.github.mythos.mythos.registry.skill.Skills;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -41,8 +43,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 import static com.github.manasmods.tensura.item.custom.ResetScrollItem.*;
 
@@ -52,6 +56,10 @@ public class ReincarnationHandler {
     @SubscribeEvent
     public static void onPlayerDeath(LivingDeathEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
+
+        SkillStorage storage = SkillAPI.getSkillsFrom(player);
+
+        storage.getLearnedSkills().removeIf(ManasSkillInstance::isTemporarySkill);
 
         if (SkillUtils.hasSkill(player, Skills.REINCARNATOR.get())) {
             CompoundTag persistTag = player.getPersistentData();
@@ -104,12 +112,6 @@ public class ReincarnationHandler {
         }
     }
 
-    private static <T> void resetStatType(Player player, ServerStatsCounter stats, StatType<T> type) {
-        for (T value : type.getRegistry()) {
-            stats.setValue(player, type.get(value), 0);
-        }
-    }
-
     public static void resetRace(ServerPlayer player) {
         MinecraftServer server = player.getServer();
         if (server != null) {
@@ -129,7 +131,7 @@ public class ReincarnationHandler {
                 Iterator<ManasSkillInstance> iterator = storage.getLearnedSkills().iterator();
 
                 label37:
-                while(true) {
+                while (true) {
                     TensuraSkillInstance instance;
                     do {
                         Object patt12668$temp;
@@ -139,9 +141,9 @@ public class ReincarnationHandler {
                                 break label37;
                             }
                             patt12668$temp = iterator.next();
-                        } while(!(patt12668$temp instanceof TensuraSkillInstance));
+                        } while (!(patt12668$temp instanceof TensuraSkillInstance));
 
-                        instance = (TensuraSkillInstance)patt12668$temp;
+                        instance = (TensuraSkillInstance) patt12668$temp;
 
                         // --- REINCARNATOR PROTECTION ---
                         ResourceLocation skillId = instance.getSkill().getRegistryName();
@@ -150,7 +152,7 @@ public class ReincarnationHandler {
                         }
                         // -------------------------------
 
-                    } while(!isIntrinsicSkills(player, cap, cap.getRace(), instance) && !(instance.getSkill() instanceof Magic) && !(instance.getSkill() instanceof ResistSkill));
+                    } while (!isIntrinsicSkills(player, cap, cap.getRace(), instance) && !(instance.getSkill() instanceof Magic) && !(instance.getSkill() instanceof ResistSkill));
 
                     if (!MinecraftForge.EVENT_BUS.post(new RemoveSkillEvent(instance, player))) {
                         iterator.remove();
@@ -166,6 +168,7 @@ public class ReincarnationHandler {
             }
         });
 
+        grantTemporaryUniqueSkill(player);
         CookSkill.removeCookedHP(player, null);
         TensuraEPCapability.resetEverything(player);
         TensuraSkillCapability.resetEverything(player, false, true);
@@ -180,4 +183,40 @@ public class ReincarnationHandler {
         resetFlight(player);
         playReincarnationSound(player);
     }
+
+    private static Skill chooseRandomUnique(ServerPlayer player) {
+        List<Skill> list = new ArrayList<>();
+        for (ManasSkill skill : SkillAPI.getSkillRegistry()) {
+            if (skill instanceof Skill s) {
+                if (s.getType() == Skill.SkillType.UNIQUE && !SkillUtils.hasSkill(player, s) && s.getRegistryName() != null) {
+                    list.add(s);
+                }
+            }
+        }
+
+        return list.isEmpty() ? null : list.get(player.getRandom().nextInt(list.size()));
+    }
+
+    private static void grantTemporaryUniqueSkill(ServerPlayer player) {
+        Skill uniquePool = chooseRandomUnique(player);
+        if (uniquePool == null) return;
+
+        ManasSkillInstance tempUnique = new ManasSkillInstance(uniquePool);
+        tempUnique.getOrCreateTag().putBoolean("NoMagiculeCost", true);
+        boolean success = SkillUtils.learnSkill(player, tempUnique);
+        if (!success) return;
+
+
+        player.sendSystemMessage(Component.literal("The Voice of the World grants you a temporary soul: ")
+                .append(Objects.requireNonNull(tempUnique.getSkill().getName()))
+                .withStyle(ChatFormatting.LIGHT_PURPLE), false);
+
+    }
+
+    private static <T> void resetStatType(Player player, ServerStatsCounter stats, StatType<T> type) {
+        for (T value : type.getRegistry()) {
+            stats.setValue(player, type.get(value), 0);
+        }
+    }
+
 }

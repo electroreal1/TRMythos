@@ -5,12 +5,12 @@ import com.github.manasmods.tensura.ability.skill.unique.InfinityPrisonSkill;
 import com.github.manasmods.tensura.capability.skill.TensuraSkillCapability;
 import com.github.mythos.mythos.ability.confluence.skill.ConfluenceUniques;
 import com.github.mythos.mythos.registry.skill.Skills;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(
@@ -21,10 +21,9 @@ public class FragarachInfinityPrisonPierceMixin {
     public FragarachInfinityPrisonPierceMixin() {
     }
 
-    @Inject(
+    @ModifyReturnValue(
             method = {"onBeingDamaged"},
             at = {@At("HEAD")},
-            cancellable = true,
             remap = false
     )
     public void onBeingDamaged(ManasSkillInstance instance, LivingAttackEvent event, CallbackInfo ci) {
