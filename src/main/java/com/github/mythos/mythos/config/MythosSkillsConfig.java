@@ -30,6 +30,7 @@ public class MythosSkillsConfig {
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> SAPLING_ENGRAVE_LIST;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> SAPLING_DISALLOWED_SKILLS;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> ARROGANCE_BLACKLIST;
+    public static ForgeConfigSpec.ConfigValue<List<? extends String>> REINCARNATION_RACES;
     public static ForgeConfigSpec.DoubleValue waterMultiplier;
     public static ForgeConfigSpec.DoubleValue waterMultiplier2;
 
@@ -114,6 +115,12 @@ public class MythosSkillsConfig {
                         ),
                         o -> o instanceof String
                 );
+
+        REINCARNATION_RACES = builder
+                .comment("List of race registry names the Reincarnator can transform into on death.")
+                .defineList("reincarnationRaces",
+                        List.of("tensura:human", "tensura:slime", "tensura:goblin", "tensura:ogre", "tensura:orc", "tensura:wight", "tensura:orc", "tensura:elf", "tensura:dwarf", "tensura:merfolk", "tensura:beastfolk", "tensura:lizardman", "tensura:ghoul", "tensura:lesser_daemon", "trmysticism:sculk_worm", "trmysticism:dragonoid", "trmythos:canine", "trmythos:maiden", "trmythos:lesser_serpent","trmythos:godling","trmythos:metalloid", "trmythos:revenant","trmythos:fableborn"),
+                        obj -> obj instanceof String);
 
         vassalAssemblyChance = builder
                 .comment("Chance (0.0–1.0) for [True Passive] Vassal Assembly to trigger when damaged.")

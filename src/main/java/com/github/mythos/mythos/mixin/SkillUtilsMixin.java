@@ -51,37 +51,37 @@ public abstract class SkillUtilsMixin {
     private static int trmythos$modifyEarningLearnPoint(int original, ManasSkillInstance instance, LivingEntity entity, boolean isMode) {
         int point = original;
 
-        if (hasSkill(entity, (ManasSkill) Skills.ORUNMILA.get())) {
+        if (hasSkill(entity, Skills.ORUNMILA.get())) {
             point = original + 20;
         }
-        if (hasSkill(entity, (ManasSkill) Skills.ELTNAM.get())) {
+        if (hasSkill(entity, Skills.ELTNAM.get())) {
             point += 6;
         }
-        if (hasSkill(entity, (ManasSkill) Skills.ZEPIA.get())) {
+        if (hasSkill(entity, Skills.ZEPIA.get())) {
             point += 9;
         }
-        if (hasSkill(entity, (ManasSkill) Skills.OMNISCIENT_EYE.get())) {
+        if (hasSkill(entity, Skills.OMNISCIENT_EYE.get())) {
             point += 10;
         }
-        if (hasSkill(entity, (ManasSkill) Skills.TRUE_DAO.get())) {
+        if (hasSkill(entity, Skills.TRUE_DAO.get())) {
             point += 5;
         }
-        if (hasSkill(entity, (ManasSkill) Skills.ORIGIN_DAO.get())) {
+        if (hasSkill(entity, Skills.ORIGIN_DAO.get())) {
             point += 10;
         }
-        if (hasSkill(entity, (ManasSkill) Skills.DEMONOLOGIST.get())) {
+        if (hasSkill(entity, Skills.DEMONOLOGIST.get())) {
             point += 5;
         }
-        if (hasSkill(entity, (ManasSkill) Skills.SAGITTARIUS.get())) {
+        if (hasSkill(entity, Skills.SAGITTARIUS.get())) {
             point += 8;
         }
-        if (hasSkill(entity, (ManasSkill) ConfluenceUniques.CELESTIAL_CULTIVATION_ORANGE.get()) && instance.getSkill() instanceof Magic) {
+        if (hasSkill(entity, ConfluenceUniques.CELESTIAL_CULTIVATION_ORANGE.get()) && instance.getSkill() instanceof Magic) {
             point += 999;
         }
-        if (hasSkill(entity, (ManasSkill) ConfluenceUniques.CELESTIAL_MUTATION_RED.get()) && instance.getSkill() instanceof Battewill) {
+        if (hasSkill(entity, ConfluenceUniques.CELESTIAL_MUTATION_RED.get()) && instance.getSkill() instanceof Battewill) {
             point += 999;
         }
-        if (hasSkill(entity, (ManasSkill) Skills.FALSE_HERO.get())) {
+        if (hasSkill(entity, Skills.FALSE_HERO.get())) {
             point += 15;
         }
         if (SkillUtils.hasSkill(entity, Skills.KTHANID.get()) && !(instance.getSkill() instanceof Kthanid)) {
@@ -96,49 +96,49 @@ public abstract class SkillUtilsMixin {
     private static int trmythos$modifyBonusMasteryPoint(int original, ManasSkillInstance instance, LivingEntity entity) {
         int point = original;
 
-        if (isSkillToggled(entity, (ManasSkill) Skills.ORUNMILA.get())) {
+        if (isSkillToggled(entity, Skills.ORUNMILA.get())) {
             point += 20;
         }
-        if (hasSkill(entity, (ManasSkill) Skills.ELTNAM.get())) {
+        if (hasSkill(entity, Skills.ELTNAM.get())) {
             point += 6;
         }
-        if (hasSkill(entity, (ManasSkill) Skills.ZEPIA.get())) {
+        if (hasSkill(entity, Skills.ZEPIA.get())) {
             point += 12;
         }
-        if (hasSkill(entity, (ManasSkill) Skills.TATARI.get())) {
+        if (hasSkill(entity, Skills.TATARI.get())) {
             point += 30;
         }
-        if (hasSkill(entity, (ManasSkill) Skills.TATARI.get()) && instance.getSkill() instanceof Magic) {
+        if (hasSkill(entity, Skills.TATARI.get()) && instance.getSkill() instanceof Magic) {
             point += 30;
         }
-        if (hasSkill(entity, (ManasSkill) Skills.ZEPIA.get())) {
+        if (hasSkill(entity, Skills.ZEPIA.get())) {
             point += 9;
         }
-        if (hasSkill(entity, (ManasSkill) Skills.OMNISCIENT_EYE.get())) {
+        if (hasSkill(entity, Skills.OMNISCIENT_EYE.get())) {
             point += 10;
         }
-        if (hasSkill(entity, (ManasSkill) Skills.OMNISCIENT_EYE.get()) && instance.getSkill() instanceof Magic) {
+        if (hasSkill(entity, Skills.OMNISCIENT_EYE.get()) && instance.getSkill() instanceof Magic) {
             point += 999;
         }
-        if (hasSkill(entity, (ManasSkill) Skills.TRUE_DAO.get())) {
+        if (hasSkill(entity, Skills.TRUE_DAO.get())) {
             point += 5;
         }
-        if (hasSkill(entity, (ManasSkill) Skills.ORIGIN_DAO.get())) {
+        if (hasSkill(entity, Skills.ORIGIN_DAO.get())) {
             point += 10;
         }
-        if (hasSkill(entity, (ManasSkill) Skills.DEMONOLOGIST.get())) {
+        if (hasSkill(entity, Skills.DEMONOLOGIST.get())) {
             point += 5;
         }
-        if (hasSkill(entity, (ManasSkill) Skills.SAGITTARIUS.get())) {
+        if (hasSkill(entity, Skills.SAGITTARIUS.get())) {
             point += 8;
         }
-        if (hasSkill(entity, (ManasSkill) Skills.FALSE_HERO.get())) {
+        if (hasSkill(entity, Skills.FALSE_HERO.get())) {
             point += 15;
         }
-        if (hasSkill(entity, (ManasSkill) ConfluenceUniques.CELESTIAL_CULTIVATION_ORANGE.get()) && instance.getSkill() instanceof Magic) {
+        if (hasSkill(entity, ConfluenceUniques.CELESTIAL_CULTIVATION_ORANGE.get()) && instance.getSkill() instanceof Magic) {
             point += 999;
         }
-        if (hasSkill(entity, (ManasSkill) ConfluenceUniques.CELESTIAL_MUTATION_RED.get()) && instance.getSkill() instanceof Battewill) {
+        if (hasSkill(entity, ConfluenceUniques.CELESTIAL_MUTATION_RED.get()) && instance.getSkill() instanceof Battewill) {
             point += 999;
         }
         if (SkillUtils.hasSkill(entity, Skills.KTHANID.get()) && !(instance.getSkill() instanceof Kthanid)) {
@@ -154,18 +154,18 @@ public abstract class SkillUtilsMixin {
     private static boolean trmythos$modifyCanNegateDodge(boolean original, LivingEntity entity, DamageSource source) {
         Entity var4 = source.getEntity();
         if (var4 instanceof LivingEntity attacker) {
-            if (isSkillInSlot(attacker, (ManasSkill) Skills.ORUNMILA.get())) {
+            if (isSkillInSlot(attacker, Skills.ORUNMILA.get())) {
                 original = true;
             }
-            if (isSkillInSlot(attacker, (ManasSkill) ConfluenceUniques.FRAGARACH.get())) {
+            if (isSkillInSlot(attacker, ConfluenceUniques.FRAGARACH.get())) {
                 if (Math.random() < 0.5) {
                     original = true;
                 }
             }
-            if (isSkillInSlot(attacker, (ManasSkill) Skills.PRETENDER_KING.get())) {
+            if (isSkillInSlot(attacker, Skills.PRETENDER_KING.get())) {
                 original = true;
             }
-            if (isSkillInSlot(attacker, (ManasSkill) Skills.DENDRRAH.get())) {
+            if (isSkillInSlot(attacker, Skills.DENDRRAH.get())) {
                 original = true;
             }
 
@@ -182,32 +182,29 @@ public abstract class SkillUtilsMixin {
 
     @ModifyReturnValue(method = {"reducingResistances"}, at = {@At("RETURN")}, remap = false)
     private static boolean NullToResistAndResistToNothing(boolean original, LivingEntity entity) {
-        original = false;
-        if (entity.hasEffect(MythosMobEffects.BLOOD_COAT.get())) {
+        original = entity.hasEffect(MythosMobEffects.BLOOD_COAT.get());
+        if (isSkillInSlot(entity, Skills.ORUNMILA.get())) {
             original = true;
         }
-        if (isSkillInSlot(entity, (ManasSkill) Skills.ORUNMILA.get())) {
+        if (isSkillInSlot(entity, Skills.TATARI.get())) {
             original = true;
         }
-        if (isSkillInSlot(entity, (ManasSkill) Skills.TATARI.get())) {
+        if (isSkillInSlot(entity, Skills.CHILD_OF_THE_PLANE.get())) {
             original = true;
         }
-        if (isSkillInSlot(entity, (ManasSkill) Skills.CHILD_OF_THE_PLANE.get())) {
+        if (isSkillInSlot(entity, Skills.TRUE_DAO.get())) {
             original = true;
         }
-        if (isSkillInSlot(entity, (ManasSkill) Skills.TRUE_DAO.get())) {
+        if (isSkillInSlot(entity, Skills.PERSEVERANCE.get())) {
             original = true;
         }
-        if (isSkillInSlot(entity, (ManasSkill) Skills.PERSEVERANCE.get())) {
+        if (isSkillInSlot(entity, Skills.BALANCE.get())) {
             original = true;
         }
-        if (isSkillInSlot(entity, (ManasSkill) Skills.BALANCE.get())) {
+        if (isSkillInSlot(entity, Skills.PRETENDER_KING.get())) {
             original = true;
         }
-        if (isSkillInSlot(entity, (ManasSkill) Skills.PRETENDER_KING.get())) {
-            original = true;
-        }
-        if (isSkillInSlot(entity, (ManasSkill) Skills.FALSE_HERO.get())) {
+        if (isSkillInSlot(entity, Skills.FALSE_HERO.get())) {
             original = true;
         }
         if (isSkillInSlot(entity, Skills.LUCIA.get())) {
@@ -225,7 +222,7 @@ public abstract class SkillUtilsMixin {
     @ModifyReturnValue(method = {"hasWarpShot"}, at = {@At("RETURN")}, remap = false)
     private static boolean trmythos$hasWarpShot(boolean original, LivingEntity entity) {
         SkillStorage storage = SkillAPI.getSkillsFrom(entity);
-        Optional<ManasSkillInstance> sagittarius = storage.getSkill((ManasSkill) Skills.SAGITTARIUS.get());
+        Optional<ManasSkillInstance> sagittarius = storage.getSkill(Skills.SAGITTARIUS.get());
         if (sagittarius.isPresent()) {
             return true;
         } else {
@@ -235,64 +232,64 @@ public abstract class SkillUtilsMixin {
 
     @ModifyReturnValue(method = {"getMagiculeGain"}, at = {@At("RETURN")}, remap = false)
     private static float MythosMagiculeGain(float original, Player player, boolean majin) {
-        if (hasSkill(player, (ManasSkill) Skills.NASCENT_DAO.get())) {
+        if (hasSkill(player, Skills.NASCENT_DAO.get())) {
             original = 0;
         }
-        if (hasSkill(player, (ManasSkill) Skills.AWAKENED_DAO.get())) {
+        if (hasSkill(player, Skills.AWAKENED_DAO.get())) {
             original = 0;
         }
-        if (hasSkill(player, (ManasSkill) Skills.TRUE_DAO.get())) {
+        if (hasSkill(player, Skills.TRUE_DAO.get())) {
             original = 0;
         }
-        if (hasSkill(player, (ManasSkill) Skills.ORIGIN_DAO.get())) {
+        if (hasSkill(player, Skills.ORIGIN_DAO.get())) {
             original = 0;
         }
-        if (hasSkill(player, (ManasSkill) Skills.STARGAZER.get())) {
+        if (hasSkill(player, Skills.STARGAZER.get())) {
             original *= 2.0F;
         }
-        if (hasSkill(player, (ManasSkill) Skills.FALSE_HERO.get())) {
+        if (hasSkill(player, Skills.FALSE_HERO.get())) {
             original *= 2.0F;
         }
-        if (hasSkill(player, (ManasSkill) Skills.TENACIOUS.get())) {
-            if (isSkillMastered(player, (ManasSkill) Skills.TENACIOUS.get())) {
+        if (hasSkill(player, Skills.TENACIOUS.get())) {
+            if (isSkillMastered(player, Skills.TENACIOUS.get())) {
                 original *= 3;
             } else {
                 original *= 2;
             }
         }
-        if (hasSkill(player, (ManasSkill) Skills.PERSEVERANCE.get())) {
-            if (isSkillMastered(player, (ManasSkill) Skills.PERSEVERANCE.get())) {
+        if (hasSkill(player, Skills.PERSEVERANCE.get())) {
+            if (isSkillMastered(player, Skills.PERSEVERANCE.get())) {
                 original *= 6;
             } else {
                 original *= 4;
             }
         }
-        if (hasSkill(player, (ManasSkill) Skills.DOMINATE.get())) {
-            if (isSkillMastered(player, (ManasSkill) Skills.DOMINATE.get())) {
+        if (hasSkill(player, Skills.DOMINATE.get())) {
+            if (isSkillMastered(player, Skills.DOMINATE.get())) {
                 original *= 4;
             } else {
                 original *= 3;
             }
         }
-        if (hasSkill(player, (ManasSkill) ConfluenceUniques.CELESTIAL_PATH_BLUE.get())) {
+        if (hasSkill(player, ConfluenceUniques.CELESTIAL_PATH_BLUE.get())) {
             original += 10;
         }
 
-        if (hasSkill(player, (ManasSkill) Skills.NPC_LIFE.get())) {
-            if (isSkillMastered(player, (ManasSkill) Skills.NPC_LIFE.get())) {
+        if (hasSkill(player, Skills.NPC_LIFE.get())) {
+            if (isSkillMastered(player, Skills.NPC_LIFE.get())) {
                 original *= 4;
             } else {
                 original *= 2;
             }
         }
-        if (hasSkill(player, (ManasSkill) Skills.PRETENDER_KING.get())) {
-            if (isSkillMastered(player, (ManasSkill) Skills.PRETENDER_KING.get())) {
+        if (hasSkill(player, Skills.PRETENDER_KING.get())) {
+            if (isSkillMastered(player, Skills.PRETENDER_KING.get())) {
                 original += 10;
             } else {
                 original += 5;
             }
         }
-        if (hasSkill(player, (ManasSkill) Skills.FALSE_HERO.get())) {
+        if (hasSkill(player, Skills.FALSE_HERO.get())) {
             original *= 2.0F;
         }
         if (hasSkill(player, Skills.LOSER.get())) {
@@ -307,60 +304,60 @@ public abstract class SkillUtilsMixin {
 
     @ModifyReturnValue(method = {"getAuraGain"}, at = {@At("RETURN")}, remap = false)
     private static float MythosAuraGain(float original, Player player, boolean majin) {
-        if (hasSkill(player, (ManasSkill) Skills.NASCENT_DAO.get())) {
+        if (hasSkill(player, Skills.NASCENT_DAO.get())) {
             original = 0;
         }
-        if (hasSkill(player, (ManasSkill) Skills.AWAKENED_DAO.get())) {
+        if (hasSkill(player, Skills.AWAKENED_DAO.get())) {
             original = 0;
         }
-        if (hasSkill(player, (ManasSkill) Skills.TRUE_DAO.get())) {
+        if (hasSkill(player, Skills.TRUE_DAO.get())) {
             original = 0;
         }
-        if (hasSkill(player, (ManasSkill) Skills.ORIGIN_DAO.get())) {
+        if (hasSkill(player, Skills.ORIGIN_DAO.get())) {
             original = 0;
         }
-        if (hasSkill(player, (ManasSkill) Skills.STARGAZER.get())) {
+        if (hasSkill(player, Skills.STARGAZER.get())) {
             original *= 2.0F;
         }
-        if (hasSkill(player, (ManasSkill) Skills.TENACIOUS.get())) {
-            if (isSkillMastered(player, (ManasSkill) Skills.TENACIOUS.get())) {
+        if (hasSkill(player, Skills.TENACIOUS.get())) {
+            if (isSkillMastered(player, Skills.TENACIOUS.get())) {
                 original *= 3;
             } else {
                 original *= 2;
             }
         }
-        if (hasSkill(player, (ManasSkill) Skills.PERSEVERANCE.get())) {
-            if (isSkillMastered(player, (ManasSkill) Skills.PERSEVERANCE.get())) {
+        if (hasSkill(player, Skills.PERSEVERANCE.get())) {
+            if (isSkillMastered(player, Skills.PERSEVERANCE.get())) {
                 original *= 6;
             } else {
                 original *= 4;
             }
         }
-        if (hasSkill(player, (ManasSkill) Skills.DOMINATE.get())) {
-            if (isSkillMastered(player, (ManasSkill) Skills.DOMINATE.get())) {
+        if (hasSkill(player, Skills.DOMINATE.get())) {
+            if (isSkillMastered(player, Skills.DOMINATE.get())) {
                 original *= 4;
             } else {
                 original *= 3;
             }
         }
-        if (hasSkill(player, (ManasSkill) ConfluenceUniques.CELESTIAL_PATH_BLUE.get())) {
+        if (hasSkill(player, ConfluenceUniques.CELESTIAL_PATH_BLUE.get())) {
             original += 10;
         }
-        if (hasSkill(player, (ManasSkill) Skills.NPC_LIFE.get())) {
-            if (isSkillMastered(player, (ManasSkill) Skills.NPC_LIFE.get())) {
+        if (hasSkill(player, Skills.NPC_LIFE.get())) {
+            if (isSkillMastered(player, Skills.NPC_LIFE.get())) {
                 original *= 4;
             } else {
                 original *= 2;
             }
         }
-        if (hasSkill(player, (ManasSkill) Skills.PRETENDER_KING.get())) {
-            if (isSkillMastered(player, (ManasSkill) Skills.PRETENDER_KING.get())) {
+        if (hasSkill(player, Skills.PRETENDER_KING.get())) {
+            if (isSkillMastered(player, Skills.PRETENDER_KING.get())) {
                 original += 10;
             } else {
                 original += 5;
             }
         }
-        if (hasSkill(player, (ManasSkill) Skills.FALSE_HERO.get())) {
+        if (hasSkill(player, Skills.FALSE_HERO.get())) {
             original *= 2.0F;
         }
         if (hasSkill(player, Skills.LOSER.get())) {

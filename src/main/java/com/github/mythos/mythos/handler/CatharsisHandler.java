@@ -7,6 +7,8 @@ import com.github.mythos.mythos.ability.confluence.skill.ConfluenceUniques;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ServerChatEvent;
@@ -69,6 +71,38 @@ public class CatharsisHandler {
             player.sendSystemMessage(Component.literal("You already possess Catharsis.").withStyle(ChatFormatting.RED), false);
         }
     }
+
+
+    @SubscribeEvent
+    public static void onServerChat(ServerChatEvent event) {
+        String message = event.getRawText();
+        ServerPlayer player = event.getPlayer();
+
+        if (message.equals("Exurge de deorsum, O Salvator mutationis!")) {
+            if (player.level.dimension().equals(Level.END)) {
+                event.setCanceled(true);
+
+                if (CatharsisHandler.isObtained() && !CatharsisHandler.isOwner(player.getUUID().toString())) {
+                    player.sendSystemMessage(Component.literal("Catharsis has already been claimed!").withStyle(ChatFormatting.RED));
+                    return;
+                }
+
+                SkillStorage storage = SkillAPI.getSkillsFrom(player);
+                ManasSkill skill = ConfluenceUniques.CATHARSIS.get();
+
+                if (!storage.getSkill(skill).isPresent()) {
+                    storage.learnSkill(skill);
+                    CatharsisHandler.markObtained(player.getUUID().toString());
+                    player.sendSystemMessage(Component.literal("You have fused with Catharsis.").withStyle(ChatFormatting.GOLD));
+
+                    player.getLevel().playSound(null, player.blockPosition(), SoundEvents.WITHER_SPAWN, SoundSource.PLAYERS, 1.0f, 1.0f);
+                } else {
+                    player.sendSystemMessage(Component.literal("You already possess Catharsis.").withStyle(ChatFormatting.RED));
+                }
+            }
+        }
+    }
+
 
 }
 

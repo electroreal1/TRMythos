@@ -6,7 +6,6 @@
   "refmap": "trmythos.refmap.json",
   "mixins": [
     "CharmSkillMixin",
-    "ChatHandlerMixin",
     "FragarachInfinityPrisonPierceMixin",
     "MagicInterferenceEffectMixin",
     "MagicUtilsMixin",

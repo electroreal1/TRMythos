@@ -24,10 +24,10 @@ public abstract class SkillHelperMixin {
     )
     private static double mythosMagiculeCost(double cost, LivingEntity entity) {
         if (entity instanceof Player player) {
-            if (SkillUtils.isSkillToggled(player, (ManasSkill) Skills.DOMINATE.get())) {
+            if (SkillUtils.isSkillToggled(player, Skills.DOMINATE.get())) {
                 cost *= 0.5;
             }
-            if (SkillUtils.isSkillToggled(player, (ManasSkill) Skills.DOMINATE.get())) {
+            if (SkillUtils.isSkillToggled(player, Skills.DOMINATE.get())) {
                 cost *= 2;
             }
 
