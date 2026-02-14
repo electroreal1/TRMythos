@@ -26,7 +26,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -115,17 +114,17 @@ public class Catharsis extends Skill {
         if (tag.getInt("ChaoticFate") < 100) {
             return false;
         } else {
-            return instance.isMastered(entity) && instance.isToggled() ? true : tag.getBoolean("ChaoticFateActivated");
+            return instance.isMastered(entity) && instance.isToggled() || tag.getBoolean("ChaoticFateActivated");
         }
     }
 
 
     public void onTouchEntity(ManasSkillInstance instance, LivingEntity entity, LivingHurtEvent event, Player player) {
         CompoundTag tag = instance.getOrCreateTag();
-        if (!isHoldingCatharsis(player)) return;
+        if (isHoldingCatharsis(player)) return;
         if (this.activatedCatharsisSeverance(instance, entity)) {
             LivingEntity target = event.getEntity();
-            AttributeInstance soulHealth = target.getAttribute((Attribute)TensuraAttributeRegistry.MAX_SPIRITUAL_HEALTH.get());
+            AttributeInstance soulHealth = target.getAttribute(TensuraAttributeRegistry.MAX_SPIRITUAL_HEALTH.get());
             AttributeModifier catharsisModifier;
 
             double baseAmount = event.getAmount();
@@ -148,7 +147,7 @@ public class Catharsis extends Skill {
                     }
 
                     this.addMasteryPoint(instance, entity);
-                    entity.getLevel().playSound((Player) null, entity.blockPosition(), SoundEvents.ILLUSIONER_MIRROR_MOVE, SoundSource.AMBIENT, 1.0F, 1.0F);
+                    entity.getLevel().playSound(null, entity.blockPosition(), SoundEvents.ILLUSIONER_MIRROR_MOVE, SoundSource.AMBIENT, 1.0F, 1.0F);
                 }
             }
             AttributeInstance health = target.getAttribute(Attributes.MAX_HEALTH);
@@ -167,7 +166,7 @@ public class Catharsis extends Skill {
                 }
 
                 this.addMasteryPoint(instance, entity);
-                entity.getLevel().playSound((Player)null, entity.blockPosition(), SoundEvents.ILLUSIONER_MIRROR_MOVE, SoundSource.AMBIENT, 1.0F, 1.0F);
+                entity.getLevel().playSound(null, entity.blockPosition(), SoundEvents.ILLUSIONER_MIRROR_MOVE, SoundSource.AMBIENT, 1.0F, 1.0F);
             }
         }
 

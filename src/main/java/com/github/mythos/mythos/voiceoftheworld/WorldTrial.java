@@ -81,8 +81,10 @@ public class WorldTrial {
 
             double mag = TensuraPlayerCapability.getBaseMagicule(player);
             double aura = TensuraPlayerCapability.getBaseAura(player);
-            TensuraPlayerCapability.setMagicule(player, mag + ((double) epReward / 2));
-            TensuraPlayerCapability.setAura(player, aura + ((double) epReward / 2));
+            TensuraPlayerCapability.getFrom(player).ifPresent((cap) -> {
+                cap.setBaseMagicule( (epReward / 2f) + mag, player);
+                cap.setBaseAura( (epReward / 2f) + aura, player);
+                    });
 
             VoiceOfTheWorld.screenShake(player, 1.0f, 40);
             TrialManager.clearActiveTrial(player);

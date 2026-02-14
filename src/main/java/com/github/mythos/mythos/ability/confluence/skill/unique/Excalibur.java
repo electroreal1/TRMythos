@@ -24,7 +24,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -50,10 +49,8 @@ public class Excalibur extends Skill {
 
     public void onToggleOn(ManasSkillInstance instance, LivingEntity entity) {
         if (entity instanceof LivingEntity) {
-            if (entity.hasEffect(TensuraMobEffects.INSPIRATION.get())) {
-                return;
-            } else {
-                entity.addEffect(new MobEffectInstance((MobEffect) TensuraMobEffects.INSPIRATION.get(), 1200, 1, false, false, false));
+            if (!entity.hasEffect(TensuraMobEffects.INSPIRATION.get())) {
+                entity.addEffect(new MobEffectInstance(TensuraMobEffects.INSPIRATION.get(), 1200, 1, false, false, false));
             }
         }
     }
@@ -71,7 +68,7 @@ public class Excalibur extends Skill {
     public boolean canTick(ManasSkillInstance instance, LivingEntity entity) {
         return true;
     }
-    private static double rotation = 0;
+    private static final double rotation = 0;
     @Override
     public void onTick(ManasSkillInstance instance, LivingEntity entity) {
         if (!(entity instanceof Player player)) return;
@@ -93,7 +90,6 @@ public class Excalibur extends Skill {
         }
 
         int groundPoints = 10;
-        double groundRadius = 1.0;
         for (int i = 0; i < groundPoints; i++) {
             double angle = rand.nextDouble() * 2 * Math.PI;
             double radius = 0.3 + rand.nextDouble() * 0.7;
@@ -107,7 +103,7 @@ public class Excalibur extends Skill {
 
         if (isInSlot(entity)) {
             if (!isHoldingExcalibur(player)) return;
-            entity.addEffect(new MobEffectInstance((MobEffect) MythosMobEffects.EXCALIBUR_REGENERATION.get(),
+            entity.addEffect(new MobEffectInstance(MythosMobEffects.EXCALIBUR_REGENERATION.get(),
                     1200, 1, false, false, false));
         }
     }
@@ -178,7 +174,7 @@ public class Excalibur extends Skill {
 
         if (!given) return;
 
-        instance.getOrCreateTag().putBoolean("UndecemberCreated", true);
+        instance.getOrCreateTag().putBoolean("ExcaliburCreated", true);
         instance.setCoolDown(100);
     }
 

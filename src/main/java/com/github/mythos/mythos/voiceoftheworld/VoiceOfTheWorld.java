@@ -180,7 +180,7 @@ public class VoiceOfTheWorld {
                 "Successful. Evolution to [" + TDL_COLOR + "True Demon Lord" + "§f] is complete."
         );
 
-        VoiceOfTheWorld.screenShake(player, 1.5f, 100); // Intensity reduced from 100 (which is extreme) to 1.5
+        VoiceOfTheWorld.screenShake(player, 1.5f, 100);
         player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 400, 0, false, false));
         player.playNotifySound(SoundEvents.END_PORTAL_SPAWN, SoundSource.MASTER, 1.0f, 0.8f);
     }
