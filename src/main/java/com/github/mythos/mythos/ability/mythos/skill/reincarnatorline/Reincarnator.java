@@ -16,7 +16,7 @@ public class Reincarnator extends Skill {
 
     @Override
     public int getMaxMastery() {
-        return 300;
+        return 10;
     }
 
     @Nullable
