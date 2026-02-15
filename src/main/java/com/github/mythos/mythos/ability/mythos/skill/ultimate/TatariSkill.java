@@ -754,7 +754,11 @@ public class TatariSkill extends Skill {
 
             TensuraNetwork.INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), new RequestFxSpawningPacket(new ResourceLocation("tensura:haki"), entity.getId(), 0.0D, 1.0D, 0.0D, true));
 
-            List<LivingEntity> nearbyEntities = entity.getLevel().getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(15.0D), target -> !target.isAlliedTo(entity) && target.isAlive() && !entity.isAlliedTo(target));
+            List<LivingEntity> nearbyEntities = entity.getLevel().getEntitiesOfClass(
+                    LivingEntity.class,
+                    entity.getBoundingBox().inflate(15.0D),
+                    target -> target != entity && target.isAlive()
+            );
 
             for (LivingEntity target : nearbyEntities) {
                 if (target instanceof Player player && player.getAbilities().instabuild) continue;
