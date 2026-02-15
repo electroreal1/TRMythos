@@ -116,7 +116,6 @@ public class TatariSkill extends Skill {
         return 25000.0;
     }
 
-    private Player target;
 
     private final double baseErrorRate = 1000.0D;
 
@@ -342,27 +341,51 @@ public class TatariSkill extends Skill {
                 }
                 break;
 
-            case 2:
-                if (entity instanceof Player) {
-                    awakenSubordinates((Player) entity, entity);
+            case 2: {
+                if (!(entity instanceof Player player)) return;
 
+                LivingEntity target = SkillHelper.getTargetingEntity(
+                        LivingEntity.class,
+                        player,
+                        20.0D,
+                        0.0D,
+                        false
+                );
+
+                if (target == null) return;
+
+                if (!player.getUUID().equals(TensuraEPCapability.getPermanentOwner(target))) {
+                    player.displayClientMessage(
+                            Component.literal("Target is not your subordinate.")
+                                    .withStyle(ChatFormatting.RED),
+                            true
+                    );
+                    return;
                 }
+
+                harvestFestivalSubordinate(target, player);
                 break;
+            }
+
 
             case 3:
                 if (!SkillHelper.outOfMagicule(entity, instance)) {
                     CharmSkill.charm(instance, entity);
                     Level level3 = entity.getLevel();
 
-                    List<LivingEntity> nearbyEntities = entity.getLevel().getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(15.0D), target -> !target.isAlliedTo(entity) && target.isAlive() && !entity.isAlliedTo(target));
+                    List<LivingEntity> nearbyEntities = entity.getLevel().getEntitiesOfClass(
+                            LivingEntity.class,
+                            entity.getBoundingBox().inflate(15.0D),
+                            e -> e != entity && e.isAlive()
+                    );
 
-                    for (LivingEntity target : nearbyEntities) {
-                        if (target instanceof Player player && player.getAbilities().invulnerable) continue;
+                    for (LivingEntity nearby : nearbyEntities) {
+                        if (nearby instanceof Player player && player.getAbilities().invulnerable) continue;
 
-                        SkillHelper.checkThenAddEffectSource(target, entity, TensuraMobEffects.MIND_CONTROL.get(), 200, 1);
+                        SkillHelper.checkThenAddEffectSource(nearby, entity, TensuraMobEffects.MIND_CONTROL.get(), 1000, 1);
 
 
-                        TensuraParticleHelper.addServerParticlesAroundSelf(target, ParticleTypes.HEART, 0.25D);
+                        TensuraParticleHelper.addServerParticlesAroundSelf(nearby, ParticleTypes.HEART, 0.25D);
                     }
 
                     addMasteryPoint(instance, entity);
@@ -374,6 +397,7 @@ public class TatariSkill extends Skill {
                     }
                 }
                 break;
+
             case 4:
                 if (SkillHelper.outOfMagicule(entity, instance)) return;
                 instance.setCoolDown(10);
@@ -564,7 +588,11 @@ public class TatariSkill extends Skill {
 
                 boolean permanentCopy = uses >= 13;
 
-                List<LivingEntity> targets = owner.getLevel().getEntitiesOfClass(LivingEntity.class, owner.getBoundingBox().inflate(50.0D), e -> e.isAlive() && e != owner);
+                List<LivingEntity> targets = owner.getLevel().getEntitiesOfClass(
+                        LivingEntity.class,
+                        owner.getBoundingBox().inflate(50.0D),
+                        e -> e.isAlive() && e != owner
+                );
 
                 for (LivingEntity target : targets) {
 
@@ -582,7 +610,11 @@ public class TatariSkill extends Skill {
                         TensuraEPCapability.getFrom(target).ifPresent(cap -> cap.setPermanentOwner(owner.getUUID()));
 
                         if (target instanceof Player p) {
-                            p.displayClientMessage(Component.literal("Your will bends to Tatari.").withStyle(ChatFormatting.DARK_RED), true);
+                            p.displayClientMessage(
+                                    Component.literal("Your will bends to Tatari.")
+                                            .withStyle(ChatFormatting.DARK_RED),
+                                    true
+                            );
                         }
                     }
 
@@ -595,24 +627,31 @@ public class TatariSkill extends Skill {
                 instance.setCoolDown(TATARI_DURATION);
                 instance.markDirty();
 
-                owner.displayClientMessage(Component.literal("Tatari engulfs the world for 10 minutes.").withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD), true);
+                owner.displayClientMessage(
+                        Component.literal("Tatari engulfs the world for 10 minutes.")
+                                .withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD),
+                        true
+                );
 
                 if (uses + 1 == 13) {
                     instance.setMastery(0);
-
-                    owner.displayClientMessage(Component.literal("Tatari has devoured itself. Mastery reset.").withStyle(ChatFormatting.DARK_PURPLE), true);
+                    owner.displayClientMessage(
+                            Component.literal("Tatari has devoured itself. Mastery reset.")
+                                    .withStyle(ChatFormatting.DARK_PURPLE),
+                            true
+                    );
                 }
-                instance.setToggled(true);
-                instance.setCoolDown(TATARI_DURATION);
-                instance.markDirty();
+
                 if (owner.getServer() != null) {
-                    Component msg = Component.literal("⚠ Tatari has descended. The world bends to a single will.").withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD);
+                    Component msg = Component.literal("⚠ Tatari has descended. The world bends to a single will.")
+                            .withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD);
 
                     owner.getServer().getPlayerList().broadcastSystemMessage(msg, false);
                 }
 
                 break;
             }
+
 
         }
     }
@@ -659,9 +698,10 @@ public class TatariSkill extends Skill {
 
                     } else {
                         TensuraPlayerCapability.getFrom(subplayer).ifPresent(cap2 -> {
-                            if (TensuraEPCapability.getPermanentOwner(target) != entity.getUUID()) return;
+                            if (!entity.getUUID().equals(TensuraEPCapability.getPermanentOwner(sub))) return;
 
-                            harvestFestivalSubordinate(target, (Player) entity);
+                            harvestFestivalSubordinate(sub, player);
+
                         });
                     }
 
@@ -776,49 +816,69 @@ public class TatariSkill extends Skill {
     }
 
     private void harvestFestivalSubordinate(LivingEntity target, Player owner) {
-        if (target instanceof Player) {
-            if (TensuraPlayerCapability.isTrueDemonLord((Player) target)) {
-                owner.displayClientMessage(Component.translatable("tensura.evolve.demon_lord.already").setStyle(Style.EMPTY.withColor(ChatFormatting.RED)), false);
-                return;
-            }
 
-            if (TensuraPlayerCapability.isTrueHero(target)) {
-                owner.displayClientMessage(Component.translatable("tensura.evolve.demon_lord.hero").setStyle(Style.EMPTY.withColor(ChatFormatting.RED)), false);
-                return;
-            }
+        if (!(target instanceof Player subPlayer)) return;
 
-            TensuraPlayerCapability.getFrom(owner).ifPresent((ownerCap) -> {
-                int ownerSoulPoints = ownerCap.getSoulPoints();
-                int harvestFestivalCost = 100000;
-                if (ownerSoulPoints < harvestFestivalCost) {
-                    owner.displayClientMessage(Component.translatable("trmythos.skill.mode.apophis.not_enough_souls", harvestFestivalCost / 1000).setStyle(Style.EMPTY.withColor(ChatFormatting.RED)), false);
-                } else {
-                    TensuraPlayerCapability.getFrom((Player) target).ifPresent((cap) -> {
-                        ownerCap.setSoulPoints(ownerCap.getSoulPoints() - harvestFestivalCost);
-                        RaceHelper.awakening((Player) target, false);
-                    });
-                }
-            });
+        if (TensuraPlayerCapability.isTrueDemonLord(subPlayer)) {
+            owner.displayClientMessage(
+                    Component.translatable("tensura.evolve.demon_lord.already")
+                            .setStyle(Style.EMPTY.withColor(ChatFormatting.RED)),
+                    false
+            );
+            return;
         }
+
+        if (TensuraPlayerCapability.isTrueHero(subPlayer)) {
+            owner.displayClientMessage(
+                    Component.translatable("tensura.evolve.demon_lord.hero")
+                            .setStyle(Style.EMPTY.withColor(ChatFormatting.RED)),
+                    false
+            );
+            return;
+        }
+
+        int harvestFestivalCost = 100000;
+
+        TensuraPlayerCapability.getFrom(owner).ifPresent(ownerCap -> {
+
+            double currentMP = ownerCap.getMagicule();
+
+            if (currentMP < harvestFestivalCost) {
+                owner.displayClientMessage(
+                        Component.literal("Not enough MP (Required: 100000)")
+                                .setStyle(Style.EMPTY.withColor(ChatFormatting.RED)),
+                        false
+                );
+                return;
+            }
+
+            ownerCap.setMagicule(currentMP - harvestFestivalCost);
+            TensuraPlayerCapability.sync(owner);
+
+            RaceHelper.awakening(subPlayer, false);
+        });
     }
+
+
 
     private List<ManasSkillInstance> getOsirisTransferableSkills(Player owner) {
         SkillStorage storage = SkillAPI.getSkillsFrom(owner);
         List<ManasSkillInstance> result = new ArrayList<>();
 
         for (ManasSkillInstance inst : storage.getLearnedSkills()) {
-            if (!canCopy(inst)) continue;
 
-            ManasSkill skill = inst.getSkill();
-            if (skill instanceof Skill s && s.getType() == SkillType.ULTIMATE) {
-                if (inst.getMastery() < inst.getMaxMastery() * 0.8) continue;
-            }
+
+            if (inst.getSkill() == Skills.TATARI.get()) continue;
+
+
+            if (inst.isTemporarySkill()) continue;
 
             result.add(inst);
         }
 
         return result;
     }
+
 
 
     @Mod.EventBusSubscriber

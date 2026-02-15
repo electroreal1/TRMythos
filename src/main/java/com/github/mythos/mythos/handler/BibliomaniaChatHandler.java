@@ -56,11 +56,14 @@ public class BibliomaniaChatHandler {
 
     @SubscribeEvent
     public static void onChat(ServerChatEvent.Submitted event) {
-        if (event.isCanceled() || INTERNAL) return;
-        if (event.getRawText() == null || event.getRawText().isEmpty()) return;
+        if (INTERNAL) return;
+        String raw = event.getRawText();
+        if (raw == null) return;
+
+        raw = raw.trim();
+        if (raw.isEmpty()) return;
 
         ServerPlayer player = event.getPlayer();
-        String raw = event.getRawText().trim();
         String[] args = raw.split("\\s+");
         String word = args[0];
 
@@ -77,6 +80,7 @@ public class BibliomaniaChatHandler {
             CompoundTag tag = instance.getOrCreateTag();
 
             if (instance.getMode() == 2) {
+
                 float rp = tag.getFloat("recordPoints");
                 if (rp < REVERSE_COST) return;
 
@@ -116,8 +120,10 @@ public class BibliomaniaChatHandler {
                     event.setCanceled(true);
                     return;
                 }
+
                 return;
             }
+
 
             Integer cost = WORD_COSTS.get(word);
             if (cost == null) return;
@@ -291,8 +297,6 @@ public class BibliomaniaChatHandler {
                     );
                 }
             }
-
-            event.setCanceled(true);
 
         } finally {
             INTERNAL = false;
