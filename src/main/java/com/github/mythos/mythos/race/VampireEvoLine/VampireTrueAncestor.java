@@ -40,7 +40,7 @@ public class VampireTrueAncestor extends Race implements Transformation {
 
     @Override
     public double getBaseHealth() {
-        return 25000;
+        return 10000;
     }
 
     @Override

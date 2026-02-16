@@ -19,7 +19,7 @@ public class GenesisMyth extends Race{
 
     @Override
     public double getBaseHealth() {
-        return 15000;
+        return 10000;
     }
 
     @Override
