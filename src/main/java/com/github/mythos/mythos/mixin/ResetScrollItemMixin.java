@@ -2,18 +2,18 @@ package com.github.mythos.mythos.mixin;
 
 import com.github.manasmods.tensura.item.custom.ResetScrollItem;
 import com.github.mythos.mythos.voiceoftheworld.VoiceOfTheWorld;
-import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ResetScrollItem.class)
 public class ResetScrollItemMixin {
 
-    @ModifyReturnValue(method = "resetEverything", at = @At("HEAD"), remap = false)
+    @Inject(method = "resetEverything", at = @At("HEAD"), remap = false)
     private static void onResetEverything(ServerPlayer player, CallbackInfo ci) {
         mythos$clearEvolutionFlags(player);
         mythos$clearLoginFlag(player);
@@ -28,7 +28,7 @@ public class ResetScrollItemMixin {
         VoiceOfTheWorld.screenShake(player, 2.0f, 20);
     }
 
-    @ModifyReturnValue(method = "resetRace", at = @At("HEAD"), remap = false)
+    @Inject(method = "resetRace", at = @At("HEAD"), remap = false)
     private static void onResetRace(ServerPlayer player, CallbackInfo ci) {
         mythos$clearEvolutionFlags(player);
     }

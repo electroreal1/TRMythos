@@ -1,5 +1,6 @@
 package com.github.mythos.mythos.mixin;
 
+import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.magic.MagicUltils;
 import com.github.manasmods.tensura.capability.skill.TensuraSkillCapability;
@@ -33,7 +34,7 @@ public class MagicUtilsMixin {
             remap = false
     )
     private static boolean trmythos$hasUniqueThoughtAcceleration(boolean original, LivingEntity entity) {
-        return original || entity.hasEffect(MythosMobEffects.THUNDER_GOD.get()) || SkillUtils.hasSkill(entity, Skills.DEMONOLOGIST.get());
+        return original || entity.hasEffect(MythosMobEffects.THUNDER_GOD.get()) || SkillUtils.hasSkill(entity, (ManasSkill)Skills.DEMONOLOGIST.get());
     }
 
     @ModifyReturnValue(
@@ -46,13 +47,13 @@ public class MagicUtilsMixin {
             original += 5000;
         }
         if (entity instanceof Player player) {
-            if (SkillUtils.isSkillToggled(player, Skills.DOMINATE.get())) {
+            if (SkillUtils.isSkillToggled(player, (ManasSkill) Skills.DOMINATE.get())) {
                 original *= 2;
             }
-            if (SkillUtils.isSkillToggled(player, ConfluenceUniques.CELESTIAL_CULTIVATION_ORANGE.get())) {
+            if (SkillUtils.isSkillToggled(player, (ManasSkill) ConfluenceUniques.CELESTIAL_CULTIVATION_ORANGE.get())) {
                 original *= 3;
             }
-            if (TensuraSkillCapability.isSkillInSlot(player, Skills.CRIMSON_ARCANIST.get())) {
+            if (TensuraSkillCapability.isSkillInSlot(player, (ManasSkill) Skills.CRIMSON_ARCANIST.get())) {
                 original -= 0.2f;
             }
             if (SkillUtils.hasSkill(player, Skills.ORUNMILA.get())) {
