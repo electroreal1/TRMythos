@@ -1,8 +1,6 @@
 package com.github.mythos.mythos.mixin;
 
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
-import com.github.manasmods.tensura.capability.skill.TensuraSkillCapability;
-import com.github.mythos.mythos.registry.skill.Skills;
 import io.github.Memoires.trmysticism.ability.skill.ultimate.UrielSkill;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -23,15 +21,12 @@ public class UrielBypassMixinMythos {
     @Inject(
             method = {"onBeingDamaged"},
             at = {@At("HEAD")},
-            cancellable = true,
             remap = false
     )
     public void onBeingDamaged(ManasSkillInstance instance, LivingAttackEvent event, CallbackInfo ci) {
         Entity attacker = event.getSource().getEntity();
         if (attacker instanceof Player player) {
-            if (TensuraSkillCapability.isSkillInSlot(player, Skills.ZERO.get())) {
-                ci.cancel();
-            }
+
         }
     }
 }

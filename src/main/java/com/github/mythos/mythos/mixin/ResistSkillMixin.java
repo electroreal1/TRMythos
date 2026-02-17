@@ -1,6 +1,5 @@
 package com.github.mythos.mythos.mixin;
 
-import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.tensura.ability.skill.resist.ResistSkill;
 import com.github.manasmods.tensura.capability.skill.TensuraSkillCapability;
 import com.github.mythos.mythos.registry.skill.Skills;
@@ -28,10 +27,7 @@ public class ResistSkillMixin {
     public boolean mythos$NullificationBypass(boolean original, @NotNull DamageSource damageSource) {
         Entity source = damageSource.getEntity();
         if (source instanceof LivingEntity living) {
-            if (TensuraSkillCapability.isSkillInSlot(living, (ManasSkill) Skills.DENDRRAH.get())) {
-                original = true;
-            }
-            if (TensuraSkillCapability.isSkillInSlot(living, Skills.ZERO.get())) {
+            if (TensuraSkillCapability.isSkillInSlot(living, Skills.DENDRRAH.get())) {
                 original = true;
             }
         }

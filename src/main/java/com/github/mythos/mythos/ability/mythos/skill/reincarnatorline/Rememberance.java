@@ -110,7 +110,7 @@ public class Rememberance extends Skill {
             double targetEP = TensuraEPCapability.getFrom(target).map(ITensuraEPCapability::getEP).orElse(0.0);
 
             if (targetEP >= playerEP) {
-                player.displayClientMessage(Component.literal("Target's Existence Points are too high to dominate!").withStyle(ChatFormatting.RED), true);
+                player.displayClientMessage(Component.literal("Target's Existence Points are too high to alter!").withStyle(ChatFormatting.RED), true);
                 return;
             }
 
@@ -118,7 +118,6 @@ public class Rememberance extends Skill {
             SkillStorage targetStorage = SkillAPI.getSkillsFrom(target);
 
             boolean isPlunderEnabled = player.level.getGameRules().getBoolean(TensuraGameRules.SKILL_STEAL);
-            int battlewillCost = 20000;
 
             List<ManasSkill> skillsToProcess = new ArrayList<>();
 

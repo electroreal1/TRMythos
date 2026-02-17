@@ -220,7 +220,7 @@ public class Skills {
         AWAKENED_DAO = registery.register("awakened_dao", () -> new AwakenedDao(Skill.SkillType.UNIQUE));
         TRUE_DAO = registery.register("true_dao", () -> new TrueDao(Skill.SkillType.UNIQUE));
         PERSEVERANCE = registery.register("perseverance", () -> new PerseveranceSkill(Skill.SkillType.UNIQUE));
-        REMEMBERACE = registery.register("rememberance", () -> new Rememberance(Skill.SkillType.UNIQUE));
+        REMEMBERACE = registery.register("remembrance", () -> new Rememberance(Skill.SkillType.UNIQUE));
         //SHADOW = registery.register("shadow", () -> new ShadowSkill(Skill.SkillType.UNIQUE));
 
         // extra

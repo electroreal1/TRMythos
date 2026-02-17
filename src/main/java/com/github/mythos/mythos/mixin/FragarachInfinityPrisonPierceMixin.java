@@ -4,7 +4,6 @@ import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.tensura.ability.skill.unique.InfinityPrisonSkill;
 import com.github.manasmods.tensura.capability.skill.TensuraSkillCapability;
 import com.github.mythos.mythos.ability.confluence.skill.ConfluenceUniques;
-import com.github.mythos.mythos.registry.skill.Skills;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -43,9 +42,6 @@ public class FragarachInfinityPrisonPierceMixin {
             original = true;
         }
 
-        if (TensuraSkillCapability.isSkillInSlot(player, Skills.ZERO.get())) {
-            original = true;
-    }
         return original;
     }
 
