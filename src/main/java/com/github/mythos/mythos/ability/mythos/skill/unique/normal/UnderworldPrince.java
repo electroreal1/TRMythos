@@ -61,6 +61,15 @@ public class UnderworldPrince extends Skill {
     private static final Random RANDOM = new Random();
 
     @Override
+    public Component getModeName(int mode) {
+        return switch (mode) {
+            case 1 -> Component.literal("Soul Feast");
+            case 2 -> Component.literal("Undead Essence");
+            default -> Component.empty();
+        };
+    }
+
+    @Override
     public void onTick(ManasSkillInstance instance, LivingEntity living) {
         if (living.tickCount % 20 == 0) {
             TensuraEPCapability.getFrom(living).ifPresent(cap -> cap.setChaos(true));

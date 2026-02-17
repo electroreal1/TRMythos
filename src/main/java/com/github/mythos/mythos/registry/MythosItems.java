@@ -28,9 +28,7 @@ public class MythosItems {
 
     static {
         registry = DeferredRegister.create(ForgeRegistries.ITEMS, "trmythos");
-        DEMON_CORE = registry.register("demon_core", () -> {
-            return new Item((new Item.Properties()));
-        });
+        DEMON_CORE = registry.register("demon_core", () -> new Item((new Item.Properties())));
         UNDECEMBER = registry.register("undecember", undecember::new);
         CATHARSIS = registry.register("catharsis", catharsis::new);
         FRAGARACH = registry.register("fragarach", fragarach::new);

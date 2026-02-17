@@ -52,9 +52,11 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.github.mythos.mythos.config.MythosSkillsConfig.EnableUltimateSkillObtainment;
@@ -66,6 +68,12 @@ public class LuciaSkill extends Skill implements Transformation {
 
     public ResourceLocation getSkillIcon() {
         return new ResourceLocation("trmythos", "textures/skill/ultimate/lucia.png");
+    }
+
+    @Nullable
+    @Override
+    public MutableComponent getName() {
+        return Component.literal("Lucia");
     }
 
     @Override
@@ -293,12 +301,12 @@ public class LuciaSkill extends Skill implements Transformation {
         if (instance.getMode() == 1) {
             PredatorMistProjectile breath = new PredatorMistProjectile(entity.getLevel(), entity);
             breath.setLength(3.0F);
-            breath.setLife(500);
+            breath.setLife(2);
             ManasSkillInstance crimson = this.getCrimson(entity);
             breath.setSkill(crimson != null ? crimson : instance);
             breath.setPos(entity.position().add(0.0, (double) entity.getEyeHeight() * 0.7, 0.0));
             entity.getLevel().addFreshEntity(breath);
-            entity.getLevel().playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.BLAZE_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F);
+            entity.getLevel().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.BLAZE_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F);
             entity.swing(InteractionHand.MAIN_HAND, true);
             this.addMasteryPoint(instance, entity);
             instance.setCoolDown(instance.isMastered(entity) ? 3 : 5);
@@ -350,8 +358,7 @@ public class LuciaSkill extends Skill implements Transformation {
                     this.addMasteryPoint(instance, entity);
                     instance.setCoolDown(1200);
                     entity.setHealth(entity.getHealth() * 2.0F);
-                    if (entity instanceof Player) {
-                        Player player = (Player)entity;
+                    if (entity instanceof Player player) {
                         TensuraPlayerCapability.getFrom(player).ifPresent((cap) -> {
                             cap.setMagicule(cap.getMagicule() * 2.0);
                             cap.setAura(cap.getAura() * 2.0);
@@ -362,7 +369,7 @@ public class LuciaSkill extends Skill implements Transformation {
                     entity.getLevel().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.PLAYERS, 1.0F, 1.0F);
 
                     if (entity instanceof Player player) {
-                        int amplifier = player.getServer().getPlayerList().getPlayerCount();
+                        int amplifier = Objects.requireNonNull(player.getServer()).getPlayerList().getPlayerCount();
 
                         entity.addEffect(new MobEffectInstance(MythosMobEffects.ULTIMATE_VILLAIN.get(), this.isMastered(instance, entity) ? 10000 : 7200,
                                 amplifier, false, false, false));

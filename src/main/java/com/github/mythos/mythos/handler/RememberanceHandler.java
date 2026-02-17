@@ -51,7 +51,8 @@ import java.util.Objects;
 import static com.github.manasmods.tensura.item.custom.ResetScrollItem.*;
 
 @Mod.EventBusSubscriber(modid = "trmythos")
-public class ReincarnationHandler {
+public class RememberanceHandler {
+    private static final double SKILL_SURVIVAL_CHANCE = 0.15;
 
     @SubscribeEvent
     public static void onPlayerDeath(LivingDeathEvent event) {
@@ -61,7 +62,7 @@ public class ReincarnationHandler {
 
         storage.getLearnedSkills().removeIf(ManasSkillInstance::isTemporarySkill);
 
-        if (SkillUtils.hasSkill(player, Skills.REINCARNATOR.get())) {
+        if (SkillUtils.hasSkill(player, Skills.REMEMBERACE.get())) {
             CompoundTag persistTag = player.getPersistentData();
             persistTag.putBoolean("ShouldReincarnate", true);
         }
@@ -70,8 +71,13 @@ public class ReincarnationHandler {
     @SubscribeEvent
     public static void onPlayerClone(PlayerEvent.Clone event) {
         if (event.isWasDeath()) {
-            boolean reincarnating = event.getOriginal().getPersistentData().getBoolean("ShouldReincarnate");
-            event.getEntity().getPersistentData().putBoolean("ShouldReincarnate", reincarnating);
+
+            CompoundTag oldData = event.getOriginal().getPersistentData();
+            CompoundTag newData = event.getEntity().getPersistentData();
+
+            if (oldData.getBoolean("ShouldReincarnate")) {
+                newData.putBoolean("ShouldReincarnate", true);
+            }
         }
     }
 
@@ -84,12 +90,21 @@ public class ReincarnationHandler {
             persistTag.remove("ShouldReincarnate");
 
             SkillStorage storage = SkillAPI.getSkillsFrom(player);
-            List<ManasSkill> toForget = storage.getLearnedSkills().stream()
-                    .map(ManasSkillInstance::getSkill)
-                    .filter(s -> s != Skills.REINCARNATOR.get())
-                    .toList();
+            List<ManasSkillInstance> learned = new ArrayList<>(storage.getLearnedSkills());
 
-            toForget.forEach(storage::forgetSkill);
+            for (ManasSkillInstance instance : learned) {
+                ManasSkill skill = instance.getSkill();
+
+                if (skill == Skills.REINCARNATOR.get()) continue;
+
+                if (player.getRandom().nextDouble() < SKILL_SURVIVAL_CHANCE) {
+                    instance.getOrCreateTag().putBoolean("MythosSurvivedReincarnation", true);
+                    player.sendSystemMessage(Component.literal("Your soul clung to the memory of: ")
+                            .append(Objects.requireNonNull(skill.getName())).withStyle(ChatFormatting.AQUA), false);
+                } else {
+                    storage.forgetSkill(skill);
+                }
+            }
 
             resetRace(player);
         }
@@ -134,20 +149,24 @@ public class ReincarnationHandler {
                 while (true) {
                     TensuraSkillInstance instance;
                     do {
-                        Object patt12668$temp;
+                        Object temp;
                         do {
                             if (!iterator.hasNext()) {
                                 storage.syncAll();
                                 break label37;
                             }
-                            patt12668$temp = iterator.next();
-                        } while (!(patt12668$temp instanceof TensuraSkillInstance));
+                            temp = iterator.next();
+                        } while (!(temp instanceof TensuraSkillInstance));
 
-                        instance = (TensuraSkillInstance) patt12668$temp;
+                        instance = (TensuraSkillInstance) temp;
 
                         // --- REINCARNATOR PROTECTION ---
                         ResourceLocation skillId = instance.getSkill().getRegistryName();
-                        if (skillId != null && skillId.getNamespace().equals("trmythos") && skillId.getPath().equals("reincarnator")) {
+                        boolean isReincarnator = skillId != null && skillId.getNamespace().equals("trmythos") && skillId.getPath().equals("rememberance");
+                        boolean survivedRandom = instance.getOrCreateTag().getBoolean("MythosSurvivedReincarnation");
+
+                        if (isReincarnator || survivedRandom) {
+                            instance.getOrCreateTag().remove("MythosSurvivedReincarnation");
                             continue;
                         }
                         // -------------------------------
