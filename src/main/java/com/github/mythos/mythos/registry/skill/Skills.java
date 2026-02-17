@@ -14,7 +14,6 @@ import com.github.mythos.mythos.ability.mythos.skill.ultimate.god.Khonsu;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.god.Kthanid;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.lord.*;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.prince.HaliSkill;
-import com.github.mythos.mythos.ability.mythos.skill.ultimate.prince.ZeroSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.DominateSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.DullahanSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.TenaciousSkill;
@@ -46,13 +45,11 @@ public class Skills {
     public static final RegistryObject<DikeSkill> DIKE;
     public static final RegistryObject<RavanaSkill> RAVANA;
     public static final RegistryObject<LuciaSkill> LUCIA;
-    public static final RegistryObject<Khaos> KHAOS;
     public static final RegistryObject<MammonSkill> MAMMON;
     public static final RegistryObject<AsclepiusSkill> ASCLEPIUS;
     public static final RegistryObject<SatanSkill> SATAN;
 
     // Prince Class
-    public static final RegistryObject<ZeroSkill> ZERO;
     public static final RegistryObject<HaliSkill> HALI;
 
     // King Class
@@ -99,8 +96,6 @@ public class Skills {
     public static final RegistryObject<WavebreakerSkill> WAVEBREAKER;
     public static final RegistryObject<EarthshakerSkill> EARTHSHAKER;
     public static final RegistryObject<CrimsonArcanistSkill> CRIMSON_ARCANIST;
-    public static final RegistryObject<Gaze> GAZE;
-    public static final RegistryObject<ShadowOfTheTesseract> SHADOW_OF_THE_TESSERACT;
     public static final RegistryObject<CultistSkill> CULTIST;
     public static final RegistryObject<LunaticSkill> LUNATIC;
     public static final RegistryObject<MegalomaniacSkill> MEGALOMANIAC;
@@ -154,13 +149,11 @@ public class Skills {
         DIKE = registery.register("dike", () -> new DikeSkill(Skill.SkillType.ULTIMATE));
         RAVANA = registery.register("ravana", () -> new RavanaSkill(Skill.SkillType.ULTIMATE));
         LUCIA = registery.register("lucia", () -> new LuciaSkill(Skill.SkillType.ULTIMATE));
-        KHAOS = registery.register("khaos", () -> new Khaos(Skill.SkillType.ULTIMATE));
         MAMMON = registery.register("mammon", () -> new MammonSkill(Skill.SkillType.ULTIMATE));
         ASCLEPIUS = registery.register("asclepius", () -> new AsclepiusSkill(Skill.SkillType.ULTIMATE));
         SATAN = registery.register("satan", () -> new SatanSkill(Skill.SkillType.ULTIMATE));
 
         // Prince Class
-        ZERO = registery.register("zero", () -> new ZeroSkill(Skill.SkillType.ULTIMATE));
         HALI = registery.register("hali", () -> new HaliSkill(Skill.SkillType.ULTIMATE));
 
         // King Class
@@ -206,7 +199,6 @@ public class Skills {
         WAVEBREAKER = registery.register("wavebreaker", () -> new WavebreakerSkill(Skill.SkillType.UNIQUE));
         EARTHSHAKER = registery.register("earthshaker", () -> new EarthshakerSkill(Skill.SkillType.UNIQUE));
         CRIMSON_ARCANIST = registery.register("crimson_arcanist", () -> new CrimsonArcanistSkill(Skill.SkillType.UNIQUE));
-        GAZE = registery.register("gaze", () -> new Gaze(Skill.SkillType.UNIQUE));
         CULTIST = registery.register("cultist", () -> new CultistSkill(Skill.SkillType.UNIQUE));
         MEGALOMANIAC = registery.register("megalomaniac", () -> new MegalomaniacSkill(Skill.SkillType.UNIQUE));
         WATCHER = registery.register("watcher", () -> new WatcherSkill(Skill.SkillType.UNIQUE));
@@ -228,7 +220,6 @@ public class Skills {
         AWAKENED_DAO = registery.register("awakened_dao", () -> new AwakenedDao(Skill.SkillType.UNIQUE));
         TRUE_DAO = registery.register("true_dao", () -> new TrueDao(Skill.SkillType.UNIQUE));
         PERSEVERANCE = registery.register("perseverance", () -> new PerseveranceSkill(Skill.SkillType.UNIQUE));
-        SHADOW_OF_THE_TESSERACT = registery.register("shadow_of_the_tesseract", () -> new ShadowOfTheTesseract(Skill.SkillType.UNIQUE));
         REMEMBERACE = registery.register("rememberance", () -> new Rememberance(Skill.SkillType.UNIQUE));
         //SHADOW = registery.register("shadow", () -> new ShadowSkill(Skill.SkillType.UNIQUE));
 

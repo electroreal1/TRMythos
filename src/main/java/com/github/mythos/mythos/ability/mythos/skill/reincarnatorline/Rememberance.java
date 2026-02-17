@@ -135,7 +135,7 @@ public class Rememberance extends Skill {
 
             for (ManasSkill skill : skillsToProcess) {
                 if (!playerStorage.getSkill(skill).isPresent()) {
-                    playerStorage.learnSkill(skill);
+                    SkillUtils.learnSkill(player, skill);
 
                     player.sendSystemMessage(Component.literal("Acquired: ").withStyle(ChatFormatting.GRAY)
                             .append(Objects.requireNonNull(skill.getName()).withStyle(ChatFormatting.GOLD)));

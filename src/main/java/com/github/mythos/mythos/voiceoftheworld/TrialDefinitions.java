@@ -45,9 +45,7 @@ public class TrialDefinitions {
         WorldTrialRegistry.register(new WorldTrial("observer", "Trial of the World Observer",
                 EnumSet.of(WorldTrial.TrialType.STILLNESS), 144000, 40000, "", p -> {
             VoiceOfTheWorld.delayedAnnouncement(p, VoiceOfTheWorld.Priority.ACQUISITION, "Notice.",
-                    "Confirmed. Ego has remained static while mind accelerated.",
-                    "Individual obtained the Skill [Gaze].");
-            SkillUtils.learnSkill(p, Skills.GAZE.get());
+                    "Confirmed. Ego has remained static while mind accelerated.");
         }));
     }
 }
