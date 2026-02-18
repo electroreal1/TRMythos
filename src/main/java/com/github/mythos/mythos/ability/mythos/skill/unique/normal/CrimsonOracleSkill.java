@@ -219,6 +219,7 @@ public class CrimsonOracleSkill extends Skill implements Transformation {
     @SubscribeEvent
     public void onEntityDamage(LivingHurtEvent event) {
         if (event.getEntity() instanceof Player player) {
+            if (!SkillUtils.fullyHasSkill(player, Skills.CRIMSON_ORACLE.get())) return;
             float damage = event.getAmount();
             float health = player.getHealth();
             if (damage >= health) {
