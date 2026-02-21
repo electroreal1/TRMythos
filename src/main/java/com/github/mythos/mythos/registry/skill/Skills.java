@@ -48,6 +48,7 @@ public class Skills {
     public static final RegistryObject<MammonSkill> MAMMON;
     public static final RegistryObject<AsclepiusSkill> ASCLEPIUS;
     public static final RegistryObject<SatanSkill> SATAN;
+    public static final RegistryObject<AngraMainyuSkill> ANGRA_MAINYU;
 
     // Prince Class
     public static final RegistryObject<HaliSkill> HALI;
@@ -103,6 +104,8 @@ public class Skills {
     public static final RegistryObject<ControlFreakSkill> CONTROL_FREAK;
     public static final RegistryObject<LoserSkill> LOSER;
     public static final RegistryObject<Reincarnator> REINCARNATOR;
+    public static final RegistryObject<ShadowAvengerSkill> SHADOW_AVENGER;
+    public static final RegistryObject<WorldScapegoatSkill> WORLDS_SCAPEGOAT;
 
     // vassal
     public static final RegistryObject<FoundationSkill> FOUNDATION;
@@ -152,6 +155,7 @@ public class Skills {
         MAMMON = registery.register("mammon", () -> new MammonSkill(Skill.SkillType.ULTIMATE));
         ASCLEPIUS = registery.register("asclepius", () -> new AsclepiusSkill(Skill.SkillType.ULTIMATE));
         SATAN = registery.register("satan", () -> new SatanSkill(Skill.SkillType.ULTIMATE));
+        ANGRA_MAINYU = registery.register("angra_mainyu", () -> new AngraMainyuSkill(Skill.SkillType.ULTIMATE));
 
         // Prince Class
         HALI = registery.register("hali", () -> new HaliSkill(Skill.SkillType.ULTIMATE));
@@ -206,6 +210,8 @@ public class Skills {
         LOSER = registery.register("loser", () -> new LoserSkill(Skill.SkillType.UNIQUE));
         LUNATIC = registery.register("lunatic", () -> new LunaticSkill(Skill.SkillType.UNIQUE));
         REINCARNATOR = registery.register("reincarnator", () -> new Reincarnator(Skill.SkillType.UNIQUE));
+        SHADOW_AVENGER = registery.register("shadow_avenger", () -> new ShadowAvengerSkill(Skill.SkillType.UNIQUE));
+        WORLDS_SCAPEGOAT = registery.register("worlds_scapegoat", () -> new WorldScapegoatSkill(Skill.SkillType.UNIQUE));
 
         // vassal series
         UNITY = registery.register("unity", () -> new UnitySkill(Skill.SkillType.UNIQUE));

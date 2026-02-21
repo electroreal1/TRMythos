@@ -24,7 +24,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -117,9 +116,9 @@ public class CommonSenseSkill extends Skill {
     @Override
     public List<MobEffect> getImmuneEffects(ManasSkillInstance instance, LivingEntity entity) {
         List<MobEffect> list = new ArrayList<>();
-        list.add((MobEffect) TensuraMobEffects.INSANITY.get());
-        list.add((MobEffect) TensuraMobEffects.FEAR.get());
-        list.add((MobEffect) TensuraMobEffects.MIND_CONTROL.get());
+        list.add(TensuraMobEffects.INSANITY.get());
+        list.add(TensuraMobEffects.FEAR.get());
+        list.add(TensuraMobEffects.MIND_CONTROL.get());
         return list;
     }
 
@@ -164,7 +163,7 @@ public class CommonSenseSkill extends Skill {
         if (Objects.requireNonNull(attacker.getAttribute(Attributes.LUCK)).getValue() <= 0.50D)
             return;
         LivingEntity entity = e.getEntity();
-        if (SkillUtils.canNegateCritChance((Entity)entity))
+        if (SkillUtils.canNegateCritChance(entity))
             return;
         double critical = Objects.requireNonNull(attacker.getAttribute(ManasCoreAttributes.CRIT_MULTIPLIER.get())).getValue();
         e.setAmount((float)(e.getAmount() * critical));
@@ -179,8 +178,7 @@ public class CommonSenseSkill extends Skill {
 
     public void onLearnSkill(@NotNull ManasSkillInstance instance, @NotNull LivingEntity entity, @NotNull UnlockSkillEvent event) {
         if (instance.getMastery() >= 0 && !instance.isTemporarySkill()) {
-            if (entity instanceof ServerPlayer) {
-                ServerPlayer player = (ServerPlayer) entity;
+            if (entity instanceof ServerPlayer player) {
                 TensuraAdvancementsHelper.grant(player, TensuraAdvancementsHelper.Advancements.MASTER_SMITH);
             }
         }
@@ -192,12 +190,10 @@ public class CommonSenseSkill extends Skill {
 
     public Component getModeName(int mode) {
         MutableComponent name;
-        switch (mode) {
-            case 1:
-                name = Component.translatable("trmythos.skill.mode.common_sense.trivia");
-                break;
-            default:
-                name = Component.empty();
+        if (mode == 1) {
+            name = Component.translatable("trmythos.skill.mode.common_sense.trivia");
+        } else {
+            name = Component.empty();
         }
         return name;
     }

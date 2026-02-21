@@ -89,7 +89,7 @@ public class MythosMobEffects {
             new AresBerserkerEffect(MobEffectCategory.NEUTRAL, (new Color(255, 165, 15)).getRGB()));
     public static final RegistryObject<MobEffect> LONGEVITY_REGENERATION = registry.register("longevity_regeneration", () ->
             new LongevityRegenerationEffect(MobEffectCategory.BENEFICIAL, (new Color(100, 0, 0)).getRGB()));
-
+    public static final RegistryObject<MobEffect> EVIL_OF_HUMANITY = registry.register("evil_of_humanity", EvilOfHumanityEffect::new);
     public static void init(IEventBus modEventBus) {
         registry.register(modEventBus);
     }

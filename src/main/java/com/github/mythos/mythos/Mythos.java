@@ -7,6 +7,7 @@ import com.github.mythos.mythos.config.MythosSkillsConfig;
 import com.github.mythos.mythos.handler.*;
 import com.github.mythos.mythos.networking.MythosNetwork;
 import com.github.mythos.mythos.registry.ClientOnlyRegistrar;
+import com.github.mythos.mythos.registry.MythosEngravings;
 import com.github.mythos.mythos.registry.MythosParticles;
 import com.github.mythos.mythos.registry.MythosRegistery;
 import com.github.mythos.mythos.registry.menu.MythosMenuTypes;
@@ -57,6 +58,7 @@ public class Mythos {
         MythosRegistery.register(modEventBus);
         modEventBus.register(MythosRaces.class);
         MythosParticles.init(modEventBus);
+        MythosEngravings.init(modEventBus);
 
         // 2. Common Handlers (No client imports in these!)
         MinecraftForge.EVENT_BUS.register(CrimsonTyrantHandler.class);

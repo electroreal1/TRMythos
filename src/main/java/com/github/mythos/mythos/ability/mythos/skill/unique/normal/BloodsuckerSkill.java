@@ -15,7 +15,6 @@ import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.mojang.math.Vector3f;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -26,10 +25,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -69,29 +65,28 @@ public class BloodsuckerSkill extends Skill {
     }
 
     public void onToggleOn(ManasSkillInstance instance, LivingEntity entity) {
-        entity.addEffect(new MobEffectInstance((MobEffect) MythosMobEffects.RAPID_REGENERATION.get(), 1200, 1, false, false, false));
-        if (!entity.hasEffect((MobEffect) TensuraMobEffects.HEAT_SENSE.get()) && !entity.hasEffect((MobEffect) TensuraMobEffects.AUDITORY_SENSE.get()) && !entity.hasEffect((MobEffect) TensuraMobEffects.PRESENCE_SENSE.get())) {
-            entity.addEffect(new MobEffectInstance((MobEffect) TensuraMobEffects.HEAT_SENSE.get(), 200, 0, false, false, false));
-            entity.addEffect(new MobEffectInstance((MobEffect) TensuraMobEffects.AUDITORY_SENSE.get(), 200, 0, false, false, false));
-            entity.addEffect(new MobEffectInstance((MobEffect) TensuraMobEffects.PRESENCE_SENSE.get(), 200, 0, false, false, false));
+        entity.addEffect(new MobEffectInstance(MythosMobEffects.RAPID_REGENERATION.get(), 1200, 1, false, false, false));
+        if (!entity.hasEffect(TensuraMobEffects.HEAT_SENSE.get()) && !entity.hasEffect(TensuraMobEffects.AUDITORY_SENSE.get()) && !entity.hasEffect(TensuraMobEffects.PRESENCE_SENSE.get())) {
+            entity.addEffect(new MobEffectInstance(TensuraMobEffects.HEAT_SENSE.get(), 200, 0, false, false, false));
+            entity.addEffect(new MobEffectInstance(TensuraMobEffects.AUDITORY_SENSE.get(), 200, 0, false, false, false));
+            entity.addEffect(new MobEffectInstance(TensuraMobEffects.PRESENCE_SENSE.get(), 200, 0, false, false, false));
         }
         if (entity instanceof LivingEntity) {
             if (entity.hasEffect(MythosMobEffects.RAPID_REGENERATION.get())) {
-                return;
             } else {
-                entity.addEffect(new MobEffectInstance((MobEffect) MythosMobEffects.RAPID_REGENERATION.get(), 1200, 1, false, false, false));
+                entity.addEffect(new MobEffectInstance(MythosMobEffects.RAPID_REGENERATION.get(), 1200, 1, false, false, false));
             }
         }
     }
 
     public void onToggleOff(ManasSkillInstance instance, LivingEntity entity) {
-        if (!entity.hasEffect((MobEffect) TensuraMobEffects.HEAT_SENSE.get()) && !entity.hasEffect((MobEffect) TensuraMobEffects.AUDITORY_SENSE.get())) {
-            entity.removeEffect((MobEffect) TensuraMobEffects.HEAT_SENSE.get());
-            entity.removeEffect((MobEffect) TensuraMobEffects.AUDITORY_SENSE.get());
+        if (!entity.hasEffect(TensuraMobEffects.HEAT_SENSE.get()) && !entity.hasEffect(TensuraMobEffects.AUDITORY_SENSE.get())) {
+            entity.removeEffect(TensuraMobEffects.HEAT_SENSE.get());
+            entity.removeEffect(TensuraMobEffects.AUDITORY_SENSE.get());
         }
-        MobEffectInstance effectInstance = entity.getEffect((MobEffect) MythosMobEffects.RAPID_REGENERATION.get());
+        MobEffectInstance effectInstance = entity.getEffect(MythosMobEffects.RAPID_REGENERATION.get());
         if (effectInstance != null && effectInstance.getAmplifier() < 1)
-            entity.removeEffect((MobEffect) MythosMobEffects.RAPID_REGENERATION.get());
+            entity.removeEffect(MythosMobEffects.RAPID_REGENERATION.get());
     }
 
     public int modes() {
@@ -131,7 +126,7 @@ public class BloodsuckerSkill extends Skill {
             if (heldTicks % 60 == 0 && heldTicks > 0)
                 addMasteryPoint(instance, entity);
             double cost = magiculeCost(entity, instance);
-            BeamProjectile.spawnLastingBeam((EntityType) TensuraEntityTypes.SPATIAL_RAY.get(),
+            BeamProjectile.spawnLastingBeam(TensuraEntityTypes.SPATIAL_RAY.get(),
                     instance.isMastered(entity) ? 100.0F : 50.0F, 0.5F, entity, instance, cost, cost, heldTicks);
             entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.BEACON_AMBIENT, SoundSource.PLAYERS, 0.8F, 0.5F);
             if (heldTicks > 100) {
@@ -165,24 +160,22 @@ public class BloodsuckerSkill extends Skill {
                 break;
 
             case 2:
-                LivingEntity target = (LivingEntity) SkillHelper.getTargetingEntity(LivingEntity.class, entity, 3.0D, 0.2D, false, true);
+                LivingEntity target = SkillHelper.getTargetingEntity(LivingEntity.class, entity, 3.0D, 0.2D, false, true);
                 if (target == null) {
-                    if (entity instanceof Player) {
-                        Player player = (Player) entity;
-                        player.displayClientMessage((Component) Component.translatable("tensura.targeting.not_targeted").withStyle(Style.EMPTY.withColor(ChatFormatting.RED)), false);
+                    if (entity instanceof Player player) {
+                        player.displayClientMessage(Component.translatable("tensura.targeting.not_targeted").withStyle(Style.EMPTY.withColor(ChatFormatting.RED)), false);
                     }
                     instance.setCoolDown(instance.isMastered(entity) ? 10 : 20);
                     return;
                 }
-                if (target.hasEffect((MobEffect) MythosMobEffects.VAPORIZATION_FREEZE.get())) {
-                    target.removeEffect((MobEffect) MythosMobEffects.VAPORIZATION_FREEZE.get());
+                if (target.hasEffect(MythosMobEffects.VAPORIZATION_FREEZE.get())) {
+                    target.removeEffect(MythosMobEffects.VAPORIZATION_FREEZE.get());
                     entity.swing(InteractionHand.MAIN_HAND, true);
                     entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_HURT_FREEZE, SoundSource.PLAYERS, 1.0F, 1.0F);
-                    TensuraParticleHelper.addServerParticlesAroundSelf((Entity) target, (ParticleOptions) ParticleTypes.SNOWFLAKE, 1.0D);
-                    TensuraParticleHelper.addServerParticlesAroundSelf((Entity) target, (ParticleOptions) ParticleTypes.SNOWFLAKE, 1.0D);
+                    TensuraParticleHelper.addServerParticlesAroundSelf(target, ParticleTypes.SNOWFLAKE, 1.0D);
+                    TensuraParticleHelper.addServerParticlesAroundSelf(target, ParticleTypes.SNOWFLAKE, 1.0D);
                 } else {
-                    if (target instanceof Player) {
-                        Player player = (Player) target;
+                    if (target instanceof Player player) {
                         if ((player.getAbilities()).instabuild)
                             return;
                     }
@@ -191,11 +184,11 @@ public class BloodsuckerSkill extends Skill {
                     instance.addMasteryPoint(entity);
                     instance.setCoolDown(instance.isMastered(entity) ? 15 : 30);
                     int duration = isMastered(instance, entity) ? 200 : 100;
-                    SkillHelper.checkThenAddEffectSource(target, (Entity) entity, (MobEffect) MythosMobEffects.VAPORIZATION_FREEZE.get(), duration, 0, false, false, false, true);
-                    DamageSourceHelper.markHurt(target, (Entity) entity);
+                    SkillHelper.checkThenAddEffectSource(target, entity, MythosMobEffects.VAPORIZATION_FREEZE.get(), duration, 0, false, false, false, true);
+                    DamageSourceHelper.markHurt(target, entity);
                     entity.swing(InteractionHand.MAIN_HAND, true);
-                    TensuraParticleHelper.addServerParticlesAroundSelf((Entity) target, (ParticleOptions) ParticleTypes.SNOWFLAKE, 1.0D);
-                    TensuraParticleHelper.addServerParticlesAroundSelf((Entity) target, (ParticleOptions) ParticleTypes.SNOWFLAKE, 1.0D);
+                    TensuraParticleHelper.addServerParticlesAroundSelf(target, ParticleTypes.SNOWFLAKE, 1.0D);
+                    TensuraParticleHelper.addServerParticlesAroundSelf(target, ParticleTypes.SNOWFLAKE, 1.0D);
                     entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.GENERIC_EXPLODE, SoundSource.PLAYERS, 1.0F, 1.0F);
                 }
                 break;
@@ -207,17 +200,16 @@ public class BloodsuckerSkill extends Skill {
                 livingEntity2 = SkillHelper.getTargetingEntity(entity, 3.0D, false);
                 if (livingEntity2 == null)
                     return;
-                if (livingEntity2 instanceof Player) {
-                    Player player = (Player) livingEntity2;
+                if (livingEntity2 instanceof Player player) {
                     if ((player.getAbilities()).instabuild)
                         return;
                 }
-                if (SkillHelper.outOfMagicule(entity, (ManasSkillInstance) instance))
+                if (SkillHelper.outOfMagicule(entity, instance))
                     return;
                 this.addMasteryPoint(instance, entity);
                 embrace = instance.isMastered(entity) ? 1 : 0;
-                SkillHelper.checkThenAddEffectSource(livingEntity2, entity, (MobEffect) MythosMobEffects.BLOOD_DRAIN.get(), 100, embrace);
-                SkillHelper.checkThenAddEffectSource(entity, entity, (MobEffect) MythosMobEffects.BLOOD_DRAIN.get(), 40, 0);
+                SkillHelper.checkThenAddEffectSource(livingEntity2, entity, MythosMobEffects.BLOOD_DRAIN.get(), 100, embrace);
+                SkillHelper.checkThenAddEffectSource(entity, entity, MythosMobEffects.BLOOD_DRAIN.get(), 40, 0);
                 entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.GENERIC_DRINK, SoundSource.PLAYERS, 1.0F, 1.0F);
                 break;
 
@@ -226,13 +218,13 @@ public class BloodsuckerSkill extends Skill {
                 break;
         }
     }
-    private static double rotation = 0;
+    private static final double rotation = 0;
     public void onTick(ManasSkillInstance instance, LivingEntity entity) {
         if (instance.isToggled()) {
-            entity.addEffect(new MobEffectInstance((MobEffect) MythosMobEffects.RAPID_REGENERATION.get(), 1200, 1, false, false, false));
-            entity.addEffect(new MobEffectInstance((MobEffect) TensuraMobEffects.HEAT_SENSE.get(), 200, 0, false, false, false));
-            entity.addEffect(new MobEffectInstance((MobEffect) TensuraMobEffects.AUDITORY_SENSE.get(), 200, 0, false, false, false));
-            entity.addEffect(new MobEffectInstance((MobEffect) TensuraMobEffects.PRESENCE_SENSE.get(), 200, 0, false, false, false));
+            entity.addEffect(new MobEffectInstance(MythosMobEffects.RAPID_REGENERATION.get(), 1200, 1, false, false, false));
+            entity.addEffect(new MobEffectInstance(TensuraMobEffects.HEAT_SENSE.get(), 200, 0, false, false, false));
+            entity.addEffect(new MobEffectInstance(TensuraMobEffects.AUDITORY_SENSE.get(), 200, 0, false, false, false));
+            entity.addEffect(new MobEffectInstance(TensuraMobEffects.PRESENCE_SENSE.get(), 200, 0, false, false, false));
         }
         if (!(entity instanceof Player player)) {
             return;
