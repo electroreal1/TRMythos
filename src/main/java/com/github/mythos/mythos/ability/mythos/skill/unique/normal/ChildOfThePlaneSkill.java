@@ -26,6 +26,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -119,7 +120,7 @@ public class ChildOfThePlaneSkill extends Skill implements Transformation {
                 entity.getLevel().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.PLAYERS, 1.0F, 1.0F);
 
                 if (entity instanceof Player player) {
-                    int amplifier = player.getServer().getPlayerList().getPlayerCount();
+                    int amplifier = Objects.requireNonNull(player.getServer()).getPlayerList().getPlayerCount();
 
                     entity.addEffect(new MobEffectInstance(MythosMobEffects.CHILD_OF_THE_PLANE.get(), this.isMastered(instance, entity) ? 7200 : 3600, amplifier / 5, false, false, false));
                 }
