@@ -122,7 +122,7 @@ public class ChildOfThePlaneSkill extends Skill implements Transformation {
                 if (entity instanceof Player player) {
                     int amplifier = Objects.requireNonNull(player.getServer()).getPlayerList().getPlayerCount();
 
-                    entity.addEffect(new MobEffectInstance(MythosMobEffects.CHILD_OF_THE_PLANE.get(), this.isMastered(instance, entity) ? 7200 : 3600, amplifier / 5, false, false, false));
+                    entity.addEffect(new MobEffectInstance(MythosMobEffects.CHILD_OF_THE_PLANE.get(), this.isMastered(instance, entity) ? 7200 : 3600, 1 + amplifier / 5, false, false, false));
                 }
 
                 TensuraParticleHelper.addServerParticlesAroundSelf(entity, ParticleTypes.POOF, 3.0);
