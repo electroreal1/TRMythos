@@ -1,6 +1,5 @@
 package com.github.mythos.mythos.ability.confluence.skill.unique;
 
-import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
 import com.github.manasmods.tensura.ability.SkillHelper;
@@ -11,12 +10,12 @@ import com.github.manasmods.tensura.enchantment.EngravingEnchantment;
 import com.github.manasmods.tensura.registry.enchantment.TensuraEnchantments;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.mythos.mythos.ability.confluence.skill.ConfluenceUniques;
+import com.github.mythos.mythos.config.MythosSkillsConfig;
 import com.github.mythos.mythos.registry.MythosItems;
 import com.github.mythos.mythos.util.damage.MythosDamageSources;
 import com.mojang.math.Vector3f;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
@@ -52,8 +51,7 @@ public class Fragarach extends Skill {
         if (this.isInSlot(attacker)) {
             float chance = instance.isMastered(attacker) ? 0.75F : 0.5F;
             if (!(attacker.getRandom().nextFloat() > chance)) {
-                if (SkillHelper.drainMP(event.getEntity(), attacker, 0.01, true) && attacker instanceof Player) {
-                    Player player = (Player)attacker;
+                if (SkillHelper.drainMP(event.getEntity(), attacker, 0.01, true) && attacker instanceof Player player) {
                     player.playNotifySound(SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1.0F, 1.0F);
                 }
 
@@ -101,23 +99,13 @@ public class Fragarach extends Skill {
         if (!(event.getSource().getEntity() instanceof LivingEntity living)) return;
         boolean holdingFragarach = isHoldingFragarach(player);
 
-        if (!TensuraSkillCapability.isSkillInSlot(living, (ManasSkill) ConfluenceUniques.FRAGARACH.get()) && !holdingFragarach) return;
+        if (!TensuraSkillCapability.isSkillInSlot(living, ConfluenceUniques.FRAGARACH.get()) && !holdingFragarach) return;
 
         LivingEntity target = event.getEntity();
 
         float trueDamage = event.getAmount() * 0.10f;
 
         target.hurt(MythosDamageSources.truthDamage(entity), trueDamage);
-    }
-
-    private void gainMastery(ManasSkillInstance instance, LivingEntity entity) {
-        CompoundTag tag = instance.getOrCreateTag();
-        int time = tag.getInt("activatedTimes");
-        if (time % 12 == 0) {
-            this.addMasteryPoint(instance, entity);
-        }
-
-        tag.putInt("activatedTimes", time + 1);
     }
 
     @Override
@@ -227,6 +215,7 @@ public class Fragarach extends Skill {
     private static double rotation = 0;
     @Override
     public void onTick(ManasSkillInstance instance, LivingEntity entity) {
+        if (!MythosSkillsConfig.EnableSkillAuras()) return;
         if (!(entity instanceof Player player)) return;
         Level level = entity.level;
         if (!(level instanceof ServerLevel server)) return;

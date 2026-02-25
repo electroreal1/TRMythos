@@ -93,6 +93,7 @@ public class ProfanitySkill extends Skill {
 
     @Override
     public void onTick(ManasSkillInstance instance, LivingEntity entity) {
+        if (!MythosSkillsConfig.EnableSkillAuras()) return;
         if (!(entity instanceof Player player)) return;
         Level level = entity.level;
         if (!(level instanceof ServerLevel server)) return;

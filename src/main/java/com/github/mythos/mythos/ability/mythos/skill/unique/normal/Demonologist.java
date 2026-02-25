@@ -24,6 +24,7 @@ import com.github.manasmods.tensura.registry.entity.TensuraEntityTypes;
 import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
 import com.github.manasmods.tensura.util.attribute.TensuraAttributeModifierIds;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSources;
+import com.github.mythos.mythos.config.MythosSkillsConfig;
 import com.mojang.math.Vector3f;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -102,7 +103,8 @@ public class Demonologist extends Skill {
 
     @Override
     public void onTick(ManasSkillInstance instance, LivingEntity living) {
-        if (!(living instanceof Player player)) return;
+        if (!MythosSkillsConfig.EnableSkillAuras()) return;
+        if (!(living instanceof Player)) return;
         Level level = living.level;
         if (!(level instanceof ServerLevel server)) return;
 

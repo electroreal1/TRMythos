@@ -9,6 +9,7 @@ import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
 import com.github.manasmods.tensura.effect.template.Transformation;
 import com.github.manasmods.tensura.registry.particle.TensuraParticles;
+import com.github.mythos.mythos.config.MythosSkillsConfig;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.registry.skill.Skills;
 import com.mojang.math.Vector3f;
@@ -67,6 +68,7 @@ public class ChildOfThePlaneSkill extends Skill implements Transformation {
 
     @Override
     public void onTick(ManasSkillInstance instance, LivingEntity entity) {
+        if (!MythosSkillsConfig.EnableSkillAuras()) return;
         if (!(entity instanceof Player player)) return;
         Level level = entity.level;
         if (!(level instanceof ServerLevel server)) return;

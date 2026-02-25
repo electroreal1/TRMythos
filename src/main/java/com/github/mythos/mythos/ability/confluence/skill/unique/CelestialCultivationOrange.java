@@ -58,7 +58,7 @@ public class CelestialCultivationOrange extends Skill {
             if (entity instanceof Player) {
                 Player player = (Player)entity;
                 TensuraPlayerCapability.getFrom(player).ifPresent((cap) -> {
-                    double maxMP = player.getAttributeValue((Attribute) TensuraAttributeRegistry.MAX_MAGICULE.get());
+                    double maxMP = player.getAttributeValue(TensuraAttributeRegistry.MAX_MAGICULE.get());
                     double regen = instance.isMastered(entity) ? 280000.0 : 140000.0;
                     cap.setMagicule(Math.min(cap.getMagicule() + regen, maxMP));
                 });

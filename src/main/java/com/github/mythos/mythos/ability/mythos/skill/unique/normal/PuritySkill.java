@@ -66,23 +66,19 @@ public class PuritySkill extends Skill {
 
     private static final double rotation = 0;
 
+    @Override
+    public List<MobEffect> getImmuneEffects(ManasSkillInstance instance, LivingEntity entity) {
+        return MythosSkillsConfig.getPurityImmuneEffects();
+    }
+
     public void onTick(ManasSkillInstance instance, LivingEntity entity) {
-        List<MobEffect> immune = MythosSkillsConfig.getPurityImmuneEffects();
-
-        entity.getActiveEffects().forEach(effectInstance -> {
-            MobEffect effect = effectInstance.getEffect();
-            if (immune.contains(effect) && effect.isBeneficial()) return;
-            if (!immune.contains(effect) && !effect.isBeneficial()) {
-                entity.removeEffect(effect);
-            }
-        });
-
         TensuraEPCapability.getFrom(entity).ifPresent((cap) -> {
             if (!cap.isChaos() || cap.isMajin()) {
                 cap.setMajin(false);
             }
         });
 
+        if (!MythosSkillsConfig.EnableSkillAuras()) return;
         if (!(entity instanceof Player player)) return;
         Level level = entity.level;
         if (!(level instanceof ServerLevel server)) return;

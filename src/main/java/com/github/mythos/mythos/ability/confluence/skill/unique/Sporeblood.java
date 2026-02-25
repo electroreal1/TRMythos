@@ -8,6 +8,7 @@ import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.registry.enchantment.TensuraEnchantments;
 import com.github.manasmods.tensura.registry.particle.TensuraParticles;
 import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
+import com.github.mythos.mythos.config.MythosSkillsConfig;
 import com.github.mythos.mythos.registry.MythosItems;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.util.MythosDamageSourceHelper;
@@ -61,6 +62,7 @@ public class Sporeblood extends Skill {
     private static double rotation = 0;
     @Override
     public void onTick(ManasSkillInstance instance, LivingEntity entity) {
+        if (!MythosSkillsConfig.EnableSkillAuras()) return;
         if (!(entity instanceof Player player)) return;
         Level level = entity.level;
         if (!(level instanceof ServerLevel server)) return;

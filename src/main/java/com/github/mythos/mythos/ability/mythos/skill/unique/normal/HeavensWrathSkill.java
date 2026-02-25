@@ -41,7 +41,7 @@ public class HeavensWrathSkill extends Skill {
                 }
             }
         }
-        if (TensuraSkillCapability.isSkillInSlot(living, (ManasSkill) Skills.HEAVENS_WRATH.get())) {
+        if (TensuraSkillCapability.isSkillInSlot(living, Skills.HEAVENS_WRATH.get())) {
             SkillUtils.reducingResistances(living);
         }
     }

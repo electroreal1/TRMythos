@@ -19,6 +19,7 @@ public class MythosSkillsConfig {
     public static ForgeConfigSpec.BooleanValue DeadApostleAncestor;
     public static ForgeConfigSpec.BooleanValue VampireCarnage;
     public static ForgeConfigSpec.BooleanValue endOfEvilReset;
+    public static ForgeConfigSpec.BooleanValue EnableSkillAuras;
     public static ForgeConfigSpec.BooleanValue CarnageBloodDominion;
     public static ForgeConfigSpec.BooleanValue EnableUltimateSkillObtainment;
     public static ForgeConfigSpec.BooleanValue EnableGodClassUltimates;
@@ -145,6 +146,9 @@ public class MythosSkillsConfig {
                 .comment("If true then those who dies to Kthanid's End of Evil will be character reset," +
                         "note: THIS CANNOT REVERSE SOMEONE WHO WAS ALREADY RESET")
                 .define("endOfEvilReset", false);
+       EnableSkillAuras = builder
+                .comment("then certain skills with have particles around them")
+                .define("EnableSkillAuras", false);
 
         ApophisEmbodiment = builder
                 .comment("if True Apophis, Lord of Sin will be capable of creating Sin Series Unique Skills once per Mastery.")
@@ -254,6 +258,9 @@ public class MythosSkillsConfig {
     }
     public static boolean EnableGodClassObtainment() {
         return EnableGodClassUltimates.get();
+    }
+    public static boolean EnableSkillAuras() {
+        return EnableSkillAuras.get();
     }
 
     public static List<? extends String> getRacesThatCanCompeteForChildOfThePlane() {

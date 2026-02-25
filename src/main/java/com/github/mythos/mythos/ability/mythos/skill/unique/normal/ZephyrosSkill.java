@@ -14,6 +14,7 @@ import com.github.manasmods.tensura.entity.magic.breath.BreathEntity;
 import com.github.manasmods.tensura.registry.entity.TensuraEntityTypes;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
+import com.github.mythos.mythos.config.MythosSkillsConfig;
 import com.github.mythos.mythos.registry.skill.Skills;
 import com.github.mythos.mythos.util.MythosUtils;
 import com.github.mythos.mythos.util.damage.MythosDamageSources;
@@ -75,6 +76,7 @@ public class ZephyrosSkill extends Skill {
     private static double rotation = 0;
     @Override
     public void onTick(ManasSkillInstance instance, LivingEntity entity) {
+        if (!MythosSkillsConfig.EnableSkillAuras()) return;
         if (!(entity instanceof Player player)) return;
         Level level = entity.level;
         if (!(level instanceof ServerLevel server)) return;

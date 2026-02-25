@@ -1,6 +1,5 @@
 package com.github.mythos.mythos.ability.confluence.skill.unique;
 
-import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
@@ -38,7 +37,7 @@ public class Gram extends Skill {
     @SubscribeEvent
     public static void onHurt(LivingHurtEvent event, ManasSkillInstance instance, LivingEntity living) {
         if (!(event.getSource().getEntity() instanceof Player player)) return;
-        if (TensuraSkillCapability.isSkillInSlot(living, (ManasSkill) ConfluenceUniques.GRAM.get())) {
+        if (TensuraSkillCapability.isSkillInSlot(living, ConfluenceUniques.GRAM.get())) {
             if (!isHoldingGram(player)) return;
             LivingEntity target = event.getEntity();
             double playerEP = TensuraPlayerCapability.getCurrentEP(player);
@@ -71,9 +70,10 @@ public class Gram extends Skill {
     public boolean canTick(ManasSkillInstance instance, LivingEntity entity) {
         return true;
     }
-    private static double rotation = 0;
+    private static final double rotation = 0;
     @Override
     public void onTick(ManasSkillInstance instance, LivingEntity entity) {
+        if (!MythosSkillsConfig.EnableSkillAuras()) return;
         if (!(entity instanceof Player player)) return;
         Level level = entity.level;
         if (!(level instanceof ServerLevel server)) return;

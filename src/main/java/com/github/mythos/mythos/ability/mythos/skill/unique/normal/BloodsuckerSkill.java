@@ -10,6 +10,7 @@ import com.github.manasmods.tensura.entity.magic.beam.BeamProjectile;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.registry.entity.TensuraEntityTypes;
 import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
+import com.github.mythos.mythos.config.MythosSkillsConfig;
 import com.github.mythos.mythos.mob_effect.debuff.CurseOfLightEffect;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.mojang.math.Vector3f;
@@ -231,6 +232,7 @@ public class BloodsuckerSkill extends Skill {
         }
         CurseOfLightEffect.tick(instance, player);
 
+        if (!MythosSkillsConfig.EnableSkillAuras()) return;
         Level level = entity.level;
         if (!(level instanceof ServerLevel server)) return;
 
@@ -262,8 +264,5 @@ public class BloodsuckerSkill extends Skill {
             if (rand.nextDouble() < 0.4) continue; // flicker
             server.sendParticles(new DustParticleOptions(color, size), px, py, pz, 1, 0, 0, 0, 0);
         }
-
-
-
     }
 }

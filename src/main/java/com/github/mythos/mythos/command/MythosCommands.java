@@ -236,10 +236,19 @@ public class MythosCommands {
                             sb.append("§7Announce Ultimates: ").append(GodClassHandler.get(context.getSource().getLevel()).isAnnouncementsEnabled() ? "§aON" : "§cOFF").append("\n");
                             sb.append("§7Voice of the World: ").append(MythosSkillsConfig.voice_of_the_world.get() ? "§aON" : "§cOFF").append("\n");
                             sb.append("§7Enable God Class Ultimates: ").append(MythosSkillsConfig.EnableGodClassUltimates.get() ? "§aON" : "§cOFF").append("\n");
+                            sb.append("§7Enable Skill Auras ").append(MythosSkillsConfig.EnableSkillAuras.get() ? "§aON" : "§cOFF");
                             sb.append("§7Allow Ultimate Copying: ").append(MythosSkillsConfig.ALLOW_ULTIMATE_COPYING.get() ? "§aON" : "§cOFF");
                             context.getSource().sendSuccess(Component.literal(sb.toString()), false);
                             return 1;
                         }))
+                        .requires(source -> source.hasPermission(4))
+                        .then(Commands.literal("EnableSkillAuras")
+                                .then(Commands.argument("value", BoolArgumentType.bool()).executes(context -> {
+                                    boolean val = BoolArgumentType.getBool(context, "value");
+                                    MythosSkillsConfig.EnableSkillAuras.set(val);
+                                    context.getSource().sendSuccess(Component.literal("§6[Mythos Config] §fEnable Skill Auras: " + val), true);
+                                    return 1;
+                                })))
                         .requires(source -> source.hasPermission(4))
                         .then(Commands.literal("allow_ultimate_copying")
                                 .then(Commands.argument("value", BoolArgumentType.bool()).executes(context -> {

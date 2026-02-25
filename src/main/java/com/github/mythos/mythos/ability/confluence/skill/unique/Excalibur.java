@@ -10,6 +10,7 @@ import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.registry.enchantment.TensuraEnchantments;
 import com.github.manasmods.tensura.registry.skill.CommonSkills;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
+import com.github.mythos.mythos.config.MythosSkillsConfig;
 import com.github.mythos.mythos.registry.MythosItems;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.mojang.math.Vector3f;
@@ -71,6 +72,7 @@ public class Excalibur extends Skill {
     private static final double rotation = 0;
     @Override
     public void onTick(ManasSkillInstance instance, LivingEntity entity) {
+        if (!MythosSkillsConfig.EnableSkillAuras()) return;
         if (!(entity instanceof Player player)) return;
         Level level = entity.level;
         if (!(level instanceof ServerLevel server)) return;
