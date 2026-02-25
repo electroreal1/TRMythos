@@ -236,7 +236,7 @@ public class MythosCommands {
                             sb.append("§7Announce Ultimates: ").append(GodClassHandler.get(context.getSource().getLevel()).isAnnouncementsEnabled() ? "§aON" : "§cOFF").append("\n");
                             sb.append("§7Voice of the World: ").append(MythosSkillsConfig.voice_of_the_world.get() ? "§aON" : "§cOFF").append("\n");
                             sb.append("§7Enable God Class Ultimates: ").append(MythosSkillsConfig.EnableGodClassUltimates.get() ? "§aON" : "§cOFF").append("\n");
-                            sb.append("§7Enable Skill Auras ").append(MythosSkillsConfig.EnableSkillAuras.get() ? "§aON" : "§cOFF");
+                            sb.append("§7Enable Skill Auras: ").append(MythosSkillsConfig.EnableSkillAuras.get() ? "§aON" : "§cOFF").append("\n");
                             sb.append("§7Allow Ultimate Copying: ").append(MythosSkillsConfig.ALLOW_ULTIMATE_COPYING.get() ? "§aON" : "§cOFF");
                             context.getSource().sendSuccess(Component.literal(sb.toString()), false);
                             return 1;
