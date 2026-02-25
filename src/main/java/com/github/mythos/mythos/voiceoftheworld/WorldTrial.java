@@ -95,7 +95,6 @@ public class WorldTrial {
     }
 
 
-     // Formats ticks into human-readable time strings, or raw numbers for kills.
 
     String formatRequirement(int value) {
         if (id.equals("observer") || id.equals("breather") || id.equals("pacifist")) {
