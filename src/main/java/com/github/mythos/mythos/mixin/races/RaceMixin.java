@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Mixin({Race.class})
+@Mixin(Race.class)
 public class RaceMixin {
 
     @Inject(
