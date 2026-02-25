@@ -104,12 +104,13 @@ public class Kthanid extends Skill {
 
     @Override
     public void onLearnSkill(ManasSkillInstance instance, LivingEntity entity, UnlockSkillEvent event) {
+        if (!instance.isTemporarySkill()) return;
         if (entity instanceof ServerPlayer player) {
             TensuraAdvancementsHelper.grant(player, TensuraAdvancementsHelper.Advancements.MASTER_SMITH);
         }
 
         if (!(entity.getLevel() instanceof ServerLevel serverLevel)) return;
-        Component msg = Component.literal("Darkness writhes as a new presence shines upon the world. Fear nestles its way into the empty hearts of the unjust, knowing that the light is soon to swallow them for their misdoings. The God of Light, the true Justice, has been born unto the world.").withStyle(ChatFormatting.RED).withStyle(ChatFormatting.BOLD);
+        Component msg = Component.literal("Darkness writhes as a new presence shines upon the world. Fear nestles its way into the empty hearts of the unjust, knowing that the light is soon to swallow them for their misdoings. The God of Light, the true Justice, has been born unto the world.").withStyle(ChatFormatting.YELLOW).withStyle(ChatFormatting.BOLD);
         serverLevel.players().forEach(player1 -> player1.displayClientMessage(msg, false));
 
         if (entity instanceof Player player && !instance.isTemporarySkill()) {

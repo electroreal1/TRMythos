@@ -103,6 +103,7 @@ public class DendrrahSkill extends Skill {
 
     @Override
     public void onLearnSkill(ManasSkillInstance instance, LivingEntity entity, UnlockSkillEvent event) {
+        if (!instance.isTemporarySkill()) return;
         if (!(entity instanceof Player player) || !(entity.level instanceof ServerLevel serverLevel)) return;
 
         SkillStorage storage = SkillAPI.getSkillsFrom(player);

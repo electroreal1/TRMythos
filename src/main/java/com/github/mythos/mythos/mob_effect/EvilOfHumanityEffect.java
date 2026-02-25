@@ -56,7 +56,7 @@ public class EvilOfHumanityEffect extends MobEffect {
         }
 
         if (!harmfulCache.isEmpty()) {
-            for (int i = 0; i < 15; i++) {
+            for (int i = 0; i < 5; i++) {
                 MobEffect randomEffect = harmfulCache.get(entity.getRandom().nextInt(harmfulCache.size()));
                 entity.addEffect(new MobEffectInstance(randomEffect, 100, amplifier));
             }

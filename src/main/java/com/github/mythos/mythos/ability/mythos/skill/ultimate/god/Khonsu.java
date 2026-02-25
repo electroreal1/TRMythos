@@ -129,6 +129,7 @@ public class Khonsu extends Skill {
 
     @Override
     public void onLearnSkill(ManasSkillInstance instance, LivingEntity entity, UnlockSkillEvent event) {
+        if (!instance.isTemporarySkill()) return;
         SkillUtils.learnSkill(entity, ResistanceSkills.SPIRITUAL_ATTACK_NULLIFICATION.get());
 
         if (entity instanceof Player player) {
