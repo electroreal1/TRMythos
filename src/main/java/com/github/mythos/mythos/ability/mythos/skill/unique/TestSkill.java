@@ -13,4 +13,16 @@ public class TestSkill extends Skill {
         return 2000000000;
     }
 
+  //  @Override
+ //   public void onPressed(ManasSkillInstance instance, LivingEntity entity) {
+    //    if (entity instanceof Player player) {
+    //        player.sendSystemMessage(MythosUtils.isCustomAlignment(player) ? Component.literal("y") : Component.literal("5"));
+
+     //       if (player.isShiftKeyDown()) {
+     //           MythosUtils.setCustomAlignment(player, true);
+     //       }
+     //   }
+
+
+  //  }
 }

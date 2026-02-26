@@ -69,6 +69,24 @@ public class MythosUtils  {
             }
         }
     }
+//
+//    public static boolean isCustomAlignment(Player player) {
+//        return player.getCapability(TensuraPlayerCapability.CAPABILITY).map(cap -> {
+//            if (cap instanceof ICustomAlignmentAccessor accessor) {
+//                return accessor.isCustomAlignment();
+//            }
+//            return false;
+//        }).orElse(false);
+//    }
+//
+//    public static void setCustomAlignment(Player player, boolean value) {
+//        player.getCapability(TensuraPlayerCapability.CAPABILITY).ifPresent(cap -> {
+//            if (cap instanceof ICustomAlignmentAccessor accessor) {
+//                accessor.setCustomAlignment(value);
+//                TensuraPlayerCapability.sync(player);
+//            }
+//        });
+//    }
 
     private static void grantStarterSkill(ServerPlayer player, ManasSkill skill, Component message) {
         if (skill == null) return;

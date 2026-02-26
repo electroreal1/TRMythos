@@ -17,6 +17,7 @@ import com.github.mythos.mythos.ability.mythos.skill.ultimate.prince.HaliSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.DominateSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.DullahanSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.TenaciousSkill;
+import com.github.mythos.mythos.ability.mythos.skill.unique.TestSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.evolved.*;
 import com.github.mythos.mythos.ability.mythos.skill.unique.megalomaniac_watcher.MegalomaniacSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.megalomaniac_watcher.WatcherSkill;
@@ -106,6 +107,7 @@ public class Skills {
     public static final RegistryObject<Reincarnator> REINCARNATOR;
     public static final RegistryObject<ShadowAvengerSkill> SHADOW_AVENGER;
     public static final RegistryObject<WorldScapegoatSkill> WORLDS_SCAPEGOAT;
+    public static final RegistryObject<TestSkill> TEST_SKILL;
 
     // vassal
     public static final RegistryObject<FoundationSkill> FOUNDATION;
@@ -212,6 +214,7 @@ public class Skills {
         REINCARNATOR = registery.register("reincarnator", () -> new Reincarnator(Skill.SkillType.UNIQUE));
         SHADOW_AVENGER = registery.register("shadow_avenger", () -> new ShadowAvengerSkill(Skill.SkillType.UNIQUE));
         WORLDS_SCAPEGOAT = registery.register("worlds_scapegoat", () -> new WorldScapegoatSkill(Skill.SkillType.UNIQUE));
+        TEST_SKILL = registery.register("test", () -> new TestSkill(Skill.SkillType.UNIQUE));
 
         // vassal series
         UNITY = registery.register("unity", () -> new UnitySkill(Skill.SkillType.UNIQUE));
