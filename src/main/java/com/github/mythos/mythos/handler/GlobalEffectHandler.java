@@ -104,6 +104,7 @@ public class GlobalEffectHandler {
 
         Minecraft mc = Minecraft.getInstance();
         if (mc.player != null && mc.player.hasEffect(MythosMobEffects.GREAT_SILENCE.get())) {
+            assert mc.level != null;
             float timer = mc.level.getGameTime() + mc.getFrameTime();
             float alpha = (float) (Math.sin(timer * 0.5f) * 0.5f + 0.5f);
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, alpha * 0.5f);
@@ -144,6 +145,7 @@ public class GlobalEffectHandler {
         }
 
         if (mc.player != null && GlobalEffectHandler.isGreatSilenceActive) {
+            assert mc.level != null;
             if (mc.level.getGameTime() % 40 == 0) {
                 mc.player.playSound(SoundEvents.CONDUIT_AMBIENT, 1.0f, 0.1f);
             }
@@ -168,6 +170,7 @@ public class GlobalEffectHandler {
 
         Minecraft mc = Minecraft.getInstance();
         if (mc.player != null && mc.player.hasEffect(MythosMobEffects.GREAT_SILENCE.get())) {
+            assert mc.level != null;
             float time = (mc.level.getGameTime() + mc.getFrameTime()) * 0.01f;
             event.setRed((float)Math.abs(Math.sin(time)) * 0.2f);
             event.setGreen(0.05f);
@@ -176,7 +179,7 @@ public class GlobalEffectHandler {
     }
 
     private static void loadShader(Minecraft mc, ResourceLocation loc) {
-        if (mc.gameRenderer.currentEffect() == null || !mc.gameRenderer.currentEffect().getName().equals(loc.toString())) {
+        if (mc.gameRenderer.currentEffect() == null || !Objects.requireNonNull(mc.gameRenderer.currentEffect()).getName().equals(loc.toString())) {
             mc.gameRenderer.loadEffect(loc);
         }
     }
@@ -206,6 +209,7 @@ public class GlobalEffectHandler {
     @OnlyIn(Dist.CLIENT)
     public static void onRenderHotbar(RenderGuiOverlayEvent.Pre event) {
         if (GlobalEffectHandler.isGreatSilenceActive) {
+            assert Minecraft.getInstance().level != null;
             long time = Minecraft.getInstance().level.getGameTime();
             float alpha = (time % 5 == 0) ? 0.2f : 1.0f;
 
