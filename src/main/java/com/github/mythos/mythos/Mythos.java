@@ -12,7 +12,6 @@ import com.github.mythos.mythos.registry.MythosParticles;
 import com.github.mythos.mythos.registry.MythosRegistery;
 import com.github.mythos.mythos.registry.menu.MythosMenuTypes;
 import com.github.mythos.mythos.registry.race.MythosRaces;
-import com.github.mythos.mythos.shaders.ClientShaderHandler;
 import com.github.mythos.mythos.voiceoftheworld.VoiceOfTheWorld;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.resources.ResourceLocation;
@@ -116,7 +115,6 @@ public class Mythos {
     private void onClientSetup(FMLClientSetupEvent event) {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
         MenuScreens.register(MythosMenuTypes.ORUN_MENU.get(), OrunScreen::new);
-        MinecraftForge.EVENT_BUS.register(ClientShaderHandler.class);
         MinecraftForge.EVENT_BUS.register(YellowSignOverlayHandler.class);
         MinecraftForge.EVENT_BUS.register(HaliShaderHandler.class);
         MinecraftForge.EVENT_BUS.register(GlobalEffectHandler.class);

@@ -34,4 +34,14 @@ public class MythosDamageSourceHelper {
             return true;
         } else return false;
     }
+
+    public static boolean isCold(DamageSource damageSource) {
+        if (damageSource.getMsgId().contains("ice")) {
+            return true;
+        } else if (damageSource.getMsgId().contains("cold")){
+            return true;
+        } else if (damageSource.getMsgId().contains("snow")) {
+            return true;
+        } else return false;
+    }
 }

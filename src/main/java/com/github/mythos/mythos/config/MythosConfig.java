@@ -18,7 +18,7 @@ public class MythosConfig {
     }
     static {
         Pair<MythosConfig, ForgeConfigSpec> pair = (new ForgeConfigSpec.Builder()).configure(MythosConfig::new);
-        INSTANCE = (MythosConfig) pair.getKey();
+        INSTANCE = pair.getKey();
         SPEC = pair.getValue();
     }
 }
