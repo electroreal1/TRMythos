@@ -26,15 +26,15 @@ public class TrialManager {
         return player.getPersistentData().getString(ACTIVE_TRIAL_KEY);
     }
 
-    public static boolean initiateTrial(ServerPlayer player, String trialID) {
-        if (!MythosSkillsConfig.voice_of_the_world.get()) return false;
-        if (player.level.isClientSide()) return false;
+    public static void initiateTrial(ServerPlayer player, String trialID) {
+        if (!MythosSkillsConfig.voice_of_the_world.get()) return;
+        if (player.level.isClientSide()) return;
 
-        if (hasActiveTrial(player)) return false;
+        if (hasActiveTrial(player)) return;
 
         CompoundTag tag = player.getPersistentData();
 
-        if (tag.getBoolean("Trial_Complete_" + trialID)) return false;
+        if (tag.getBoolean("Trial_Complete_" + trialID)) return;
 
         tag.putString(ACTIVE_TRIAL_KEY, trialID);
 
@@ -47,50 +47,43 @@ public class TrialManager {
                     "Recording progress within the soul core...");
         }
 
-        return true;
     }
 
     public static void init() {
         WorldTrialRegistry.register(new WorldTrial("giant_slayer", "Trial of the Giant Slayer",
-                EnumSet.of(WorldTrial.TrialType.KILL), 5, 15000, "", p -> {
-            VoiceOfTheWorld.delayedAnnouncement(p, VoiceOfTheWorld.Priority.ACQUISITION, "Notice.",
-                    "Confirmed. Concept of 'Size' has been surpassed.",
-                    "Trial Completed.");
-        }));
+                EnumSet.of(WorldTrial.TrialType.KILL), 5, 15000, "", p ->
+                VoiceOfTheWorld.delayedAnnouncement(p, VoiceOfTheWorld.Priority.ACQUISITION, "Notice.",
+                        "Confirmed. Concept of 'Size' has been surpassed.",
+                        "Trial Completed.")));
 
         WorldTrialRegistry.register(new WorldTrial("breather", "Trial of the Magicule Breather",
-                EnumSet.of(WorldTrial.TrialType.DIMENSION), 144000, 20000, "labyrinth", p -> {
-            VoiceOfTheWorld.delayedAnnouncement(p, VoiceOfTheWorld.Priority.ACQUISITION, "Notice.",
-                    "Confirmed. Respiratory system has adapted to high-density environments.",
-                    "Trial Completed.");
-        }));
+                EnumSet.of(WorldTrial.TrialType.DIMENSION), 144000, 20000, "labyrinth", p ->
+                VoiceOfTheWorld.delayedAnnouncement(p, VoiceOfTheWorld.Priority.ACQUISITION, "Notice.",
+                        "Confirmed. Respiratory system has adapted to high-density environments.",
+                        "Trial Completed.")));
 
         WorldTrialRegistry.register(new WorldTrial("pacifist", "Trial of the Pacifist",
-                EnumSet.of(WorldTrial.TrialType.PASSIVE), 240000, 30000, "", p -> {
-            VoiceOfTheWorld.delayedAnnouncement(p, VoiceOfTheWorld.Priority.ACQUISITION, "Notice.",
-                    "Confirmed. Inner peace has stabilized the spiritual body.",
-                    "Trial Completed.");
-        }));
+                EnumSet.of(WorldTrial.TrialType.PASSIVE), 240000, 30000, "", p ->
+                VoiceOfTheWorld.delayedAnnouncement(p, VoiceOfTheWorld.Priority.ACQUISITION, "Notice.",
+                        "Confirmed. Inner peace has stabilized the spiritual body.",
+                        "Trial Completed.")));
 
         WorldTrialRegistry.register(new WorldTrial("stability", "Trial of the Soul Stability",
-                EnumSet.of(WorldTrial.TrialType.EP_THRESHOLD), 1, 100000, "", p -> {
-            VoiceOfTheWorld.delayedAnnouncement(p, VoiceOfTheWorld.Priority.ACQUISITION, "Notice.",
-                    "Confirmed. Spiritual threshold exceeded.",
-                    "Trial Completed.");
-        }));
+                EnumSet.of(WorldTrial.TrialType.EP_THRESHOLD), 1, 100000, "", p ->
+                VoiceOfTheWorld.delayedAnnouncement(p, VoiceOfTheWorld.Priority.ACQUISITION, "Notice.",
+                        "Confirmed. Spiritual threshold exceeded.",
+                        "Trial Completed.")));
 
         WorldTrialRegistry.register(new WorldTrial("void_walker", "Trial of the Void Walker",
-                EnumSet.of(WorldTrial.TrialType.Y_LEVEL), 1, 50000, "-10000", p -> {
-            VoiceOfTheWorld.delayedAnnouncement(p, VoiceOfTheWorld.Priority.ACQUISITION, "Notice.",
-                    "Confirmed. Survival in the Non-Existent Space verified.",
-                    "Trial Completed.");
-        }));
+                EnumSet.of(WorldTrial.TrialType.Y_LEVEL), 1, 50000, "-10000", p ->
+                VoiceOfTheWorld.delayedAnnouncement(p, VoiceOfTheWorld.Priority.ACQUISITION, "Notice.",
+                        "Confirmed. Survival in the Non-Existent Space verified.",
+                        "Trial Completed.")));
 
         WorldTrialRegistry.register(new WorldTrial("observer", "Trial of the World Observer",
-                EnumSet.of(WorldTrial.TrialType.STILLNESS), 144000, 40000, "", p -> {
-            VoiceOfTheWorld.delayedAnnouncement(p, VoiceOfTheWorld.Priority.ACQUISITION, "Notice.",
-                    "Confirmed. Ego has remained static while mind accelerated.");
-        }));
+                EnumSet.of(WorldTrial.TrialType.STILLNESS), 144000, 40000, "", p ->
+                VoiceOfTheWorld.delayedAnnouncement(p, VoiceOfTheWorld.Priority.ACQUISITION, "Notice.",
+                        "Confirmed. Ego has remained static while mind accelerated.")));
     }
 
     public static void clearActiveTrial(ServerPlayer player) {
