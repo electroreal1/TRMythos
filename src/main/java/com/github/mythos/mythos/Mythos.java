@@ -62,7 +62,6 @@ public class Mythos {
 
         // 2. Common Handlers (No client imports in these!)
         MinecraftForge.EVENT_BUS.register(CrimsonTyrantHandler.class);
-        MinecraftForge.EVENT_BUS.register(CarnageHandler.class);
         MinecraftForge.EVENT_BUS.register(KhaosHandler.class);
 
         MinecraftForge.EVENT_BUS.register(this);

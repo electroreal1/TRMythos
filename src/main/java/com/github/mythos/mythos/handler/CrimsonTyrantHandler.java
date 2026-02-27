@@ -2,6 +2,7 @@ package com.github.mythos.mythos.handler;
 
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
+import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.entity.CharybdisEntity;
 import com.github.manasmods.tensura.entity.IfritEntity;
@@ -51,8 +52,7 @@ public class CrimsonTyrantHandler {
         if (!(attackerEntity instanceof Player player)) return;
         if (player.level.isClientSide) return;
 
-        SkillStorage attackerStorage = SkillAPI.getSkillsFrom(player);
-        if (attackerStorage == null || attackerStorage.getSkill(Skills.CRIMSON_TYRANT.get()).isEmpty()) return;
+        if (!SkillUtils.hasSkill(attackerEntity, Skills.CRIMSON_TYRANT.get()) || !SkillUtils.hasSkill(attackerEntity, Skills.CARNAGE.get())) return;
 
         // --- Track kill streak ---
         int streak = player.getPersistentData().getInt("TyrantKillStreak") + 1;
