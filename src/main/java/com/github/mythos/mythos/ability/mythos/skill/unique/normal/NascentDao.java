@@ -95,7 +95,6 @@ public class NascentDao extends Skill {
         }
 
 
-        instance.setCoolDown(5);
         SkillHelper.gainMaxAP(entity, epGained / 2f);
         SkillHelper.gainMaxMP(entity, epGained / 2f);
     }

@@ -162,7 +162,6 @@ public class OriginDao extends Skill {
             return;
         }
 
-        instance.setCoolDown(5);
         SkillHelper.gainMaxAP(entity, epGained / 2f);
         SkillHelper.gainMaxMP(entity, epGained / 2f);
     }
