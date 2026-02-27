@@ -5,6 +5,7 @@ import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
 import com.github.manasmods.manascore.api.skills.event.RemoveSkillEvent;
+import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.ability.magic.Magic;
@@ -33,6 +34,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.ServerStatsCounter;
 import net.minecraft.stats.StatType;
 import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
@@ -228,4 +230,25 @@ public class ReincarnatorHandler {
         }
     }
 
+    @SubscribeEvent
+    public static void MemoryShards(UnlockSkillEvent event) {
+        Entity entity = event.getEntity();
+        if (!(entity instanceof Player player)) return;
+        if (SkillUtils.hasSkill(player, Skills.REINCARNATOR.get())) {
+            if (player.getRandom().nextInt(10) == 0) {
+                CompoundTag data = player.getPersistentData();
+
+                int currentShards = data.getInt("MemoryShards");
+                data.putInt("MemoryShards", currentShards + 1);
+
+                player.displayClientMessage(Component.literal("You have obtained a Memory Shard!")
+                        .withStyle(ChatFormatting.BLUE, ChatFormatting.BOLD), true);
+
+                player.level.playSound(null, player.blockPosition(),
+                        SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.PLAYERS, 1.0f, 1.2f);
+
+
+            }
+        }
+    }
 }

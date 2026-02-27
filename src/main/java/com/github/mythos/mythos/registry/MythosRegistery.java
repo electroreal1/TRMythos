@@ -7,7 +7,7 @@ import com.github.mythos.mythos.registry.dimensions.MythosDimensions;
 import com.github.mythos.mythos.registry.menu.MythosMenuTypes;
 import com.github.mythos.mythos.registry.skill.FusedSkills;
 import com.github.mythos.mythos.registry.skill.Skills;
-import com.github.mythos.mythos.voiceoftheworld.TrialDefinitions;
+import com.github.mythos.mythos.voiceoftheworld.TrialManager;
 import net.minecraftforge.eventbus.api.IEventBus;
 
 public class MythosRegistery {
@@ -29,7 +29,7 @@ public class MythosRegistery {
         //modEventBus.addListener(MythosClient::clientSetup);
 
         // trials and voice of the world
-        TrialDefinitions.init();
+        TrialManager.init();
 
     }
 

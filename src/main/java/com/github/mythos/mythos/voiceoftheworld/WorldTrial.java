@@ -65,9 +65,7 @@ public class WorldTrial {
         if (tag.getBoolean("Trial_Complete_" + this.id)) return;
 
         if (activeTrial.isEmpty()) {
-            if (TrialManager.initiateTrial(player, this.id)) {
-                VoiceOfTheWorld.delayedAnnouncement(player, "Notice.", "Hidden Condition met.", "Trial: [" + name + "] initiated.");
-            } else return;
+            return;
         }
 
         if (current < requirement) {
@@ -93,8 +91,6 @@ public class WorldTrial {
             onComplete.accept(player);
         }
     }
-
-
 
     String formatRequirement(int value) {
         if (id.equals("observer") || id.equals("breather") || id.equals("pacifist")) {
