@@ -1,6 +1,5 @@
 package com.github.mythos.mythos.ability.mythos.skill.ultimate;
 
-import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
@@ -12,6 +11,7 @@ import com.github.manasmods.tensura.ability.skill.extra.ThoughtAccelerationSkill
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.registry.attribute.TensuraAttributeRegistry;
+import com.github.manasmods.tensura.registry.blocks.TensuraBlocks;
 import com.github.manasmods.tensura.registry.items.TensuraMobDropItems;
 import com.github.mythos.mythos.registry.skill.Skills;
 import com.github.mythos.mythos.voiceoftheworld.VoiceOfTheWorld;
@@ -54,7 +54,7 @@ public class OriginDao extends Skill {
         if (currentEP < getObtainingEpCost()) {
             return false;
         }
-        return SkillUtils.isSkillMastered(player, (ManasSkill) Skills.TRUE_DAO.get());
+        return SkillUtils.isSkillMastered(player, Skills.TRUE_DAO.get());
     }
 
     @Override
@@ -113,12 +113,11 @@ public class OriginDao extends Skill {
                 DamageSource damageSource = event.getSource();
                 if (!damageSource.isBypassInvul() && !damageSource.isMagic()) {
                     Entity var5 = damageSource.getDirectEntity();
-                    if (var5 instanceof LivingEntity) {
-                        LivingEntity entity = (LivingEntity)var5;
+                    if (var5 instanceof LivingEntity entity) {
                         double dodgeChance = 0.5;
 
                         if (!(entity.getRandom().nextDouble() >= dodgeChance)) {
-                            entity.getLevel().playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_WEAK, SoundSource.PLAYERS, 2.0F, 1.0F);
+                            entity.getLevel().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_WEAK, SoundSource.PLAYERS, 2.0F, 1.0F);
                             event.setCanceled(true);
                         }
                     }
@@ -133,18 +132,30 @@ public class OriginDao extends Skill {
         ItemStack held = player.getMainHandItem();
         Item item = held.getItem();
 
-        int epGained = 0;
+        int epGained;
 
         if (item == TensuraMobDropItems.LOW_QUALITY_MAGIC_CRYSTAL.get()) {
-            epGained = 40;
+            epGained = 200;
             this.addMasteryPoint(instance, entity);
             held.shrink(1);
         } else if (item == TensuraMobDropItems.MEDIUM_QUALITY_MAGIC_CRYSTAL.get()) {
-            epGained = 120;
+            epGained = 1200;
             this.addMasteryPoint(instance, entity);
             held.shrink(1);
         } else if (item == TensuraMobDropItems.HIGH_QUALITY_MAGIC_CRYSTAL.get()) {
-            epGained = 240;
+            epGained = 4800;
+            this.addMasteryPoint(instance, entity);
+            held.shrink(1);
+        } else if (item == TensuraBlocks.LOW_QUALITY_MAGIC_CRYSTAL_BLOCK.get().asItem()) {
+            epGained = 1800;
+            this.addMasteryPoint(instance, entity);
+            held.shrink(1);
+        } else if (item == TensuraBlocks.MEDIUM_QUALITY_MAGIC_CRYSTAL_BLOCK.get().asItem()) {
+            epGained = 10800;
+            this.addMasteryPoint(instance, entity);
+            held.shrink(1);
+        } else if (item == TensuraBlocks.HIGH_QUALITY_MAGIC_CRYSTAL_BLOCK.get().asItem()) {
+            epGained = 43200;
             this.addMasteryPoint(instance, entity);
             held.shrink(1);
         } else {
@@ -152,7 +163,7 @@ public class OriginDao extends Skill {
         }
 
         instance.setCoolDown(5);
-        SkillHelper.gainMaxAP(entity, epGained / 2);
-        SkillHelper.gainMaxMP(entity, epGained / 2);
+        SkillHelper.gainMaxAP(entity, epGained / 2f);
+        SkillHelper.gainMaxMP(entity, epGained / 2f);
     }
 }

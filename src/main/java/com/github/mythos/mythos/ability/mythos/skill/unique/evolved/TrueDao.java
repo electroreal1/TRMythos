@@ -1,6 +1,5 @@
 package com.github.mythos.mythos.ability.mythos.skill.unique.evolved;
 
-import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.event.UnlockSkillEvent;
 import com.github.manasmods.tensura.ability.SkillHelper;
@@ -10,6 +9,7 @@ import com.github.manasmods.tensura.ability.skill.extra.ThoughtAccelerationSkill
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.registry.attribute.TensuraAttributeRegistry;
+import com.github.manasmods.tensura.registry.blocks.TensuraBlocks;
 import com.github.manasmods.tensura.registry.items.TensuraMobDropItems;
 import com.github.mythos.mythos.registry.skill.Skills;
 import com.github.mythos.mythos.voiceoftheworld.VoiceOfTheWorld;
@@ -42,7 +42,7 @@ public class TrueDao extends Skill {
         if (currentEP < getObtainingEpCost()) {
             return false; // not enough EP
         }
-        return SkillUtils.isSkillMastered(player, (ManasSkill) Skills.AWAKENED_DAO.get());
+        return SkillUtils.isSkillMastered(player, Skills.AWAKENED_DAO.get());
     }
 
     @Override
@@ -105,7 +105,7 @@ public class TrueDao extends Skill {
         ItemStack held = player.getMainHandItem();
         Item item = held.getItem();
 
-        int epGained = 0;
+        int epGained;
 
         if (item == TensuraMobDropItems.LOW_QUALITY_MAGIC_CRYSTAL.get()) {
             epGained = 40;
@@ -119,12 +119,24 @@ public class TrueDao extends Skill {
             epGained = 240;
             this.addMasteryPoint(instance, entity);
             held.shrink(1);
+        } else if (item == TensuraBlocks.LOW_QUALITY_MAGIC_CRYSTAL_BLOCK.get().asItem()) {
+            epGained = 360;
+            this.addMasteryPoint(instance, entity);
+            held.shrink(1);
+        } else if (item == TensuraBlocks.MEDIUM_QUALITY_MAGIC_CRYSTAL_BLOCK.get().asItem()) {
+            epGained = 1080;
+            this.addMasteryPoint(instance, entity);
+            held.shrink(1);
+        } else if (item == TensuraBlocks.HIGH_QUALITY_MAGIC_CRYSTAL_BLOCK.get().asItem()) {
+            epGained = 2160;
+            this.addMasteryPoint(instance, entity);
+            held.shrink(1);
         } else {
             return;
         }
 
         instance.setCoolDown(5);
-        SkillHelper.gainMaxAP(entity, epGained / 2);
-        SkillHelper.gainMaxMP(entity, epGained / 2);
+        SkillHelper.gainMaxAP(entity, epGained / 2f);
+        SkillHelper.gainMaxMP(entity, epGained / 2f);
     }
 }
