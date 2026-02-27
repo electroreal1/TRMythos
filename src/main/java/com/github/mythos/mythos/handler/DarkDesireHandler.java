@@ -24,7 +24,7 @@ public class DarkDesireHandler {
         ManasSkillInstance instance = SkillUtils.getSkillOrNull(user, Skills.KHONSU.get());
 
         if (instance != null && instance.getOrCreateTag().getBoolean("DarkDesireListening")) {
-            event.setCanceled(true);
+            event.setMessage(Component.empty());
 
             String targetName = event.getRawText().trim();
             CompoundTag tag = instance.getOrCreateTag();
@@ -44,9 +44,7 @@ public class DarkDesireHandler {
                 double victimMP = TensuraEPCapability.getEP(victim);
 
                 if (victimMP < (userMP * 0.8)) {
-                    EntityDamageSource khonsuPhysical = new EntityDamageSource("khonsu_dark_desire", user);
-                    khonsuPhysical.bypassArmor();
-                    victim.die(khonsuPhysical);
+                    victim.die(EntityDamageSource.GENERIC);
                     victim.level.playSound(null, victim.blockPosition(), SoundEvents.BELL_BLOCK, SoundSource.PLAYERS, 1.0F, 0.1F);
 
                     instance.setMastery(instance.getSkill().getMaxMastery() / 2);
