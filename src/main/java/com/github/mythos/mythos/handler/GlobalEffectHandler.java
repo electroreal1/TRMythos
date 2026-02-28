@@ -405,9 +405,8 @@ public class GlobalEffectHandler {
         PoseStack poseStack = event.getPoseStack();
         Vec3 camera = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
 
-        player.level.getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(20), e -> e != player).forEach(target -> {
-            renderPredictionLine(target, poseStack, camera);
-        });
+        player.level.getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(20), e -> e != player).forEach(target ->
+                renderPredictionLine(target, poseStack, camera));
     }
 
     private static void renderPredictionLine(LivingEntity target, PoseStack poseStack, Vec3 camera) {
