@@ -108,6 +108,7 @@ public class Skills {
     public static final RegistryObject<ShadowAvengerSkill> SHADOW_AVENGER;
     public static final RegistryObject<WorldScapegoatSkill> WORLDS_SCAPEGOAT;
     public static final RegistryObject<TestSkill> TEST_SKILL;
+    public static final RegistryObject<ContagionSkill> CONTAGION;
 
     // vassal
     public static final RegistryObject<FoundationSkill> FOUNDATION;
@@ -217,6 +218,7 @@ public class Skills {
         SHADOW_AVENGER = registery.register("shadow_avenger", () -> new ShadowAvengerSkill(Skill.SkillType.UNIQUE));
         WORLDS_SCAPEGOAT = registery.register("worlds_scapegoat", () -> new WorldScapegoatSkill(Skill.SkillType.UNIQUE));
         TEST_SKILL = registery.register("test", () -> new TestSkill(Skill.SkillType.UNIQUE));
+        CONTAGION = registery.register("contagion", ContagionSkill::new);
 
         // vassal series
         UNITY = registery.register("unity", () -> new UnitySkill(Skill.SkillType.UNIQUE));

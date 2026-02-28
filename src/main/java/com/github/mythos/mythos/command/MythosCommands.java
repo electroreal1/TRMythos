@@ -2,9 +2,11 @@ package com.github.mythos.mythos.command;
 
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
+import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.mythos.mythos.config.MythosSkillsConfig;
+import com.github.mythos.mythos.handler.ContagionHandler;
 import com.github.mythos.mythos.handler.GodClassHandler;
 import com.github.mythos.mythos.networking.MythosNetwork;
 import com.github.mythos.mythos.networking.play2server.ShaderPacket;
@@ -172,7 +174,6 @@ public class MythosCommands {
                                                 }))))
 
                         .requires(source -> source.hasPermission(4))
-                        // Clear
                         .then(Commands.literal("clear")
                                 .then(Commands.argument("target", EntityArgument.player())
                                         .executes(context -> {
@@ -339,7 +340,6 @@ public class MythosCommands {
                         )
                 )
 
-                // ADMIN COMMANDS
 
                 .then(Commands.literal("inspect")
                         .requires(source -> source.hasPermission(4))
@@ -450,7 +450,8 @@ public class MythosCommands {
                                             double result = Math.max(0, TensuraPlayerCapability.getBaseMagicule(target) - DoubleArgumentType.getDouble(context, "amount"));
                                             TensuraPlayerCapability.getFrom(target).ifPresent((cap) -> {
                                                 cap.setBaseMagicule(result, target);
-                                            });                                            context.getSource().sendSuccess(Component.literal("§c[EP] §fReduced MP for " + target.getScoreboardName()), true);
+                                            });
+                                            context.getSource().sendSuccess(Component.literal("§c[EP] §fReduced MP for " + target.getScoreboardName()), true);
                                             TensuraPlayerCapability.sync(target);
                                             return 1;
                                         })))
@@ -554,7 +555,6 @@ public class MythosCommands {
                 .then(Commands.literal("world")
                         .then(Commands.literal("shaders")
                                 .requires(source -> source.hasPermission(4))
-                                // 1. TINT COMMAND
                                 .then(Commands.literal("tint")
                                         .then(Commands.argument("r", IntegerArgumentType.integer(0, 255))
                                                 .then(Commands.argument("g", IntegerArgumentType.integer(0, 255))
@@ -625,11 +625,34 @@ public class MythosCommands {
                                         }))
 
                                         .then(Commands.literal("reset").executes(context -> {
-                                            for (ServerPlayer player : context.getSource().getServer().getPlayerList().getPlayers()) {
-                                                MythosNetwork.sendToPlayer(new ShaderPacket("none", 1.0f, 1.0f, 1.0f), player);
+                                                    for (ServerPlayer player : context.getSource().getServer().getPlayerList().getPlayers()) {
+                                                        MythosNetwork.sendToPlayer(new ShaderPacket("none", 1.0f, 1.0f, 1.0f), player);
+                                                    }
+                                                    return 1;
+                                                })
+                                        )
+                                )
+                        )
+                )
+                .then(Commands.literal("contagion")
+                        .requires(source -> source.hasPermission(0))
+                        .then(Commands.literal("mutate")
+                                .then(Commands.argument("path", StringArgumentType.word())
+                                        .executes(context -> {
+                                            ServerPlayer player = context.getSource().getPlayerOrException();
+
+                                            boolean hasSkill = SkillUtils.hasSkill(player, Skills.CONTAGION.get());
+                                            if (!hasSkill && !context.getSource().hasPermission(2)) {
+                                                return 0;
                                             }
+
+                                            String path = StringArgumentType.getString(context, "path");
+                                            ContagionHandler.handleMutationLogic(player, path);
                                             return 1;
-                                        })))))
+                                        })
+                                )
+                        )
+                )
         );
     }
 }

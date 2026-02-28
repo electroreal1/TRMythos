@@ -23,7 +23,7 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.Optional;
 import java.util.Random;
 @Mod.EventBusSubscriber(modid = "trmythos")
-public class MythosUtils  {
+public class MythosUtils {
 
     public MythosUtils() {
     }

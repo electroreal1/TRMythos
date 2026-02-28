@@ -20,7 +20,9 @@
     "races.RaceMixin",
     "races.VampireEvoMixin"
   ],
-  "client": [],
+  "client": [
+    "DeceptionInversion"
+  ],
   "injectors": {
     "defaultRequire": 1
   }
