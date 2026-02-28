@@ -1,21 +1,30 @@
 package com.github.mythos.mythos.handler;
 
+import com.github.manasmods.tensura.ability.SkillUtils;
+import com.github.manasmods.tensura.util.damage.TensuraDamageSources;
 import com.github.mythos.mythos.Mythos;
 import com.github.mythos.mythos.registry.MythosMobEffects;
+import com.github.mythos.mythos.registry.skill.Magics;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.*;
@@ -24,9 +33,9 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 @Mod.EventBusSubscriber(modid = Mythos.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class GlobalEffectHandler {
@@ -36,6 +45,8 @@ public class GlobalEffectHandler {
     private static int soundLoopTimer = 0;
     private static final ResourceLocation STRONG_SHADER = new ResourceLocation("minecraft", "shaders/post/blobs.json");
     private static int lastActiveAmplifier = -1;
+    private static final Map<UUID, Vec3> FORCED_PATHS = new HashMap<>();
+    private static final Map<UUID, UUID> OVERLOAD_TARGETS = new HashMap<>();
 
     @SubscribeEvent
     public static void onCameraAngles(ViewportEvent.ComputeCameraAngles event) {
@@ -324,5 +335,106 @@ public class GlobalEffectHandler {
 
         victim.teleportTo(anchor.getX() + 0.5, anchor.getY(), anchor.getZ() + 0.5);
         victim.level.playSound(null, anchor, SoundEvents.ENDERMAN_TELEPORT, SoundSource.HOSTILE, 1.0f, 1.8f);
+    }
+
+    public static void startForcedPath(Player player, UUID targetUUID, Vec3 destination) {
+        FORCED_PATHS.put(targetUUID, destination);
+        player.level.playSound(null, player.blockPosition(), SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundSource.PLAYERS, 1.0f, 2.0f);
+    }
+
+    public static void toggleOverload(Player player, LivingEntity target) {
+        if (OVERLOAD_TARGETS.containsKey(player.getUUID())) {
+            OVERLOAD_TARGETS.remove(player.getUUID());
+        } else {
+            OVERLOAD_TARGETS.put(player.getUUID(), target.getUUID());
+        }
+    }
+
+    @SubscribeEvent
+    public static void onServerTick(TickEvent.ServerTickEvent event) {
+        if (event.phase != TickEvent.Phase.END) return;
+
+        FORCED_PATHS.entrySet().removeIf(entry -> {
+            LivingEntity victim = findEntity(entry.getKey());
+            if (victim == null || !victim.isAlive() || victim.distanceToSqr(entry.getValue()) < 1.0) return true;
+
+            Vec3 dir = entry.getValue().subtract(victim.position()).normalize().scale(0.6);
+            victim.setDeltaMovement(dir.x, victim.getDeltaMovement().y, dir.z);
+            victim.hurtMarked = true;
+            return false;
+        });
+
+        OVERLOAD_TARGETS.forEach((casterUUID, victimUUID) -> {
+            Player caster = findCaster(casterUUID);
+            LivingEntity victim = findEntity(victimUUID);
+
+            if (caster != null && victim != null) {
+                caster.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 5, 10, false, false));
+                victim.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 5, 10, false, false));
+
+                int ticks = victim.getPersistentData().getInt("LaplaceTicks") + 1;
+                victim.getPersistentData().putInt("LaplaceTicks", ticks);
+
+                if (ticks % 20 == 0) {
+                    float damage = (float) Math.pow(2, ticks / 20.0);
+                    victim.hurt(TensuraDamageSources.holyDamage(caster), damage);
+                }
+            }
+        });
+    }
+
+    private static LivingEntity findEntity(UUID uuid) {
+        for (var level : ServerLifecycleHooks.getCurrentServer().getAllLevels()) {
+            Entity entity = level.getEntity(uuid);
+            if (entity != null) return (LivingEntity) entity;
+        }
+        return null;
+    }
+
+    private static ServerPlayer findCaster(UUID uuid) {
+        return ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(uuid);
+    }
+
+    @SubscribeEvent
+    public static void onRenderLevel(RenderLevelStageEvent event) {
+        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES) return;
+
+        var player = Minecraft.getInstance().player;
+        if (player == null || !SkillUtils.hasSkill(player, Magics.LAPLACES_DEMON.get())) return;
+
+        PoseStack poseStack = event.getPoseStack();
+        Vec3 camera = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
+
+        player.level.getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(20), e -> e != player).forEach(target -> {
+            renderPredictionLine(target, poseStack, camera);
+        });
+    }
+
+    private static void renderPredictionLine(LivingEntity target, PoseStack poseStack, Vec3 camera) {
+        Vec3 pos = target.getPosition(Minecraft.getInstance().getFrameTime());
+        Vec3 velocity = target.getDeltaMovement();
+        Vec3 predicted = pos.add(velocity.x * 40, velocity.y * 40, velocity.z * 40);
+
+        Tesselator tesselator = Tesselator.getInstance();
+        BufferBuilder buffer = tesselator.getBuilder();
+
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        RenderSystem.disableTexture();
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+
+        poseStack.pushPose();
+        poseStack.translate(-camera.x, -camera.y, -camera.z);
+
+        buffer.begin(VertexFormat.Mode.DEBUG_LINES, DefaultVertexFormat.POSITION_COLOR);
+
+        buffer.vertex(poseStack.last().pose(), (float)pos.x, (float)pos.y + 1.0f, (float)pos.z).color(0, 255, 255, 255).endVertex();
+        buffer.vertex(poseStack.last().pose(), (float)predicted.x, (float)predicted.y + 1.0f, (float)predicted.z).color(0, 255, 255, 50).endVertex();
+
+        tesselator.end();
+        poseStack.popPose();
+
+        RenderSystem.enableTexture();
+        RenderSystem.disableBlend();
     }
 }
