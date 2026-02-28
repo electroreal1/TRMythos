@@ -6,6 +6,7 @@ import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.mythos.mythos.ability.mythos.skill.extra.AutomaticHakiCoatSkill;
 import com.github.mythos.mythos.ability.mythos.skill.extra.SpatialStorageSkill;
 import com.github.mythos.mythos.ability.mythos.skill.extra.ThunderRainSkill;
+import com.github.mythos.mythos.ability.mythos.skill.kanakhat.FleshOfKanakhtSkill;
 import com.github.mythos.mythos.ability.mythos.skill.reincarnatorline.Reincarnator;
 import com.github.mythos.mythos.ability.mythos.skill.reincarnatorline.Rememberance;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.*;
@@ -109,6 +110,7 @@ public class Skills {
     public static final RegistryObject<WorldScapegoatSkill> WORLDS_SCAPEGOAT;
     public static final RegistryObject<TestSkill> TEST_SKILL;
     public static final RegistryObject<ContagionSkill> CONTAGION;
+    public static final RegistryObject<FleshOfKanakhtSkill> FLESH_OF_KANAKHT;
 
     // vassal
     public static final RegistryObject<FoundationSkill> FOUNDATION;
@@ -219,6 +221,7 @@ public class Skills {
         WORLDS_SCAPEGOAT = registery.register("worlds_scapegoat", () -> new WorldScapegoatSkill(Skill.SkillType.UNIQUE));
         TEST_SKILL = registery.register("test", () -> new TestSkill(Skill.SkillType.UNIQUE));
         CONTAGION = registery.register("contagion", ContagionSkill::new);
+        FLESH_OF_KANAKHT = registery.register("flesh", FleshOfKanakhtSkill::new);
 
         // vassal series
         UNITY = registery.register("unity", () -> new UnitySkill(Skill.SkillType.UNIQUE));

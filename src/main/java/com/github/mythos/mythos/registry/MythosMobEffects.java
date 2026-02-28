@@ -94,6 +94,8 @@ public class MythosMobEffects {
     public static final RegistryObject<MobEffect> EVIL_OF_HUMANITY = registry.register("evil_of_humanity", EvilOfHumanityEffect::new);
     public static final RegistryObject<MobEffect> PATHOGEN = registry.register("pathogen", PathogenEffect::new);
     public static final RegistryObject<MobEffect> PATHOGEN_DECEPTION = registry.register("pathogen_deception", PathogenDeception::new);
+    public static final RegistryObject<MobEffect> FLESH = registry.register("flesh", () ->
+            new RotEffect(MobEffectCategory.HARMFUL, (new Color(255, 0, 0))));
     public static void init(IEventBus modEventBus) {
         registry.register(modEventBus);
     }
