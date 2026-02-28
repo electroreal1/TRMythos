@@ -6,6 +6,7 @@ import com.github.mythos.mythos.networking.MythosNetwork;
 import com.github.mythos.mythos.registry.dimensions.MythosDimensions;
 import com.github.mythos.mythos.registry.menu.MythosMenuTypes;
 import com.github.mythos.mythos.registry.skill.FusedSkills;
+import com.github.mythos.mythos.registry.skill.Magics;
 import com.github.mythos.mythos.registry.skill.Skills;
 import com.github.mythos.mythos.voiceoftheworld.TrialManager;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -16,6 +17,7 @@ public class MythosRegistery {
 
     public static void register(IEventBus modEventBus) {
         Skills.init(modEventBus);
+        Magics.init(modEventBus);
         ConfluenceUniques.init(modEventBus);
         FusedSkills.init(modEventBus);
         MythosMobEffects.register(modEventBus);

@@ -129,6 +129,8 @@ public class Skills {
     public static final RegistryObject<SpatialStorageSkill> SPATIAL_STORAGE_SKILL;
     public static final RegistryObject<ThunderRainSkill> THUNDER_RAIN;
 
+    // Magics
+
     public Skills() {
     }
 
