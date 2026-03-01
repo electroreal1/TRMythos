@@ -63,13 +63,13 @@ public class TrialManager {
                         "Trial Completed.")));
 
         WorldTrialRegistry.register(new WorldTrial("pacifist", "Trial of the Pacifist",
-                EnumSet.of(WorldTrial.TrialType.PASSIVE), 240000, 30000, "", p ->
+                EnumSet.of(WorldTrial.TrialType.PASSIVE), 240000, 3000, "", p ->
                 VoiceOfTheWorld.delayedAnnouncement(p, VoiceOfTheWorld.Priority.ACQUISITION, "Notice.",
                         "Confirmed. Inner peace has stabilized the spiritual body.",
                         "Trial Completed.")));
 
         WorldTrialRegistry.register(new WorldTrial("stability", "Trial of the Soul Stability",
-                EnumSet.of(WorldTrial.TrialType.EP_THRESHOLD), 1, 10000, "", p ->
+                EnumSet.of(WorldTrial.TrialType.EP_THRESHOLD), 1, 1000, "", p ->
                 VoiceOfTheWorld.delayedAnnouncement(p, VoiceOfTheWorld.Priority.ACQUISITION, "Notice.",
                         "Confirmed. Spiritual threshold exceeded.",
                         "Trial Completed.")));
