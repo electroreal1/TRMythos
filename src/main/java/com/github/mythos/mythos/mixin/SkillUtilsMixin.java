@@ -230,6 +230,8 @@ public abstract class SkillUtilsMixin {
         }
     }
 
+
+
     @ModifyReturnValue(method = {"getMagiculeGain"}, at = {@At("RETURN")}, remap = false)
     private static float MythosMagiculeGain(float original, Player player, boolean majin) {
         if (hasSkill(player, Skills.NASCENT_DAO.get())) {
