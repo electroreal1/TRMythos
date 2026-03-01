@@ -6,7 +6,6 @@ import com.github.mythos.mythos.registry.skill.Skills;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
@@ -29,28 +28,28 @@ public class KanakhtHandler {
         float healthPct = player.getHealth() / player.getMaxHealth();
 
         if (healthPct < 0.10f) {
-            enterFleeMode(player);
+          //  enterFleeMode(player);
             return;
-        }
+        } else {
 
-        List<LivingEntity> targets = player.level.getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(20),
-                e -> e != player && e.isAlive() && TensuraEPCapability.getEP(e) < (ep * 2));
+            List<LivingEntity> targets = player.level.getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(20),
+                    e -> e != player && e.isAlive() && TensuraEPCapability.getEP(e) < (ep * 2));
 
-        if (!targets.isEmpty()) {
-            LivingEntity nearest = targets.get(0);
-            forceAttack(player, nearest);
+            if (!targets.isEmpty()) {
+                LivingEntity nearest = targets.get(0);
+                forceAttack(player, nearest);
+            }
         }
     }
 
-    private static void enterFleeMode(Player player) {
-        player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 20, 3, false, false));
-        player.addEffect(new MobEffectInstance(MobEffects.JUMP, 20, 2, false, false));
-
-        List<LivingEntity> enemies = player.level.getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(10), e -> e != player);
-        Vec3 fleeDir = player.position().subtract(enemies.get(0).position()).normalize();
-        player.setDeltaMovement(fleeDir.x * 0.5, 0.2, fleeDir.z * 0.5);
-
-    }
+//    private static void enterFleeMode(Player player) {
+//        player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 20, 3, false, false));
+//        player.addEffect(new MobEffectInstance(MobEffects.JUMP, 20, 2, false, false));
+//
+//        List<LivingEntity> enemies = player.level.getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(10), e -> e != player);
+//        Vec3 fleeDir = player.position().subtract(enemies.get(0).position()).normalize();
+//        player.setDeltaMovement(fleeDir.x * 0.5, 0.2, fleeDir.z * 0.5);
+//    }
 
     private static void forceAttack(Player player, LivingEntity target) {
         if (player == null || target == null) return;
