@@ -54,38 +54,36 @@ public class NightsThiefSkill extends Skill {
 
         for (ItemEntity entity1 : items) {
             ItemStack stack = entity1.getItem();
-            if (stack.isEmpty()) continue;
+            if (stack.isEmpty()) {
+                return;
+            }
         }
 
         if (instance.isToggled()) {
             entity.addEffect(new MobEffectInstance(MysticismMobEffects.TREASURE_DETECTION.get(), 10, 1, false, false, false));
-        }
 
-//        TensuraPlayerCapability.getFrom(player).ifPresent((cap) -> {
-//            cap.setBlessed(true);
-//        });
-//        TensuraPlayerCapability.sync(player);
 
-        int preciousCount = 0;
-        for (ItemStack stack : player.getInventory().items) {
-            if (isPrecious(stack)) {
-                preciousCount += stack.getCount();
+            int preciousCount = 0;
+            for (ItemStack stack : player.getInventory().items) {
+                if (isPrecious(stack)) {
+                    preciousCount += stack.getCount();
+                }
             }
-        }
 
-        double damageBonus = Math.min(0.1 * preciousCount, 300);
-        double armorBonus  = Math.min(preciousCount, 100);
+            double damageBonus = Math.min(0.1 * preciousCount, 300);
+            double armorBonus = Math.min(preciousCount, 100);
 
-        if (damageBonus > 0) {
-            Objects.requireNonNull(player.getAttribute(Attributes.ATTACK_DAMAGE)).addTransientModifier(
-                    new AttributeModifier(DAMAGE_MODIFIER_ID, "HeavyPouchDamage", damageBonus, AttributeModifier.Operation.ADDITION)
-            );
-        }
+            if (damageBonus > 0) {
+                Objects.requireNonNull(player.getAttribute(Attributes.ATTACK_DAMAGE)).addTransientModifier(
+                        new AttributeModifier(DAMAGE_MODIFIER_ID, "HeavyPouchDamage", damageBonus, AttributeModifier.Operation.ADDITION)
+                );
+            }
 
-        if (armorBonus > 0) {
-            Objects.requireNonNull(player.getAttribute(Attributes.ARMOR)).addTransientModifier(
-                    new AttributeModifier(ARMOR_MODIFIER_ID, "HeavyPouchArmor", armorBonus, AttributeModifier.Operation.ADDITION)
-            );
+            if (armorBonus > 0) {
+                Objects.requireNonNull(player.getAttribute(Attributes.ARMOR)).addTransientModifier(
+                        new AttributeModifier(ARMOR_MODIFIER_ID, "HeavyPouchArmor", armorBonus, AttributeModifier.Operation.ADDITION)
+                );
+            }
         }
     }
 
@@ -96,9 +94,7 @@ public class NightsThiefSkill extends Skill {
         boolean isOre = stack.getTags().anyMatch(tag -> tag.location().toString().equals("forge:ores")) ||
                 stack.getTags().anyMatch(tag -> tag.location().toString().equals("forge:ingot"));
 
-        return isOre || item == Items.DIAMOND
-                || item == Items.GOLD_INGOT
-                || item == Items.EMERALD;
+        return isOre || item == Items.DIAMOND || item == Items.GOLD_INGOT || item == Items.EMERALD;
     }
 
     @Override
@@ -112,7 +108,6 @@ public class NightsThiefSkill extends Skill {
         else
             return (instance.getMode() == 3) ? 1 : (instance.getMode() + 1);
     }
-
 
     @Override
     public void onPressed(ManasSkillInstance instance, LivingEntity entity) {
