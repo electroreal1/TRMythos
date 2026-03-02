@@ -49,11 +49,6 @@ public class AwakenedDao extends Skill {
     }
 
     @Override
-    public int getMaxMastery() {
-        return 4000;
-    }
-
-    @Override
     public boolean canBeToggled(ManasSkillInstance instance, LivingEntity entity) {
         return true;
     }

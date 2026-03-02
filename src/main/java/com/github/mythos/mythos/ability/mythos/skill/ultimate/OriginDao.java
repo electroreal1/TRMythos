@@ -43,11 +43,6 @@ public class OriginDao extends Skill {
         return 1000000;
     }
 
-    @Override
-    public int getMaxMastery() {
-        return 6000;
-    }
-
     public boolean meetEPRequirement(Player player, double newEP) {
         if (!EnableUltimateSkillObtainment()) return false;
         double currentEP = TensuraEPCapability.getCurrentEP(player);

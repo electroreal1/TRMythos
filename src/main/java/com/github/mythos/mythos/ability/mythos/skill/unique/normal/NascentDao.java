@@ -27,11 +27,6 @@ public class NascentDao extends Skill {
         return 50000;
     }
 
-    @Override
-    public int getMaxMastery() {
-        return 3000;
-    }
-
     public ResourceLocation getSkillIcon() {
         return new ResourceLocation("trmythos", "textures/skill/unique/nascent_dao.png");
     }

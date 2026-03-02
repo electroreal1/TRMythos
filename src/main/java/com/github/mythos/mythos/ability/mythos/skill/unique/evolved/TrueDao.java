@@ -54,11 +54,6 @@ public class TrueDao extends Skill {
     }
 
     @Override
-    public int getMaxMastery() {
-        return 5000;
-    }
-
-    @Override
     public boolean canBeToggled(ManasSkillInstance instance, LivingEntity entity) {
         return true;
     }
