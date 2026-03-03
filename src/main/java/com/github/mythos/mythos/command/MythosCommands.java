@@ -615,6 +615,20 @@ public class MythosCommands {
                             return 1;
                         }))
 
+                        .then(Commands.literal("starfall").executes(context -> {
+                            for (ServerPlayer player : context.getSource().getServer().getPlayerList().getPlayers()) {
+                                VoiceOfTheWorld.delayedAnnouncement(player, VoiceOfTheWorld.Priority.WORLD,
+                                        "§9[ STARFALL CONVERGENCE ]", "§bCelestial bodies aligned.", "§fDrawing power from the Outer Cosmos.");
+
+                                player.playNotifySound(SoundEvents.AMETHYST_BLOCK_PLACE, SoundSource.MASTER, 1.0f, 0.5f);
+                                player.playNotifySound(SoundEvents.ILLUSIONER_CAST_SPELL, SoundSource.MASTER, 0.7f, 1.5f);
+
+                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/twinkle.json", 1.0f, 1.0f, 1.0f), player);
+                                VoiceOfTheWorld.screenShake(player, 100, 1);
+                            }
+                            return 1;
+                        }))
+
                         .then(Commands.literal("glitch").executes(context -> {
                             for (ServerPlayer player : context.getSource().getServer().getPlayerList().getPlayers()) {
                                 VoiceOfTheWorld.delayedAnnouncement(player, VoiceOfTheWorld.Priority.WORLD,
@@ -785,7 +799,6 @@ public class MythosCommands {
                                                                                 MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/master_sky.json", r, g, b), p);
                                                                             }
 
-                                                                            context.getSource().sendSuccess(Component.literal("§b[Mythos] Sky/Fog tint set."), true);
                                                                             return 1;
                                                                         })))))
 
@@ -797,6 +810,22 @@ public class MythosCommands {
                                                 })
                                         )
                                 )
+                                .then(Commands.argument("r", IntegerArgumentType.integer(0, 255))
+                                        .then(Commands.argument("g", IntegerArgumentType.integer(0, 255))
+                                                .then(Commands.argument("b", IntegerArgumentType.integer(0, 255))
+                                                        .then(Commands.argument("targets", EntityArgument.players())
+                                                                .executes(context -> {
+                                                                    float r = IntegerArgumentType.getInteger(context, "r") / 255.0f;
+                                                                    float g = IntegerArgumentType.getInteger(context, "g") / 255.0f;
+                                                                    float b = IntegerArgumentType.getInteger(context, "b") / 255.0f;
+
+                                                                    var players = EntityArgument.getPlayers(context, "targets");
+                                                                    for (ServerPlayer p : players) {
+                                                                        MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/twinkle.json", 1.0f, 1.0f, 1.0f), p);
+                                                                    }
+
+                                                                    return 1;
+                                                                })))))
                         )
                 )
                 .then(Commands.literal("contagion")
