@@ -50,6 +50,7 @@ import com.github.mythos.mythos.race.ValkyrieRaceLine.MaidenRace;
 import com.github.mythos.mythos.race.ValkyrieRaceLine.SoulCourierRace;
 import com.github.mythos.mythos.race.ValkyrieRaceLine.ValkyrieRace;
 import com.github.mythos.mythos.race.VampireEvoLine.*;
+import com.github.mythos.mythos.race.VoidVesselLine.EmptyBodyRace;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -177,6 +178,9 @@ public class MythosRaces {
 
     // Paper Races
     public static final ResourceLocation PAPER = new ResourceLocation(Mythos.MOD_ID, "paper");
+
+    // Void Vessel
+    public static final ResourceLocation EMPTY_BODY = new ResourceLocation(Mythos.MOD_ID, "empty_body");
     /**
      * Make sure that you register the race, otherwise it will not show up correctly in the selection menu
      * @param event
@@ -470,6 +474,11 @@ public class MythosRaces {
 //        event.register(((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get()).getRegistryKey(), helper -> {
 //            helper.register("paper", new Paper());
 //        });
+
+        // Empty Body
+        event.register(TensuraRaces.RACE_REGISTRY.get().getRegistryKey(), helper -> {
+            helper.register("empty_body", new EmptyBodyRace());
+        });
     }
 
 }

@@ -123,6 +123,15 @@ public class MythosUtils {
 
     }
 
+    public static boolean isEmpty(Player player) {
+        return player.getPersistentData().getBoolean("isEmpty");
+    }
+
+    public static void setEmpty(Player player, boolean value) {
+        CompoundTag tag = player.getPersistentData();
+        tag.putBoolean("isEmpty", value);
+    }
+
     @SubscribeEvent
     public static void onServerTick(TickEvent.ServerTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
