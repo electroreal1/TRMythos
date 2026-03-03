@@ -17,6 +17,7 @@ import com.github.mythos.mythos.voiceoftheworld.WorldTrial;
 import com.github.mythos.mythos.voiceoftheworld.WorldTrialRegistry;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.*;
+import io.github.Memoires.trmysticism.registry.effects.MysticismMobEffects;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -25,6 +26,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffectInstance;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -605,6 +607,8 @@ public class MythosCommands {
                                 player.playNotifySound(SoundEvents.BELL_RESONATE, SoundSource.MASTER, 1.0f, 2.0f);
                                 player.playNotifySound(SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.MASTER, 1.5f, 0.1f);
                                 player.playNotifySound(SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.MASTER, 0.8f, 0.5f);
+
+                                player.addEffect(new MobEffectInstance(MysticismMobEffects.TIMESTOP.get(), 20, 20, false, false, false));
 
                                 MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/master_sky.json", 0.5f, 0.5f, 0.5f), player);
                             }
