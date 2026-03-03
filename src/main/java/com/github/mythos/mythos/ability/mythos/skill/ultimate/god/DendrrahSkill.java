@@ -19,6 +19,8 @@ import com.github.manasmods.tensura.registry.attribute.TensuraAttributeRegistry;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSources;
 import com.github.mythos.mythos.handler.GodClassHandler;
+import com.github.mythos.mythos.networking.MythosNetwork;
+import com.github.mythos.mythos.networking.play2server.ShaderPacket;
 import com.github.mythos.mythos.registry.skill.Skills;
 import com.github.mythos.mythos.util.MythosUtils;
 import net.minecraft.ChatFormatting;
@@ -282,12 +284,27 @@ public class DendrrahSkill extends Skill {
                     applyApocalypseEffect(mob);
                 }
 
+                for (LivingEntity player : nearbyMobs) {
+                    MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/carnage.json", 0.8f, 0.0f, 0.0f), (ServerPlayer) player);
+                }
+
                 instance.addMasteryPoint(entity);
             }
             return true;
         }
 
         return true;
+    }
+
+    @Override
+    public void onRelease(ManasSkillInstance instance, LivingEntity entity, int heldTicks) {
+        if (!(entity.level instanceof ServerLevel serverLevel)) return;
+        AABB area = entity.getBoundingBox().inflate(100);
+        List<ServerPlayer> players = serverLevel.getEntitiesOfClass(ServerPlayer.class, area);
+
+        for (ServerPlayer player : players) {
+            MythosNetwork.sendToPlayer(new ShaderPacket("none", 1.0f, 1.0f, 1.0f), player);
+        }
     }
 
     private void applyApocalypseEffect(LivingEntity target) {
