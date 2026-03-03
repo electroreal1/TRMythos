@@ -552,6 +552,7 @@ public class MythosCommands {
                             return 1;
                         }))
 
+                .requires(source -> source.hasPermission(4))
                 .then(Commands.literal("world")
                         .then(Commands.literal("scream").executes(context -> {
                             for (ServerPlayer player : context.getSource().getServer().getPlayerList().getPlayers()) {
@@ -578,7 +579,7 @@ public class MythosCommands {
                                 player.playNotifySound(SoundEvents.WARDEN_DIG, SoundSource.MASTER, 1.5f, 0.8f);
                                 player.playNotifySound(SoundEvents.DEEPSLATE_BREAK, SoundSource.MASTER, 1.2f, 0.5f);
 
-                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/master_sky.json", 0.4f, 0.3f, 0.2f), player);
+                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/tectonic.json", 0.4f, 0.3f, 0.2f), player);
 
                                 VoiceOfTheWorld.screenShake(player, 100, 8);
                             }
@@ -594,7 +595,7 @@ public class MythosCommands {
                                 player.playNotifySound(SoundEvents.ENDER_EYE_DEATH, SoundSource.MASTER, 1.0f, 0.5f);
                                 player.playNotifySound(SoundEvents.ENDERMAN_STARE, SoundSource.MASTER, 0.4f, 0.5f);
 
-                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/master_sky.json", 0.1f, 0.0f, 0.2f), player);
+                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/eclipse.json", 0.1f, 0.0f, 0.2f), player);
                             }
                             return 1;
                         }))
@@ -610,7 +611,7 @@ public class MythosCommands {
 
                                 player.addEffect(new MobEffectInstance(MysticismMobEffects.TIMESTOP.get(), 20, 20, false, false, false));
 
-                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/master_sky.json", 0.5f, 0.5f, 0.5f), player);
+                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/stasis.json", 0.5f, 0.5f, 0.5f), player);
                             }
                             return 1;
                         }))
@@ -638,7 +639,7 @@ public class MythosCommands {
                                 player.playNotifySound(SoundEvents.ENDERMAN_TELEPORT, SoundSource.MASTER, 0.8f, 2.0f);
                                 player.playNotifySound(SoundEvents.UI_BUTTON_CLICK, SoundSource.MASTER, 1.2f, 0.5f);
 
-                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/master_sky.json", 0.0f, 1.0f, 0.3f), player);
+                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/glitch.json", 1.0f, 1.0f, 1.0f), player);
 
                                 VoiceOfTheWorld.screenShake(player, 40, 10);
                             }
@@ -654,7 +655,7 @@ public class MythosCommands {
                                 player.playNotifySound(SoundEvents.RAVAGER_ROAR, SoundSource.MASTER, 0.7f, 0.2f);
                                 player.playNotifySound(SoundEvents.CONDUIT_ATTACK_TARGET, SoundSource.MASTER, 1.0f, 0.1f);
 
-                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/master_sky.json", 0.8f, 0.0f, 0.0f), player);
+                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/carnage.json", 0.8f, 0.0f, 0.0f), player);
 
                                 VoiceOfTheWorld.screenShake(player, 120, 3);
                             }
@@ -670,7 +671,7 @@ public class MythosCommands {
                                 player.playNotifySound(SoundEvents.BEACON_ACTIVATE, SoundSource.MASTER, 1.2f, 1.0f);
                                 player.playNotifySound(SoundEvents.EVOKER_PREPARE_WOLOLO, SoundSource.MASTER, 1.0f, 0.1f);
 
-                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/master_sky.json", 1.0f, 0.9f, 0.4f), player);
+                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/judgement.json", 1.0f, 0.9f, 0.4f), player);
                             }
                             return 1;
                         }))
@@ -684,7 +685,7 @@ public class MythosCommands {
                                 player.playNotifySound(SoundEvents.WITCH_CELEBRATE, SoundSource.MASTER, 0.6f, 0.1f);
                                 player.playNotifySound(SoundEvents.ILLUSIONER_MIRROR_MOVE, SoundSource.MASTER, 1.0f, 0.5f);
 
-                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/master_sky.json", 0.7f, 0.0f, 1.0f), player);
+                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/chaos.json", 0.7f, 0.0f, 1.0f), player);
 
                                 VoiceOfTheWorld.screenShake(player, 80, 12);
                             }
@@ -700,7 +701,7 @@ public class MythosCommands {
                                 player.playNotifySound(SoundEvents.GRASS_STEP, SoundSource.MASTER, 2.0f, 0.1f);
                                 player.playNotifySound(SoundEvents.AZALEA_LEAVES_PLACE, SoundSource.MASTER, 1.0f, 0.5f);
 
-                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/master_sky.json", 0.1f, 0.9f, 0.1f), player);
+                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/overgrowth.json", 0.1f, 0.9f, 0.1f), player);
                             }
                             return 1;
                         }))
@@ -714,7 +715,7 @@ public class MythosCommands {
                                 player.playNotifySound(SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.MASTER, 0.5f, 0.1f);
                                 player.playNotifySound(SoundEvents.BELL_RESONATE, SoundSource.MASTER, 1.5f, 0.5f);
 
-                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/master_sky.json", 1.0f, 0.4f, 0.0f), player);
+                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/primordial.json", 1.0f, 0.4f, 0.0f), player);
 
                                 VoiceOfTheWorld.screenShake(player, 150, 4);
                             }
@@ -730,7 +731,7 @@ public class MythosCommands {
                                 player.playNotifySound(SoundEvents.ENDERMAN_DEATH, SoundSource.MASTER, 0.5f, 0.1f);
                                 player.playNotifySound(SoundEvents.CONDUIT_DEACTIVATE, SoundSource.MASTER, 1.0f, 0.5f);
 
-                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/master_sky.json", 0.05f, 0.05f, 0.05f), player);
+                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/void.json", 0.05f, 0.05f, 0.05f), player);
                             }
                             return 1;
                         }))
@@ -744,7 +745,7 @@ public class MythosCommands {
                                 player.playNotifySound(SoundEvents.WOLF_PANT, SoundSource.MASTER, 0.2f, 0.1f);
                                 player.playNotifySound(SoundEvents.PLAYER_HURT_FREEZE, SoundSource.MASTER, 1.0f, 0.5f);
 
-                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/master_sky.json", 0.0f, 0.7f, 1.0f), player);
+                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/frostbite.json", 0.0f, 0.7f, 1.0f), player);
                             }
                             return 1;
                         }))
