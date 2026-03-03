@@ -609,7 +609,7 @@ public class MythosCommands {
                                 player.playNotifySound(SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.MASTER, 1.5f, 0.1f);
                                 player.playNotifySound(SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.MASTER, 0.8f, 0.5f);
 
-                                player.addEffect(new MobEffectInstance(MysticismMobEffects.TIMESTOP.get(), 20, 20, false, false, false));
+                                player.addEffect(new MobEffectInstance(MysticismMobEffects.TIMESTOP.get(), 200, 20, false, false, false));
 
                                 MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/stasis.json", 0.5f, 0.5f, 0.5f), player);
                             }
