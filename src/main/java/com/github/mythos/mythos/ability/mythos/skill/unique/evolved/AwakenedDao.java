@@ -8,9 +8,11 @@ import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.ability.skill.extra.ThoughtAccelerationSkill;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.registry.blocks.TensuraBlocks;
+import com.github.manasmods.tensura.registry.items.TensuraMaterialItems;
 import com.github.manasmods.tensura.registry.items.TensuraMobDropItems;
 import com.github.mythos.mythos.registry.skill.Skills;
 import com.github.mythos.mythos.voiceoftheworld.VoiceOfTheWorld;
+import io.github.Memoires.trmysticism.registry.skill.UniqueSkills;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -94,8 +96,16 @@ public class AwakenedDao extends Skill {
             epGained = 1080;
             this.addMasteryPoint(instance, entity);
             held.shrink(1);
+        } else if (item == TensuraMaterialItems.MARIONETTE_HEART.get()) {
+            epGained = 2160;
+            this.addMasteryPoint(instance, entity);
+            held.shrink(1);
         } else {
             return;
+        }
+
+        if (SkillUtils.hasSkill(entity, UniqueSkills.CULTIVATOR.get())) {
+            epGained *= 2;
         }
 
         SkillHelper.gainMaxAP(entity, epGained / 2f);

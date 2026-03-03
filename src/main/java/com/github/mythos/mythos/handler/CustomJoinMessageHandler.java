@@ -22,13 +22,12 @@ public class CustomJoinMessageHandler {
     private static final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
     public static final UUID ELECTRO = UUID.fromString("e313811f-6b1c-4aea-8211-0aaa4f9adb11");
-    public static final UUID PRIMORDIAL_ROSE = UUID.fromString("YOUR-UUID-HERE");
+    public static final UUID PRIMORDIAL_ROSE = UUID.fromString("7ee73300-fb30-4ed6-8cac-5d2ee3be2046");
 
     @SubscribeEvent
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer joiningPlayer)) return;
 
-        String name = joiningPlayer.getGameProfile().getName();
         MinecraftServer server = joiningPlayer.getServer();
         if (server == null) return;
 
