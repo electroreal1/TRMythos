@@ -122,7 +122,7 @@ public class SoulCourierRace extends Race {
             }
             entity.getAbilities().setFlyingSpeed(0.08F);
             entity.onUpdateAbilities();
-            level.playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ELYTRA_FLYING, SoundSource.PLAYERS, 0.5F, 1.0F);
+            level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ELYTRA_FLYING, SoundSource.PLAYERS, 0.5F, 1.0F);
         }
     }
 

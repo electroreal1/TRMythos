@@ -68,10 +68,10 @@ public class EnvoyOfValhallaRace extends Race {
         return 0.3f;
     }
 
-    private double auraMin = 600000;
-    private double auraMax = 600000;
-    private double startingMagiculeMin = 1400000;
-    private double startingMagiculeMax = 1400000;
+    private final double auraMin = 600000;
+    private final double auraMax = 600000;
+    private final double startingMagiculeMin = 1400000;
+    private final double startingMagiculeMax = 1400000;
 
     @Override
     public Pair<Double, Double> getBaseAuraRange() {
@@ -114,7 +114,7 @@ public class EnvoyOfValhallaRace extends Race {
         List<Component> list = new ArrayList();
         list.add(Component.translatable("tensura.evolution_menu.ep_requirement"));
         list.add(Component.translatable("tensura.evolution_menu.awaken_requirement",
-                new Object[]{ Component.translatable("tensura.attribute.true_hero.name").withStyle(ChatFormatting.GOLD)}));
+                Component.translatable("tensura.attribute.true_hero.name").withStyle(ChatFormatting.GOLD)));
         return list;
     }
 
@@ -130,7 +130,7 @@ public class EnvoyOfValhallaRace extends Race {
             }
             entity.getAbilities().setFlyingSpeed(0.12F);
             entity.onUpdateAbilities();
-            level.playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ELYTRA_FLYING, SoundSource.PLAYERS, 0.5F, 1.0F);
+            level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ELYTRA_FLYING, SoundSource.PLAYERS, 0.5F, 1.0F);
         }
     }
 
