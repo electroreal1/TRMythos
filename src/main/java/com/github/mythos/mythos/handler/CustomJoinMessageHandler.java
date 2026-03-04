@@ -20,9 +20,9 @@ import java.util.concurrent.TimeUnit;
 public class CustomJoinMessageHandler {
 
     private static final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-
     public static final UUID ELECTRO = UUID.fromString("e313811f-6b1c-4aea-8211-0aaa4f9adb11");
     public static final UUID PRIMORDIAL_ROSE = UUID.fromString("7ee73300-fb30-4ed6-8cac-5d2ee3be2046");
+    public static final UUID TERRACHARM = UUID.fromString("3c930a59-4d3d-4e4f-b62b-2f71073e1bbb");
 
     @SubscribeEvent
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
@@ -72,6 +72,14 @@ public class CustomJoinMessageHandler {
                     player.playNotifySound(SoundEvents.ENDER_EYE_DEATH, SoundSource.PLAYERS, 0.7f, 1.2f);
                 }
             }), 3500, TimeUnit.MILLISECONDS);
+        } else if (joiningPlayer.getUUID().equals(TERRACHARM)) {
+            for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/master_sky.json", 0.682f, 0.0f, 1.0f), player);
+
+                scheduler.schedule(() -> server.execute(() -> {
+                    MythosNetwork.sendToPlayer(new ShaderPacket("none", 1.0f, 1.0f, 1.0f), player);
+                }), 3500, TimeUnit.MILLISECONDS);
+            }
         }
     }
 }
