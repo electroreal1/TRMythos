@@ -10,12 +10,8 @@ import com.mojang.blaze3d.vertex.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -30,7 +26,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.ServerLifecycleHooks;
@@ -304,37 +299,6 @@ public class GlobalEffectHandler {
 
             event.setNewFovModifier(event.getFovModifier() + wave + jitter);
         }
-    }
-
-    @SubscribeEvent
-    public static void onQuantumTick(LivingEvent.LivingTickEvent event) {
-        LivingEntity victim = event.getEntity();
-        if (victim.level.isClientSide) return;
-
-        if (victim.hasEffect(MythosMobEffects.SCHRODINGERS_LABYRINTH.get())) {
-            CompoundTag tag = victim.getPersistentData();
-
-            if (tag.contains("LabyrinthAnchor")) {
-                BlockPos anchor = BlockPos.of(tag.getLong("LabyrinthAnchor"));
-                double distanceSq = victim.blockPosition().distSqr(anchor);
-
-                if (distanceSq >36) {
-                    if (victim.getRandom().nextFloat() < 0.4f) {
-                        performQuantumCollapse(victim, anchor);
-                    }
-                }
-            }
-        }
-    }
-
-    private static void performQuantumCollapse(LivingEntity victim, BlockPos anchor) {
-        if (victim.level instanceof ServerLevel sl) {
-            sl.sendParticles(ParticleTypes.REVERSE_PORTAL, victim.getX(), victim.getY() + 1, victim.getZ(),
-                    25, 0.2, 0.5, 0.2, 0.1);
-        }
-
-        victim.teleportTo(anchor.getX() + 0.5, anchor.getY(), anchor.getZ() + 0.5);
-        victim.level.playSound(null, anchor, SoundEvents.ENDERMAN_TELEPORT, SoundSource.HOSTILE, 1.0f, 1.8f);
     }
 
     public static void startForcedPath(Player player, UUID targetUUID, Vec3 destination) {

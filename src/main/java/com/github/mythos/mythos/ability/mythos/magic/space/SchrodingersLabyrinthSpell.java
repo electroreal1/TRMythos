@@ -53,7 +53,7 @@ public class SchrodingersLabyrinthSpell extends SpiritualMagic {
                     entity.swing(InteractionHand.MAIN_HAND, true);
                     entity.getLevel().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ILLUSIONER_PREPARE_MIRROR, SoundSource.PLAYERS, 1.0F, 1.0F);
 
-                    target.addEffect(new MobEffectInstance(MythosMobEffects.SCHRODINGERS_LABYRINTH.get(), 200, 1, false, false, false));
+                    target.addEffect(new MobEffectInstance(MythosMobEffects.SCHRODINGERS_LABYRINTH.get(), 200, 0, false, false, false));
                 }
             }
         }
