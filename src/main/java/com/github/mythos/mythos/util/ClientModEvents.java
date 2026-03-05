@@ -32,5 +32,7 @@ public class ClientModEvents {
 
         event.registerEntityRenderer(MythosEntityTypes.THUNDER_STORM.get(), ThunderStormRenderer::new);
         event.registerEntityRenderer(MythosEntityTypes.INTROVERT_BARRIER.get(), IntrovertBarrierRenderer::new);
+
+        event.registerEntityRenderer(MythosEntityTypes.BLACK_HOLE.get(), BlackHoleRenderer::new);
     }
 }

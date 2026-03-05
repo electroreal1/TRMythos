@@ -1,4 +1,4 @@
-package com.github.mythos.mythos.ability.mythos.skill.ultimate.lord;
+package com.github.mythos.mythos.ability.mythos.skill.ultimate.king;
 
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
@@ -91,8 +91,13 @@ public class AngraMainyuSkill extends Skill {
     }
 
     @Override
+    public Component getSkillDescription() {
+        return Component.literal("The Incarnation Of All Of The World's Evils. Evil Made Flesh.");
+    }
+
+    @Override
     public double getObtainingEpCost() {
-        return 1500000;
+        return 15000000;
     }
 
     @Override

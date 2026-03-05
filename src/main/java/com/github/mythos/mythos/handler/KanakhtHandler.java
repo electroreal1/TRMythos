@@ -1,5 +1,7 @@
 package com.github.mythos.mythos.handler;
 
+import com.github.manasmods.manascore.api.skills.SkillAPI;
+import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.mythos.mythos.registry.MythosMobEffects;
@@ -41,6 +43,9 @@ public class KanakhtHandler {
                 forceAttack(player, nearest);
             }
         }
+
+        SkillStorage storage = SkillAPI.getSkillsFrom(player);
+        storage.forgetSkill(Skills.FLESH_OF_KANAKHT.get());
     }
 
     private static void enterFleeMode(Player player) {

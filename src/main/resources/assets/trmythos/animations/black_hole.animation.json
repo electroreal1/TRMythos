@@ -1,0 +1,262 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.blackhole.base": {
+			"loop": true,
+			"animation_length": 28,
+			"bones": {
+				"part": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"28.0": {
+							"vector": [3240, 3240, 3240]
+						}
+					}
+				},
+				"dust1": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"28.0": {
+							"vector": [0, 1800, 0]
+						}
+					}
+				},
+				"dust2": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"28.0": {
+							"vector": [0, 2160, 0]
+						}
+					}
+				},
+				"dust3": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"28.0": {
+							"vector": [0, 1440, 0]
+						}
+					}
+				},
+				"star1": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"28.0": {
+							"vector": [0, 720, 0]
+						}
+					}
+				},
+				"star2": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"28.0": {
+							"vector": [0, 1440, 0]
+						}
+					}
+				},
+				"star4": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"28.0": {
+							"vector": [720, 0, 0]
+						}
+					}
+				},
+				"star5": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"28.0": {
+							"vector": [720, 0, 0]
+						}
+					}
+				},
+				"star6": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"28.0": {
+							"vector": [360, 0, 0]
+						}
+					}
+				},
+				"dusts": {
+					"rotation": {
+						"0.0": {
+							"post": {
+								"vector": [2.5, 0, 0]
+							},
+							"lerp_mode": "catmullrom"
+						},
+						"14.0": {
+							"post": {
+								"vector": [-2.5, 0, 0]
+							},
+							"lerp_mode": "catmullrom"
+						},
+						"28.0": {
+							"post": {
+								"vector": [2.5, 0, 0]
+							},
+							"lerp_mode": "catmullrom"
+						}
+					}
+				},
+				"dust4": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"28.0": {
+							"vector": [0, 1080, 0]
+						}
+					}
+				}
+			}
+		},
+		"animation.blackhole.base2": {
+			"loop": true,
+			"animation_length": 28,
+			"bones": {
+				"part": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"28.0": {
+							"vector": [3240, 3240, 3240]
+						}
+					}
+				},
+				"dust1": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"28.0": {
+							"vector": [0, 1800, 0]
+						}
+					}
+				},
+				"dust2": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"28.0": {
+							"vector": [0, 2160, 0]
+						}
+					}
+				},
+				"dust3": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"28.0": {
+							"vector": [0, 1440, 0]
+						}
+					}
+				},
+				"star1": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"28.0": {
+							"vector": [0, 720, 0]
+						}
+					}
+				},
+				"star2": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"28.0": {
+							"vector": [0, 1440, 0]
+						}
+					}
+				},
+				"star4": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"28.0": {
+							"vector": [720, 0, 0]
+						}
+					}
+				},
+				"star5": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"28.0": {
+							"vector": [720, 0, 0]
+						}
+					}
+				},
+				"star6": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"28.0": {
+							"vector": [360, 0, 0]
+						}
+					}
+				},
+				"dusts": {
+					"rotation": {
+						"0.0": {
+							"post": {
+								"vector": [2.5, 0, 0]
+							},
+							"lerp_mode": "catmullrom"
+						},
+						"14.0": {
+							"post": {
+								"vector": [-2.5, 0, 0]
+							},
+							"lerp_mode": "catmullrom"
+						},
+						"28.0": {
+							"post": {
+								"vector": [2.5, 0, 0]
+							},
+							"lerp_mode": "catmullrom"
+						}
+					}
+				},
+				"dust4": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"28.0": {
+							"vector": [0, 1080, 0]
+						}
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}

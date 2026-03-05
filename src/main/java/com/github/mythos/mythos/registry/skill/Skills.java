@@ -13,6 +13,7 @@ import com.github.mythos.mythos.ability.mythos.skill.ultimate.*;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.god.DendrrahSkill;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.god.Khonsu;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.god.Kthanid;
+import com.github.mythos.mythos.ability.mythos.skill.ultimate.king.AngraMainyuSkill;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.lord.*;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.prince.HaliSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.DominateSkill;
