@@ -7,18 +7,16 @@ import com.github.manasmods.tensura.ability.TensuraSkill;
 import com.github.manasmods.tensura.race.Race;
 import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
-import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
+import com.github.manasmods.tensura.util.JumpPowerHelper;
 import com.github.mythos.mythos.registry.race.MythosRaces;
-import com.github.mythos.mythos.registry.skill.Skills;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.IForgeRegistry;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +51,7 @@ public class GreaterDivinityRace extends Race {
 
     @Override
     public double getJumpHeight() {
-        return 1;
+        return JumpPowerHelper.defaultPlayer(1);
     }
 
     @Override

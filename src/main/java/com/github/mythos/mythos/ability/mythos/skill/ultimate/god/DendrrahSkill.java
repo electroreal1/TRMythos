@@ -284,10 +284,6 @@ public class DendrrahSkill extends Skill {
                     applyApocalypseEffect(mob);
                 }
 
-                for (LivingEntity player : nearbyMobs) {
-                    MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/carnage.json", 0.8f, 0.0f, 0.0f), (ServerPlayer) player);
-                }
-
                 instance.addMasteryPoint(entity);
             }
             return true;

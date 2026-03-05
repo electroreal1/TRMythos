@@ -3,6 +3,7 @@ package com.github.mythos.mythos.race.VoidVesselLine;
 import com.github.manasmods.tensura.ability.TensuraSkill;
 import com.github.manasmods.tensura.race.Race;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
+import com.github.manasmods.tensura.util.JumpPowerHelper;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -55,7 +56,7 @@ public class EmptyBodyRace extends Race {
     }
     @Override
     public double getJumpHeight() {
-        return 2;
+        return JumpPowerHelper.defaultPlayer(2);
     }
 
     @Override

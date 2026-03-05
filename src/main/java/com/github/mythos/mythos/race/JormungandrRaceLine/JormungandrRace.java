@@ -5,6 +5,7 @@ import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.race.Race;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
+import com.github.manasmods.tensura.util.JumpPowerHelper;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -50,7 +51,7 @@ public class JormungandrRace extends Race {
 
     @Override
     public double getJumpHeight() {
-        return 1.4;
+        return JumpPowerHelper.defaultPlayer(1.4);
     }
 
     @Override

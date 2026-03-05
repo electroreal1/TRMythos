@@ -10,6 +10,7 @@ import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.manasmods.tensura.registry.skill.IntrinsicSkills;
 import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
+import com.github.manasmods.tensura.util.JumpPowerHelper;
 import com.github.mythos.mythos.registry.race.MythosRaces;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.chat.Component;
@@ -54,7 +55,7 @@ public class DreadBeastRace extends Race {
 
     @Override
     public double getJumpHeight() {
-        return 1.2;
+        return JumpPowerHelper.defaultPlayer(1.2);
     }
 
     @Override

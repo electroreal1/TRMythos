@@ -5,6 +5,7 @@ import com.github.manasmods.tensura.race.Race;
 import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
+import com.github.manasmods.tensura.util.JumpPowerHelper;
 import com.github.mythos.mythos.registry.race.MythosRaces;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.world.entity.player.Player;
@@ -51,7 +52,7 @@ public class MidgardianSpiritRace extends Race {
 
     @Override
     public double getJumpHeight() {
-        return 1.35;
+        return JumpPowerHelper.defaultPlayer(1.35);
     }
 
     @Override
