@@ -2,6 +2,7 @@ package com.github.mythos.mythos.registry.skill;
 
 import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
+import com.github.mythos.mythos.ability.mythos.magic.TestMagic;
 import com.github.mythos.mythos.ability.mythos.magic.light.LaplacesDemonSpell;
 import com.github.mythos.mythos.ability.mythos.magic.space.SchrodingersLabyrinthSpell;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -20,4 +21,5 @@ public class Magics {
     public static final RegistryObject<SchrodingersLabyrinthSpell> SCHRODINGERS =
             registry.register("schrodingers", SchrodingersLabyrinthSpell::new);
     public static final RegistryObject<LaplacesDemonSpell> LAPLACES_DEMON = registry.register("laplaces", LaplacesDemonSpell::new);
+    public static final RegistryObject<TestMagic> TEST_MAGIC = registry.register("test_magic", TestMagic::new);
 }

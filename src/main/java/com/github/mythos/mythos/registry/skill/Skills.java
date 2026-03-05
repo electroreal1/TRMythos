@@ -13,6 +13,7 @@ import com.github.mythos.mythos.ability.mythos.skill.ultimate.*;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.god.DendrrahSkill;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.god.Khonsu;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.god.Kthanid;
+import com.github.mythos.mythos.ability.mythos.skill.ultimate.king.AngraMainyuSkill;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.lord.*;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.prince.HaliSkill;
 import com.github.mythos.mythos.ability.mythos.skill.unique.DominateSkill;
@@ -94,7 +95,6 @@ public class Skills {
     public static final RegistryObject<CrackedPhilospherStoneSkill> CRACKED_PHILOSOPHER_STONE;
     public static final RegistryObject<PretenderKingSkill> PRETENDER_KING;
     public static final RegistryObject<HoarderSkill> HOARDER;
-    public static final RegistryObject<NightsThiefSkill> NIGHTS_THIEF;
     public static final RegistryObject<FalseHeroSkill> FALSE_HERO;
     public static final RegistryObject<WavebreakerSkill> WAVEBREAKER;
     public static final RegistryObject<EarthshakerSkill> EARTHSHAKER;
@@ -205,7 +205,6 @@ public class Skills {
         CRACKED_PHILOSOPHER_STONE = registery.register("cracked_philosopher_stone", () -> new CrackedPhilospherStoneSkill(Skill.SkillType.UNIQUE));
         PRETENDER_KING = registery.register("pretender_king", () -> new PretenderKingSkill(Skill.SkillType.UNIQUE));
         HOARDER = registery.register("hoarder", () -> new HoarderSkill(Skill.SkillType.UNIQUE));
-        NIGHTS_THIEF = registery.register("nights_thief", () -> new NightsThiefSkill(Skill.SkillType.UNIQUE));
         FALSE_HERO = registery.register("false_hero", () -> new FalseHeroSkill(Skill.SkillType.UNIQUE));
         WAVEBREAKER = registery.register("wavebreaker", () -> new WavebreakerSkill(Skill.SkillType.UNIQUE));
         EARTHSHAKER = registery.register("earthshaker", () -> new EarthshakerSkill(Skill.SkillType.UNIQUE));

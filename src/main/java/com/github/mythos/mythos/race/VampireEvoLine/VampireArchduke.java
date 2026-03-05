@@ -11,6 +11,7 @@ import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.manasmods.tensura.registry.skill.CommonSkills;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.manasmods.tensura.registry.skill.IntrinsicSkills;
+import com.github.manasmods.tensura.util.JumpPowerHelper;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSources;
 import com.github.manasmods.tensura.world.TensuraGameRules;
 import com.github.mythos.mythos.registry.race.MythosRaces;
@@ -18,7 +19,6 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -68,7 +68,7 @@ public class VampireArchduke extends Race implements Transformation {
 
     @Override
     public double getJumpHeight() {
-        return 1.7;
+        return JumpPowerHelper.defaultPlayer(1.7);
     }
 
     @Override
@@ -76,10 +76,10 @@ public class VampireArchduke extends Race implements Transformation {
         return 0.27;
     }
 
-    private double auraMin = 2500000;
-    private double auraMax = 2500000;
-    private double startingMagiculeMin = 2500000;
-    private double startingMagiculeMax = 2500000;
+    private final double auraMin = 2500000;
+    private final double auraMax = 2500000;
+    private final double startingMagiculeMin = 2500000;
+    private final double startingMagiculeMax = 2500000;
 
     @Override
     public Pair<Double, Double> getBaseAuraRange() {
@@ -124,11 +124,11 @@ public class VampireArchduke extends Race implements Transformation {
     }
 
     public @Nullable Race getDefaultEvolution(Player player) {
-        return (Race) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.VAMPIRE_PRINCE);
+        return TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.VAMPIRE_PRINCE);
     }
 
     public @Nullable Race getHarvestFestivalEvolution(Player player) {
-        return (Race) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.VAMPIRE_PRINCE);
+        return TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.VAMPIRE_PRINCE);
     }
 
     public List<Race> getNextEvolutions(Player player) {
@@ -141,13 +141,13 @@ public class VampireArchduke extends Race implements Transformation {
     @Override
     public List<Race> getPreviousEvolutions(Player player) {
         List<Race> list = new ArrayList<>();
-        list.add((Race)((IForgeRegistry) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.VAMPIRE_DUKE)));
+        list.add((Race) TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.VAMPIRE_DUKE));
         return list;
     }
 
     public void raceAbility(Player player) {
-        if (player.hasEffect((MobEffect) TensuraMobEffects.BATS_MODE.get())) {
-            player.removeEffect((MobEffect)TensuraMobEffects.BATS_MODE.get());
+        if (player.hasEffect(TensuraMobEffects.BATS_MODE.get())) {
+            player.removeEffect(TensuraMobEffects.BATS_MODE.get());
             if (player.isSpectator() || player.isCreative()) {
                 return;
             }
@@ -161,17 +161,17 @@ public class VampireArchduke extends Race implements Transformation {
                 if (target.hurt(TensuraDamageSources.bloodDrain(target), 2.0F)) {
                     player.heal(2.0F);
                     player.getFoodData().eat(2, 0.0F);
-                    player.getLevel().playSound((Player)null, target.getX(), target.getY(), target.getZ(), SoundEvents.GENERIC_DRINK, SoundSource.PLAYERS, 1.0F, 1.0F);
+                    player.getLevel().playSound(null, target.getX(), target.getY(), target.getZ(), SoundEvents.GENERIC_DRINK, SoundSource.PLAYERS, 1.0F, 1.0F);
                 }
 
                 return;
             }
 
-            if (this.failedToActivate(player, (MobEffect)TensuraMobEffects.BATS_MODE.get())) {
+            if (this.failedToActivate(player, TensuraMobEffects.BATS_MODE.get())) {
                 return;
             }
 
-            player.addEffect(new MobEffectInstance((MobEffect)TensuraMobEffects.BATS_MODE.get(), 1728000, 0, false, false, false));
+            player.addEffect(new MobEffectInstance(TensuraMobEffects.BATS_MODE.get(), 1728000, 0, false, false, false));
             if (player.isSpectator() || player.isCreative()) {
                 return;
             }
@@ -193,7 +193,7 @@ public class VampireArchduke extends Race implements Transformation {
             }
         } else if (player.level.isNight() && player.level.getMoonPhase() == 4) {
             player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 40, 3, false, false, false));
-            player.addEffect(new MobEffectInstance((MobEffect)TensuraMobEffects.FRAGILITY.get(), 40, 3, false, false, false));
+            player.addEffect(new MobEffectInstance(TensuraMobEffects.FRAGILITY.get(), 40, 3, false, false, false));
         }
 
     }
@@ -202,8 +202,7 @@ public class VampireArchduke extends Race implements Transformation {
         if (!entity.isAlive()) {
             return false;
         } else {
-            if (entity instanceof Player) {
-                Player player = (Player)entity;
+            if (entity instanceof Player player) {
                 if (player.isCreative()) {
                     return false;
                 }

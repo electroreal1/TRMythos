@@ -2,10 +2,13 @@ package com.github.mythos.mythos.ability.mythos.skill.unique.normal;
 
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.tensura.ability.SkillHelper;
+import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.ability.skill.extra.ThoughtAccelerationSkill;
 import com.github.manasmods.tensura.registry.blocks.TensuraBlocks;
+import com.github.manasmods.tensura.registry.items.TensuraMaterialItems;
 import com.github.manasmods.tensura.registry.items.TensuraMobDropItems;
+import io.github.Memoires.trmysticism.registry.skill.UniqueSkills;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -27,13 +30,8 @@ public class NascentDao extends Skill {
         return 50000;
     }
 
-    @Override
-    public int getMaxMastery() {
-        return 3000;
-    }
-
     public ResourceLocation getSkillIcon() {
-        return new ResourceLocation("trmythos", "textures/skill/unique/nascent_dao.png");
+        return new ResourceLocation("trmythos", "textures/skill/unique/nascant_dao.png");
     }
 
     @Override
@@ -90,10 +88,17 @@ public class NascentDao extends Skill {
             epGained = 540;
             this.addMasteryPoint(instance, entity);
             held.shrink(1);
+        } else if (item == TensuraMaterialItems.MARIONETTE_HEART.get()) {
+            epGained = 1080;
+            this.addMasteryPoint(instance, entity);
+            held.shrink(1);
         } else {
             return;
         }
 
+        if (SkillUtils.hasSkill(entity, UniqueSkills.CULTIVATOR.get())) {
+            epGained *= 2;
+        }
 
         SkillHelper.gainMaxAP(entity, epGained / 2f);
         SkillHelper.gainMaxMP(entity, epGained / 2f);

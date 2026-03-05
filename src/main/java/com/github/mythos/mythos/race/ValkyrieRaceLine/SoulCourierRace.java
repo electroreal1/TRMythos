@@ -5,6 +5,7 @@ import com.github.manasmods.tensura.race.Race;
 import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
+import com.github.manasmods.tensura.util.JumpPowerHelper;
 import com.github.mythos.mythos.registry.race.MythosRaces;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.sounds.SoundEvents;
@@ -54,7 +55,7 @@ public class SoulCourierRace extends Race {
 
     @Override
     public double getJumpHeight() {
-        return 1;
+        return JumpPowerHelper.defaultPlayer(1.5);
     }
 
     @Override
@@ -122,7 +123,7 @@ public class SoulCourierRace extends Race {
             }
             entity.getAbilities().setFlyingSpeed(0.08F);
             entity.onUpdateAbilities();
-            level.playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ELYTRA_FLYING, SoundSource.PLAYERS, 0.5F, 1.0F);
+            level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ELYTRA_FLYING, SoundSource.PLAYERS, 0.5F, 1.0F);
         }
     }
 

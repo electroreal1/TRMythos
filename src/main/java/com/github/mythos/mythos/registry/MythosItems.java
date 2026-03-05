@@ -18,6 +18,7 @@ public class MythosItems {
     public static final RegistryObject<Item> FRAGARACH;
     public static final RegistryObject<Item> GRAM;
     public static final RegistryObject<Item> EXCALIBUR;
+    public static final RegistryObject<Item> VOID_HEART;
 
     public MythosItems() {
     }
@@ -34,6 +35,7 @@ public class MythosItems {
         FRAGARACH = registry.register("fragarach", fragarach::new);
         GRAM = registry.register("gram", gram::new);
         EXCALIBUR = registry.register("excalibur", excalibur::new);
+        VOID_HEART = registry.register("void_heart", voidHeart::new);
     }
 
 

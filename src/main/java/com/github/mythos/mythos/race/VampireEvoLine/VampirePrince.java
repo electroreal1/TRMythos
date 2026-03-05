@@ -14,6 +14,7 @@ import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.manasmods.tensura.registry.skill.CommonSkills;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.manasmods.tensura.registry.skill.IntrinsicSkills;
+import com.github.manasmods.tensura.util.JumpPowerHelper;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSources;
 import com.github.manasmods.tensura.world.TensuraGameRules;
 import com.github.mythos.mythos.registry.race.MythosRaces;
@@ -74,7 +75,7 @@ public class VampirePrince extends Race implements Transformation {
 
     @Override
     public double getJumpHeight() {
-        return 1.8;
+        return JumpPowerHelper.defaultPlayer(1.8);
     }
 
     @Override

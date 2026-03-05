@@ -4,6 +4,7 @@ import com.github.manasmods.tensura.ability.TensuraSkill;
 import com.github.manasmods.tensura.race.Race;
 import com.github.manasmods.tensura.registry.skill.IntrinsicSkills;
 import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
+import com.github.manasmods.tensura.util.JumpPowerHelper;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.world.entity.player.Player;
 
@@ -46,7 +47,7 @@ public class DeusExMachinaRace extends Race {
 
     @Override
     public double getJumpHeight() {
-        return 4;
+        return JumpPowerHelper.defaultPlayer(4);
     }
 
     @Override

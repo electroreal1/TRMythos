@@ -10,7 +10,6 @@ import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -63,8 +62,19 @@ public class AutomaticHakiCoatSkill extends Skill {
     }
 
     @Override
-    public void onTick(ManasSkillInstance instance, LivingEntity living) {
-        this.onToggleOn(instance, living);
+    public void onTick(ManasSkillInstance instance, LivingEntity entity) {
+        this.onToggleOn(instance, entity);
+        if (!entity.hasEffect(TensuraMobEffects.HAKI_COAT.get())) {
+            if (SkillHelper.outOfMagicule(entity, instance)) {
+                return;
+            }
+
+            entity.addEffect(new MobEffectInstance(TensuraMobEffects.HAKI_COAT.get(), 2400, 0, false, false, false));
+            entity.getLevel().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ILLUSIONER_MIRROR_MOVE, SoundSource.PLAYERS, 1.0F, 1.0F);
+        } else {
+            entity.removeEffect(TensuraMobEffects.HAKI_COAT.get());
+            entity.getLevel().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ILLUSIONER_MIRROR_MOVE, SoundSource.PLAYERS, 1.0F, 1.0F);
+        }
     }
 
     @Override
@@ -74,11 +84,11 @@ public class AutomaticHakiCoatSkill extends Skill {
                 return;
             }
 
-            entity.addEffect(new MobEffectInstance((MobEffect)TensuraMobEffects.HAKI_COAT.get(), 2400, 0, false, false, false));
-            entity.getLevel().playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ILLUSIONER_MIRROR_MOVE, SoundSource.PLAYERS, 1.0F, 1.0F);
+            entity.addEffect(new MobEffectInstance(TensuraMobEffects.HAKI_COAT.get(), 2400, 0, false, false, false));
+            entity.getLevel().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ILLUSIONER_MIRROR_MOVE, SoundSource.PLAYERS, 1.0F, 1.0F);
         } else {
-            entity.removeEffect((MobEffect)TensuraMobEffects.HAKI_COAT.get());
-            entity.getLevel().playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ILLUSIONER_MIRROR_MOVE, SoundSource.PLAYERS, 1.0F, 1.0F);
+            entity.removeEffect(TensuraMobEffects.HAKI_COAT.get());
+            entity.getLevel().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ILLUSIONER_MIRROR_MOVE, SoundSource.PLAYERS, 1.0F, 1.0F);
         }
     }
 

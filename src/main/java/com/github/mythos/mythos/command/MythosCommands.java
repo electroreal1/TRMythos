@@ -17,6 +17,7 @@ import com.github.mythos.mythos.voiceoftheworld.WorldTrial;
 import com.github.mythos.mythos.voiceoftheworld.WorldTrialRegistry;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.*;
+import io.github.Memoires.trmysticism.registry.effects.MysticismMobEffects;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -25,6 +26,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffectInstance;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -526,12 +528,10 @@ public class MythosCommands {
                                             String message = StringArgumentType.getString(context, "message");
                                             VoiceOfTheWorld.Priority priority = VoiceOfTheWorld.Priority.valueOf(priorityStr.toUpperCase());
 
-                                            // Broadcast to all players
                                             context.getSource().getServer().getPlayerList().getPlayers().forEach(player ->
                                                     VoiceOfTheWorld.delayedAnnouncement(player, priority, message)
                                             );
 
-                                            // context.getSource().sendSuccess(Component.literal("§a[Mythos] Queued global announcement."), true);
                                             return 1;
                                         }))))
 
@@ -552,7 +552,237 @@ public class MythosCommands {
                             return 1;
                         }))
 
+                .requires(source -> source.hasPermission(4))
                 .then(Commands.literal("world")
+                        .then(Commands.literal("scream").executes(context -> {
+                            for (ServerPlayer player : context.getSource().getServer().getPlayerList().getPlayers()) {
+                                VoiceOfTheWorld.delayedAnnouncement(player, VoiceOfTheWorld.Priority.WORLD,
+                                        "§4[ CRITICAL ERROR ]", "§cSoul-Space partition dissolved.", "§4Entering the Void.");
+
+                                player.playNotifySound(SoundEvents.ENDER_DRAGON_DEATH, SoundSource.MASTER, 1.2f, 0.1f);
+                                player.playNotifySound(SoundEvents.GHAST_SCREAM, SoundSource.MASTER, 0.8f, 0.5f);
+                                player.playNotifySound(SoundEvents.WITHER_SPAWN, SoundSource.MASTER, 1.0f, 0.2f);
+
+
+                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/master_sky.json", 0.7f, 0.0f, 0.0f), player);
+                                VoiceOfTheWorld.screenShake(player, 60, 5);
+                            }
+                            return 1;
+                        }))
+
+                        .then(Commands.literal("tectonic").executes(context -> {
+                            for (ServerPlayer player : context.getSource().getServer().getPlayerList().getPlayers()) {
+                                VoiceOfTheWorld.delayedAnnouncement(player, VoiceOfTheWorld.Priority.WORLD,
+                                        "§6[ GEOLOGICAL ANOMALY ]", "§fTectonic plates shifting...", "§7Massive gravity fluctuations detected.");
+
+                                player.playNotifySound(SoundEvents.GENERIC_EXPLODE, SoundSource.MASTER, 0.5f, 0.5f);
+                                player.playNotifySound(SoundEvents.WARDEN_DIG, SoundSource.MASTER, 1.5f, 0.8f);
+                                player.playNotifySound(SoundEvents.DEEPSLATE_BREAK, SoundSource.MASTER, 1.2f, 0.5f);
+
+                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/tectonic.json", 0.4f, 0.3f, 0.2f), player);
+
+                                VoiceOfTheWorld.screenShake(player, 100, 8);
+                            }
+                            return 1;
+                        }))
+
+                        .then(Commands.literal("eclipse").executes(context -> {
+                            for (ServerPlayer player : context.getSource().getServer().getPlayerList().getPlayers()) {
+                                VoiceOfTheWorld.delayedAnnouncement(player, VoiceOfTheWorld.Priority.WORLD,
+                                        "§5[ CELESTIAL ALIGNMENT ]", "§8The Sun is being consumed.", "§dMagicule density reaching critical levels.");
+
+                                player.playNotifySound(SoundEvents.BEACON_DEACTIVATE, SoundSource.MASTER, 1.2f, 0.1f);
+                                player.playNotifySound(SoundEvents.ENDER_EYE_DEATH, SoundSource.MASTER, 1.0f, 0.5f);
+                                player.playNotifySound(SoundEvents.ENDERMAN_STARE, SoundSource.MASTER, 0.4f, 0.5f);
+
+                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/eclipse.json", 0.1f, 0.0f, 0.2f), player);
+                            }
+                            return 1;
+                        }))
+
+                        .then(Commands.literal("stasis").executes(context -> {
+                            for (ServerPlayer player : context.getSource().getServer().getPlayerList().getPlayers()) {
+                                VoiceOfTheWorld.delayedAnnouncement(player, VoiceOfTheWorld.Priority.WORLD,
+                                        "§b[ CHRONO FRACTURE ]", "§fTime-flow synchronization failed.", "§3Freezing causality...");
+
+                                player.playNotifySound(SoundEvents.BELL_RESONATE, SoundSource.MASTER, 1.0f, 2.0f);
+                                player.playNotifySound(SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.MASTER, 1.5f, 0.1f);
+                                player.playNotifySound(SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.MASTER, 0.8f, 0.5f);
+
+                                player.addEffect(new MobEffectInstance(MysticismMobEffects.TIMESTOP.get(), 200, 20, false, false, false));
+
+                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/stasis.json", 0.5f, 0.5f, 0.5f), player);
+                            }
+                            return 1;
+                        }))
+
+                        .then(Commands.literal("starfall").executes(context -> {
+                            for (ServerPlayer player : context.getSource().getServer().getPlayerList().getPlayers()) {
+                                VoiceOfTheWorld.delayedAnnouncement(player, VoiceOfTheWorld.Priority.WORLD,
+                                        "§9[ STARFALL CONVERGENCE ]", "§bCelestial bodies aligned.", "§fDrawing power from the Outer Cosmos.");
+
+                                player.playNotifySound(SoundEvents.AMETHYST_BLOCK_PLACE, SoundSource.MASTER, 1.0f, 0.5f);
+                                player.playNotifySound(SoundEvents.ILLUSIONER_CAST_SPELL, SoundSource.MASTER, 0.7f, 1.5f);
+
+                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/twinkle.json", 1.0f, 1.0f, 1.0f), player);
+                                VoiceOfTheWorld.screenShake(player, 100, 1);
+                            }
+                            return 1;
+                        }))
+
+                        .then(Commands.literal("glitch").executes(context -> {
+                            for (ServerPlayer player : context.getSource().getServer().getPlayerList().getPlayers()) {
+                                VoiceOfTheWorld.delayedAnnouncement(player, VoiceOfTheWorld.Priority.WORLD,
+                                        "§a[ LOGIC FAILURE ]", "§7Illegal memory access in §fReality.jar", "§2Re-routing packets to Void...");
+
+                                player.playNotifySound(SoundEvents.ITEM_BREAK, SoundSource.MASTER, 1.0f, 0.1f);
+                                player.playNotifySound(SoundEvents.ENDERMAN_TELEPORT, SoundSource.MASTER, 0.8f, 2.0f);
+                                player.playNotifySound(SoundEvents.UI_BUTTON_CLICK, SoundSource.MASTER, 1.2f, 0.5f);
+
+                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/glitch.json", 1.0f, 1.0f, 1.0f), player);
+
+                                VoiceOfTheWorld.screenShake(player, 40, 10);
+                            }
+                            return 1;
+                        }))
+
+                        .then(Commands.literal("carnage").executes(context -> {
+                            for (ServerPlayer player : context.getSource().getServer().getPlayerList().getPlayers()) {
+                                VoiceOfTheWorld.delayedAnnouncement(player, VoiceOfTheWorld.Priority.WORLD,
+                                        "§4[ BLOOD MOON RISING ]", "§cBiological inhibitors: §lOFF", "§fThe hunger of the Ancestors is manifested.");
+
+                                player.playNotifySound(SoundEvents.PHANTOM_BITE, SoundSource.MASTER, 1.5f, 0.5f);
+                                player.playNotifySound(SoundEvents.RAVAGER_ROAR, SoundSource.MASTER, 0.7f, 0.2f);
+                                player.playNotifySound(SoundEvents.CONDUIT_ATTACK_TARGET, SoundSource.MASTER, 1.0f, 0.1f);
+
+                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/carnage.json", 0.8f, 0.0f, 0.0f), player);
+
+                                VoiceOfTheWorld.screenShake(player, 120, 3);
+                            }
+                            return 1;
+                        }))
+
+                        .then(Commands.literal("judgment").executes(context -> {
+                            for (ServerPlayer player : context.getSource().getServer().getPlayerList().getPlayers()) {
+                                VoiceOfTheWorld.delayedAnnouncement(player, VoiceOfTheWorld.Priority.WORLD,
+                                        "§e[ DIVINE INTERVENTION ]", "§fUniversal laws are being rewritten.", "§6Behold the weight of Authority.");
+
+                                player.playNotifySound(SoundEvents.TOTEM_USE, SoundSource.MASTER, 0.6f, 0.5f);
+                                player.playNotifySound(SoundEvents.BEACON_ACTIVATE, SoundSource.MASTER, 1.2f, 1.0f);
+                                player.playNotifySound(SoundEvents.EVOKER_PREPARE_WOLOLO, SoundSource.MASTER, 1.0f, 0.1f);
+
+                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/judgement.json", 1.0f, 0.9f, 0.4f), player);
+                            }
+                            return 1;
+                        }))
+
+                        .then(Commands.literal("chaos").executes(context -> {
+                            for (ServerPlayer player : context.getSource().getServer().getPlayerList().getPlayers()) {
+                                VoiceOfTheWorld.delayedAnnouncement(player, VoiceOfTheWorld.Priority.WORLD,
+                                        "§d[ SPIRITUAL OVERFLOW ]", "§fMagicule pressure: §lCRITICAL", "§5Reality boundaries are blurring.");
+
+                                player.playNotifySound(SoundEvents.PORTAL_TRAVEL, SoundSource.MASTER, 0.4f, 2.0f);
+                                player.playNotifySound(SoundEvents.WITCH_CELEBRATE, SoundSource.MASTER, 0.6f, 0.1f);
+                                player.playNotifySound(SoundEvents.ILLUSIONER_MIRROR_MOVE, SoundSource.MASTER, 1.0f, 0.5f);
+
+                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/chaos.json", 0.7f, 0.0f, 1.0f), player);
+
+                                VoiceOfTheWorld.screenShake(player, 80, 12);
+                            }
+                            return 1;
+                        }))
+
+                        .then(Commands.literal("overgrowth").executes(context -> {
+                            for (ServerPlayer player : context.getSource().getServer().getPlayerList().getPlayers()) {
+                                VoiceOfTheWorld.delayedAnnouncement(player, VoiceOfTheWorld.Priority.WORLD,
+                                        "§2[ NATURE'S WRATH ]", "§aBiological synchronization: 100%", "§fThe world is being reclaimed.");
+
+                                player.playNotifySound(SoundEvents.BEE_LOOP_AGGRESSIVE, SoundSource.MASTER, 0.4f, 0.1f);
+                                player.playNotifySound(SoundEvents.GRASS_STEP, SoundSource.MASTER, 2.0f, 0.1f);
+                                player.playNotifySound(SoundEvents.AZALEA_LEAVES_PLACE, SoundSource.MASTER, 1.0f, 0.5f);
+
+                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/overgrowth.json", 0.1f, 0.9f, 0.1f), player);
+                            }
+                            return 1;
+                        }))
+
+                        .then(Commands.literal("primordial").executes(context -> {
+                            for (ServerPlayer player : context.getSource().getServer().getPlayerList().getPlayers()) {
+                                VoiceOfTheWorld.delayedAnnouncement(player, VoiceOfTheWorld.Priority.WORLD,
+                                        "§6[ PRIMORDIAL AWAKENING ]", "§fSoul signature detected: §4Ancient Class", "§eSubmit to the presence of the Origin.");
+
+                                player.playNotifySound(SoundEvents.ENDER_DRAGON_GROWL, SoundSource.MASTER, 1.0f, 0.1f);
+                                player.playNotifySound(SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.MASTER, 0.5f, 0.1f);
+                                player.playNotifySound(SoundEvents.BELL_RESONATE, SoundSource.MASTER, 1.5f, 0.5f);
+
+                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/primordial.json", 1.0f, 0.4f, 0.0f), player);
+
+                                VoiceOfTheWorld.screenShake(player, 150, 4);
+                            }
+                            return 1;
+                        }))
+
+                        .then(Commands.literal("void").executes(context -> {
+                            for (ServerPlayer player : context.getSource().getServer().getPlayerList().getPlayers()) {
+                                VoiceOfTheWorld.delayedAnnouncement(player, VoiceOfTheWorld.Priority.WORLD,
+                                        "§0[ DIMENSIONAL COLLAPSE ]", "§7Warning. Sector data not found.", "§8Returning to the Great Void.");
+
+                                player.playNotifySound(SoundEvents.BEACON_DEACTIVATE, SoundSource.MASTER, 2.0f, 0.1f);
+                                player.playNotifySound(SoundEvents.ENDERMAN_DEATH, SoundSource.MASTER, 0.5f, 0.1f);
+                                player.playNotifySound(SoundEvents.CONDUIT_DEACTIVATE, SoundSource.MASTER, 1.0f, 0.5f);
+
+                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/void.json", 0.05f, 0.05f, 0.05f), player);
+                            }
+                            return 1;
+                        }))
+
+                        .then(Commands.literal("frostbite").executes(context -> {
+                            for (ServerPlayer player : context.getSource().getServer().getPlayerList().getPlayers()) {
+                                VoiceOfTheWorld.delayedAnnouncement(player, VoiceOfTheWorld.Priority.WORLD,
+                                        "§b[ THERMAL COLLAPSE ]", "§fAbsolute zero approaching...", "§3Magicule vibration has ceased.");
+
+                                player.playNotifySound(SoundEvents.GLASS_BREAK, SoundSource.MASTER, 0.5f, 0.1f);
+                                player.playNotifySound(SoundEvents.WOLF_PANT, SoundSource.MASTER, 0.2f, 0.1f);
+                                player.playNotifySound(SoundEvents.PLAYER_HURT_FREEZE, SoundSource.MASTER, 1.0f, 0.5f);
+
+                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/frostbite.json", 0.0f, 0.7f, 1.0f), player);
+                            }
+                            return 1;
+                        }))
+
+                        .requires(source -> source.hasPermission(4))
+                        .then(Commands.literal("restore").executes(context -> {
+                            for (ServerPlayer player : context.getSource().getServer().getPlayerList().getPlayers()) {
+                                VoiceOfTheWorld.delayedAnnouncement(player, VoiceOfTheWorld.Priority.WORLD,
+                                        "§b[ SYSTEM RECOVERY ]", "§fRe-establishing soul-space partitions...", "§7Calibrating visual sensors.");
+
+                                new Thread(() -> {
+                                    try {
+                                        Thread.sleep(2000);
+
+                                        MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/master_sky.json", 0.2f, 0.2f, 0.2f), player);
+
+                                        player.playNotifySound(net.minecraft.sounds.SoundEvents.BEACON_ACTIVATE, net.minecraft.sounds.SoundSource.MASTER, 0.5f, 0.5f);
+
+                                        Thread.sleep(3000);
+
+                                        MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/master_sky.json", 0.5f, 0.5f, 0.6f), player);
+
+                                        Thread.sleep(3000);
+
+                                        MythosNetwork.sendToPlayer(new ShaderPacket("none", 1.0f, 1.0f, 1.0f), player);
+
+                                        player.playNotifySound(net.minecraft.sounds.SoundEvents.PLAYER_LEVELUP, net.minecraft.sounds.SoundSource.MASTER, 0.8f, 1.2f);
+
+                                        VoiceOfTheWorld.delayedAnnouncement(player, VoiceOfTheWorld.Priority.WORLD, "§aNotice.", "§fWorld stability restored.", "§7Soul core synchronized.");
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                }).start();
+                            }
+                            return 1;
+                        }))
+
                         .then(Commands.literal("shaders")
                                 .requires(source -> source.hasPermission(4))
                                 .then(Commands.literal("tint")
@@ -570,59 +800,8 @@ public class MythosCommands {
                                                                                 MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/master_sky.json", r, g, b), p);
                                                                             }
 
-                                                                            context.getSource().sendSuccess(Component.literal("§b[Mythos] Sky/Fog tint set."), true);
                                                                             return 1;
                                                                         })))))
-
-                                        .then(Commands.literal("scream").executes(context -> {
-                                            for (ServerPlayer player : context.getSource().getServer().getPlayerList().getPlayers()) {
-                                                VoiceOfTheWorld.delayedAnnouncement(player, VoiceOfTheWorld.Priority.WORLD,
-                                                        "§4[ CRITICAL ERROR ]", "§cSoul-Space partition dissolved.", "§4Entering the Void.");
-
-                                                player.playNotifySound(SoundEvents.ENDER_DRAGON_DEATH, SoundSource.MASTER, 1.2f, 0.1f);
-                                                player.playNotifySound(SoundEvents.GHAST_SCREAM, SoundSource.MASTER, 0.8f, 0.5f);
-                                                player.playNotifySound(SoundEvents.WITHER_SPAWN, SoundSource.MASTER, 1.0f, 0.2f);
-
-
-                                                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/master_sky.json", 0.7f, 0.0f, 0.0f), player);
-                                                VoiceOfTheWorld.screenShake(player, 60, 5);
-                                            }
-                                            return 1;
-                                        }))
-
-                                        .requires(source -> source.hasPermission(4))
-                                        .then(Commands.literal("restore").executes(context -> {
-                                            for (ServerPlayer player : context.getSource().getServer().getPlayerList().getPlayers()) {
-                                                VoiceOfTheWorld.delayedAnnouncement(player, VoiceOfTheWorld.Priority.WORLD,
-                                                        "§b[ SYSTEM RECOVERY ]", "§fRe-establishing soul-space partitions...",
-                                                        "§7Calibrating visual sensors.");
-
-                                                new Thread(() -> {
-                                                    try {
-                                                        Thread.sleep(2000);
-
-                                                        MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/master_sky.json", 0.2f, 0.2f, 0.2f), player);
-
-                                                        player.playNotifySound(net.minecraft.sounds.SoundEvents.BEACON_ACTIVATE, net.minecraft.sounds.SoundSource.MASTER, 0.5f, 0.5f);
-
-                                                        Thread.sleep(3000);
-
-                                                        MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/master_sky.json", 0.5f, 0.5f, 0.6f), player);
-
-                                                        Thread.sleep(3000);
-
-                                                        MythosNetwork.sendToPlayer(new ShaderPacket("none", 1.0f, 1.0f, 1.0f), player);
-
-                                                        player.playNotifySound(net.minecraft.sounds.SoundEvents.PLAYER_LEVELUP, net.minecraft.sounds.SoundSource.MASTER, 0.8f, 1.2f);
-
-                                                        VoiceOfTheWorld.delayedAnnouncement(player, VoiceOfTheWorld.Priority.WORLD, "§aNotice.", "§fWorld stability restored.", "§7Soul core synchronized.");
-                                                    } catch (InterruptedException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                }).start();
-                                            }
-                                            return 1;
-                                        }))
 
                                         .then(Commands.literal("reset").executes(context -> {
                                                     for (ServerPlayer player : context.getSource().getServer().getPlayerList().getPlayers()) {
@@ -632,6 +811,22 @@ public class MythosCommands {
                                                 })
                                         )
                                 )
+                                .then(Commands.argument("r", IntegerArgumentType.integer(0, 255))
+                                        .then(Commands.argument("g", IntegerArgumentType.integer(0, 255))
+                                                .then(Commands.argument("b", IntegerArgumentType.integer(0, 255))
+                                                        .then(Commands.argument("targets", EntityArgument.players())
+                                                                .executes(context -> {
+                                                                    float r = IntegerArgumentType.getInteger(context, "r") / 255.0f;
+                                                                    float g = IntegerArgumentType.getInteger(context, "g") / 255.0f;
+                                                                    float b = IntegerArgumentType.getInteger(context, "b") / 255.0f;
+
+                                                                    var players = EntityArgument.getPlayers(context, "targets");
+                                                                    for (ServerPlayer p : players) {
+                                                                        MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/twinkle.json", 1.0f, 1.0f, 1.0f), p);
+                                                                    }
+
+                                                                    return 1;
+                                                                })))))
                         )
                 )
                 .then(Commands.literal("contagion")

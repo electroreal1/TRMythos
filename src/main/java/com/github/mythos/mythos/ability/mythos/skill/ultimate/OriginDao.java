@@ -12,9 +12,11 @@ import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.registry.attribute.TensuraAttributeRegistry;
 import com.github.manasmods.tensura.registry.blocks.TensuraBlocks;
+import com.github.manasmods.tensura.registry.items.TensuraMaterialItems;
 import com.github.manasmods.tensura.registry.items.TensuraMobDropItems;
 import com.github.mythos.mythos.registry.skill.Skills;
 import com.github.mythos.mythos.voiceoftheworld.VoiceOfTheWorld;
+import io.github.Memoires.trmysticism.registry.skill.UniqueSkills;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
@@ -41,11 +43,6 @@ public class OriginDao extends Skill {
     @Override
     public double getObtainingEpCost() {
         return 1000000;
-    }
-
-    @Override
-    public int getMaxMastery() {
-        return 6000;
     }
 
     public boolean meetEPRequirement(Player player, double newEP) {
@@ -158,8 +155,16 @@ public class OriginDao extends Skill {
             epGained = 43200;
             this.addMasteryPoint(instance, entity);
             held.shrink(1);
+        } else if (item == TensuraMaterialItems.MARIONETTE_HEART.get()) {
+            epGained = 8640;
+            this.addMasteryPoint(instance, entity);
+            held.shrink(1);
         } else {
             return;
+        }
+
+        if (SkillUtils.hasSkill(entity, UniqueSkills.CULTIVATOR.get())) {
+            epGained *= 2;
         }
 
         SkillHelper.gainMaxAP(entity, epGained / 2f);

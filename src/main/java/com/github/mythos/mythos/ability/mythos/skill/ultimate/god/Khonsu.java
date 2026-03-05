@@ -796,7 +796,7 @@ public class Khonsu extends Skill {
     public void eyeOfTheMoon(ManasSkillInstance instance, LivingEntity entity) {
         Level level = entity.getLevel();
 
-        if (!entity.hasEffect(TensuraMobEffects.SHADOW_STEP.get()) || !entity.hasEffect(MythosMobEffects.KHONSU.get())) {
+        if (!entity.hasEffect(TensuraMobEffects.SHADOW_STEP.get()) || !entity.hasEffect(MythosMobEffects.KHONSU.get()) || !entity.hasEffect(TensuraMobEffects.PRESENCE_CONCEALMENT.get())) {
             if (SkillHelper.outOfMagicule(entity, instance)) {
                 return;
             }

@@ -123,6 +123,27 @@ public class MythosUtils {
 
     }
 
+    public static boolean isEmpty(Player player) {
+        return player.getPersistentData().getBoolean("trmythos:is_empty");
+    }
+
+    public static void setEmpty(Player player, boolean value) {
+        player.getPersistentData().putBoolean("trmythos:is_empty", value);
+    }
+
+    @SubscribeEvent
+    public static void onPlayerDeath(PlayerEvent.Clone event) {
+        Player oldPlayer = event.getOriginal();
+        Player newPlayer = event.getEntity();
+
+        CompoundTag oldData = oldPlayer.getPersistentData();
+        CompoundTag newData = newPlayer.getPersistentData();
+
+        if (oldData.contains("trmythos:is_empty")) {
+            newData.putBoolean("trmythos:is_empty", oldData.getBoolean("trmythos:is_empty"));
+        }
+    }
+
     @SubscribeEvent
     public static void onServerTick(TickEvent.ServerTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {

@@ -3,18 +3,15 @@ package com.github.mythos.mythos.race.HydraLine;
 import com.github.manasmods.tensura.ability.TensuraSkill;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.race.Race;
-import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.manasmods.tensura.registry.skill.CommonSkills;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.manasmods.tensura.registry.skill.IntrinsicSkills;
 import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
-import com.github.mythos.mythos.registry.race.MythosRaces;
+import com.github.manasmods.tensura.util.JumpPowerHelper;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.registries.IForgeRegistry;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +50,7 @@ public class HydraRace extends Race {
 
     @Override
     public double getJumpHeight() {
-        return 1;
+        return JumpPowerHelper.defaultPlayer(1);
     }
 
     @Override

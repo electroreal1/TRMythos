@@ -1,0 +1,16 @@
+{
+  "targets": ["swap"],
+  "passes": [
+    {
+      "name": "trmythos:eclipse",
+      "intarget": "minecraft:main",
+      "outtarget": "swap",
+      "auxtargets": [{ "name": "DiffuseSampler", "id": "minecraft:main" }]
+    },
+    {
+      "name": "blit",
+      "intarget": "swap",
+      "outtarget": "minecraft:main"
+    }
+  ]
+}

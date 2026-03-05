@@ -1,0 +1,16 @@
+{
+  "targets": ["swap"],
+  "passes": [
+    {
+      "name": "trmythos:tectonic",
+      "intarget": "minecraft:main",
+      "outtarget": "swap",
+      "auxtargets": [{ "name": "DiffuseSampler", "id": "minecraft:main" }],
+      "uniforms": [{ "name": "Time", "values": [0.0] }]
+    },
+    { "name": "blit",
+      "intarget": "swap",
+      "outtarget": "minecraft:main"
+    }
+  ]
+}

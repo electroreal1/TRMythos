@@ -10,6 +10,7 @@ import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
+import com.github.manasmods.tensura.effect.template.Transformation;
 import com.github.manasmods.tensura.registry.particle.TensuraParticles;
 import com.github.manasmods.tensura.registry.skill.UniqueSkills;
 import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
@@ -17,7 +18,6 @@ import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.voiceoftheworld.VoiceOfTheWorld;
 import com.mojang.math.Vector3f;
 import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -27,7 +27,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -39,7 +38,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static com.github.mythos.mythos.config.MythosSkillsConfig.EnableUltimateSkillObtainment;
 
-public class AresSkill extends Skill {
+public class AresSkill extends Skill implements Transformation {
     public AresSkill(SkillType type) {
         super(SkillType.ULTIMATE);
     }
@@ -114,8 +113,7 @@ public class AresSkill extends Skill {
                 DamageSource damageSource = event.getSource();
                 if (!damageSource.isBypassInvul() && !damageSource.isMagic()) {
                     Entity var5 = damageSource.getDirectEntity();
-                    if (var5 instanceof LivingEntity) {
-                        LivingEntity entity = (LivingEntity)var5;
+                    if (var5 instanceof LivingEntity entity) {
                         double dodgeChance = 0;
                         if (instance.isMastered(entity)) {
                             dodgeChance = 0.75;
@@ -124,7 +122,7 @@ public class AresSkill extends Skill {
                         }
 
                         if (!(entity.getRandom().nextDouble() >= dodgeChance)) {
-                            entity.getLevel().playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_WEAK, SoundSource.PLAYERS, 2.0F, 1.0F);
+                            entity.getLevel().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_WEAK, SoundSource.PLAYERS, 2.0F, 1.0F);
                             event.setCanceled(true);
                         }
                     }
@@ -137,13 +135,13 @@ public class AresSkill extends Skill {
     public boolean canTick(ManasSkillInstance instance, LivingEntity entity) {
         return true;
     }
-    private static double rotation = 0;
+    private static final double rotation = 0;
 
     @Override
     public void onTick(ManasSkillInstance instance, LivingEntity entity) {
 
         if (instance.isToggled()) {
-            entity.addEffect(new MobEffectInstance((MobEffect) MythosMobEffects.LONGEVITY_REGENERATION.get(), 200, 3, false, false, false));
+            entity.addEffect(new MobEffectInstance(MythosMobEffects.LONGEVITY_REGENERATION.get(), 200, 3, false, false, false));
         }
 
         if (!(entity instanceof Player player)) return;
@@ -193,23 +191,22 @@ public class AresSkill extends Skill {
             instance.setCoolDown(360);
             entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ZOMBIE_INFECT, SoundSource.PLAYERS, 1.0F, 1.0F);
             if (isMastered(instance, entity)) {
-                entity.addEffect(new MobEffectInstance((MobEffect)MythosMobEffects.ARES_BERSERKER.get(), 28800, amp, false, false, false));
+                entity.addEffect(new MobEffectInstance(MythosMobEffects.ARES_BERSERKER.get(), 28800, amp, false, false, false));
             } else {
-                entity.addEffect(new MobEffectInstance((MobEffect)MythosMobEffects.ARES_BERSERKER.get(), 14400, amp, false, false, false));
+                entity.addEffect(new MobEffectInstance(MythosMobEffects.ARES_BERSERKER.get(), 14400, amp, false, false, false));
             }
-            TensuraParticleHelper.addServerParticlesAroundSelf((Entity)entity, (ParticleOptions)ParticleTypes.EXPLOSION, 3.0D);
-            TensuraParticleHelper.addServerParticlesAroundSelf((Entity)entity, (ParticleOptions)ParticleTypes.EXPLOSION, 2.0D);
-            TensuraParticleHelper.spawnServerParticles(entity.level, (ParticleOptions) TensuraParticles.PURPLE_LIGHTNING_SPARK.get(), entity
+            TensuraParticleHelper.addServerParticlesAroundSelf(entity, ParticleTypes.EXPLOSION, 3.0D);
+            TensuraParticleHelper.addServerParticlesAroundSelf(entity, ParticleTypes.EXPLOSION, 2.0D);
+            TensuraParticleHelper.spawnServerParticles(entity.level, TensuraParticles.PURPLE_LIGHTNING_SPARK.get(), entity
                     .getX(), entity.getY(), entity.getZ(), 55, 0.08D, 0.08D, 0.08D, 0.5D, true);
         }
     }
 
     public int getSouls(LivingEntity entity) {
-        if (entity instanceof Player) {
-            Player player = (Player)entity;
-            return ((Integer)TensuraPlayerCapability.getFrom(player)
+        if (entity instanceof Player player) {
+            return TensuraPlayerCapability.getFrom(player)
                     .map(cap -> Integer.valueOf(cap.getSoulPoints() / 1000))
-                    .orElse(Integer.valueOf(0))).intValue();
+                    .orElse(Integer.valueOf(0)).intValue();
         }
         return 0;
     }

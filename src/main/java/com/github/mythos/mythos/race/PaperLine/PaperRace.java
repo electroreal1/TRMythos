@@ -4,7 +4,7 @@ import com.github.manasmods.tensura.ability.TensuraSkill;
 import com.github.manasmods.tensura.race.Race;
 import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.manasmods.tensura.registry.skill.IntrinsicSkills;
-import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
+import com.github.manasmods.tensura.util.JumpPowerHelper;
 import com.github.mythos.mythos.registry.race.MythosRaces;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.sounds.SoundEvents;
@@ -53,7 +53,7 @@ public class PaperRace extends Race {
 
         @Override
         public double getJumpHeight() {
-            return 2;
+            return JumpPowerHelper.defaultPlayer(2);
         }
 
 

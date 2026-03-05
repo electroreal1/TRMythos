@@ -1,26 +1,16 @@
 package com.github.mythos.mythos.race.RevenantLine;
 
-import com.github.manasmods.manascore.api.skills.SkillAPI;
-import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
 import com.github.manasmods.tensura.ability.TensuraSkill;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.race.Race;
-import com.github.manasmods.tensura.registry.items.TensuraMobDropItems;
-import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.manasmods.tensura.registry.skill.*;
-import com.github.mythos.mythos.config.MythosConfig;
-import com.github.mythos.mythos.registry.race.MythosRaces;
+import com.github.manasmods.tensura.util.JumpPowerHelper;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +51,7 @@ public class PrimalChaosRace extends Race {
 
     @Override
     public double getJumpHeight() {
-        return 1;
+        return JumpPowerHelper.defaultPlayer(1);
     }
 
     @Override

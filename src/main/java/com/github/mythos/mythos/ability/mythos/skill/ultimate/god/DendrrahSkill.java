@@ -11,17 +11,25 @@ import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.ability.skill.extra.HakiSkill;
 import com.github.manasmods.tensura.ability.skill.unique.CookSkill;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
+import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
+import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
+import com.github.manasmods.tensura.effect.template.Transformation;
 import com.github.manasmods.tensura.entity.magic.TensuraProjectile;
 import com.github.manasmods.tensura.entity.magic.projectile.SeveranceCutterProjectile;
 import com.github.manasmods.tensura.network.TensuraNetwork;
 import com.github.manasmods.tensura.network.play2client.RequestFxSpawningPacket;
 import com.github.manasmods.tensura.registry.attribute.TensuraAttributeRegistry;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
+import com.github.manasmods.tensura.registry.particle.TensuraParticles;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSources;
 import com.github.mythos.mythos.handler.GodClassHandler;
+import com.github.mythos.mythos.networking.MythosNetwork;
+import com.github.mythos.mythos.networking.play2server.ShaderPacket;
+import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.registry.skill.Skills;
 import com.github.mythos.mythos.util.MythosUtils;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -56,7 +64,7 @@ import java.util.UUID;
 import static com.github.mythos.mythos.config.MythosSkillsConfig.EnableGodClassObtainment;
 import static com.github.mythos.mythos.config.MythosSkillsConfig.EnableUltimateSkillObtainment;
 
-public class DendrrahSkill extends Skill {
+public class DendrrahSkill extends Skill implements Transformation {
     private static final UUID DENDRRAH_DAMAGE_UUID = UUID.fromString("f56df6f3-1847-4bd2-9d6b-48c57b6a91e1");
     private static final UUID DENDRRAH_SPEED_UUID = UUID.fromString("4b8ae36b-3740-4690-84cd-694db333ca1a");
     private static final UUID DENDRRAH_ARMOR_UUID = UUID.fromString("4b8ae90b-3740-4690-84cd-694db333ca1a");
@@ -184,7 +192,7 @@ public class DendrrahSkill extends Skill {
 
                     this.addMasteryPoint(instance, entity);
                     instance.setCoolDown(1);
-                    entity.getLevel().playSound((Player) null, entity.blockPosition(), SoundEvents.ILLUSIONER_MIRROR_MOVE, SoundSource.AMBIENT, 1.0F, 1.0F);
+                    entity.getLevel().playSound(null, entity.blockPosition(), SoundEvents.ILLUSIONER_MIRROR_MOVE, SoundSource.AMBIENT, 1.0F, 1.0F);
                 }
             }
         }
@@ -210,34 +218,65 @@ public class DendrrahSkill extends Skill {
         else return (instance.getMode() == 4) ? 1 : (instance.getMode() + 1);
     }
 
+    public int getSouls(LivingEntity entity) {
+        if (entity instanceof Player player) {
+            return TensuraPlayerCapability.getFrom(player)
+                    .map(cap -> Integer.valueOf(cap.getSoulPoints() / 1000))
+                    .orElse(Integer.valueOf(0)).intValue();
+        }
+        return 0;
+    }
+
     @Override
     public void onPressed(ManasSkillInstance instance, LivingEntity entity) {
         if (!(entity instanceof Player player)) return;
         // War God Release
         if (instance.getMode() == 1) {
+            if (!this.failedToActivate(entity, MythosMobEffects.ARES_BERSERKER.get())) {
+                if (entity.hasEffect(MythosMobEffects.ARES_BERSERKER.get())) {
+                    entity.removeEffect(MythosMobEffects.ARES_BERSERKER.get());
+                    entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ZOMBIE_VILLAGER_CURE, SoundSource.PLAYERS, 1.0F, 1.0F);
+                    instance.setCoolDown(360);
+                } else {
+                    if (SkillHelper.outOfMagicule(entity, instance)) return;
+                    double souls = getSouls(entity);
+                    int amp = Math.min((int) Math.round(souls / 1000.0D), 200);
 
-        }
+                    instance.setCoolDown(360);
+                    entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ZOMBIE_INFECT, SoundSource.PLAYERS, 1.0F, 1.0F);
+                    if (isMastered(instance, entity)) {
+                        entity.addEffect(new MobEffectInstance(MythosMobEffects.ARES_BERSERKER.get(), 28800, amp, false, false, false));
+                    } else {
+                        entity.addEffect(new MobEffectInstance(MythosMobEffects.ARES_BERSERKER.get(), 14400, amp, false, false, false));
+                    }
+                    TensuraParticleHelper.addServerParticlesAroundSelf(entity, ParticleTypes.EXPLOSION, 3.0D);
+                    TensuraParticleHelper.addServerParticlesAroundSelf(entity, ParticleTypes.EXPLOSION, 2.0D);
+                    TensuraParticleHelper.spawnServerParticles(entity.level, TensuraParticles.PURPLE_LIGHTNING_SPARK.get(), entity
+                            .getX(), entity.getY(), entity.getZ(), 55, 0.08D, 0.08D, 0.08D, 0.5D, true);
+                }
+            }
 
-        // Providence Blade
-        if (instance.getMode() == 2) {
-            SeveranceCutterProjectile cutter = new SeveranceCutterProjectile(entity.level, entity);
-            double userEP = TensuraEPCapability.getEP(player);
-            double targetEP = 0;
+            // Providence Blade
+            if (instance.getMode() == 2) {
+                SeveranceCutterProjectile cutter = new SeveranceCutterProjectile(entity.level, entity);
+                double userEP = TensuraEPCapability.getEP(player);
+                double targetEP = 0;
 
-            LivingEntity target = MythosUtils.getLookedAtEntity(entity, 30);
-            if (target != null) targetEP = TensuraEPCapability.getEP(target);
+                LivingEntity target = MythosUtils.getLookedAtEntity(entity, 30);
+                if (target != null) targetEP = TensuraEPCapability.getEP(target);
 
-            float baseDmg = instance.isMastered(entity) ? 2000F : 1000F;
-            float epBonus = (float) Math.max(0, (userEP - targetEP) / 1000.0);
+                float baseDmg = instance.isMastered(entity) ? 2000F : 1000F;
+                float epBonus = (float) Math.max(0, (userEP - targetEP) / 1000.0);
 
-            cutter.setDamage(Math.min(100000, baseDmg + epBonus));
-            cutter.setSize(this.isMastered(instance, entity) ? 8.0F : 5.0F);
-            cutter.setNoGravity(true);
-            cutter.setSkill(instance);
-            cutter.setPosAndShoot(entity);
-            cutter.setPosDirection(entity, TensuraProjectile.PositionDirection.MIDDLE);
-            entity.level.addFreshEntity(cutter);
-            entity.swing(InteractionHand.MAIN_HAND, true);
+                cutter.setDamage(Math.min(100000, baseDmg + epBonus));
+                cutter.setSize(this.isMastered(instance, entity) ? 8.0F : 5.0F);
+                cutter.setNoGravity(true);
+                cutter.setSkill(instance);
+                cutter.setPosAndShoot(entity);
+                cutter.setPosDirection(entity, TensuraProjectile.PositionDirection.MIDDLE);
+                entity.level.addFreshEntity(cutter);
+                entity.swing(InteractionHand.MAIN_HAND, true);
+            }
         }
     }
 
@@ -288,6 +327,17 @@ public class DendrrahSkill extends Skill {
         }
 
         return true;
+    }
+
+    @Override
+    public void onRelease(ManasSkillInstance instance, LivingEntity entity, int heldTicks) {
+        if (!(entity.level instanceof ServerLevel serverLevel)) return;
+        AABB area = entity.getBoundingBox().inflate(100);
+        List<ServerPlayer> players = serverLevel.getEntitiesOfClass(ServerPlayer.class, area);
+
+        for (ServerPlayer player : players) {
+            MythosNetwork.sendToPlayer(new ShaderPacket("none", 1.0f, 1.0f, 1.0f), player);
+        }
     }
 
     private void applyApocalypseEffect(LivingEntity target) {

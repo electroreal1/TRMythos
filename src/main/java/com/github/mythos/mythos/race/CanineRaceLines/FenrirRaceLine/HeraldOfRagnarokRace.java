@@ -4,9 +4,8 @@ import com.github.manasmods.tensura.ability.TensuraSkill;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.race.Race;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
-import com.github.manasmods.tensura.registry.skill.IntrinsicSkills;
 import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
-import com.github.manasmods.tensura.registry.skill.UniqueSkills;
+import com.github.manasmods.tensura.util.JumpPowerHelper;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
@@ -47,7 +46,7 @@ public class HeraldOfRagnarokRace extends Race {
 
     @Override
     public double getJumpHeight() {
-        return 2;
+        return JumpPowerHelper.defaultPlayer(2);
     }
 
     @Override

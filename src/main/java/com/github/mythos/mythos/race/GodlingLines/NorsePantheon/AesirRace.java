@@ -1,10 +1,9 @@
 package com.github.mythos.mythos.race.GodlingLines.NorsePantheon;
 
-import com.github.manasmods.tensura.ability.TensuraSkill;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.race.Race;
-import com.github.manasmods.tensura.registry.skill.ExtraSkills;
+import com.github.manasmods.tensura.util.JumpPowerHelper;
 import com.github.mythos.mythos.registry.race.MythosRaces;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.chat.Component;
@@ -52,7 +51,7 @@ public class AesirRace extends Race {
 
     @Override
     public double getJumpHeight() {
-        return 2;
+        return JumpPowerHelper.defaultPlayer(2);
     }
 
     @Override

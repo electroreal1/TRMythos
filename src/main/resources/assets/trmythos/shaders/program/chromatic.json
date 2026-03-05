@@ -1,0 +1,19 @@
+{
+  "blend": {
+    "func": "add",
+    "srcmsg": "one",
+    "dstmsg": "zero"
+  },
+  "vertex": "minecraft:blit",
+  "fragment": "trmythos:chromatic",
+  "attributes": [ "Position" ],
+  "samplers": [
+    { "name": "DiffuseSampler" }
+  ],
+  "uniforms": [
+    { "name": "ProjMat", "type": "matrix4x4", "count": 16, "values": [ 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 ] },
+    { "name": "InSize",  "type": "float",     "count": 2,  "values": [ 1, 1 ] },
+    { "name": "OutSize", "type": "float",     "count": 2,  "values": [ 1, 1 ] },
+    { "name": "Offset",  "type": "float",     "count": 2,  "values": [ 0.005, 0.005 ] }
+  ]
+}

@@ -13,6 +13,7 @@ import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.manasmods.tensura.registry.skill.CommonSkills;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.manasmods.tensura.registry.skill.IntrinsicSkills;
+import com.github.manasmods.tensura.util.JumpPowerHelper;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSources;
 import com.github.manasmods.tensura.world.TensuraGameRules;
 import com.github.mythos.mythos.registry.race.MythosRaces;
@@ -68,7 +69,7 @@ public class VampireBaron extends VampireRace implements Transformation {
 
     @Override
     public double getJumpHeight() {
-        return 1;
+        return JumpPowerHelper.defaultPlayer(1);
     }
 
     @Override

@@ -38,7 +38,7 @@ public class FishEvolutionHandler {
                 return;
             Player player = event.player;
             UUID playerId = player.getUUID();
-            if (TensuraEPCapability.isMajin((LivingEntity)player) && !evolvedThisTick.contains(playerId)) {
+            if (TensuraEPCapability.isMajin(player) && !evolvedThisTick.contains(playerId)) {
                 evolvePlayerIntoSeaBeast(player);
                 evolvedThisTick.add(playerId);
             }

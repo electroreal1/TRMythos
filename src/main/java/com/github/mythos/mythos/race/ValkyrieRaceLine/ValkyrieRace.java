@@ -8,6 +8,7 @@ import com.github.manasmods.tensura.registry.TensuraStats;
 import com.github.manasmods.tensura.registry.race.TensuraRaces;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
+import com.github.manasmods.tensura.util.JumpPowerHelper;
 import com.github.mythos.mythos.registry.race.MythosRaces;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.chat.Component;
@@ -56,7 +57,7 @@ public class ValkyrieRace extends Race {
 
     @Override
     public double getJumpHeight() {
-        return 2;
+        return JumpPowerHelper.defaultPlayer(2);
     }
 
 
@@ -70,10 +71,10 @@ public class ValkyrieRace extends Race {
         return 0.25f;
     }
 
-    private double auraMin = 300000;
-    private double auraMax = 300000;
-    private double startingMagiculeMin = 200000;
-    private double startingMagiculeMax = 200000;
+    private final double auraMin = 300000;
+    private final double auraMax = 300000;
+    private final double startingMagiculeMin = 200000;
+    private final double startingMagiculeMax = 200000;
 
     @Override
     public Pair<Double, Double> getBaseAuraRange() {
@@ -85,7 +86,7 @@ public class ValkyrieRace extends Race {
         // Base EP contribution, capped at 50
         double percentage = TensuraPlayerCapability.getBaseEP(player) * 50 / minimalEP;
         percentage = Math.min(percentage, 50.0);
-        double boss = (double)Math.min(TensuraStats.getBossKilled(player) * 50 / (Integer)TensuraConfig.INSTANCE.racesConfig.bossForSaint.get(), 50);
+        double boss = Math.min(TensuraStats.getBossKilled(player) * 50 / TensuraConfig.INSTANCE.racesConfig.bossForSaint.get(), 50);
         return percentage + boss;
     }
     public List<Component> getRequirementsForRendering(Player player) {
@@ -141,7 +142,7 @@ public class ValkyrieRace extends Race {
             }
             entity.getAbilities().setFlyingSpeed(0.1F);
             entity.onUpdateAbilities();
-            level.playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ELYTRA_FLYING, SoundSource.PLAYERS, 0.5F, 1.0F);
+            level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ELYTRA_FLYING, SoundSource.PLAYERS, 0.5F, 1.0F);
         }
     }
 
