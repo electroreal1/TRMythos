@@ -9,7 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.damagesource.EntityDamageSource;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -44,7 +44,7 @@ public class DarkDesireHandler {
                 double victimMP = TensuraEPCapability.getEP(victim);
 
                 if (victimMP < (userMP * 0.8)) {
-                    victim.die(EntityDamageSource.GENERIC);
+                    victim.die(DamageSource.mobAttack(user));
                     victim.level.playSound(null, victim.blockPosition(), SoundEvents.BELL_BLOCK, SoundSource.PLAYERS, 1.0F, 0.1F);
 
                     instance.setMastery(instance.getSkill().getMaxMastery() / 2);
