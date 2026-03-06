@@ -241,6 +241,6 @@ public class Skills {
         // extra
         AUTOMATIC_HAKI_COAT = registery.register("automatic_haki_coat", () -> new AutomaticHakiCoatSkill(Skill.SkillType.EXTRA));
         SPATIAL_STORAGE_SKILL = registery.register("spatial_storage", () -> new SpatialStorageSkill(Skill.SkillType.EXTRA));
-        THUNDER_RAIN = registery.register("thunder_rain", () -> new ThunderRainSkill(Skill.SkillType.EXTRA));
+        THUNDER_RAIN = registery.register("thunder_rain", ThunderRainSkill::new);
     }
 }

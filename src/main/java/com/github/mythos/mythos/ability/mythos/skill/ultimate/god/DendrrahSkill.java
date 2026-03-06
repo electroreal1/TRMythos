@@ -23,8 +23,6 @@ import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.registry.particle.TensuraParticles;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSources;
 import com.github.mythos.mythos.handler.GodClassHandler;
-import com.github.mythos.mythos.networking.MythosNetwork;
-import com.github.mythos.mythos.networking.play2server.ShaderPacket;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.registry.skill.Skills;
 import com.github.mythos.mythos.util.MythosUtils;
@@ -254,6 +252,7 @@ public class DendrrahSkill extends Skill implements Transformation {
                     TensuraParticleHelper.spawnServerParticles(entity.level, TensuraParticles.PURPLE_LIGHTNING_SPARK.get(), entity
                             .getX(), entity.getY(), entity.getZ(), 55, 0.08D, 0.08D, 0.08D, 0.5D, true);
                 }
+                instance.setCoolDown(100);
             }
 
             // Providence Blade
@@ -276,6 +275,7 @@ public class DendrrahSkill extends Skill implements Transformation {
                 cutter.setPosDirection(entity, TensuraProjectile.PositionDirection.MIDDLE);
                 entity.level.addFreshEntity(cutter);
                 entity.swing(InteractionHand.MAIN_HAND, true);
+                instance.setCoolDown(10);
             }
         }
     }
@@ -331,13 +331,8 @@ public class DendrrahSkill extends Skill implements Transformation {
 
     @Override
     public void onRelease(ManasSkillInstance instance, LivingEntity entity, int heldTicks) {
-        if (!(entity.level instanceof ServerLevel serverLevel)) return;
-        AABB area = entity.getBoundingBox().inflate(100);
-        List<ServerPlayer> players = serverLevel.getEntitiesOfClass(ServerPlayer.class, area);
-
-        for (ServerPlayer player : players) {
-            MythosNetwork.sendToPlayer(new ShaderPacket("none", 1.0f, 1.0f, 1.0f), player);
-        }
+        if (instance.getMode() == 3 && this.isHeld(entity)) instance.setCoolDown(100);
+        if (instance.getMode() == 4 && this.isHeld(entity)) instance.setCoolDown(100);
     }
 
     private void applyApocalypseEffect(LivingEntity target) {
