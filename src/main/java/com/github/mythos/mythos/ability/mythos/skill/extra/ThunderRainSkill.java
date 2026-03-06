@@ -46,7 +46,7 @@ public class ThunderRainSkill extends Skill {
     }
 
     @Override
-    public void onTick(ManasSkillInstance instance, LivingEntity entity) {
+    public void onTick(@NotNull ManasSkillInstance instance, LivingEntity entity) {
         if (!entity.hasEffect(MythosMobEffects.LIGHTNING_COAT.get())) {
             if (SkillHelper.outOfMagicule(entity, instance)) {
                 return;
