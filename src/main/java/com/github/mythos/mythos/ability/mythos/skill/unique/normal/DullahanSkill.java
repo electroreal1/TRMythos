@@ -55,6 +55,10 @@ import java.util.List;
 
 public class DullahanSkill extends Skill {
 
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/unique/dullahan.png");
+    }
+
     public DullahanSkill() {
         super(SkillType.UNIQUE);
         MinecraftForge.EVENT_BUS.register(this);
@@ -242,12 +246,39 @@ public class DullahanSkill extends Skill {
                 }
 
                 instance.addMasteryPoint(player);
-                instance.setCoolDown(10);
-
                 player.swing(InteractionHand.MAIN_HAND, true);
                 break;
+            case 4:
+                if (!(entity instanceof Player player)) return;
+                if (instance.onCoolDown()) return;
 
+                ItemStack stack = player.getMainHandItem();
+
+                if (!(stack.getItem() instanceof PlayerHeadItem)) return;
+
+                int count = stack.getCount();
+                int mpGain = 2000 * count;
+
+
+                SkillHelper.gainMaxMP(player, mpGain);
+
+                stack.shrink(count);
+
+                ServerLevel level4 = (ServerLevel) player.level;
+
+                level4.playSound(null,
+                        player.blockPosition(),
+                        SoundEvents.EVOKER_PREPARE_SUMMON,
+                        player.getSoundSource(),
+                        1.0F,
+                        0.8F);
+
+                player.swing(InteractionHand.MAIN_HAND, true);
+
+                instance.addMasteryPoint(player);
+                break;
         }
+
     }
     @SubscribeEvent
     public void onLivingHurt(LivingHurtEvent event) {

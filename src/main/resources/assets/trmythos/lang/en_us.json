@@ -72,8 +72,8 @@
   "trmythos.skill.the_world.description": "Your power continues to grow, surging in ways you could have never perceived. Now a strange, ghostly companion stands at your side, granting you control over the hands of time, if only for a few precious moments.",
 
   "trmythos.skill.bibliomania": "Bibliomania",
-  "trmythos.skill.mode.bibliomania.description": "You'll live forever, within my records... this is the greatest honor I can grant with my own two hands.",
-  "trmythos.skill.mode.bibliomania.glossary": "Glossary",
+  "trmythos.skill.bibliomania.description": "You'll live forever, within my records... this is the greatest honor I can grant with my own two hands.",
+   "trmythos.skill.mode.bibliomania.glossary": "Glossary",
   "trmythos.skill.mode.bibliomania.bookmark": "Bookmark",
   "trmythos.skill.mode.bibliomania.bird_in_the_window": "Bird In The Window",
   "trmythos.skill.mode.bibliomania.for_my_happiness": "For My Happiness",
@@ -84,6 +84,13 @@
   "trmythos.skill.mode.eltnam.Synthetic_blood_formula" : "§5Synthetic Blood",
   "trmythos.skill.mode.eltnam.Scry_proficiency: Divination" : "§5Scry Proficiency: Divination",
   "trmythos.skill.eltnam.obtained" : "§cThe Crimson Moon extends his blessing...",
+
+  "trmythos.skill.dullahan": "§0Dullahan",
+  "trmythos.skill.dullahan.description": "Dark, Angry, sullen...such a head no mortal ever saw before...",
+  "trmythos.skill.mode.dullahan.iris_out" : "§0Iris Out",
+  "trmythos.skill.mode.dullahan.spine_whip" : "§0Spine Whip",
+  "trmythos.skill.mode.dullahan.soundless_coach" : "§0Soundless Coach",
+  "trmythos.skill.mode.dullahan.god_of_sacrifice" : "§0God of Sacrifice",
 
   "trmythos.skill.zepia": "§cZepia",
   "trmythos.skill.zepia.description": "Kill yourself! Destroy yourself! End your inane existance!",

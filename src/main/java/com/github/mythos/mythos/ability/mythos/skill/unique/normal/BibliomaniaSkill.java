@@ -40,6 +40,9 @@ public class BibliomaniaSkill extends Skill {
         super(SkillType.UNIQUE);
     }
 
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/unique/bibliomania.png");
+    }
 
     @Nullable
     @Override
