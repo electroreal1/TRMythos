@@ -27,7 +27,6 @@ import com.github.manasmods.tensura.util.damage.TensuraDamageSources;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.voiceoftheworld.VoiceOfTheWorld;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -38,7 +37,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
@@ -54,7 +52,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -119,7 +116,7 @@ public class MammonSkill extends Skill implements ISpatialStorage {
 
     @Override
     public int modes() {
-        return 3;
+        return 4;
     }
 
     @Override
@@ -160,21 +157,15 @@ public class MammonSkill extends Skill implements ISpatialStorage {
 
     public void onTick(Player player, ManasSkillInstance instance, CompoundTag tag) {
         SkillStorage storage = SkillAPI.getSkillsFrom(player);
-
-
-        List<ManasSkillInstance> skills = new ArrayList<>(storage.getLearnedSkills());
-
-        for (ManasSkillInstance tempInstance : skills) {
-            if (tempInstance.isTemporarySkill()) {
-                storage.forgetSkill(tempInstance.getSkill());
-
+        storage.getLearnedSkills().removeIf(tempInstance -> {
+            if (tempInstance.isTemporarySkill() && tempInstance.getRemoveTime() <= 0) {
                 player.displayClientMessage(
                         Component.translatable("tensura.skill.temp_lost", tempInstance.getSkill().getName())
-                                .withStyle(style -> style.withColor(ChatFormatting.GRAY)),
-                        false
-                );
+                                .withStyle(ChatFormatting.GRAY), false);
+                return true;
             }
-        }
+            return false;
+        });
     }
 
     public double magiculeCost(LivingEntity entity, ManasSkillInstance instance) {
@@ -193,10 +184,8 @@ public class MammonSkill extends Skill implements ISpatialStorage {
     }
 
     public void onHeld(ManasSkillInstance instance, LivingEntity entity) {
-        if (!SkillHelper.outOfMagicule(entity, instance)) {
-            CompoundTag tag = instance.getOrCreateTag();
-            int heldTicks = tag.getInt("heldTicks");
-            if (instance.getMode() == 4) {
+        if (instance.getMode() == 4) {
+            if (!SkillHelper.outOfMagicule(entity, instance)) {
                 this.death(instance, entity);
             }
         }
@@ -204,66 +193,66 @@ public class MammonSkill extends Skill implements ISpatialStorage {
 
     public boolean death(ManasSkillInstance instance, LivingEntity user) {
         CompoundTag tag = instance.getOrCreateTag();
-
-        LivingEntity currentTarget = SkillHelper.getTargetingEntity(LivingEntity.class, user, 10.0, 1.0, true, true);
+        LivingEntity currentTarget = SkillHelper.getTargetingEntity(user, 15.0, false);
 
         if (currentTarget == null) {
-            if (user.tickCount % 20 == 0) {
-                int seconds = tag.getInt("heldSeconds");
-                if (seconds > 0) {
-                    tag.putInt("heldSeconds", seconds - 1);
-                    if (user instanceof Player p) p.displayClientMessage(Component.literal("§cLock Lost - Charging: " + seconds + "s"), true);
-                } else {
-                    tag.remove("targetUUID");
-                }
+            int grace = tag.getInt("lockGrace");
+            if (grace > 20) {
+                tag.putInt("heldSeconds", 0);
+                tag.remove("targetUUID");
+                tag.putInt("lockGrace", 0);
+                if (user instanceof Player p) p.displayClientMessage(Component.literal("§cTarget Lost - Resetting"), true);
+            } else {
+                tag.putInt("lockGrace", grace + 1);
             }
             return false;
         }
 
-        if (!tag.hasUUID("targetUUID")) {
+        tag.putInt("lockGrace", 0);
+
+        if (!tag.hasUUID("targetUUID") || !tag.getUUID("targetUUID").equals(currentTarget.getUUID())) {
             tag.putUUID("targetUUID", currentTarget.getUUID());
+            tag.putInt("heldSeconds", 0);
         }
 
-        if (currentTarget.getUUID().equals(tag.getUUID("targetUUID"))) {
-            if (user.tickCount % 20 == 0) {
-                int seconds = tag.getInt("heldSeconds") + 1;
-                tag.putInt("heldSeconds", seconds);
+        if (user.tickCount % 20 == 0) {
+            int seconds = tag.getInt("heldSeconds") + 1;
+            tag.putInt("heldSeconds", seconds);
 
-                if (user instanceof Player player) {
-                    ChatFormatting color = seconds > 7 ? ChatFormatting.RED : ChatFormatting.GOLD;
-                    player.displayClientMessage(Component.literal("§6Death Wish Charging: " + seconds + "/10s").withStyle(color), true);
+            if (user instanceof Player player) {
+                ChatFormatting color = seconds >= 10 ? ChatFormatting.RED : ChatFormatting.GOLD;
+                player.displayClientMessage(Component.literal("§6Death Wish Charging: " + seconds + "/10s").withStyle(color), true);
 
-                    user.level.playSound(null, user.getX(), user.getY(), user.getZ(),
-                            SoundEvents.UI_BUTTON_CLICK, SoundSource.PLAYERS, 0.5f, 0.5f + (seconds * 0.1f));
-                }
+                user.level.playSound(null, user.getX(), user.getY(), user.getZ(),
+                        SoundEvents.UI_BUTTON_CLICK, SoundSource.PLAYERS, 0.5f, 0.5f + (seconds * 0.1f));
             }
+        }
 
-            if (user.level instanceof ServerLevel) {
-                TensuraParticleHelper.addServerParticlesAroundSelf(currentTarget, ParticleTypes.REVERSE_PORTAL, 0.5);
-            }
+        if (user.level instanceof ServerLevel) {
+            TensuraParticleHelper.addServerParticlesAroundSelf(currentTarget, ParticleTypes.REVERSE_PORTAL, 0.2);
+        }
 
-            if (tag.getInt("heldSeconds") >= 10) {
-                tag.putInt("heldSeconds", 0);
-                tag.remove("targetUUID");
-
-                this.addMasteryPoint(instance, user);
-
-                float executionDamage = currentTarget.getMaxHealth() * 10.0F;
-                DamageSource source = this.sourceWithMP(TensuraDamageSources.deathWish(user), user, instance);
-
-                if (currentTarget.hurt(source, executionDamage)) {
-                    user.level.playSound(null, currentTarget.getX(), currentTarget.getY(), currentTarget.getZ(),
-                            SoundEvents.WITHER_SPAWN, SoundSource.PLAYERS, 1.0F, 0.5F);
-                    TensuraParticleHelper.addServerParticlesAroundSelf(currentTarget, (ParticleOptions)TensuraParticles.BLACK_LIGHTNING_EFFECT.get(), 2.0);
-                }
-                return true;
-            }
-        } else {
+        if (tag.getInt("heldSeconds") >= 10) {
+            this.executeDeathWish(instance, user, currentTarget);
             tag.putInt("heldSeconds", 0);
-            tag.putUUID("targetUUID", currentTarget.getUUID());
+            tag.remove("targetUUID");
+            return true;
         }
 
         return false;
+    }
+
+    private void executeDeathWish(ManasSkillInstance instance, LivingEntity user, LivingEntity target) {
+        this.addMasteryPoint(instance, user);
+        float executionDamage = target.getMaxHealth() * 10.0F;
+
+        DamageSource source = TensuraDamageSources.deathWish(user);
+
+        if (target.hurt(source, executionDamage)) {
+            user.level.playSound(null, target.getX(), target.getY(), target.getZ(),
+                    SoundEvents.WITHER_SPAWN, SoundSource.PLAYERS, 1.0F, 0.5F);
+            TensuraParticleHelper.addServerParticlesAroundSelf(target, TensuraParticles.BLACK_LIGHTNING_EFFECT.get(), 2.0);
+        }
     }
 
     public void life(ManasSkillInstance instance, LivingEntity user, Level level) {
@@ -305,7 +294,7 @@ public class MammonSkill extends Skill implements ISpatialStorage {
                     level.playSound(null, user.getX(), user.getY(), user.getZ(),
                             SoundEvents.IRON_GOLEM_DEATH, SoundSource.PLAYERS, 1.0F, 0.7F);
 
-                    TensuraParticleHelper.addServerParticlesAroundSelf(target, (ParticleOptions)TensuraParticles.BLACK_LIGHTNING_EFFECT.get(), 1.5);
+                    TensuraParticleHelper.addServerParticlesAroundSelf(target, TensuraParticles.BLACK_LIGHTNING_EFFECT.get(), 1.5);
                 }
             }
         }
@@ -328,10 +317,10 @@ public class MammonSkill extends Skill implements ISpatialStorage {
 
                 for (LivingEntity target : targets) {
                     if (CharmSkill.canMindControl(target, level) &&
-                            !target.hasEffect((MobEffect)TensuraMobEffects.RAMPAGE.get()) &&
+                            !target.hasEffect(TensuraMobEffects.RAMPAGE.get()) &&
                             !RaceHelper.isSpiritualLifeForm(target)) {
 
-                        int duration = SkillUtils.isSkillToggled(target, (ManasSkill) ResistanceSkills.SPIRITUAL_ATTACK_NULLIFICATION.get()) ? 30000 : 60000;
+                        int duration = SkillUtils.isSkillToggled(target, ResistanceSkills.SPIRITUAL_ATTACK_NULLIFICATION.get()) ? 30000 : 60000;
 
                         SkillHelper.checkThenAddEffectSource(target, user, TensuraMobEffects.MIND_CONTROL.get(), duration, 0);
 
