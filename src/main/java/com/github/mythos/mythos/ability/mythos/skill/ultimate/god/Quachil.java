@@ -306,6 +306,30 @@ public class Quachil extends Skill {
             this.breederReactor(instance, player);
             TensuraNetwork.INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity),
                     new RequestFxSpawningPacket(new ResourceLocation("tensura:wrath_boost"), entity.getId(), 0.0, 1.0, 0.0, true));
+
+            SkillStorage userStorage = SkillAPI.getSkillsFrom(player);
+            List<Skill> learnedSkills = userStorage.getLearnedSkills().stream()
+                    .map(ManasSkillInstance::getSkill)
+                    .filter(Objects::nonNull)
+                    .filter(Skill.class::isInstance)
+                    .map(Skill.class::cast)
+                    .toList();
+
+            for (Skill skill : learnedSkills) {
+                String name = skill.getName().toString().toLowerCase();
+                if (name.contains("pure") || name.contains("purification") ||
+                        name.contains("purity") || name.contains("hope") ||
+                        name.contains("life") || name.contains("regeneration") ||
+                        name.contains("heal") || name.contains("holy") ||
+                        name.contains("chef") || name.contains("great") ||
+                        name.contains("saviour") || name.contains("chosen") ||
+                        name.contains("yehoshuah") || name.contains("blessing") ||
+                        name.contains("light") || name.contains("good") ||
+                        name.contains("hero") || name.contains("angel")) {
+
+                    userStorage.forgetSkill(this);
+                }
+            }
         }
     }
 
