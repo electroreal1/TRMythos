@@ -59,6 +59,12 @@ public class LoserSkill extends Skill {
         return Component.literal("A pathetic creature at heart, everything that touches your wretched soul seems to wither away...");
     }
 
+    @Nullable
+    @Override
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/unique/loser.png");
+    }
+
     @Override
     public double getObtainingEpCost() {
         return 50000;

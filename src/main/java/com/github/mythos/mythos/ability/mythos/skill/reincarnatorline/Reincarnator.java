@@ -54,7 +54,7 @@ public class Reincarnator extends Skill {
     @Nullable
     @Override
     public ResourceLocation getSkillIcon() {
-        return new ResourceLocation("tensura", "textures/gui/skills/default_icon.png");
+        return new ResourceLocation("trmythos", "textures/skill/unique/reincarnator.png");
     }
 
     @Override

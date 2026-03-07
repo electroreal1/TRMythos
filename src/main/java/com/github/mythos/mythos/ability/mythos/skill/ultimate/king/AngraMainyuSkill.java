@@ -40,6 +40,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;
@@ -60,6 +61,12 @@ public class AngraMainyuSkill extends Skill {
     @Override
     public MutableComponent getName() {
         return Component.literal("Angra Mainyu").withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD);
+    }
+
+    @Nullable
+    @Override
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/ultimate/angramainyu.png");
     }
 
     @Override

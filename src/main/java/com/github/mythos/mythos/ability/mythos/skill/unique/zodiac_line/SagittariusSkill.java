@@ -12,6 +12,7 @@ import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -47,6 +48,12 @@ public class SagittariusSkill extends Skill {
     @Override
     public MutableComponent getName() {
         return Component.literal("Sagittarius");
+    }
+
+    @Nullable
+    @Override
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/unique/sagittarius.png");
     }
 
     @Override

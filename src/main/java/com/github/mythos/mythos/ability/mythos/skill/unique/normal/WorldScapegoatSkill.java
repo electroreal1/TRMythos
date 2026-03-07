@@ -52,6 +52,12 @@ public class WorldScapegoatSkill extends Skill {
         return Component.literal("World's Scapegoat").withStyle(ChatFormatting.DARK_RED);
     }
 
+    @Nullable
+    @Override
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/unique/worldsscapegoat.png");
+    }
+
     @Override
     public Component getSkillDescription() {
         return Component.literal("When the world falters, it seeks a bearer. When it curses, it chooses one.");

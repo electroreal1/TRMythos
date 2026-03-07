@@ -13,6 +13,7 @@ import com.github.mythos.mythos.registry.MythosParticles;
 import com.github.mythos.mythos.util.MythosUtils;
 import com.github.mythos.mythos.util.damage.MythosDamageSources;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -24,6 +25,7 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import org.jetbrains.annotations.Nullable;
 
 import static com.github.mythos.mythos.ability.mythos.skill.unique.normal.CrimsonTyrantSkill.VAMPIRE_ANCESTOR;
 
@@ -55,6 +57,12 @@ public class CrimsonArcanistSkill extends Skill {
                 cap.setBaseMagicule(magicules, player);
             }
         });
+    }
+
+    @Nullable
+    @Override
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/unique/crimsonarcanist.png");
     }
 
     @Override
