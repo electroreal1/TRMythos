@@ -712,7 +712,7 @@ public class Khonsu extends Skill {
                 double victimMP = TensuraEPCapability.getEP(victim);
 
                 if (victimMP < (userMP * 0.8)) {
-                    victim.die(DamageSource.OUT_OF_WORLD);
+                    victim.die(DamageSource.mobAttack(user));
 
                     victim.level.playSound(null, victim.blockPosition(), SoundEvents.BELL_BLOCK, SoundSource.PLAYERS, 1.0F, 0.1F);
 
