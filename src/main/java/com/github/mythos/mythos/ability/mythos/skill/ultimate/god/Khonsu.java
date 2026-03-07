@@ -691,34 +691,40 @@ public class Khonsu extends Skill {
     }
 
     @SubscribeEvent
-    public static void onServerChat(ServerChatEvent event, ManasSkillInstance instance) {
+    public static void onServerChat(ServerChatEvent event) {
         ServerPlayer user = event.getPlayer();
 
+        ManasSkillInstance instance = SkillUtils.getSkillOrNull(user, Skills.KHONSU.get());
+
         if (instance != null && instance.getOrCreateTag().getBoolean("DarkDesireListening")) {
-            event.setCanceled(true);
+            event.setMessage(Component.empty());
 
             String targetName = event.getRawText().trim();
             CompoundTag tag = instance.getOrCreateTag();
 
+            if (user.getServer() == null) return;
+
             ServerPlayer victim = null;
-            for (ServerPlayer p : Objects.requireNonNull(user.getServer()).getPlayerList().getPlayers()) {
+            for (ServerPlayer p : user.getServer().getPlayerList().getPlayers()) {
                 if (p.getName().getString().equalsIgnoreCase(targetName)) {
                     victim = p;
                     break;
                 }
             }
+
             if (victim != null) {
                 double userMP = TensuraEPCapability.getEP(user);
                 double victimMP = TensuraEPCapability.getEP(victim);
 
                 if (victimMP < (userMP * 0.8)) {
                     victim.die(DamageSource.mobAttack(user));
-
                     victim.level.playSound(null, victim.blockPosition(), SoundEvents.BELL_BLOCK, SoundSource.PLAYERS, 1.0F, 0.1F);
 
                     instance.setMastery(instance.getSkill().getMaxMastery() / 2);
-
                     user.displayClientMessage(Component.literal("§0Desire fulfilled. §8" + targetName + " has been erased."), true);
+
+                    tag.putBoolean("DarkDesireListening", false);
+                    instance.setCoolDown(24000);
                 } else {
                     user.displayClientMessage(Component.literal("§cTheir soul is too heavy for your desire to claim."), true);
                 }
@@ -726,12 +732,9 @@ public class Khonsu extends Skill {
                 user.displayClientMessage(Component.literal("§7The void finds no one by that name."), true);
             }
 
-            tag.putBoolean("DarkDesireListening", false);
-            instance.setCoolDown(1200);
             instance.markDirty();
         }
     }
-
 
     @Override
     public boolean canIgnoreCoolDown(ManasSkillInstance instance, LivingEntity entity) {
