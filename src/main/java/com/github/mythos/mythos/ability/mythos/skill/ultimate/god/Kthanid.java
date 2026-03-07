@@ -31,6 +31,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
@@ -45,9 +46,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
-import static com.github.mythos.mythos.config.MythosSkillsConfig.*;
+import static com.github.mythos.mythos.config.MythosSkillsConfig.EnableGodClassObtainment;
+import static com.github.mythos.mythos.config.MythosSkillsConfig.EnableUltimateSkillObtainment;
 
 public class Kthanid extends Skill {
 
@@ -135,16 +138,43 @@ public class Kthanid extends Skill {
     public boolean meetEPRequirement(@NotNull Player player, double newEP) {
         if (!EnableGodClassObtainment()) return false;
         if (!EnableUltimateSkillObtainment()) return false;
+        SkillStorage userStorage = SkillAPI.getSkillsFrom(player);
         double currentEP = TensuraEPCapability.getCurrentEP(player);
         if (currentEP < getObtainingEpCost()) {
             return false;
         }
+
+        List<Skill> learnedSkills = userStorage.getLearnedSkills().stream()
+                .map(ManasSkillInstance::getSkill)
+                .filter(Objects::nonNull)
+                .filter(Skill.class::isInstance)
+                .map(Skill.class::cast)
+                .toList();
+
+        for (Skill skill : learnedSkills) {
+            String name = skill.getName().toString().toLowerCase();
+            if (name.contains("crimson") || name.contains("dark") ||
+                    name.contains("apophis") || name.contains("sin") ||
+                    name.contains("pride") || name.contains("lust") ||
+                    name.contains("carnage") || name.contains("sloth") ||
+                    name.contains("profanity") || name.contains("gluttony") ||
+                    name.contains("traitor") || name.contains("betrayal") ||
+                    name.contains("villain") || name.contains("avenger") ||
+                    name.contains("shadow") || name.contains("envy") ||
+                    name.contains("greed") || name.contains("wrath") || name.contains("vainglory")) {
+                return false;
+            }
+        }
+
+        if (((ServerPlayer) player).getStats().getValue(Stats.CUSTOM.get(Stats.RAID_WIN)) > 25) return false;
+
         return SkillUtils.isSkillMastered(player, Skills.DIKE.get()) &&
                 SkillUtils.isSkillMastered(player, UltimateSkills.URIEL.get()) &&
                 SkillUtils.isSkillMastered(player, UniqueSkills.GREAT_SAGE.get()) &&
                 SkillUtils.isSkillMastered(player, UniqueSkills.ABSOLUTE_SEVERANCE.get()) &&
                 SkillUtils.isSkillMastered(player, UltimateSkills.SANDALPHON.get()) &&
                 SkillUtils.isSkillMastered(player, UltimateSkills.SARIEL.get());
+
     }
 
     private double getMaxEP(LivingEntity entity) {

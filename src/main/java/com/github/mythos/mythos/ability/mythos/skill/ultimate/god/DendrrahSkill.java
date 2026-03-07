@@ -103,6 +103,22 @@ public class DendrrahSkill extends Skill implements Transformation {
         if (!EnableUltimateSkillObtainment()) return false;
         if (!(player.level instanceof ServerLevel world)) return false;
         GodClassHandler godClassHandler = GodClassHandler.get(world);
+        SkillStorage userStorage = SkillAPI.getSkillsFrom(player);
+
+        List<Skill> learnedSkills = userStorage.getLearnedSkills().stream()
+                .map(ManasSkillInstance::getSkill)
+                .filter(Objects::nonNull)
+                .filter(Skill.class::isInstance)
+                .map(Skill.class::cast)
+                .toList();
+
+        for (Skill skill : learnedSkills) {
+            String name = skill.getName().toString().toLowerCase();
+            if (name.contains("healer") || name.contains("chosen_one") ||
+                    name.contains("regeneration") || name.contains("holy") || name.contains("chef") || name.contains("life") || name.contains("hope")) {
+                return false;
+            }
+        }
 
         return TensuraEPCapability.getCurrentEP(player) >= getObtainingEpCost() && SkillUtils.isSkillMastered(player, Skills.ARES.get()) && SkillUtils.isSkillMastered(player, Skills.RAVANA.get()) && !godClassHandler.isDendrahhObtained();
     }

@@ -145,7 +145,7 @@ public class Khonsu extends Skill {
         for (Skill skill : learnedSkills) {
             String name = skill.getName().toString().toLowerCase();
             if (name.contains("healer") || name.contains("chosen_one") ||
-                    name.contains("regeneration") || name.contains("holy") || name.contains("chef") || name.contains("life")) {
+                    name.contains("regeneration") || name.contains("holy") || name.contains("chef") || name.contains("life") || name.contains("hope")) {
                 return false;
             }
         }
