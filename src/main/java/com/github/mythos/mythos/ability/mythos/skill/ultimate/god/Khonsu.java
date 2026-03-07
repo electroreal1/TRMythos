@@ -25,6 +25,8 @@ import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
 import com.github.mythos.mythos.handler.GodClassHandler;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.registry.skill.Skills;
+import com.github.mythos.mythos.util.kill_tracker.IKillTracker;
+import com.github.mythos.mythos.util.kill_tracker.KillTrackerProvider;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -38,6 +40,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
@@ -92,7 +95,7 @@ public class Khonsu extends Skill {
 
     @Override
     public double getObtainingEpCost() {
-        return 20000000.0;
+        return 50000000.0;
     }
 
     @Nullable
@@ -119,11 +122,39 @@ public class Khonsu extends Skill {
     public boolean meetEPRequirement(Player player, double newEP) {
         if (!EnableGodClassObtainment()) return false;
         if (!EnableUltimateSkillObtainment()) return false;
+        SkillStorage userStorage = SkillAPI.getSkillsFrom(player);
+
         double currentEP = TensuraEPCapability.getCurrentEP(player);
-        if (currentEP < getObtainingEpCost()) {
+        if (currentEP < getObtainingEpCost()) return false;
+        if (!SkillUtils.isSkillMastered(player, Skills.HALI.get())) return false;
+
+        int totalPlayerKills = getTotalKills(player);
+        int awakenedPlayerKills = player.getCapability(KillTrackerProvider.CAPABILITY).map(IKillTracker::getAwakenedKills).orElse(0);
+
+        if (totalPlayerKills < 50 && awakenedPlayerKills < 10) {
             return false;
         }
-        return SkillUtils.isSkillMastered(player, Skills.HALI.get());
+
+        List<Skill> learnedSkills = userStorage.getLearnedSkills().stream()
+                .map(ManasSkillInstance::getSkill)
+                .filter(Objects::nonNull)
+                .filter(Skill.class::isInstance)
+                .map(Skill.class::cast)
+                .toList();
+
+        for (Skill skill : learnedSkills) {
+            String name = skill.getName().toString().toLowerCase();
+            if (name.contains("healer") || name.contains("chosen_one") ||
+                    name.contains("regeneration") || name.contains("holy") || name.contains("chef") || name.contains("life")) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private int getTotalKills(Player player) {
+        return ((ServerPlayer) player).getStats().getValue(Stats.CUSTOM.get(Stats.PLAYER_KILLS));
     }
 
 

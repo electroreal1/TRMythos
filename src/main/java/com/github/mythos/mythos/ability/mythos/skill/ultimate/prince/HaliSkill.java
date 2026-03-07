@@ -575,8 +575,9 @@ public class HaliSkill extends Skill {
 
     public void eyeOfTheMoon(ManasSkillInstance instance, LivingEntity entity) {
         Level level = entity.getLevel();
+        boolean isActive = entity.hasEffect(TensuraMobEffects.PRESENCE_CONCEALMENT.get());
 
-        if (!entity.hasEffect(TensuraMobEffects.SHADOW_STEP.get()) || !entity.hasEffect(MythosMobEffects.KHONSU.get()) || !entity.hasEffect(TensuraMobEffects.PRESENCE_CONCEALMENT.get())) {
+        if (!isActive) {
             if (SkillHelper.outOfMagicule(entity, instance)) {
                 return;
             }
@@ -584,17 +585,17 @@ public class HaliSkill extends Skill {
             this.addMasteryPoint(instance, entity);
 
             level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
-                    SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
+                    SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 1.2F);
 
-            entity.addEffect(new MobEffectInstance(TensuraMobEffects.SHADOW_STEP.get(), 6000, 0,
-                    false, false, false));
-            entity.addEffect(new MobEffectInstance(TensuraMobEffects.PRESENCE_CONCEALMENT.get(), 6000,
-                    3, false, false, false));
+            entity.addEffect(new MobEffectInstance(TensuraMobEffects.SHADOW_STEP.get(), 6000, 0, false, false, false));
+            entity.addEffect(new MobEffectInstance(TensuraMobEffects.PRESENCE_CONCEALMENT.get(), 6000, 3, false, false, false));
         } else {
             entity.removeEffect(TensuraMobEffects.SHADOW_STEP.get());
             entity.removeEffect(TensuraMobEffects.PRESENCE_CONCEALMENT.get());
+            entity.removeEffect(MythosMobEffects.KHONSU.get());
+
             level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
-                    SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 0.5F);
+                    SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 0.7F);
         }
     }
 
