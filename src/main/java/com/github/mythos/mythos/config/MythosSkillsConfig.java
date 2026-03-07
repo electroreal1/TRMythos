@@ -20,6 +20,7 @@ public class MythosSkillsConfig {
     public static ForgeConfigSpec.BooleanValue VampireCarnage;
     public static ForgeConfigSpec.BooleanValue endOfEvilReset;
     public static ForgeConfigSpec.BooleanValue EnableSkillAuras;
+    public static ForgeConfigSpec.BooleanValue DarkDesire;
     public static ForgeConfigSpec.BooleanValue CarnageBloodDominion;
     public static ForgeConfigSpec.BooleanValue EnableUltimateSkillObtainment;
     public static ForgeConfigSpec.BooleanValue EnableGodClassUltimates;
@@ -146,6 +147,9 @@ public class MythosSkillsConfig {
                 .comment("If true then those who dies to Kthanid's End of Evil will be character reset," +
                         "note: THIS CANNOT REVERSE SOMEONE WHO WAS ALREADY RESET")
                 .define("endOfEvilReset", false);
+        DarkDesire = builder
+                .comment("If enabled let's Khonsu use Dark Desire to kill someone.")
+                .define("DarkDesire", true);
        EnableSkillAuras = builder
                 .comment("then certain skills with have particles around them")
                 .define("EnableSkillAuras", false);
@@ -248,6 +252,9 @@ public class MythosSkillsConfig {
     public static boolean endOfEvilReset() {
         return endOfEvilReset.get();
     }
+    public static boolean DarkDesire() {
+        return DarkDesire.get();
+    }
 
     public static boolean ApophisEmbodiment() {
         return ApophisEmbodiment.get();
@@ -277,9 +284,6 @@ public class MythosSkillsConfig {
 
     public static List<? extends String> SAPLING_DISALLOWED_SKILLS() {
         return SAPLING_DISALLOWED_SKILLS.get();
-    }
-    public static List<? extends String> ARROGANCE_BLACKLIST() {
-        return ARROGANCE_BLACKLIST.get();
     }
 }
 

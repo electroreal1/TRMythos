@@ -22,6 +22,7 @@ import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.registry.entity.TensuraEntityTypes;
 import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
 import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
+import com.github.mythos.mythos.config.MythosSkillsConfig;
 import com.github.mythos.mythos.handler.GodClassHandler;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.registry.skill.Skills;
@@ -670,6 +671,7 @@ public class Khonsu extends Skill {
                     }
                 case 7:
                     if (instance.getMode() == 7 && instance.isMastered(entity)) {
+                        if (!MythosSkillsConfig.DarkDesire()) return;
                         if (!SkillHelper.outOfMagicule(entity, instance)) {
                             CompoundTag tag = instance.getOrCreateTag();
                             tag.putBoolean("DarkDesireListening", true);
