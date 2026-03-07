@@ -11,15 +11,14 @@ import com.github.manasmods.tensura.registry.attribute.TensuraAttributeRegistry;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
@@ -27,6 +26,7 @@ import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class SagittariusSkill extends Skill {
     public SagittariusSkill(SkillType type) {
@@ -43,6 +43,12 @@ public class SagittariusSkill extends Skill {
         return true;
     }
 
+    @Nullable
+    @Override
+    public MutableComponent getName() {
+        return Component.literal("Sagittarius");
+    }
+
     @Override
     public void onDamageEntity(ManasSkillInstance instance, LivingEntity entity, LivingHurtEvent event) {
         if (!instance.isToggled()) return;
@@ -54,7 +60,7 @@ public class SagittariusSkill extends Skill {
         if (!(direct instanceof Projectile projectile)) return;
 
         Entity owner = projectile.getOwner();
-        if (!(owner instanceof Player player)) return;
+        if (!(owner instanceof Player)) return;
 
         event.setAmount(event.getAmount() * 3.0F);
     }
@@ -62,12 +68,12 @@ public class SagittariusSkill extends Skill {
     public void onBeingDamaged(ManasSkillInstance instance, LivingAttackEvent event) {
         if (!event.isCanceled()) {
             LivingEntity entity = event.getEntity();
-            boolean futureVision = entity.hasEffect((MobEffect) TensuraMobEffects.FUTURE_VISION.get());
+            boolean futureVision = entity.hasEffect(TensuraMobEffects.FUTURE_VISION.get());
             if (futureVision) {
                 DamageSource damageSource = event.getSource();
                 if (!damageSource.isBypassInvul()) {
                     if (damageSource.getDirectEntity() != null && damageSource.getDirectEntity() == damageSource.getEntity()) {
-                        entity.getLevel().playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_WEAK, SoundSource.PLAYERS, 2.0F, 1.0F);
+                        entity.getLevel().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_WEAK, SoundSource.PLAYERS, 2.0F, 1.0F);
                         event.setCanceled(true);
                         if (SkillUtils.canNegateDodge(entity, damageSource)) {
                             event.setCanceled(false);
@@ -80,10 +86,10 @@ public class SagittariusSkill extends Skill {
     }
 
     public void onProjectileHit(ManasSkillInstance instance, LivingEntity entity, ProjectileImpactEvent event) {
-        boolean futureVision = entity.hasEffect((MobEffect)TensuraMobEffects.FUTURE_VISION.get());
+        boolean futureVision = entity.hasEffect(TensuraMobEffects.FUTURE_VISION.get());
         if (futureVision) {
             if (!SkillUtils.isProjectileAlwaysHit(event.getProjectile())) {
-                entity.getLevel().playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_WEAK, SoundSource.PLAYERS, 2.0F, 1.0F);
+                entity.getLevel().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_WEAK, SoundSource.PLAYERS, 2.0F, 1.0F);
                 event.setCanceled(true);
             }
         }
@@ -96,8 +102,8 @@ public class SagittariusSkill extends Skill {
 
     public @NotNull Component getModeName(int mode) {
         return switch (mode) {
-            case 1 -> Component.translatable("trmythos.skill.sagittarius.future");
-            case 2 -> Component.translatable("trmythos.skill.sagittarius.heal");
+            case 1 -> Component.literal("Future Sight");
+            case 2 -> Component.literal("Heal");
             default -> Component.empty();
         };
     }
@@ -111,16 +117,16 @@ public class SagittariusSkill extends Skill {
     }
 
     public void onPressed(ManasSkillInstance instance, LivingEntity entity) {
-        if (!(instance.getMode() == 2)) {
-            if (entity.hasEffect((MobEffect) TensuraMobEffects.FUTURE_VISION.get())) {
-                entity.removeEffect((MobEffect) TensuraMobEffects.FUTURE_VISION.get());
-                entity.getLevel().playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_WEAK, SoundSource.PLAYERS, 1.0F, 1.0F);
+        if (instance.getMode() == 1) {
+            if (entity.hasEffect(TensuraMobEffects.FUTURE_VISION.get())) {
+                entity.removeEffect(TensuraMobEffects.FUTURE_VISION.get());
+                entity.getLevel().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_WEAK, SoundSource.PLAYERS, 1.0F, 1.0F);
                 instance.setCoolDown(10);
             } else {
                 int duration = instance.isMastered(entity) ? 400 : 200;
                 instance.setCoolDown(instance.isMastered(entity) ? 30 : 20);
-                entity.addEffect(new MobEffectInstance((MobEffect) TensuraMobEffects.FUTURE_VISION.get(), duration, 0, false, false, false));
-                entity.getLevel().playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundSource.PLAYERS, 1.0F, 1.0F);
+                entity.addEffect(new MobEffectInstance(TensuraMobEffects.FUTURE_VISION.get(), duration, 0, false, false, false));
+                entity.getLevel().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundSource.PLAYERS, 1.0F, 1.0F);
             }
         } else {
             Level level = entity.getLevel();
@@ -138,7 +144,7 @@ public class SagittariusSkill extends Skill {
                 this.addMasteryPoint(instance, entity);
                 cost = instance.isMastered(entity) ? 40 : 80;
                 healingHP = target.getMaxHealth() - target.getHealth();
-                lackedMana = SkillHelper.outOfMagiculeStillConsume(entity, (double) ((int) (healingHP * (float) cost)));
+                lackedMana = SkillHelper.outOfMagiculeStillConsume(entity, (int) (healingHP * (float) cost));
                 if (lackedMana > 0.0) {
                     healingHP = (float) ((double) healingHP - lackedMana / (double) cost);
                 }
@@ -146,8 +152,8 @@ public class SagittariusSkill extends Skill {
                 target.heal(healingHP);
                 if (this.isMastered(instance, entity)) {
                     healingSpiritual = TensuraEPCapability.getSpiritualHealth(target);
-                    lackedSpiritual = target.getAttributeValue((Attribute) TensuraAttributeRegistry.MAX_SPIRITUAL_HEALTH.get()) - healingSpiritual;
-                    lackedMP = SkillHelper.outOfMagiculeStillConsume(entity, (double) ((int) (lackedSpiritual * 60.0)));
+                    lackedSpiritual = target.getAttributeValue(TensuraAttributeRegistry.MAX_SPIRITUAL_HEALTH.get()) - healingSpiritual;
+                    lackedMP = SkillHelper.outOfMagiculeStillConsume(entity, (int) (lackedSpiritual * 60.0));
                     if (lackedMP > 0.0) {
                         lackedSpiritual -= lackedMP / 60.0;
                     }
@@ -156,7 +162,7 @@ public class SagittariusSkill extends Skill {
                 }
 
                 TensuraParticleHelper.addServerParticlesAroundSelf(target, ParticleTypes.HEART, 1.0);
-                level.playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1.0F, 1.0F);
+                level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1.0F, 1.0F);
             }
         }
     }

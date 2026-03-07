@@ -1,6 +1,5 @@
 package com.github.mythos.mythos.ability.mythos.skill.ultimate.lord;
 
-import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
@@ -122,15 +121,14 @@ public class LuciaSkill extends Skill implements Transformation {
                 DamageSource damageSource = event.getSource();
                 if (!damageSource.isBypassInvul() && !damageSource.isMagic()) {
                     Entity var5 = damageSource.getDirectEntity();
-                    if (var5 instanceof LivingEntity) {
-                        LivingEntity entity = (LivingEntity)var5;
+                    if (var5 instanceof LivingEntity entity) {
                         double dodgeChance = instance.isMastered(entity) ? 1 : 0.99;
                         if (SkillUtils.canNegateDodge(entity, damageSource)) {
                             dodgeChance = 0.8;
                         }
 
                         if (!(entity.getRandom().nextDouble() >= dodgeChance)) {
-                            entity.getLevel().playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_WEAK, SoundSource.PLAYERS, 2.0F, 1.0F);
+                            entity.getLevel().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_WEAK, SoundSource.PLAYERS, 2.0F, 1.0F);
                             event.setCanceled(true);
                         }
                     }
@@ -199,7 +197,6 @@ public class LuciaSkill extends Skill implements Transformation {
         if (!(event.getSource().getEntity() instanceof Player player)) return;
 
         SkillStorage targetStorage = SkillAPI.getSkillsFrom(target);
-        SkillStorage ownerStorage = SkillAPI.getSkillsFrom(player);
         List<ManasSkillInstance> targetSkills = new ArrayList<>(targetStorage.getLearnedSkills());
         for (ManasSkillInstance instance : targetSkills) {
             if (instance.getMode() != 1) return;
@@ -236,7 +233,7 @@ public class LuciaSkill extends Skill implements Transformation {
             breath.setLife(30);
             breath.setPos(entity.position().add(0.0, (double) entity.getEyeHeight() * 0.7, 0.0));
             entity.getLevel().addFreshEntity(breath);
-            entity.getLevel().playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.BLAZE_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F);
+            entity.getLevel().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.BLAZE_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F);
             entity.swing(InteractionHand.MAIN_HAND, true);
             this.addMasteryPoint(instance, entity);
             instance.setCoolDown(instance.isMastered(entity) ? 3 : 5);
@@ -246,8 +243,8 @@ public class LuciaSkill extends Skill implements Transformation {
 
     private ManasSkillInstance getCrimson(LivingEntity entity) {
         SkillStorage storage = SkillAPI.getSkillsFrom(entity);
-        Optional<ManasSkillInstance> CrimsonOptional = storage.getSkill((ManasSkill) Skills.CRIMSON_ORACLE.get());
-        return (ManasSkillInstance)CrimsonOptional.orElse((ManasSkillInstance) null);
+        Optional<ManasSkillInstance> CrimsonOptional = storage.getSkill(Skills.CRIMSON_ORACLE.get());
+        return CrimsonOptional.orElse(null);
     }
 
     @Override
@@ -269,8 +266,8 @@ public class LuciaSkill extends Skill implements Transformation {
 
     @Override
     public void onTick(ManasSkillInstance instance, LivingEntity living) {
-        if (!living.hasEffect((MobEffect) TensuraMobEffects.PRESENCE_SENSE.get())) {
-            living.addEffect(new MobEffectInstance((MobEffect)TensuraMobEffects.TRUE_BLINDNESS.get(), 600, 0, false, false, false));
+        if (!living.hasEffect(TensuraMobEffects.PRESENCE_SENSE.get())) {
+            living.addEffect(new MobEffectInstance(TensuraMobEffects.TRUE_BLINDNESS.get(), 600, 0, false, false, false));
             living.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 600, 0, false, false, false));
         }
     }
@@ -382,7 +379,7 @@ public class LuciaSkill extends Skill implements Transformation {
                     TensuraParticleHelper.spawnServerParticles(entity.level, TensuraParticles.DARK_RED_LIGHTNING_SPARK.get(), entity.getX(), entity.getY(), entity.getZ(), 55, 0.08, 0.08, 0.08, 0.5, true);
                 } else {
                     entity.removeEffect(MythosMobEffects.ULTIMATE_VILLAIN.get());
-                    entity.getLevel().playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.BEACON_DEACTIVATE, SoundSource.PLAYERS, 1.0F, 1.0F);
+                    entity.getLevel().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.BEACON_DEACTIVATE, SoundSource.PLAYERS, 1.0F, 1.0F);
                 }
 
             }

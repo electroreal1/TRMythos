@@ -134,6 +134,7 @@ public class CultistSkill extends Skill {
         player.displayClientMessage(Component.literal("§cYou offered blood and soul. SP is now §4{0}" + (sp + 1)), true);
         TensuraParticleHelper.addServerParticlesAroundSelf(player, ParticleTypes.FLAME, 1.0);
         TensuraParticleHelper.addServerParticlesAroundSelf(player, ParticleTypes.SMOKE, 1.0);
+        this.addMasteryPoint(instance, player);
     }
 
     private void bless(Player player, ManasSkillInstance instance) {
@@ -161,6 +162,7 @@ public class CultistSkill extends Skill {
                     player.displayClientMessage(Component.translatable("trmythos.cultist.bless.success", currentLevel + 1), true);
 
                     player.level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
+                    this.addMasteryPoint(instance, player);
                 }
             }
         }
