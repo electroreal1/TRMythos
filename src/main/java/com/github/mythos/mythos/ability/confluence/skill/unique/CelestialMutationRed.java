@@ -14,12 +14,14 @@ import com.github.manasmods.tensura.util.damage.TensuraDamageSource;
 import com.github.mythos.mythos.ability.confluence.skill.ConfluenceUniques;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
@@ -44,6 +46,11 @@ public class CelestialMutationRed extends Skill {
         return true;
     }
 
+    @Nullable
+    @Override
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/unique/celestialred.png");
+    }
 
     public void onBeingDamaged(ManasSkillInstance instance, LivingAttackEvent event) {
         ManasSkillInstance resistance;
@@ -96,21 +103,20 @@ public class CelestialMutationRed extends Skill {
     }
 
     @Override
-    public void onTick(ManasSkillInstance instance, LivingEntity living) {
-        if (living instanceof Player player) {
-            SkillStorage storage = SkillAPI.getSkillsFrom(player);
+    public void onTick(ManasSkillInstance instance, LivingEntity entity) {
+        if (entity instanceof Player player) {
             Skill blue = ConfluenceUniques.CELESTIAL_PATH_BLUE.get();
             if (!SkillUtils.fullyHasSkill(player, blue)) {
                 double chance = 0.01;
                 double currentEP = TensuraEPCapability.getCurrentEP(player);
 
                 if (!(player.getRandom().nextDouble() == chance)) {
-                    if (blue.getObtainingEpCost() > currentEP) {
-                        player.sendSystemMessage(Component.literal("Not Enough EP To Acquire Celestial Path - Blue Mask").withStyle(ChatFormatting.RED));
-                    } else if (blue.getObtainingEpCost() < currentEP) {
-                        storage.learnSkill(blue);
-                        player.sendSystemMessage(Component.literal("You have Acquired Celestial Path - Blue Mask").withStyle(ChatFormatting.BLUE));
-                    }
+                    return;
+                } else if (blue.getObtainingEpCost() > currentEP && player.getRandom().nextDouble() == chance) {
+                    player.sendSystemMessage(Component.literal("Not Enough EP To Acquire Celestial Path - Blue Mask").withStyle(ChatFormatting.RED));
+                } else if (player.getRandom().nextDouble() == chance && blue.getObtainingEpCost() < currentEP) {
+                    SkillUtils.learnSkill(entity, blue);
+                    player.sendSystemMessage(Component.literal("You have Acquired Celestial Path - Blue Mask").withStyle(ChatFormatting.BLUE));
                 }
             }
         }

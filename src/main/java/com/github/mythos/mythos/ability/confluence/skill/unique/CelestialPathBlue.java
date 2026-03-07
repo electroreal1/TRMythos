@@ -3,6 +3,7 @@ package com.github.mythos.mythos.ability.confluence.skill.unique;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -19,6 +20,7 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.jetbrains.annotations.Nullable;
 
 public class CelestialPathBlue extends Skill {
     public CelestialPathBlue(SkillType type) {
@@ -43,6 +45,12 @@ public class CelestialPathBlue extends Skill {
     @Override
     public Component getModeName(int mode) {
         return Component.translatable("trmythos.skill.celestial_path_blue.fate");
+    }
+
+    @Nullable
+    @Override
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/unique/celestialteal.png");
     }
 
     @Override
