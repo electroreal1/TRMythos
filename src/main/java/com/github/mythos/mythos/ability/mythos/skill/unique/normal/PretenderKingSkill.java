@@ -19,7 +19,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
@@ -80,13 +79,12 @@ public class PretenderKingSkill extends Skill {
         }
 
         TensuraPlayerCapability.getFrom(player).ifPresent((cap) -> {
-            double maxMP = player.getAttributeValue((Attribute) TensuraAttributeRegistry.MAX_MAGICULE.get());
+            double maxMP = player.getAttributeValue(TensuraAttributeRegistry.MAX_MAGICULE.get());
             double regenRate = instance.isMastered(living) ? maxMP / 10 : maxMP / 20;
             cap.setMagicule(Math.min(cap.getMagicule() + regenRate, maxMP));
         });
         TensuraPlayerCapability.sync(player);
         if (player.hasEffect(TensuraMobEffects.PRESENCE_SENSE.get())) {
-            return;
         } else {
             player.addEffect(new MobEffectInstance(TensuraMobEffects.PRESENCE_SENSE.get(), 20, 2, false, false, false));
         }
@@ -97,12 +95,11 @@ public class PretenderKingSkill extends Skill {
             DamageSource damageSource = event.getSource();
             if (!damageSource.isBypassInvul() && !damageSource.isMagic()) {
                 Entity var5 = damageSource.getDirectEntity();
-                if (var5 instanceof LivingEntity) {
-                    LivingEntity entity = (LivingEntity)var5;
+                if (var5 instanceof LivingEntity entity) {
                     double dodgeChance = 0.1;
 
                     if (!(entity.getRandom().nextDouble() >= dodgeChance)) {
-                        entity.getLevel().playSound((Player)null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_WEAK, SoundSource.PLAYERS, 2.0F, 1.0F);
+                        entity.getLevel().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_WEAK, SoundSource.PLAYERS, 2.0F, 1.0F);
                         event.setCanceled(true);
                     }
                 }
@@ -117,7 +114,7 @@ public class PretenderKingSkill extends Skill {
         var data = attacker.getPersistentData();
         if (!data.getBoolean("ars_universum_active")) return;
 
-        double mp = entity.getAttributeValue((Attribute) TensuraAttributeRegistry.MAX_MAGICULE.get());
+        double mp = entity.getAttributeValue(TensuraAttributeRegistry.MAX_MAGICULE.get());
 
         double bonus = mp * 0.01f;
         if (bonus > 200) {
