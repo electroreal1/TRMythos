@@ -37,6 +37,11 @@ public class ThunderRainSkill extends Skill {
         return instance.getMode() == 1 ? 2 : 1;
     }
 
+    @Override
+    public boolean canTick(ManasSkillInstance instance, LivingEntity entity) {
+        return true;
+    }
+
     public @NotNull Component getModeName(int mode) {
         return switch (mode) {
             case 1 -> Component.translatable("trmythos.skill.thunder_rain.rain");

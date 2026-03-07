@@ -24,6 +24,10 @@ public class AutomaticHakiCoatSkill extends Skill {
         return new ResourceLocation("trmythos", "textures/skill/extra/automatic_haki_coat.png");
     }
 
+    @Override
+    public boolean canTick(ManasSkillInstance instance, LivingEntity entity) {
+        return true;
+    }
 
     public boolean meetEPRequirement(Player entity, double newEP) {
         Skill HeroHaki = ExtraSkills.HERO_HAKI.get();
