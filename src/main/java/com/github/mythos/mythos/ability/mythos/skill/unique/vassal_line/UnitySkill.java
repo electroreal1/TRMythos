@@ -9,7 +9,6 @@ import com.github.manasmods.tensura.ability.SkillHelper;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.TensuraSkillInstance;
 import com.github.manasmods.tensura.ability.skill.Skill;
-import com.github.manasmods.tensura.ability.skill.intrinsic.CharmSkill;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.client.particle.TensuraParticleHelper;
@@ -58,8 +57,8 @@ public class UnitySkill extends Skill {
     }
 
     @Override
-    public boolean canBeToggled(ManasSkillInstance instance, LivingEntity entity) {
-        return true;
+    public double getObtainingEpCost() {
+        return Float.MAX_VALUE;
     }
 
     @Override
@@ -70,8 +69,8 @@ public class UnitySkill extends Skill {
     @Override
     public MutableComponent getModeName(int mode) {
         return switch (mode) {
-            case 1 -> Component.translatable("trmythos.skill.mode.unity.as_one");
-            case 2 -> Component.translatable("trmythos.skill.mode.unity.unity");
+            case 1 -> Component.literal("As One");
+            case 2 -> Component.literal("Intertwined");
             default -> Component.empty();
         };
     }
@@ -227,15 +226,12 @@ public class UnitySkill extends Skill {
     }
 
     public boolean isOwnClone(LivingEntity owner, LivingEntity target) {
-        boolean var10000;
         if (target instanceof CloneEntity clone) {
             if (clone.isOwnedBy(owner)) {
-                var10000 = true;
                 return true;
             }
         }
 
-        var10000 = false;
         return false;
     }
 
@@ -399,28 +395,24 @@ public class UnitySkill extends Skill {
                         ManasSkillInstance toCopy = targetSkills.get(random.nextInt(targetSkills.size()));
                         TensuraSkillInstance tempCopy = new TensuraSkillInstance(toCopy.getSkill());
 
-                        tempCopy.getOrCreateTag().putBoolean("IntertwinedTemp", true);
-                        tempCopy.getOrCreateTag().putInt("Duration", 1200);
-
                         userStorage.learnSkill(tempCopy);
                         owner.sendSystemMessage(Component.literal("Existence Intertwined: Replicated " + Objects.requireNonNull(toCopy.getSkill().getName())
                                         .getString())
                                 .withStyle(ChatFormatting.LIGHT_PURPLE));
                     }
                 } else {
-                    List<Skill> allSkills = SkillAPI.getSkillRegistry().getValues().stream()
-                            .filter(s -> s instanceof Skill)
-                            .map(s -> (Skill) s)
+                    List<Skill> allSkills = userStorage.getLearnedSkills().stream()
+                            .map(ManasSkillInstance::getSkill)
+                            .filter(Objects::nonNull)
+                            .filter(Skill.class::isInstance)
+                            .map(Skill.class::cast)
                             .filter(s -> s.getType() == Skill.SkillType.EXTRA || s.getType() == Skill.SkillType.UNIQUE)
                             .toList();
 
                     if (!allSkills.isEmpty()) {
                         Skill randomSkill = allSkills.get(random.nextInt(allSkills.size()));
-                        TensuraSkillInstance grantedSkill = new TensuraSkillInstance(randomSkill);
+                        SkillUtils.learnSkill(target, randomSkill, 1200);
 
-                        grantedSkill.getOrCreateTag().putBoolean("IntertwinedTemp", true);
-
-                        targetStorage.learnSkill(grantedSkill);
                         owner.sendSystemMessage(Component.literal("Existence Intertwined: Granted " + Objects.requireNonNull(randomSkill.getName())
                                         .getString() + " to " + target.getName().getString())
                                 .withStyle(ChatFormatting.GOLD));
@@ -434,13 +426,6 @@ public class UnitySkill extends Skill {
 
                 owner.level.playSound(null, owner.blockPosition(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0f, 1.2f);
                 instance.setCoolDown(30);
-                break;
-
-
-            case 3:
-                LivingEntity target1 = MythosUtils.getLookedAtEntity(owner, 10);
-                CharmSkill.charm(instance, target1);
-                break;
         }
     }
 }
