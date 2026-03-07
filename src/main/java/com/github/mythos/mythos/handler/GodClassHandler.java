@@ -20,6 +20,7 @@ public class GodClassHandler extends SavedData {
     private boolean dendrahhObtained = false;
     private boolean khonsuObtained = false;
     private boolean kthanidObtained = false;
+    private boolean quachilObtained = false;
 
     public GodClassHandler() {}
 
@@ -27,6 +28,11 @@ public class GodClassHandler extends SavedData {
     public boolean isDendrahhObtained() { return dendrahhObtained; }
     public boolean isKhonsuObtained() { return khonsuObtained; }
     public boolean isKthanidObtained() { return kthanidObtained; }
+
+    public boolean isQuachilObtained() {
+        return quachilObtained;
+    }
+
 
     // Setters
     public void setDendrahhObtained(boolean value) {
@@ -44,10 +50,16 @@ public class GodClassHandler extends SavedData {
         this.setDirty();
     }
 
+    public void setQuachilObtained(boolean value) {
+        quachilObtained = value;
+        this.setDirty();
+    }
+
     public void resetAllOwners() {
         this.dendrahhObtained = false;
         this.khonsuObtained = false;
         this.kthanidObtained = false;
+        this.quachilObtained = false;
         this.setDirty();
     }
 
@@ -56,6 +68,7 @@ public class GodClassHandler extends SavedData {
         tag.putBoolean("dendrahh", this.dendrahhObtained);
         tag.putBoolean("khonsu", this.khonsuObtained);
         tag.putBoolean("kthanid", this.kthanidObtained);
+        tag.putBoolean("quachil", this.quachilObtained);
         tag.putBoolean("ultimateAnnouncements", this.ultimateAnnouncementsEnabled);
         return tag;
     }
@@ -65,6 +78,7 @@ public class GodClassHandler extends SavedData {
         handler.dendrahhObtained = tag.getBoolean("dendrahh");
         handler.khonsuObtained = tag.getBoolean("khonsu");
         handler.kthanidObtained = tag.getBoolean("kthanid");
+        handler.quachilObtained = tag.getBoolean("quachil");
         handler.ultimateAnnouncementsEnabled = tag.getBoolean("ultimateAnnouncements");
         return handler;
     }

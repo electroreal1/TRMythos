@@ -32,6 +32,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
@@ -48,7 +49,7 @@ public class ApophisSkill extends Skill {
 
     @Override
     public ResourceLocation getSkillIcon() {
-        return new ResourceLocation("trmythos", "textures/skill/unique/apophis.png");
+        return new ResourceLocation("trmythos", "textures/skill/ultimate/apophis.png");
     }
 
     @Override
@@ -59,8 +60,6 @@ public class ApophisSkill extends Skill {
     }
 
     public boolean canTick(ManasSkillInstance instance, LivingEntity entity) {return true;}
-
-    public boolean canBeSlotted(ManasSkillInstance instance, LivingEntity entity) {return true;}
 
     public int getMaxMastery() {return 3000;}
 
@@ -139,7 +138,7 @@ public class ApophisSkill extends Skill {
             } else {
                 return;
             }
-            target = (LivingEntity)SkillHelper.getTargetingEntity(LivingEntity.class, (LivingEntity)player, 20.0D, 0.0D, false);
+            target = SkillHelper.getTargetingEntity(LivingEntity.class, player, 20.0D, 0.0D, false);
             if (TensuraEPCapability.getPermanentOwner(target) != entity.getUUID())
                 return;
 
@@ -238,7 +237,11 @@ public class ApophisSkill extends Skill {
         }
     }
 
-    public void onEntityHurt(LivingHurtEvent event, ManasSkillInstance instance, Player player) {
+
+    @Override
+    public void onTakenDamage(ManasSkillInstance instance, LivingDamageEvent event) {
+        LivingEntity entity = event.getEntity();
+        if (!(entity instanceof Player player)) return;
         if (isInSlot(player)) {
             LivingEntity target = event.getEntity();
             DamageSource source = event.getSource();
@@ -252,6 +255,7 @@ public class ApophisSkill extends Skill {
 
             if ((DamageSourceHelper.isDarkDamage(source))) {
                 amount = event.getAmount() * 2.0F;
+                event.setAmount(amount);
             }
 
             if (event.getSource().isMagic()) {
@@ -281,7 +285,7 @@ public class ApophisSkill extends Skill {
                 int ownerSoulPoints = ownerCap.getSoulPoints();
                 int harvestFestivalCost = 100000;
                 if (ownerSoulPoints < harvestFestivalCost) {
-                    owner.displayClientMessage(Component.translatable("trmythos.skill.mode.apophis.not_enough_souls", new Object[]{harvestFestivalCost / 1000}).setStyle(Style.EMPTY.withColor(ChatFormatting.RED)), false);
+                    owner.displayClientMessage(Component.translatable("trmythos.skill.mode.apophis.not_enough_souls", harvestFestivalCost / 1000).setStyle(Style.EMPTY.withColor(ChatFormatting.RED)), false);
                 } else {
                     TensuraPlayerCapability.getFrom((Player)target).ifPresent((cap) -> {
                         ownerCap.setSoulPoints(ownerCap.getSoulPoints() - harvestFestivalCost);

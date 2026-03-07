@@ -13,6 +13,7 @@ import com.github.mythos.mythos.ability.mythos.skill.ultimate.*;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.god.DendrrahSkill;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.god.Khonsu;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.god.Kthanid;
+import com.github.mythos.mythos.ability.mythos.skill.ultimate.god.Quachil;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.king.AngraMainyuSkill;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.lord.*;
 import com.github.mythos.mythos.ability.mythos.skill.ultimate.prince.HaliSkill;
@@ -62,6 +63,7 @@ public class Skills {
     public static final RegistryObject<DendrrahSkill> DENDRRAH;
     public static final RegistryObject<Khonsu> KHONSU;
     public static final RegistryObject<Kthanid> KTHANID;
+    public static final RegistryObject<Quachil> QUACHIL;
 
     // uniques
     public static final RegistryObject<FakerSkill> FAKER;
@@ -173,6 +175,7 @@ public class Skills {
         DENDRRAH = registery.register("dendrahh", DendrrahSkill::new);
         KHONSU = registery.register("khonsu", () -> new Khonsu(Skill.SkillType.ULTIMATE));
         KTHANID = registery.register("kthanid", () -> new Kthanid(Skill.SkillType.ULTIMATE));
+        QUACHIL = registery.register("quachil", Quachil::new);
 
         // uniques
         FAKER = registery.register("faker", FakerSkill::new);

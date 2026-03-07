@@ -99,7 +99,6 @@ public class Kthanid extends Skill {
         };
     }
 
-
     public int nextMode(LivingEntity entity, TensuraSkillInstance instance, boolean reverse) {
         if (reverse) return (instance.getMode() == 1) ? 3 : (instance.getMode() - 1);
         else return (instance.getMode() == 3) ? 1 : (instance.getMode() + 1);
@@ -107,7 +106,7 @@ public class Kthanid extends Skill {
 
     @Override
     public void onLearnSkill(ManasSkillInstance instance, LivingEntity entity, UnlockSkillEvent event) {
-        if (!instance.isTemporarySkill()) return;
+        if (instance.isTemporarySkill()) return;
         if (entity instanceof ServerPlayer player) {
             TensuraAdvancementsHelper.grant(player, TensuraAdvancementsHelper.Advancements.MASTER_SMITH);
         }
@@ -227,7 +226,7 @@ public class Kthanid extends Skill {
         DamageSource source = event.getSource();
         if (source.getEntity() instanceof LivingEntity attacker) {
 
-//            if (SkillUtils.hasSkill(attacker, Skills.QUACHIL_UTTAUS.get())) return;
+            if (SkillUtils.hasSkill(attacker, Skills.QUACHIL.get())) return;
 
             if (getCurrentEP(attacker) >= (getCurrentEP(user) * 8.0)) return;
 
@@ -377,15 +376,24 @@ public class Kthanid extends Skill {
 
             switch (ticks) {
 
-                case 1 -> playerList.broadcastSystemMessage(Component.literal("§fBy the light that stood before sin learned its name,"), false);
-                case 20 -> playerList.broadcastSystemMessage(Component.literal("§fBy purity unbroken since the first dawn breathed,"), false);
-                case 40 -> playerList.broadcastSystemMessage(Component.literal("§fI call upon the radiance that denies corruption,"), false);
-                case 60 -> playerList.broadcastSystemMessage(Component.literal("§fLet false divinity be exposed beneath holy sight."), false);
-                case 80 -> playerList.broadcastSystemMessage(Component.literal("§fMajin born of taint, your borrowed grace expires."), false);
-                case 100 -> playerList.broadcastSystemMessage(Component.literal("§fSeeds of tyranny, return to the soil of nothingness."), false);
-                case 120 -> playerList.broadcastSystemMessage(Component.literal("§lDemon kings crowned by blood, your reign ends now."), false);
-                case 140 -> playerList.broadcastSystemMessage(Component.literal("§oWhere darkness stood, only beginning shall remain."), false);
-                case 159 -> playerList.broadcastSystemMessage(Component.literal("§f§llet heaven's virtue descend and reclaim the land."), false);
+                case 1 ->
+                        playerList.broadcastSystemMessage(Component.literal("§fBy the light that stood before sin learned its name,"), false);
+                case 20 ->
+                        playerList.broadcastSystemMessage(Component.literal("§fBy purity unbroken since the first dawn breathed,"), false);
+                case 40 ->
+                        playerList.broadcastSystemMessage(Component.literal("§fI call upon the radiance that denies corruption,"), false);
+                case 60 ->
+                        playerList.broadcastSystemMessage(Component.literal("§fLet false divinity be exposed beneath holy sight."), false);
+                case 80 ->
+                        playerList.broadcastSystemMessage(Component.literal("§fMajin born of taint, your borrowed grace expires."), false);
+                case 100 ->
+                        playerList.broadcastSystemMessage(Component.literal("§fSeeds of tyranny, return to the soil of nothingness."), false);
+                case 120 ->
+                        playerList.broadcastSystemMessage(Component.literal("§lDemon kings crowned by blood, your reign ends now."), false);
+                case 140 ->
+                        playerList.broadcastSystemMessage(Component.literal("§oWhere darkness stood, only beginning shall remain."), false);
+                case 159 ->
+                        playerList.broadcastSystemMessage(Component.literal("§f§llet heaven's virtue descend and reclaim the land."), false);
 
             }
 
