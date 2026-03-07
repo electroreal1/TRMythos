@@ -10,6 +10,7 @@ import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSources;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -25,6 +26,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;
@@ -43,6 +45,17 @@ public class PretenderKingSkill extends Skill {
     @Override
     public boolean canBeToggled(ManasSkillInstance instance, LivingEntity entity) {
         return true;
+    }
+
+    @Nullable
+    @Override
+    public MutableComponent getName() {
+        return Component.literal("Pretender King");
+    }
+
+    @Override
+    public Component getSkillDescription() {
+        return Component.literal("I have no quote here, if you have an idea for a quote suggest it!");
     }
 
     @Override
@@ -129,9 +142,9 @@ public class PretenderKingSkill extends Skill {
 
     public Component getModeName(int mode) {
         return switch (mode) {
-            case 1 -> Component.translatable("trmythos.skill.pretender_king.dictatum");
-            case 2 -> Component.translatable("trmythos.skill.pretender_king.univeresum");
-            case 3 -> Component.translatable("trmythos.skill.pretender_king.decree");
+            case 1 -> Component.literal("Ars Dictatum");
+            case 2 -> Component.literal("Ars Universum");
+            case 3 -> Component.literal("False King's Decree");
             default -> Component.empty();
         };
     }

@@ -12,6 +12,7 @@ import com.github.manasmods.tensura.registry.attribute.TensuraAttributeRegistry;
 import com.github.mythos.mythos.registry.skill.Skills;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -19,6 +20,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -61,6 +63,17 @@ public class AlchemistSkill extends Skill {
             case 3 -> Component.literal("Soul Condensation");
             default -> Component.empty();
         };
+    }
+
+    @Nullable
+    @Override
+    public MutableComponent getName() {
+        return Component.literal("Alchemist");
+    }
+
+    @Override
+    public Component getSkillDescription() {
+        return Component.literal("I have no quote here, if you have an idea for a quote suggest it!");
     }
 
     @Override

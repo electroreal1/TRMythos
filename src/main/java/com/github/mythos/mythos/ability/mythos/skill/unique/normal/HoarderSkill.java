@@ -8,6 +8,8 @@ import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.capability.race.TensuraPlayerCapability;
 import com.github.manasmods.tensura.menu.container.SpatialStorageContainer;
 import com.github.manasmods.tensura.registry.enchantment.TensuraEnchantments;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -20,6 +22,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -205,6 +208,25 @@ public class HoarderSkill extends Skill implements ISpatialStorage {
             if (this.getSpatialStorage(instance).getItem(i).isEmpty()) return false;
         }
         return true;
+    }
+
+    @Nullable
+    @Override
+    public MutableComponent getName() {
+        return Component.literal("Hoarder");
+    }
+
+    @Override
+    public Component getSkillDescription() {
+        return Component.literal("You can never let go of your possessions, and your items always find their way back to you.");
+    }
+
+    public @NotNull Component getModeName(int mode) {
+        return switch (mode) {
+            case 1 -> Component.literal("Hoard");
+            case 2 -> Component.literal("MINE!");
+            default -> Component.empty();
+        };
     }
 
     @Override
