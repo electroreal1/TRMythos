@@ -108,7 +108,7 @@ public class Quachil extends Skill {
                     name.contains("saviour") || name.contains("chosen") ||
                     name.contains("yehoshuah") || name.contains("blessing") ||
                     name.contains("light") || name.contains("good") ||
-                    name.contains("hero")) {
+                    name.contains("hero") || name.contains("angel")) {
                 return false;
             }
         }
