@@ -296,6 +296,7 @@ public class Kthanid extends Skill {
     public void onPressed(ManasSkillInstance instance, LivingEntity entity) {
         if (SkillHelper.outOfMagicule(entity, instance)) return;
 
+        // Essence of Courage
         if (instance.getMode() == 1) {
             LivingEntity target = MythosUtils.getLookedAtEntity(entity, 30);
             if (target != null) {
@@ -304,13 +305,18 @@ public class Kthanid extends Skill {
 
                 SeveranceCutterProjectile spaceCutter = new SeveranceCutterProjectile(entity.getLevel(), entity);
                 spaceCutter.setSpeed(5F);
-                spaceCutter.setDamage(damage);
+                if (target instanceof Player) {
+                    spaceCutter.setDamage(damage);
+                } else {
+                    spaceCutter.setDamage(1000);
+                }
                 spaceCutter.setSize(this.isMastered(instance, entity) ? 8.0F : 5.0F);
                 spaceCutter.setMpCost(this.magiculeCost(entity, instance));
                 spaceCutter.setSkill(instance);
                 spaceCutter.setNoGravity(true);
                 spaceCutter.setPosAndShoot(entity);
                 spaceCutter.setPosDirection(entity, TensuraProjectile.PositionDirection.MIDDLE);
+                entity.level.addFreshEntity(spaceCutter);
 
                 entity.level.playSound(null, target.getX(), target.getY(), target.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.PLAYERS, 1.0F, 0.5F);
             }
@@ -362,6 +368,7 @@ public class Kthanid extends Skill {
 
     @Override
     public boolean onHeld(ManasSkillInstance instance, LivingEntity entity, int ticks) {
+        // End of Evil
         if (instance.getMode() == 3 && instance.isMastered(entity)) {
             if (entity.level.isClientSide) return true;
 
@@ -401,10 +408,12 @@ public class Kthanid extends Skill {
                 }
 
                 for (LivingEntity mob : nearbyMobs) {
-                    if (TensuraEPCapability.isMajin(mob)) {
-                        mob.die(MythosDamageSources.EndOfEvil());
+                    if (!(mob instanceof Player)) {
+                        if (TensuraEPCapability.isMajin(mob)) {
+                            mob.die(MythosDamageSources.EndOfEvil());
 
-                        serverLevel.sendParticles(ParticleTypes.FLASH, mob.getX(), mob.getY() + 1, mob.getZ(), 1, 0, 0, 0, 0);
+                            serverLevel.sendParticles(ParticleTypes.FLASH, mob.getX(), mob.getY() + 1, mob.getZ(), 1, 0, 0, 0, 0);
+                        }
                     }
                 }
 
@@ -420,7 +429,7 @@ public class Kthanid extends Skill {
     public int getMaxHeldTime(ManasSkillInstance instance, LivingEntity living) {
         int e = 0;
         if (instance.getMode() == 3) {
-            e = 25;
+            e = 170;
         }
 
         return e;

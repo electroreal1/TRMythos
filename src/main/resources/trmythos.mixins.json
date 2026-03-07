@@ -17,7 +17,6 @@
     "SkillUtilsMixin",
     "UrielBypassMixinMythos",
     "WeaponEPHandlerMixin",
-    "races.RaceMixin",
     "races.VampireEvoMixin"
   ],
   "client": [
