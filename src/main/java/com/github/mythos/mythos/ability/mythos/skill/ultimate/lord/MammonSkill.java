@@ -153,21 +153,6 @@ public class MammonSkill extends Skill implements ISpatialStorage {
         return var10000;
     }
 
-
-
-    public void onTick(Player player, ManasSkillInstance instance, CompoundTag tag) {
-        SkillStorage storage = SkillAPI.getSkillsFrom(player);
-        storage.getLearnedSkills().removeIf(tempInstance -> {
-            if (tempInstance.isTemporarySkill() && tempInstance.getRemoveTime() <= 0) {
-                player.displayClientMessage(
-                        Component.translatable("tensura.skill.temp_lost", tempInstance.getSkill().getName())
-                                .withStyle(ChatFormatting.GRAY), false);
-                return true;
-            }
-            return false;
-        });
-    }
-
     public double magiculeCost(LivingEntity entity, ManasSkillInstance instance) {
         return instance.getMode() == 3 ? 1000.0 : 0.0;
     }
@@ -452,7 +437,6 @@ public class MammonSkill extends Skill implements ISpatialStorage {
     public CopyResult copyRandomSkill(ManasSkillInstance instance, LivingEntity user, LivingEntity target) {
         if (user instanceof Player player) {
             Level level = user.level;
-            SkillStorage storage = SkillAPI.getSkillsFrom(player);
 
             List<ManasSkillInstance> availableSkills = SkillAPI.getSkillsFrom(target).getLearnedSkills().stream()
                     .filter(skillInstance -> this.canCopy(player, skillInstance))
@@ -467,9 +451,6 @@ public class MammonSkill extends Skill implements ISpatialStorage {
                 if (SkillUtils.fullyHasSkill(player, targetSkill)) {
                     return CopyResult.NONE;
                 } else {
-                    TensuraSkillInstance tempInstance = new TensuraSkillInstance(targetSkill);
-                    tempInstance.setMastery(25);
-
                     boolean isPermanentCopy = false;
                     int masteryPenalty = 0;
 
@@ -477,27 +458,21 @@ public class MammonSkill extends Skill implements ISpatialStorage {
                         ResourceLocation registryName = skill.getRegistryName();
                         Skill.SkillType type = skill.getType();
 
-                        // 5. Check if the skill is in the Mammon Whitelist (Config)
-                        if (registryName != null) {
+                        if (registryName != null && type == SkillType.UNIQUE) {
                             boolean isMastered = skill.isMastered(targetSkillInstance, target);
                             double roll = Math.random();
-                            double chance;
+                            double chance = isMastered ? 0.1 : 0.05;
 
-                            if (type == SkillType.UNIQUE) {
-                                chance = isMastered ? 0.1 : 0.05;
-                                if (roll < chance) {
-                                    isPermanentCopy = true;
-                                    masteryPenalty = 1000;
-                                }
+                            if (roll < chance) {
+                                isPermanentCopy = true;
+                                masteryPenalty = 1000;
                             }
                         }
                     }
 
-                    if (!isPermanentCopy) {
-                        tempInstance.setRemoveTime(300);
-                    }
+                    int removeTime = isPermanentCopy ? -1 : 300;
 
-                    if (storage.learnSkill(tempInstance)) {
+                    if (SkillUtils.learnSkill(player, targetSkill, removeTime)) {
                         if (isPermanentCopy) {
                             instance.setMastery(Math.max(0, instance.getMastery() - masteryPenalty));
                         }
