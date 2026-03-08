@@ -88,7 +88,7 @@ public class FableweaverRace extends FablebornRace {
     @Nullable
     @Override
     public Race getDefaultEvolution(Player player) {
-        return null;
+        return TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.LIVING_LEGEND);
     }
 
     @Nullable
