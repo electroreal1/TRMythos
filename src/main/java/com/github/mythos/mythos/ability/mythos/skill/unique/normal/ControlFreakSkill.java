@@ -13,6 +13,7 @@ import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.util.MythosUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -38,6 +39,11 @@ public class ControlFreakSkill extends Skill {
     @Override
     public double getObtainingEpCost() {
         return 100000;
+    }
+
+    @Override
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/unique/control_freak.png");
     }
 
     @Override

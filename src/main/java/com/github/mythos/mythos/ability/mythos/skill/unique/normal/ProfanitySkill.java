@@ -175,14 +175,8 @@ public class ProfanitySkill extends Skill {
 
             if (changed) {
                 TensuraParticleHelper.addServerParticlesAroundSelf(target, ParticleTypes.SCULK_SOUL, 2.0);
-                entity.level.playSound(
-                        null,
-                        entity.getX(), entity.getY(), entity.getZ(),
-                        SoundEvents.WARDEN_HEARTBEAT,
-                        SoundSource.PLAYERS,
-                        1.0F,
-                        1.2F
-                );
+                entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.WARDEN_HEARTBEAT,
+                        SoundSource.PLAYERS, 1.0F, 1.2F);
             }
             applyRandomEffects(target, level.random);
             TensuraEPCapability.sync(target);
@@ -236,7 +230,6 @@ public class ProfanitySkill extends Skill {
                 }
             }
 
-            // Add mastery every 3 seconds
             if (heldTicks % 60 == 0 && heldTicks > 0) {
                 this.addMasteryPoint(instance, entity);
             }

@@ -51,8 +51,13 @@ public class MythosDamageSources {
         return (new TensuraDamageSource("trmythos.blood")).bypassArmor().bypassMagic().bypassEnchantments();
     }
     public static DamageSource EndOfEvil() {
-        return (new TensuraDamageSource("trmythos.end_of_evil")).bypassArmor().bypassMagic().bypassEnchantments();
+        return (new TensuraDamageSource("trmythos.end_of_evil")).bypassArmor().bypassMagic().bypassEnchantments().bypassInvul();
     }
+
+    public static DamageSource GreatDecay() {
+        return (new TensuraDamageSource("trmythos.great_decay")).bypassArmor().bypassArmor().bypassArmor().bypassInvul();
+    }
+
     public static DamageSource Horseman(Entity source) {
         return new TensuraEntityDamageSource("trmythos.horseman", source).bypassArmor().bypassMagic().bypassEnchantments().bypassInvul();
     }

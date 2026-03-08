@@ -19,8 +19,11 @@ public class MythosSkillsConfig {
     public static ForgeConfigSpec.BooleanValue DeadApostleAncestor;
     public static ForgeConfigSpec.BooleanValue VampireCarnage;
     public static ForgeConfigSpec.BooleanValue endOfEvilReset;
+    public static ForgeConfigSpec.BooleanValue greatDecay;
     public static ForgeConfigSpec.BooleanValue EnableSkillAuras;
     public static ForgeConfigSpec.BooleanValue DarkDesire;
+    public static ForgeConfigSpec.BooleanValue fourthQuachilCondition;
+    public static ForgeConfigSpec.BooleanValue fifthQuachilCondition;
     public static ForgeConfigSpec.BooleanValue CarnageBloodDominion;
     public static ForgeConfigSpec.BooleanValue EnableUltimateSkillObtainment;
     public static ForgeConfigSpec.BooleanValue EnableGodClassUltimates;
@@ -99,7 +102,7 @@ public class MythosSkillsConfig {
                         obj -> obj instanceof String
                 );
         blacklistedEffects = builder
-                .comment("List of effects that cannot be given via profanity")
+                .comment("List of effects that cannot be given via profanity or Quachil Uttaus")
                 .defineList(
                         "blacklistedEffects",
                         Arrays.asList(
@@ -121,7 +124,7 @@ public class MythosSkillsConfig {
         REINCARNATION_RACES = builder
                 .comment("List of race registry names the Reincarnator can transform into on death.")
                 .defineList("reincarnationRaces",
-                        List.of("tensura:human", "tensura:slime", "tensura:goblin", "tensura:ogre", "tensura:orc", "tensura:wight", "tensura:orc", "tensura:elf", "tensura:dwarf", "tensura:merfolk", "tensura:beastfolk", "tensura:lizardman", "tensura:ghoul", "tensura:lesser_daemon", "trmysticism:sculk_worm", "trmysticism:dragonoid", "trmythos:canine", "trmythos:maiden", "trmythos:lesser_serpent","trmythos:godling","trmythos:metalloid", "trmythos:revenant","trmythos:fableborn"),
+                        List.of("tensura:human", "tensura:slime", "tensura:goblin", "tensura:ogre", "tensura:orc", "tensura:wight", "tensura:orc", "tensura:elf", "tensura:dwarf", "tensura:merfolk", "tensura:beastfolk", "tensura:lizardman", "tensura:ghoul", "tensura:lesser_daemon", "trmysticism:sculk_worm", "trmysticism:dragonoid", "trmythos:canine", "trmythos:maiden", "trmythos:lesser_serpent", "trmythos:godling", "trmythos:metalloid", "trmythos:revenant", "trmythos:fableborn"),
                         obj -> obj instanceof String);
 
         vassalAssemblyChance = builder
@@ -147,10 +150,16 @@ public class MythosSkillsConfig {
                 .comment("If true then those who dies to Kthanid's End of Evil will be character reset," +
                         "note: THIS CANNOT REVERSE SOMEONE WHO WAS ALREADY RESET")
                 .define("endOfEvilReset", false);
+
+        greatDecay = builder
+                .comment("If true then those who dies to Quachil's Great Decay will be character reset," +
+                        "note: THIS CANNOT REVERSE SOMEONE WHO WAS ALREADY RESET")
+                .define("greatDecay", false);
+
         DarkDesire = builder
                 .comment("If enabled let's Khonsu use Dark Desire to kill someone.")
                 .define("DarkDesire", true);
-       EnableSkillAuras = builder
+        EnableSkillAuras = builder
                 .comment("then certain skills with have particles around them")
                 .define("EnableSkillAuras", false);
 
@@ -165,6 +174,14 @@ public class MythosSkillsConfig {
         EnableGodClassUltimates = builder
                 .comment("If true ultimate god class skills will be obtainable.")
                 .define("EnableGodClassUltimates", true);
+
+        fourthQuachilCondition = builder
+                .comment("If true then the fourth condition of Quachil's Weight of Sin will be effective.")
+                .define("fourthConditionQuachil", true);
+
+        fifthQuachilCondition = builder
+                .comment("If true then the fourth condition of Quachil's Weight of Sin will be effective.")
+                .define("fifthQuachilCondition", true);
 
         ALLOW_ULTIMATE_COPYING = builder
                 .comment("If true any skills that are capable of copying ultimates can copy ultimates.")
@@ -206,11 +223,11 @@ public class MythosSkillsConfig {
                 );
         ARROGANCE_BLACKLIST = builder
                 .comment("List of unique skills that cannot be copied by Arrogance.")
-                        .defineList("ARROGANCE_BLACKLIST", Arrays.asList(
+                .defineList("ARROGANCE_BLACKLIST", Arrays.asList(
                                 "tensura:pride"
                         ),
-                                obj -> obj instanceof String
-                                );
+                        obj -> obj instanceof String
+                );
 
 
         builder.pop(); // pop SkillsConfig
@@ -252,6 +269,7 @@ public class MythosSkillsConfig {
     public static boolean endOfEvilReset() {
         return endOfEvilReset.get();
     }
+
     public static boolean DarkDesire() {
         return DarkDesire.get();
     }
@@ -263,9 +281,11 @@ public class MythosSkillsConfig {
     public static boolean EnableUltimateSkillObtainment() {
         return EnableUltimateSkillObtainment.get();
     }
+
     public static boolean EnableGodClassObtainment() {
         return EnableGodClassUltimates.get();
     }
+
     public static boolean EnableSkillAuras() {
         return EnableSkillAuras.get();
     }
