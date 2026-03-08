@@ -57,13 +57,16 @@ public class MythosUtils {
                     }
 
                     if (random.nextInt(100) < 10) {
-                        grantStarterSkill(serverPlayer, Skills.CRIMSON_TYRANT.get(),
-                                Component.literal("The Crimson Moon Far Away Extends Its Bloody Blessing, Let the Carnage Begin!").withStyle(ChatFormatting.DARK_RED));
-                    }
-
-                    if (random.nextInt(100) < 10) {
                         grantStarterSkill(serverPlayer, Skills.UNDERWORLD_PRINCE.get(),
                                 Component.literal("The Underworld Beckons you to embrace souls of the damned!").withStyle(ChatFormatting.BLACK));
+                    }
+                }
+                if (race != null && race.equals(TensuraRaces.GHOUL.get())) {
+                    Random random = new Random();
+
+                    if (random.nextInt(100) < 10) {
+                        grantStarterSkill(serverPlayer, Skills.CRIMSON_TYRANT.get(),
+                                Component.literal("The Crimson Moon Far Away Extends Its Bloody Blessing, Let the Carnage Begin!").withStyle(ChatFormatting.DARK_RED));
                     }
                 }
             }
