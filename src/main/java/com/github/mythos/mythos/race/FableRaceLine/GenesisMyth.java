@@ -55,7 +55,11 @@ public class GenesisMyth extends Race{
 
     @Override
     public double getMovementSpeed() {
-        return 0.6;
+        return 0.75;
+    }
+
+    public double getSprintSpeed() {
+        return 0.95;
     }
 
     private double auraMin = 20000000;

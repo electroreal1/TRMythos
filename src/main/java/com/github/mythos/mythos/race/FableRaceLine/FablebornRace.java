@@ -65,7 +65,11 @@ public class FablebornRace extends Race {
 
     @Override
     public double getMovementSpeed() {
-        return 0.2;
+        return 0.22;
+    }
+
+    public double getSprintSpeed() {
+        return 0.4;
     }
 
     private double auraMin = 300;

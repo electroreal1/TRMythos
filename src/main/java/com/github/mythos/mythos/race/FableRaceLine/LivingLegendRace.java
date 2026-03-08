@@ -61,6 +61,10 @@ public class LivingLegendRace extends FableweaverRace{
         return 0.35;
     }
 
+    public double getSprintSpeed() {
+        return 0.6;
+    }
+
     private double auraMin = 500000;
     private double auraMax = 500000;
     private double startingMagiculeMin = 800000;

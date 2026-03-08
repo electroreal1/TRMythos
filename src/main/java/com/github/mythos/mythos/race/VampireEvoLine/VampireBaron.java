@@ -78,7 +78,7 @@ public class VampireBaron extends VampireRace implements Transformation {
     }
 
     public double getSprintSpeed() {
-        return 0.25;
+        return 0.45;
     }
 
     private double auraMin = 100000;

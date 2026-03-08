@@ -74,7 +74,11 @@ public class VampireMarquis extends Race implements Transformation {
 
     @Override
     public double getMovementSpeed() {
-        return 0.25;
+        return 0.6;
+    }
+
+    public double getSprintSpeed() {
+        return 0.9;
     }
 
     private double auraMin = 1500000;
@@ -102,11 +106,11 @@ public class VampireMarquis extends Race implements Transformation {
     }
 
     private double AuraEvolutionReward() {
-        return 4000;
+        return 40000;
     }
 
     private double ManaEvolutionReward() {
-        return 3000;
+        return 50000;
     }
 
     @Override

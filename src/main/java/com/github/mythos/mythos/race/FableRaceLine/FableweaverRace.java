@@ -53,7 +53,11 @@ public class FableweaverRace extends FablebornRace {
 
     @Override
     public double getMovementSpeed() {
-        return 0.24;
+        return 0.35;
+    }
+
+    public double getSprintSpeed() {
+        return 0.5;
     }
 
 

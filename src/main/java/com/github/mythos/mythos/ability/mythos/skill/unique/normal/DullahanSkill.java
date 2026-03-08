@@ -13,6 +13,7 @@ import com.github.manasmods.tensura.entity.magic.TensuraProjectile;
 import com.github.manasmods.tensura.entity.magic.projectile.SeveranceCutterProjectile;
 import com.github.manasmods.tensura.network.TensuraNetwork;
 import com.github.manasmods.tensura.network.play2client.RequestFxSpawningPacket;
+import com.github.manasmods.tensura.registry.attribute.TensuraAttributeRegistry;
 import com.github.manasmods.tensura.registry.effects.TensuraMobEffects;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.mythos.mythos.registry.MythosMobEffects;
@@ -28,6 +29,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -93,20 +95,17 @@ public class DullahanSkill extends Skill {
 
     @Override
     public void onToggleOn(ManasSkillInstance instance, LivingEntity entity) {
-
+        entity.addEffect(new MobEffectInstance(TensuraMobEffects.PRESENCE_SENSE.get(), 20, 3, false, false, false));
     }
 
 
     @Override
     public void onToggleOff(ManasSkillInstance instance, LivingEntity entity) {
-
+        entity.removeEffect(TensuraMobEffects.PRESENCE_SENSE.get());
     }
 
-    @Override
-    public void onLearnSkill(@NotNull ManasSkillInstance instance, @NotNull LivingEntity entity, @NotNull UnlockSkillEvent event) {
-        if (instance.getMastery() >= 0 && !instance.isTemporarySkill()) {
-            SkillUtils.learnSkill(entity, ExtraSkills.UNIVERSAL_PERCEPTION.get());
-        }
+    public void onTick(ManasSkillInstance instance, LivingEntity entity) {
+
     }
 
     public int modes() {
@@ -208,8 +207,8 @@ public class DullahanSkill extends Skill {
                 List<LivingEntity> targets = level2.getEntitiesOfClass(
                         LivingEntity.class,
                         player.getBoundingBox().inflate(15.0D),
-                        target -> target.isAlive() && !target.isAlliedTo(player)
-                );
+                        target -> !target.isAlliedTo(entity) && target.isAlive() && !entity.isAlliedTo(target));
+
 
                 for (LivingEntity target : targets) {
 

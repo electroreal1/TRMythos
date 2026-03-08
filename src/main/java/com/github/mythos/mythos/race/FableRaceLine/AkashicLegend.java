@@ -58,7 +58,11 @@ public class AkashicLegend extends LivingLegendRace{
 
     @Override
     public double getMovementSpeed() {
-        return 0.45;
+        return 0.6;
+    }
+
+    public double getSprintSpeed() {
+        return 0.8;
     }
 
     private double auraMin = 10000000;

@@ -73,7 +73,11 @@ public class VampireArchduke extends Race implements Transformation {
 
     @Override
     public double getMovementSpeed() {
-        return 0.27;
+        return 0.9;
+    }
+
+    public double getSprintSpeed() {
+        return 1.35;
     }
 
     private final double auraMin = 2500000;
@@ -101,11 +105,11 @@ public class VampireArchduke extends Race implements Transformation {
     }
 
     private double AuraEvolutionReward() {
-        return 8000;
+        return 100000;
     }
 
     private double ManaEvolutionReward() {
-        return 5000;
+        return 150000;
     }
 
     @Override
