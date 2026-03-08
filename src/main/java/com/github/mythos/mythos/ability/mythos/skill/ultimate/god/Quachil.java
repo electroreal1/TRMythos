@@ -27,6 +27,7 @@ import com.github.manasmods.tensura.util.damage.TensuraDamageSource;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSources;
 import com.github.manasmods.tensura.world.TensuraGameRules;
 import com.github.mythos.mythos.config.MythosSkillsConfig;
+import com.github.mythos.mythos.handler.GodClassHandler;
 import com.github.mythos.mythos.registry.skill.Skills;
 import com.github.mythos.mythos.util.MythosUtils;
 import com.github.mythos.mythos.util.damage.MythosDamageSources;
@@ -97,6 +98,8 @@ public class Quachil extends Skill {
     public boolean meetEPRequirement(@NotNull Player player, double newEP) {
         if (!EnableGodClassObtainment()) return false;
         if (!EnableUltimateSkillObtainment()) return false;
+        GodClassHandler godClassHandler = new GodClassHandler();
+        if (godClassHandler.isQuachilObtained()) return false;
         SkillStorage userStorage = SkillAPI.getSkillsFrom(player);
         double currentEP = TensuraEPCapability.getCurrentEP(player);
         if (currentEP < getObtainingEpCost()) {
@@ -156,6 +159,8 @@ public class Quachil extends Skill {
             storage.getSkill(greedSkill5).ifPresent(storage::forgetSkill);
             storage.getSkill(greedSkill6).ifPresent(storage::forgetSkill);
             storage.getSkill(greedSkill7).ifPresent(storage::forgetSkill);
+            GodClassHandler godClassHandler = new GodClassHandler();
+            godClassHandler.setQuachilObtained(true);
         }
     }
 
@@ -175,7 +180,7 @@ public class Quachil extends Skill {
                     if (!damageSource.isBypassInvul()) {
                         if (damageSource.getEntity() == null || !damageSource.getEntity().getType().is(TensuraTags.EntityTypes.NO_SKILL_PLUNDER)) {
                             if (damageSource instanceof TensuraDamageSource source) {
-                                if (!((double)source.getIgnoreBarrier() >= 1.75)) {
+                                if (!((double) source.getIgnoreBarrier() >= 1.75)) {
                                     ManasSkillInstance targetInstance = source.getSkill();
                                     if (targetInstance != null && !targetInstance.isTemporarySkill() && targetInstance.getSkill() != this) {
                                         Entity var8 = source.getEntity();
@@ -221,8 +226,8 @@ public class Quachil extends Skill {
                                                     ManasSkill var11 = plunderEvent.getSkill();
                                                     if (var11 instanceof TensuraSkill tensuraSkill) {
                                                         double mastery = tensuraSkill.getObtainingEpCost() / 10000.0;
-                                                        this.addMasteryPoint(instance, entity, (int)(mastery + (double)SkillUtils.getBonusMasteryPoint(instance, entity, (int)mastery)));
-                                                        instance.setCoolDown(Math.max((int)(360.0 * mastery), 1));
+                                                        this.addMasteryPoint(instance, entity, (int) (mastery + (double) SkillUtils.getBonusMasteryPoint(instance, entity, (int) mastery)));
+                                                        instance.setCoolDown(Math.max((int) (360.0 * mastery), 1));
                                                     } else {
                                                         this.addMasteryPoint(instance, entity);
                                                     }
@@ -680,10 +685,10 @@ public class Quachil extends Skill {
                 List<Player> nearbyPlayers = serverLevel.getEntitiesOfClass(Player.class, area);
 
                 for (Player p : nearbyPlayers) {
-                        p.hurt(MythosDamageSources.EndOfEvil(), (float) TensuraEPCapability.getEP(p));
-                        if (MythosSkillsConfig.greatDecay.get()) {
-                            TensuraEPCapability.resetEverything(p);
-                        }
+                    p.hurt(MythosDamageSources.EndOfEvil(), (float) TensuraEPCapability.getEP(p));
+                    if (MythosSkillsConfig.greatDecay.get()) {
+                        TensuraEPCapability.resetEverything(p);
+                    }
 
                     p.playNotifySound(SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.AMBIENT, 1.0f, 1.0f);
 
@@ -691,10 +696,10 @@ public class Quachil extends Skill {
 
                 for (LivingEntity mob : nearbyMobs) {
                     if (!(mob instanceof Player)) {
-                            mob.hurt(MythosDamageSources.EndOfEvil(), (float) TensuraEPCapability.getEP(mob));
+                        mob.hurt(MythosDamageSources.EndOfEvil(), (float) TensuraEPCapability.getEP(mob));
 
-                            serverLevel.sendParticles(ParticleTypes.SQUID_INK, mob.getX(), mob.getY() + 1, mob.getZ(), 1, 0, 0, 0, 0);
-                        }
+                        serverLevel.sendParticles(ParticleTypes.SQUID_INK, mob.getX(), mob.getY() + 1, mob.getZ(), 1, 0, 0, 0, 0);
+                    }
                 }
 
                 instance.setCoolDown(86400);

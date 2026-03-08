@@ -121,7 +121,8 @@ public class Khonsu extends Skill {
         if (!EnableGodClassObtainment()) return false;
         if (!EnableUltimateSkillObtainment()) return false;
         SkillStorage userStorage = SkillAPI.getSkillsFrom(player);
-
+        GodClassHandler godClassHandler = new GodClassHandler();
+        if (godClassHandler.isKhonsuObtained()) return false;
         double currentEP = TensuraEPCapability.getCurrentEP(player);
         if (currentEP < getObtainingEpCost()) return false;
         if (!SkillUtils.isSkillMastered(player, Skills.HALI.get())) return false;

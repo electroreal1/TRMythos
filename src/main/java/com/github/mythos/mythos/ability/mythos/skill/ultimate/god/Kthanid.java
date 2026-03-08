@@ -138,6 +138,8 @@ public class Kthanid extends Skill {
         if (!EnableGodClassObtainment()) return false;
         if (!EnableUltimateSkillObtainment()) return false;
         SkillStorage userStorage = SkillAPI.getSkillsFrom(player);
+        GodClassHandler godClassHandler = new GodClassHandler();
+        if (godClassHandler.isKthanidObtained()) return false;
         double currentEP = TensuraEPCapability.getCurrentEP(player);
         if (currentEP < getObtainingEpCost()) {
             return false;
