@@ -169,9 +169,9 @@ repositories {
     }
 
     maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven' }
-    maven { url 'https://dl.cloudsmith.io/public/manasmods/manascore/maven/' }
-    maven { url 'https://dl.cloudsmith.io/public/manasmods/tensura/maven/' }
-    maven { url 'https://jitpack.io/' }
+  //  maven { url 'https://dl.cloudsmith.io/public/manasmods/manascore/maven/' }
+   // maven { url 'https://dl.cloudsmith.io/public/manasmods/tensura/maven/' }
+  //  maven { url 'https://jitpack.io/' }
     maven { url "https://maven.firstdarkdev.xyz/snapshots" }
 }
 
