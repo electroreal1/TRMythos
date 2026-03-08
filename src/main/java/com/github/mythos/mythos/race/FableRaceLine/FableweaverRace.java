@@ -85,16 +85,10 @@ public class FableweaverRace extends FablebornRace {
         return true;
     }
 
-    public List<Race> getPreviousEvolutions(Player player) {
-        List<Race> list = new ArrayList<>();
-        list.add(TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.FABLEWEAVER));
-        return list;
-    }
-
     @Nullable
     @Override
     public Race getDefaultEvolution(Player player) {
-        return null;
+        return TensuraRaces.RACE_REGISTRY.get().getValue(MythosRaces.LIVING_LEGEND);
     }
 
     @Nullable
