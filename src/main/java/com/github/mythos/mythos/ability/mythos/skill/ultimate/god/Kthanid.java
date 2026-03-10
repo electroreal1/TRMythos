@@ -215,32 +215,6 @@ public class Kthanid extends Skill {
     }
 
     @Override
-    public void onTick(ManasSkillInstance instance, LivingEntity entity) {
-        SkillStorage userStorage = SkillAPI.getSkillsFrom(entity);
-        List<Skill> learnedSkills = userStorage.getLearnedSkills().stream()
-                .map(ManasSkillInstance::getSkill)
-                .filter(Objects::nonNull)
-                .filter(Skill.class::isInstance)
-                .map(Skill.class::cast)
-                .toList();
-
-        for (Skill skill : learnedSkills) {
-            String name = skill.getName().toString().toLowerCase();
-            if (name.contains("crimson") || name.contains("dark") ||
-                    name.contains("apophis") || name.contains("sin") ||
-                    name.contains("pride") || name.contains("lust") ||
-                    name.contains("carnage") || name.contains("sloth") ||
-                    name.contains("profanity") || name.contains("gluttony") ||
-                    name.contains("traitor") || name.contains("betrayal") ||
-                    name.contains("villain") || name.contains("avenger") ||
-                    name.contains("shadow") || name.contains("envy") ||
-                    name.contains("greed") || name.contains("wrath") || name.contains("vainglory")) {
-                userStorage.forgetSkill(this);
-            }
-        }
-    }
-
-    @Override
     public void onDamageEntity(ManasSkillInstance instance, LivingEntity attacker, LivingHurtEvent event) {
         double critMult = attacker.getAttributeValue(ManasCoreAttributes.CRIT_MULTIPLIER.get());
 

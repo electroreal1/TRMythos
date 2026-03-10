@@ -158,7 +158,7 @@ public class Khonsu extends Skill {
 
     @Override
     public void onLearnSkill(ManasSkillInstance instance, LivingEntity entity, UnlockSkillEvent event) {
-        if (!instance.isTemporarySkill()) return;
+        if (instance.isTemporarySkill()) return;
         SkillUtils.learnSkill(entity, ResistanceSkills.SPIRITUAL_ATTACK_NULLIFICATION.get());
 
         if (entity instanceof Player player) {
@@ -172,7 +172,6 @@ public class Khonsu extends Skill {
         }
         if (!(entity.level instanceof ServerLevel serverLevel)) return;
         GodClassHandler.get(serverLevel).setKhonsuObtained(true);
-
     }
 
     private void triggerHaliLearningSequence(Player player) {
@@ -368,21 +367,6 @@ public class Khonsu extends Skill {
                 entity.addEffect(new MobEffectInstance(TensuraMobEffects.PRESENCE_SENSE.get(), 3000, 4, false, false, false));
                 entity.addEffect(new MobEffectInstance(TensuraMobEffects.HEAT_SENSE.get(), 3000, 1, false, false, false));
                 entity.addEffect(new MobEffectInstance(TensuraMobEffects.AUDITORY_SENSE.get(), 3000, 1, false, false, false));
-            }
-        }
-
-        List<Skill> learnedSkills = userStorage.getLearnedSkills().stream()
-                .map(ManasSkillInstance::getSkill)
-                .filter(Objects::nonNull)
-                .filter(Skill.class::isInstance)
-                .map(Skill.class::cast)
-                .toList();
-
-        for (Skill skill : learnedSkills) {
-            String name = skill.getName().toString().toLowerCase();
-            if (name.contains("healer") || name.contains("chosen_one") ||
-                    name.contains("regeneration") || name.contains("holy") || name.contains("chef") || name.contains("life") || name.contains("hope")) {
-                userStorage.forgetSkill(this);
             }
         }
 

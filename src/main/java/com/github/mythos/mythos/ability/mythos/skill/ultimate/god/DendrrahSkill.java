@@ -129,28 +129,8 @@ public class DendrrahSkill extends Skill implements Transformation {
     }
 
     @Override
-    public void onTick(ManasSkillInstance instance, LivingEntity entity) {
-        SkillStorage userStorage = SkillAPI.getSkillsFrom(entity);
-
-        List<Skill> learnedSkills = userStorage.getLearnedSkills().stream()
-                .map(ManasSkillInstance::getSkill)
-                .filter(Objects::nonNull)
-                .filter(Skill.class::isInstance)
-                .map(Skill.class::cast)
-                .toList();
-
-        for (Skill skill : learnedSkills) {
-            String name = skill.getName().toString().toLowerCase();
-            if (name.contains("healer") || name.contains("chosen_one") ||
-                    name.contains("regeneration") || name.contains("holy") || name.contains("chef") || name.contains("life") || name.contains("hope")) {
-                userStorage.forgetSkill(this);
-            }
-        }
-    }
-
-    @Override
     public void onLearnSkill(ManasSkillInstance instance, LivingEntity entity, UnlockSkillEvent event) {
-        if (!instance.isTemporarySkill()) return;
+        if (instance.isTemporarySkill()) return;
         if (!(entity instanceof Player player) || !(entity.level instanceof ServerLevel serverLevel)) return;
 
         SkillStorage storage = SkillAPI.getSkillsFrom(player);
@@ -164,10 +144,9 @@ public class DendrrahSkill extends Skill implements Transformation {
         Component msg = Component.literal("Violence, suffering, bloodshed... The Apocalypse God has arisen. An indescribable rage fills the hearts of all life!").withStyle(ChatFormatting.RED, ChatFormatting.BOLD);
         serverLevel.players().forEach(p -> p.displayClientMessage(msg, false));
 
-        if (!instance.isTemporarySkill()) {
-            Skill greedSkill = Skills.ARES.get();
-            storage.getSkill(greedSkill).ifPresent(storage::forgetSkill);
-        }
+        Skill greedSkill = Skills.ARES.get();
+        storage.getSkill(greedSkill).ifPresent(storage::forgetSkill);
+
 
         GodClassHandler.get(serverLevel).setDendrahhObtained(true);
     }

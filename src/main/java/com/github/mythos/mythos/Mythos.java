@@ -4,12 +4,10 @@ import com.github.mythos.mythos.client.screen.OrunScreen;
 import com.github.mythos.mythos.command.MythosCommands;
 import com.github.mythos.mythos.config.MythosConfig;
 import com.github.mythos.mythos.config.MythosSkillsConfig;
+import com.github.mythos.mythos.entity.boss.DendrrahEntity;
 import com.github.mythos.mythos.handler.*;
 import com.github.mythos.mythos.networking.MythosNetwork;
-import com.github.mythos.mythos.registry.ClientOnlyRegistrar;
-import com.github.mythos.mythos.registry.MythosEngravings;
-import com.github.mythos.mythos.registry.MythosParticles;
-import com.github.mythos.mythos.registry.MythosRegistery;
+import com.github.mythos.mythos.registry.*;
 import com.github.mythos.mythos.registry.menu.MythosMenuTypes;
 import com.github.mythos.mythos.registry.race.MythosRaces;
 import com.github.mythos.mythos.voiceoftheworld.VoiceOfTheWorld;
@@ -20,6 +18,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
@@ -72,7 +71,13 @@ public class Mythos {
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientOnlyRegistrar::registerClientOnlyEvents);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, MythosConfig.SPEC, getConfigFileName("mythos-common"));
+
+        modEventBus.addListener(this::setupAttributes);
         LOGGER.info("Mythos has been loaded!");
+    }
+
+    private void setupAttributes(EntityAttributeCreationEvent event) {
+        event.put(MythosEntityTypes.DENDRAHH.get(), DendrrahEntity.createAttributes().build());
     }
 
     @SubscribeEvent
