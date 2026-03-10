@@ -11,6 +11,7 @@ import com.github.manasmods.tensura.util.damage.TensuraDamageSources;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -55,6 +56,11 @@ public class PretenderKingSkill extends Skill {
     @Override
     public Component getSkillDescription() {
         return Component.literal("I have no quote here, if you have an idea for a quote suggest it!");
+    }
+
+    @Override
+    public @Nullable ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/unique/pretenderking.png");
     }
 
     @Override
