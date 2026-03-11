@@ -1,0 +1,7 @@
+{
+  "evolvingItem": "minecraft:air",
+  "gainEP": 0.04,
+  "item": "trnightmare:the_world",
+  "maxEP": 60000000,
+  "minEP": 1000
+}
