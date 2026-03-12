@@ -27,6 +27,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.commands.arguments.coordinates.Vec3Argument;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,8 +39,16 @@ import java.util.Optional;
 
 public class MythosCommands {
 
+    private static final ResourceLocation SPATIAL_DOMINATION =
+            new ResourceLocation("tensura", "spatial_domination");
+
+    private static final ResourceLocation SPATIAL_MOTION =
+            new ResourceLocation("tensura", "spatial_motion");
+
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("mythos")
+
+
 
                 // Godclass
                 .then(Commands.literal("godclass")
@@ -838,6 +849,7 @@ public class MythosCommands {
                                                                 })))))
                         )
                 )
+
                 .then(Commands.literal("contagion")
                         .requires(source -> source.hasPermission(0))
                         .then(Commands.literal("mutate")
@@ -857,6 +869,62 @@ public class MythosCommands {
                                 )
                         )
                 )
-        );
+                );
+                dispatcher.register(Commands.literal("spacetp")
+                        .requires(source -> source.getEntity() instanceof ServerPlayer)
+
+                        .then(Commands.argument("location", Vec3Argument.vec3())
+                                .executes(context -> {
+
+                                    ServerPlayer player = context.getSource().getPlayerOrException();
+
+                                    var registry = SkillAPI.getSkillRegistry();
+
+                                    var domSkill = registry.getValue(SPATIAL_DOMINATION);
+                                    var motionSkill = registry.getValue(SPATIAL_MOTION);
+
+                                    if (domSkill == null || motionSkill == null) {
+                                        player.sendSystemMessage(Component.literal("§cSpatial skills not found."));
+                                        return 0;
+                                    }
+
+                                    var storage = SkillAPI.getSkillsFrom(player);
+
+                                    Optional<ManasSkillInstance> spatialDom = storage.getSkill(domSkill);
+                                    Optional<ManasSkillInstance> spatialMotion = storage.getSkill(motionSkill);
+
+                                    if (spatialDom.isEmpty() || spatialMotion.isEmpty()
+                                            || !spatialDom.get().isMastered(player)
+                                            || !spatialMotion.get().isMastered(player)) {
+
+                                        player.sendSystemMessage(Component.literal(
+                                                "§cYour spatial authority is insufficient."
+                                        ));
+                                        return 0;
+                                    }
+
+                                    Vec3 pos = Vec3Argument.getVec3(context, "location");
+
+                                    player.teleportTo(
+                                            player.getLevel(),
+                                            pos.x,
+                                            pos.y,
+                                            pos.z,
+                                            player.getYRot(),
+                                            player.getXRot()
+                                    );
+
+                                    player.playNotifySound(
+                                            SoundEvents.ENDERMAN_TELEPORT,
+                                            SoundSource.PLAYERS,
+                                            1.0F,
+                                            1.0F
+                                    );
+
+                                    return 1;
+                                })
+                        )
+                );
+
     }
 }
