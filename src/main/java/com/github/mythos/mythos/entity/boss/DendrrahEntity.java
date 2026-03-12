@@ -69,7 +69,7 @@ public class DendrrahEntity extends OtherworlderEntity implements ITeleportation
 
         TensuraEPCapability.setLivingEP(this, 200000000.0D);
         TensuraEPCapability.setCurrentLivingEP(this, 200000000.0D);
-        TensuraEPCapability.setSpiritualHealth(this, 500000.0D);
+        TensuraEPCapability.setSpiritualHealth(this, 500000000.0D);
         TensuraEPCapability.sync(this);
 
 
@@ -103,7 +103,7 @@ public class DendrrahEntity extends OtherworlderEntity implements ITeleportation
                 .add(ForgeMod.ATTACK_RANGE.get(), 6.0D)
                 .add(TensuraAttributeRegistry.MAX_MAGICULE.get(), 100000000.0D)
                 .add(TensuraAttributeRegistry.MAX_AURA.get(), 100000000.0D)
-                .add(TensuraAttributeRegistry.MAX_SPIRITUAL_HEALTH.get(), 500000.0D);
+                .add(TensuraAttributeRegistry.MAX_SPIRITUAL_HEALTH.get(), 500000000.0D);
     }
 
     @Override

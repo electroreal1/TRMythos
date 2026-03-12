@@ -36,6 +36,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.protocol.game.ClientboundAnimatePacket;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -105,6 +106,11 @@ public class Khonsu extends Skill {
     @Override
     public Component getSkillDescription() {
         return Component.literal("In the heart of the deepest eclipse, there is a silence that swallows the soul before the blade ever touches the throat. It is the moon’s cold promise: that which is hidden by the night belongs to the night, and that which the night claims, even the gods cannot recall.");
+    }
+
+    @Override
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/ultimate/khonsu.png");
     }
 
     @Override
@@ -826,7 +832,7 @@ public class Khonsu extends Skill {
     public void eyeOfTheMoon(ManasSkillInstance instance, LivingEntity entity) {
         Level level = entity.getLevel();
 
-        if (!entity.hasEffect(TensuraMobEffects.SHADOW_STEP.get()) || !entity.hasEffect(MythosMobEffects.KHONSU.get()) || !entity.hasEffect(TensuraMobEffects.PRESENCE_CONCEALMENT.get())) {
+        if (!entity.isShiftKeyDown()) {
             if (SkillHelper.outOfMagicule(entity, instance)) {
                 return;
             }
@@ -838,7 +844,7 @@ public class Khonsu extends Skill {
             entity.addEffect(new MobEffectInstance(TensuraMobEffects.SHADOW_STEP.get(), 6000, 0, false, false, false));
             entity.addEffect(new MobEffectInstance(TensuraMobEffects.PRESENCE_CONCEALMENT.get(), 6000, 3, false, false, false));
             entity.addEffect(new MobEffectInstance(MythosMobEffects.KHONSU.get(), 6000, 0, false, false, false));
-        } else {
+        } else if (entity.isShiftKeyDown()){
             entity.removeEffect(TensuraMobEffects.SHADOW_STEP.get());
             entity.removeEffect(MythosMobEffects.KHONSU.get());
             entity.removeEffect(TensuraMobEffects.PRESENCE_CONCEALMENT.get());

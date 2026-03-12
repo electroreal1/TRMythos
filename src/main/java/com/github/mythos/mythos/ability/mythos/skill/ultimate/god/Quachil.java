@@ -32,12 +32,12 @@ import com.github.mythos.mythos.registry.skill.Skills;
 import com.github.mythos.mythos.util.MythosUtils;
 import com.github.mythos.mythos.util.damage.MythosDamageSources;
 import io.github.Memoires.trmysticism.registry.skill.UltimateSkills;
-import io.github.Memoires.trmysticism.util.damage.MysticismDamageSources;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -514,6 +514,7 @@ public class Quachil extends Skill {
                     player.getInventory().clearContent();
                 }
             }
+            instance.setCoolDown(800);
         }
     }
 
@@ -550,76 +551,57 @@ public class Quachil extends Skill {
         Level level = entity.level;
         if (level.isClientSide) return true;
         if (instance.getMode() == 1) {
-            if (heldTicks % 20 == 0) {
-                if (SkillHelper.outOfMagicule(entity, instance)) return false;
 
-                level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
-                        SoundEvents.WARDEN_HEARTBEAT, SoundSource.PLAYERS, 1.0F, 0.8F);
+            // Haki mode
 
-                TensuraNetwork.INSTANCE.send(
-                        PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity),
-                        new RequestFxSpawningPacket(
-                                new ResourceLocation("tensura:strength_sap"),
-                                entity.getId(), 0.0, 23, 0.0, true)
-                );
+            entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
+                    SoundEvents.WARDEN_HEARTBEAT, SoundSource.PLAYERS, 1.0F, 0.8F);
 
-                List<LivingEntity> targets = level.getEntitiesOfClass(
-                        LivingEntity.class,
-                        entity.getBoundingBox().inflate(50),
-                        e -> e.isAlive() && !e.is(entity) && !entity.isAlliedTo(e)
-                );
+            TensuraNetwork.INSTANCE.send(
+                    PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity),
+                    new RequestFxSpawningPacket(new ResourceLocation("tensura:strength_sap"),
+                            entity.getId(), 0.0, 3.5, 0.0, true)
+            );
 
-                if (!targets.isEmpty()) {
-                    double ep = TensuraEPCapability.getEP(entity);
-                    if (ep <= 0) return true;
+            List<LivingEntity> targets = entity.level.getEntitiesOfClass(
+                    LivingEntity.class,
+                    entity.getBoundingBox().inflate(50),
+                    e -> e.isAlive() && !e.is(entity) && !entity.isAlliedTo(e)
+            );
 
-                    float damagePerSecond = (float) (ep / 1000.0);
+            double ep = TensuraEPCapability.getEP(entity);
+            if (ep > 0) {
+                float damagePerSecond = (float) (ep / 1000.0);
 
-                    for (LivingEntity target : targets) {
-                        if (target instanceof Player p && p.getAbilities().invulnerable) continue;
+                for (LivingEntity target : targets) {
+                    if (target instanceof Player p && p.getAbilities().invulnerable) continue;
 
-                        target.hurt(MysticismDamageSources.destroyerHaki(entity), damagePerSecond);
+                    DamageSource damageSource = new DamageSource("quachil_void").bypassArmor().bypassEnchantments().bypassInvul().bypassMagic();
+                    target.hurt(damageSource, damagePerSecond);
+                    TensuraParticleHelper.addServerParticlesAroundSelf(target, ParticleTypes.SMOKE, 1.0);
 
-                        TensuraParticleHelper.addServerParticlesAroundSelf(target, ParticleTypes.SMOKE, 1.0);
 
-                        float drainPercent = instance.isMastered(entity) ? 5 : 10;
+                    float drainDivisor = instance.isMastered(entity) ? 20F : 10F;
+                    float mpDrain = (float) SkillHelper.getMP(target, false) / drainDivisor;
+                    float apDrain = (float) SkillHelper.getAP(target, false) / drainDivisor;
 
-                        float mpDrain = (float) SkillHelper.getMP(target, false) / drainPercent;
-                        float apDrain = (float) SkillHelper.getAP(target, false) / drainPercent;
+                    SkillHelper.drainAP(target, entity, apDrain);
+                    SkillHelper.drainMP(target, entity, mpDrain, false);
 
-                        SkillHelper.drainAP(target, entity, apDrain);
-                        SkillHelper.drainMP(target, entity, mpDrain, false);
 
-                        SkillStorage targetStorage = SkillAPI.getSkillsFrom(target);
-                        List<ManasSkill> targetSkills = targetStorage.getLearnedSkills().stream()
-                                .map(ManasSkillInstance::getSkill)
-                                .filter(Objects::nonNull)
-                                .filter(skill -> !(skill instanceof Skill s && s.getType() == Skill.SkillType.ULTIMATE))
-                                .toList();
-
-                        if (target.isDeadOrDying()) {
-                            if (TensuraGameRules.canStealSkill(level)) {
-                                for (ManasSkill skill : targetSkills) {
-                                    SkillPlunderEvent event = new SkillPlunderEvent(target, entity, true, skill);
-                                    if (!MinecraftForge.EVENT_BUS.post(event)) {
-                                        SkillUtils.learnSkill(entity, event.getSkill());
-                                    }
-                                }
-                            } else {
-                                for (ManasSkill skill : targetSkills) {
-                                    SkillPlunderEvent event = new SkillPlunderEvent(target, entity, false, skill);
-                                    if (!MinecraftForge.EVENT_BUS.post(event)) {
-                                        SkillUtils.learnSkill(entity, event.getSkill());
-                                    }
-                                }
-                            }
-                        }
+                    if (target.getHealth() <= 0 || target.isDeadOrDying()) {
+                        plunderTargetSkills(entity, target);
                     }
+
+                    return true;
                 }
+
+                return true;
             }
 
             if (heldTicks % 60 == 0 && heldTicks > 0) {
                 this.addMasteryPoint(instance, entity);
+                return true;
             }
 
             return true;
@@ -629,28 +611,31 @@ public class Quachil extends Skill {
             ServerLevel serverLevel = (ServerLevel) entity.level;
             var playerList = serverLevel.getServer().getPlayerList();
 
+            // Great Decay
+
             switch (heldTicks) {
 
                 case 1 ->
-                        playerList.broadcastSystemMessage(Component.literal("The bells of the end toll beneath a sky of weeping bile."), false);
+                        playerList.broadcastSystemMessage(Component.literal("The bells of the end toll beneath a sky of weeping bile.").withStyle(ChatFormatting.BLACK), false);
                 case 20 ->
-                        playerList.broadcastSystemMessage(Component.literal("Pride is stripped bare, its golden vanity corroded into ash."), false);
+                        playerList.broadcastSystemMessage(Component.literal("Pride is stripped bare, its golden vanity corroded into ash.").withStyle(ChatFormatting.YELLOW), false);
                 case 40 ->
-                        playerList.broadcastSystemMessage(Component.literal("Envy turns to glass, shattering against the weight of the void."), false);
+                        playerList.broadcastSystemMessage(Component.literal("Envy turns to glass, shattering against the weight of the void.").withStyle(ChatFormatting.DARK_GREEN), false);
                 case 60 ->
-                        playerList.broadcastSystemMessage(Component.literal("Wrath is drowned in the rising tide of a stagnant, black sea."), false);
+                        playerList.broadcastSystemMessage(Component.literal("Wrath is drowned in the rising tide of a stagnant, black sea.").withStyle(ChatFormatting.RED), false);
                 case 80 ->
-                        playerList.broadcastSystemMessage(Component.literal("Sloth claims the bones of the world, slowing the pulse of time."), false);
+                        playerList.broadcastSystemMessage(Component.literal("Sloth claims the bones of the world, slowing the pulse of time.").withStyle(ChatFormatting.GREEN), false);
                 case 100 ->
-                        playerList.broadcastSystemMessage(Component.literal("Greed dissolves into the very nothingness it sought to claim."), false);
+                        playerList.broadcastSystemMessage(Component.literal("Greed dissolves into the very nothingness it sought to claim.").withStyle(ChatFormatting.GOLD), false);
                 case 120 ->
-                        playerList.broadcastSystemMessage(Component.literal("Gluttony is hollowed out, leaving a hunger that devours light."), false);
+                        playerList.broadcastSystemMessage(Component.literal("Gluttony is hollowed out, leaving a hunger that devours light.")
+                                .withStyle(style -> style.withColor(TextColor.fromRgb(0x8B4513))), false);
                 case 140 ->
-                        playerList.broadcastSystemMessage(Component.literal("Lust is forgotten, as the warmth of the soul turns to winter."), false);
+                        playerList.broadcastSystemMessage(Component.literal("Lust is forgotten, as the warmth of the soul turns to winter.").withStyle(ChatFormatting.LIGHT_PURPLE), false);
                 case 159 ->
-                        playerList.broadcastSystemMessage(Component.literal("I am the sediment of the ages, the final stain upon existence."), false);
+                        playerList.broadcastSystemMessage(Component.literal("I am the sediment of the ages, the final stain upon existence.").withStyle(ChatFormatting.DARK_PURPLE), false);
                 case 160 ->
-                        playerList.broadcastSystemMessage(Component.literal("Behold the Great Decay, where even the gods come to wither."), false);
+                        playerList.broadcastSystemMessage(Component.literal("Behold the Great Decay, where even the gods come to wither.").withStyle(ChatFormatting.BLACK), false);
 
             }
 
@@ -688,11 +673,55 @@ public class Quachil extends Skill {
 
     @Override
     public int getMaxHeldTime(ManasSkillInstance instance, LivingEntity living) {
-        int e = 0;
         if (instance.getMode() == 3) {
-            e = 170;
-        }
+            return 170;
+        } else return Integer.MAX_VALUE;
+    }
 
-        return e;
+    private void plunderTargetSkills(LivingEntity thief, LivingEntity victim) {
+        SkillStorage victimStorage = SkillAPI.getSkillsFrom(victim);
+        boolean canSteal = TensuraGameRules.canStealSkill(thief.level);
+        boolean canStealUlts = MythosSkillsConfig.ALLOW_ULTIMATE_COPYING.get();
+
+        if (canStealUlts) {
+            List<ManasSkill> toSteal = victimStorage.getLearnedSkills().stream()
+                    .filter(instance -> !instance.isTemporarySkill())
+                    .map(ManasSkillInstance::getSkill)
+                    .filter(Objects::nonNull)
+                    .filter(skill -> !SkillUtils.hasSkill(thief, skill))
+                    .toList();
+
+            for (ManasSkill skill : toSteal) {
+                SkillPlunderEvent event = new SkillPlunderEvent(victim, thief, canSteal, skill);
+                if (!MinecraftForge.EVENT_BUS.post(event)) {
+                    SkillUtils.learnSkill(thief, event.getSkill());
+
+                    if (thief instanceof Player player) {
+                        player.displayClientMessage(Component.literal("Plundered: " + event.getSkill().getName().getString())
+                                .withStyle(ChatFormatting.GOLD), false);
+                    }
+                }
+            }
+        } else {
+            List<ManasSkill> toSteal = victimStorage.getLearnedSkills().stream()
+                    .filter(instance -> !instance.isTemporarySkill())
+                    .map(ManasSkillInstance::getSkill)
+                    .filter(Objects::nonNull)
+                    .filter(skill -> !(skill instanceof Skill s && s.getType() == SkillType.ULTIMATE))
+                    .filter(skill -> !SkillUtils.hasSkill(thief, skill))
+                    .toList();
+
+            for (ManasSkill skill : toSteal) {
+                SkillPlunderEvent event = new SkillPlunderEvent(victim, thief, canSteal, skill);
+                if (!MinecraftForge.EVENT_BUS.post(event)) {
+                    SkillUtils.learnSkill(thief, event.getSkill());
+
+                    if (thief instanceof Player player) {
+                        player.displayClientMessage(Component.literal("Plundered: " + event.getSkill().getName().getString())
+                                .withStyle(ChatFormatting.GOLD), false);
+                    }
+                }
+            }
+        }
     }
 }

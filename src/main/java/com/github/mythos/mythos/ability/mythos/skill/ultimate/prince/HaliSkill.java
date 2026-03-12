@@ -1,6 +1,5 @@
 package com.github.mythos.mythos.ability.mythos.skill.ultimate.prince;
 
-import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
 import com.github.manasmods.manascore.api.skills.SkillAPI;
 import com.github.manasmods.manascore.api.skills.capability.SkillStorage;
@@ -42,7 +41,6 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -50,7 +48,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -573,9 +570,8 @@ public class HaliSkill extends Skill {
 
     public void eyeOfTheMoon(ManasSkillInstance instance, LivingEntity entity) {
         Level level = entity.getLevel();
-        boolean isActive = entity.hasEffect(TensuraMobEffects.PRESENCE_CONCEALMENT.get());
 
-        if (!isActive) {
+        if (!entity.isShiftKeyDown()) {
             if (SkillHelper.outOfMagicule(entity, instance)) {
                 return;
             }
@@ -590,7 +586,6 @@ public class HaliSkill extends Skill {
         } else {
             entity.removeEffect(TensuraMobEffects.SHADOW_STEP.get());
             entity.removeEffect(TensuraMobEffects.PRESENCE_CONCEALMENT.get());
-            entity.removeEffect(MythosMobEffects.KHONSU.get());
 
             level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
                     SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1.0F, 0.7F);
