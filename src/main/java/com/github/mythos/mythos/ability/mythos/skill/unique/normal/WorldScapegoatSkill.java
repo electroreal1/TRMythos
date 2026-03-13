@@ -95,6 +95,7 @@ public class WorldScapegoatSkill extends Skill {
 
         handleRedirectionLogic(user, tag, isActive);
 
+        instance.addMasteryPoint(entity);
 
         int harmfulCount = 0;
         for (MobEffectInstance effect : entity.getActiveEffects()) {
