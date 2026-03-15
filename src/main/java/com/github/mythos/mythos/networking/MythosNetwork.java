@@ -1,9 +1,6 @@
 package com.github.mythos.mythos.networking;
 
-import com.github.mythos.mythos.networking.play2server.GreatSilencePacket;
-import com.github.mythos.mythos.networking.play2server.ScreenShakePacket;
-import com.github.mythos.mythos.networking.play2server.ShaderPacket;
-import com.github.mythos.mythos.networking.play2server.SkillCopyPacket;
+import com.github.mythos.mythos.networking.play2server.*;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -54,6 +51,12 @@ public class MythosNetwork {
                 GreatSilencePacket::encode,
                 GreatSilencePacket::decode,
                 GreatSilencePacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+
+        registerPacket(WhiteoutPacket.class,
+                WhiteoutPacket::encode,
+                WhiteoutPacket::decode,
+                WhiteoutPacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 

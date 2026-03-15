@@ -51,9 +51,20 @@ public class Mythos {
         return true;
     });
 
-    public Mythos() {
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+    static {
+        try {
+            net.minecraftforge.fml.config.ConfigTracker.INSTANCE.loadDefaultServerConfigs();
+        } catch (Throwable e) {
+            System.out.println("Mythos: Attempted static-phase config load.");
+        }
+    }
 
+
+
+    public Mythos() {
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, MythosConfig.SPEC, getConfigFileName("mythos-common"));
+
+        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         // 1. Common Listeners
         modEventBus.addListener(this::onCommonSetup);
         MythosRegistery.register(modEventBus);
@@ -69,8 +80,6 @@ public class Mythos {
 
         // 3. Safe Client Loading via Proxy
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientOnlyRegistrar::registerClientOnlyEvents);
-
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, MythosConfig.SPEC, getConfigFileName("mythos-common"));
 
         modEventBus.addListener(this::setupAttributes);
         LOGGER.info("Mythos has been loaded!");
@@ -101,6 +110,7 @@ public class Mythos {
     public static Logger getLogger() {
         return LOGGER;
     }
+
     private String getConfigFileName(String name) {
         return String.format("%s/%s.toml", "tensura-reincarnated", name);
     }
@@ -128,7 +138,6 @@ public class Mythos {
         MinecraftForge.EVENT_BUS.register(GlobalEffectHandler.class);
         MinecraftForge.EVENT_BUS.register(KhaosHandler.class);
     }
-
 
 
     private boolean isFirstLaunch() {
@@ -162,7 +171,7 @@ public class Mythos {
 
             String line;
             try {
-                while((line = reader.readLine()) != null) {
+                while ((line = reader.readLine()) != null) {
                     contentBuilder.append(line).append(System.lineSeparator());
                 }
             } catch (Throwable var19) {
@@ -185,10 +194,10 @@ public class Mythos {
 
 
         String content = contentBuilder.toString();
-        String[] newStarting = new String[]{"trmythos:canine", "trmythos:maiden", "trmythos:lesser_serpent","trmythos:godling","trmythos:metalloid", "trmythos:revenant","trmythos:fableborn"};
-        String[] newRandom = new String[]{"trmythos:canine", "trmythos:maiden", "trmythos:lesser_serpent","trmythos:godling","trmythos:metalloid", "trmythos:revenant","trmythos:fableborn"};
-        String[] newSkills = new String[]{"trmythos:omniscient_eye", "trmythos:faker", "trmythos:purity","trmythos:bloodsucker", "trmythos:profanity","trmythos:opportunist","trmythos:sporeblood","trmythos:fragarach","trmythos:excalibur","trmythos:gram", "trmythos:heavens_wrath","trmythos:zephyros","trmythos:introvert","trmythos:stargazer","trmythos:tenacious","trmythos:demonologist","trmythos:sagittarius", "trmythos:npc_life", "trmythos:celestial_path_blue", "trmythos:celestial_cultivation_orange", "trmythos:celestial_mutation_red", "trmythos:author", "trmythos:alchemist", "trmythos:hoarder", "trmythos:pretender_king", "trmythos:false_hero", "trmythos:crimson_arcanist", "trmythos:author", "trmythos:shadow_avenger", "trmythos:worlds_scapegoat"};
-        String[] creatorSkills = new String[]{"trmythos:opportunist", "trmythos:heavens_wrath","trmythos:zephyros","trmythos:introvert","trmythos:stargazer","trmythos:tenacious","trmythos:demonologist"};
+        String[] newStarting = new String[]{"trmythos:canine", "trmythos:maiden", "trmythos:lesser_serpent", "trmythos:godling", "trmythos:metalloid", "trmythos:revenant", "trmythos:fableborn"};
+        String[] newRandom = new String[]{"trmythos:canine", "trmythos:maiden", "trmythos:lesser_serpent", "trmythos:godling", "trmythos:metalloid", "trmythos:revenant", "trmythos:fableborn"};
+        String[] newSkills = new String[]{"trmythos:omniscient_eye", "trmythos:faker", "trmythos:purity", "trmythos:bloodsucker", "trmythos:profanity", "trmythos:opportunist", "trmythos:sporeblood", "trmythos:fragarach", "trmythos:excalibur", "trmythos:gram", "trmythos:heavens_wrath", "trmythos:zephyros", "trmythos:introvert", "trmythos:stargazer", "trmythos:tenacious", "trmythos:demonologist", "trmythos:sagittarius", "trmythos:npc_life", "trmythos:celestial_path_blue", "trmythos:celestial_cultivation_orange", "trmythos:celestial_mutation_red", "trmythos:author", "trmythos:alchemist", "trmythos:hoarder", "trmythos:pretender_king", "trmythos:false_hero", "trmythos:crimson_arcanist", "trmythos:author", "trmythos:shadow_avenger", "trmythos:worlds_scapegoat"};
+        String[] creatorSkills = new String[]{"trmythos:opportunist", "trmythos:heavens_wrath", "trmythos:zephyros", "trmythos:introvert", "trmythos:stargazer", "trmythos:tenacious", "trmythos:demonologist"};
         String startingRacesKey = "startingRaces = [";
         String randomRacesKey = "possibleRandomRaces = [";
         String reincarnationSkillsKey = "reincarnationSkills = [";
@@ -232,7 +241,7 @@ public class Mythos {
 
             String line;
             try {
-                while((line = reader.readLine()) != null) {
+                while ((line = reader.readLine()) != null) {
                     contentBuilder.append(line).append(System.lineSeparator());
                 }
             } catch (Throwable var21) {
@@ -256,14 +265,14 @@ public class Mythos {
         String[] var10000 = new String[]{"tensura:dead_end_rainbow"};
         var10000 = new String[]{"tensura:dead_end_rainbow"};
         var10000 = new String[]{"tensura:dead_end_rainbow"};
-      //  String[] veryRareEngraveNew = new String[]{""};
+        //  String[] veryRareEngraveNew = new String[]{""};
         String[] blacklistedEngraveNew = new String[]{"trmythos:vain_of_the_world"};
         String commonKey = "enchantments.commonEngrave";
         String uncommonKey = "enchantments.uncommonEngrave";
         String rareKey = "enchantments.rareEngrave";
         String veryRareKey = "enchantments.veryRareEngrave";
         String blacklistedKey = "enchantments.researcherEnchant";
-       // content = this.addItemsToTOMLEngravings(content, veryRareKey, veryRareEngraveNew);
+        // content = this.addItemsToTOMLEngravings(content, veryRareKey, veryRareEngraveNew);
         content = this.addBlacklistToTOMLEngravings(content, blacklistedKey, blacklistedEngraveNew);
 
         try {
@@ -313,7 +322,7 @@ public class Mythos {
                         var9 = currentListStr.split(",");
                         var10 = var9.length;
 
-                        for(var11 = 0; var11 < var10; ++var11) {
+                        for (var11 = 0; var11 < var10; ++var11) {
                             enchantment = var9[var11];
                             currentEnchantments.add(enchantment.trim().replace("\"", ""));
                         }
@@ -322,7 +331,7 @@ public class Mythos {
                     var9 = newItems;
                     var10 = newItems.length;
 
-                    for(var11 = 0; var11 < var10; ++var11) {
+                    for (var11 = 0; var11 < var10; ++var11) {
                         enchantment = var9[var11];
                         currentEnchantments.add(enchantment);
                     }
@@ -330,8 +339,8 @@ public class Mythos {
                     StringBuilder newEnchantmentsLine = new StringBuilder("enchantments = [");
                     boolean first = true;
 
-                    for(Iterator var15 = currentEnchantments.iterator(); var15.hasNext(); first = false) {
-                        enchantment = (String)var15.next();
+                    for (Iterator var15 = currentEnchantments.iterator(); var15.hasNext(); first = false) {
+                        enchantment = (String) var15.next();
                         if (!first) {
                             newEnchantmentsLine.append(", ");
                         }
@@ -370,7 +379,7 @@ public class Mythos {
                         var9 = currentListStr.split(",");
                         var10 = var9.length;
 
-                        for(var11 = 0; var11 < var10; ++var11) {
+                        for (var11 = 0; var11 < var10; ++var11) {
                             enchantment = var9[var11];
                             currentEnchantments.add(enchantment.trim().replace("\"", ""));
                         }
@@ -379,7 +388,7 @@ public class Mythos {
                     var9 = newItems;
                     var10 = newItems.length;
 
-                    for(var11 = 0; var11 < var10; ++var11) {
+                    for (var11 = 0; var11 < var10; ++var11) {
                         enchantment = var9[var11];
                         currentEnchantments.add(enchantment);
                     }
@@ -387,8 +396,8 @@ public class Mythos {
                     StringBuilder newEnchantmentsLine = new StringBuilder("blacklist = [");
                     boolean first = true;
 
-                    for(Iterator var15 = currentEnchantments.iterator(); var15.hasNext(); first = false) {
-                        enchantment = (String)var15.next();
+                    for (Iterator var15 = currentEnchantments.iterator(); var15.hasNext(); first = false) {
+                        enchantment = (String) var15.next();
                         if (!first) {
                             newEnchantmentsLine.append(", ");
                         }
@@ -403,6 +412,7 @@ public class Mythos {
             }
         }
     }
+
     private String addItemsToTOMLList(String content, String listKey, String[] newItems) {
         int index = content.indexOf(listKey);
         if (index == -1) {
@@ -418,7 +428,7 @@ public class Mythos {
                 String[] var7 = newItems;
                 int var8 = newItems.length;
 
-                for(int var9 = 0; var9 < var8; ++var9) {
+                for (int var9 = 0; var9 < var8; ++var9) {
                     String newItem = var7[var9];
                     if (!listContent.contains(newItem)) {
                         listContent = listContent.replace("]", ", \"" + newItem + "\"]");

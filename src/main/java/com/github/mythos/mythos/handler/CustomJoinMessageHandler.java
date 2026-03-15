@@ -2,6 +2,8 @@ package com.github.mythos.mythos.handler;
 
 import com.github.mythos.mythos.networking.MythosNetwork;
 import com.github.mythos.mythos.networking.play2server.ShaderPacket;
+import com.github.mythos.mythos.networking.play2server.WhiteoutPacket;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -23,6 +25,7 @@ public class CustomJoinMessageHandler {
     public static final UUID ELECTRO = UUID.fromString("e313811f-6b1c-4aea-8211-0aaa4f9adb11");
     public static final UUID PRIMORDIAL_ROSE = UUID.fromString("7ee73300-fb30-4ed6-8cac-5d2ee3be2046");
     public static final UUID TERRACHARM = UUID.fromString("3c930a59-4d3d-4e4f-b62b-2f71073e1bbb");
+    public static final UUID ARGON = UUID.fromString("0f8fc498-6cc0-4e1f-8769-4ae33cbb4a1f");
 
     @SubscribeEvent
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
@@ -80,6 +83,23 @@ public class CustomJoinMessageHandler {
                     MythosNetwork.sendToPlayer(new ShaderPacket("none", 1.0f, 1.0f, 1.0f), player);
                 }), 3500, TimeUnit.MILLISECONDS);
             }
+        } else if (joiningPlayer.getUUID().equals(ARGON)) {
+            for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+                sendWhiteoutToAll(player, 1f);
+                player.sendSystemMessage(Component.literal("Oh Vained white sand, heed me.").withStyle(ChatFormatting.WHITE), false);
+                player.playNotifySound(SoundEvents.CREEPER_PRIMED, null, 1, 1);
+
+                scheduler.schedule(() -> server.execute(() -> {
+                    sendWhiteoutToAll(player, 0f);
+                    player.sendSystemMessage(Component.literal("The Serpent in white coils around sin again.").withStyle(ChatFormatting.DARK_RED), false);
+                }), 3500, TimeUnit.MILLISECONDS);
+
+
+            }
         }
+    }
+
+    private static void sendWhiteoutToAll(ServerPlayer playerList, float intensity) {
+            MythosNetwork.sendToPlayer(new WhiteoutPacket(intensity), playerList);
     }
 }

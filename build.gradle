@@ -169,9 +169,9 @@ repositories {
     }
 
     maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven' }
-  //  maven { url 'https://dl.cloudsmith.io/public/manasmods/manascore/maven/' }
-   // maven { url 'https://dl.cloudsmith.io/public/manasmods/tensura/maven/' }
-  //  maven { url 'https://jitpack.io/' }
+    //  maven { url 'https://dl.cloudsmith.io/public/manasmods/manascore/maven/' }
+    // maven { url 'https://dl.cloudsmith.io/public/manasmods/tensura/maven/' }
+    //  maven { url 'https://jitpack.io/' }
     maven { url "https://maven.firstdarkdev.xyz/snapshots" }
 }
 
@@ -199,53 +199,53 @@ dependencies {
     //implementation fg.deobf("top.theillusivec4.curios:curios-forge:1.19.2-5.1.6.4")
     //implementation fg.deobf("top.theillusivec4.caelus:caelus-forge:1.19.2-3.0.0.6")
     implementation fg.deobf('com.github.glitchfiend:TerraBlender-forge:1.19.2-2.0.1.162')
-   // implementation fg.deobf("curse.maven:enigmatic-legacy-291524:4124015")
+    // implementation fg.deobf("curse.maven:enigmatic-legacy-291524:4124015")
 }
 
 // dependencies {
-    // Specify the version of Minecraft to use.
-    // Any artifact can be supplied so long as it has a "userdev" classifier artifact and is a compatible patcher artifact.
-    // The "userdev" classifier will be requested and setup by ForgeGradle.
-    // If the group id is "net.minecraft" and the artifact id is one of ["client", "server", "joined"],
-    // then special handling is done to allow a setup of a vanilla dependency without the use of an external repository.
-  //  minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-   // annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-   // implementation fg.deobf("com.github.manasmods:ManasCore:${minecraft_version}-${manasCoreVersion}")
-  //  implementation fg.deobf("com.github.manasmods:tensura:${minecraft_version}-${tensuraVersion}")
-  //  compileOnly fg.deobf("com.github.lucifel:virtuoso:${virtuosoVersion}")
-  //  implementation fg.deobf("io.github.memoires:trmysticism:${mysticismVersion}")
-   // compileOnly fg.deobf("com.radientfox:stellarprism:${stellarVersion}")
-   // implementation fg.deobf("com.github.hvnbael:trnightmare:${minecraft_version}-${nightmareVersion}")
- //   implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.19:3.1.40')
-   // implementation fg.deobf("curse.maven:gecko-${geckoVersion}")
-   // implementation fg.deobf("blank:EnigmaticLegacy:2.26.5")
-   // implementation fg.deobf("vazkii.patchouli:Patchouli:1.19.2-77")
-   // implementation fg.deobf("top.theillusivec4.curios:curios-forge:1.19.2-5.1.6.4")
-  //  implementation fg.deobf("top.theillusivec4.caelus:caelus-forge:1.19.2-3.0.0.6")
-  //  implementation fg.deobf('com.github.glitchfiend:TerraBlender-forge:1.19.2-2.0.1.162')
-  //  compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.5.0"))
-   // implementation(jarJar("io.github.llamalad7:mixinextras-forge:0.5.0")) {
-   //     jarJar.ranged(it, "[0.5.0,)")
-  //  }
-    //implementation fg.deobf("curse.maven:terrablender-${terrablenderVersion}")
+// Specify the version of Minecraft to use.
+// Any artifact can be supplied so long as it has a "userdev" classifier artifact and is a compatible patcher artifact.
+// The "userdev" classifier will be requested and setup by ForgeGradle.
+// If the group id is "net.minecraft" and the artifact id is one of ["client", "server", "joined"],
+// then special handling is done to allow a setup of a vanilla dependency without the use of an external repository.
+//  minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+// annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+// implementation fg.deobf("com.github.manasmods:ManasCore:${minecraft_version}-${manasCoreVersion}")
+//  implementation fg.deobf("com.github.manasmods:tensura:${minecraft_version}-${tensuraVersion}")
+//  compileOnly fg.deobf("com.github.lucifel:virtuoso:${virtuosoVersion}")
+//  implementation fg.deobf("io.github.memoires:trmysticism:${mysticismVersion}")
+// compileOnly fg.deobf("com.radientfox:stellarprism:${stellarVersion}")
+// implementation fg.deobf("com.github.hvnbael:trnightmare:${minecraft_version}-${nightmareVersion}")
+//   implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.19:3.1.40')
+// implementation fg.deobf("curse.maven:gecko-${geckoVersion}")
+// implementation fg.deobf("blank:EnigmaticLegacy:2.26.5")
+// implementation fg.deobf("vazkii.patchouli:Patchouli:1.19.2-77")
+// implementation fg.deobf("top.theillusivec4.curios:curios-forge:1.19.2-5.1.6.4")
+//  implementation fg.deobf("top.theillusivec4.caelus:caelus-forge:1.19.2-3.0.0.6")
+//  implementation fg.deobf('com.github.glitchfiend:TerraBlender-forge:1.19.2-2.0.1.162')
+//  compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.5.0"))
+// implementation(jarJar("io.github.llamalad7:mixinextras-forge:0.5.0")) {
+//     jarJar.ranged(it, "[0.5.0,)")
+//  }
+//implementation fg.deobf("curse.maven:terrablender-${terrablenderVersion}")
 
 
-    // Example mod dependency with JEI - using fg.deobf() ensures the dependency is remapped to your development mappings
-    // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
-    // compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
-    // compileOnly fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}")
-    // runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
+// Example mod dependency with JEI - using fg.deobf() ensures the dependency is remapped to your development mappings
+// The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
+// compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
+// compileOnly fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}")
+// runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
 
-    // Example mod dependency using a mod jar from ./libs with a flat dir repository
-    // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
-    // The group id is ignored when searching -- in this case, it is "blank"
-    // implementation fg.deobf("blank:coolmod-${mc_version}:${coolmod_version}")
+// Example mod dependency using a mod jar from ./libs with a flat dir repository
+// This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
+// The group id is ignored when searching -- in this case, it is "blank"
+// implementation fg.deobf("blank:coolmod-${mc_version}:${coolmod_version}")
 
-    // For more info:
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
+// For more info:
+// http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
+// http://www.gradle.org/docs/current/userguide/dependency_management.html
 
-    // annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+// annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
 // }
 
