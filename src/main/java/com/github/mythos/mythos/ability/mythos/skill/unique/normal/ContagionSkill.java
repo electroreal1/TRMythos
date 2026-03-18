@@ -7,10 +7,10 @@ import com.github.mythos.mythos.handler.ContagionHandler;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -37,13 +37,8 @@ public class ContagionSkill extends Skill {
     }
 
     @Override
-    public void onDamageEntity(ManasSkillInstance instance, LivingEntity entity, LivingHurtEvent event) {
-        onTick(instance, entity);
-    }
-
-    @Override
-    public void onToggleOn(ManasSkillInstance instance, LivingEntity entity) {
-        onTick(instance, entity);
+    public boolean canTick(ManasSkillInstance instance, LivingEntity entity) {
+        return true;
     }
 
     @Override
@@ -79,12 +74,8 @@ public class ContagionSkill extends Skill {
             int bio = ContagionHandler.getBiomatter(player);
             player.displayClientMessage(Component.literal("§2[Contagion] §7Current Biomatter: §a" + bio), true);
         } else {
-            if (ContagionHandler.isListeningForMutation(player)) {
-                ContagionHandler.setListening(player, false);
-            } else {
-                ContagionHandler.setListening(player, true);
-                ContagionHandler.sendMutationMenu(player);
-            }
+            if (!(player instanceof ServerPlayer serverPlayer)) return;
+            ContagionHandler.openMutationGui(serverPlayer);
         }
     }
 

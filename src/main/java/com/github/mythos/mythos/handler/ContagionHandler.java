@@ -4,13 +4,12 @@ import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.registry.skill.UniqueSkills;
 import com.github.manasmods.tensura.util.damage.TensuraDamageSources;
 import com.github.mythos.mythos.config.MythosContagionConfig;
+import com.github.mythos.mythos.networking.MythosNetwork;
+import com.github.mythos.mythos.networking.play2server.OpenContagionGuiPacket;
 import com.github.mythos.mythos.registry.MythosMobEffects;
 import com.github.mythos.mythos.registry.skill.Skills;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.HoverEvent;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -24,6 +23,8 @@ import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = "trmythos")
@@ -155,20 +156,27 @@ public class ContagionHandler {
 
         if (matchedPath != null) {
             int currentLvl = getMutationLevel(player, matchedPath);
-            int maxLvl = MythosContagionConfig.MAX_LEVELS.get(matchedPath).get();
+
+            var maxLvlSetting = MythosContagionConfig.MAX_LEVELS.get(matchedPath);
+            if (maxLvlSetting == null) return;
+
+            int maxLvl = maxLvlSetting.get();
             int biomatter = getBiomatter(player);
             int cost = 1000 + (currentLvl * 500);
 
             if (currentLvl < maxLvl) {
                 if (biomatter >= cost) {
+                    // 2. Apply the mutation
                     incrementPath(player, matchedPath);
                     addBiomatter(player, -cost);
+
                     player.displayClientMessage(Component.literal("§2[Contagion] §a" + matchedPath + " §7evolved to Level " + (currentLvl + 1)), false);
                     player.level.playSound(null, player.blockPosition(), SoundEvents.ZOMBIE_VILLAGER_CURE, SoundSource.PLAYERS, 1.0f, 1.0f);
 
-                    sendMutationMenu(player);
+                    openMutationGui(player);
                 } else {
                     player.displayClientMessage(Component.literal("§cInsufficient Biomatter! Need: " + cost), true);
+                    openMutationGui(player);
                 }
             } else {
                 player.displayClientMessage(Component.literal("§6" + matchedPath + " is already maxed."), true);
@@ -176,40 +184,25 @@ public class ContagionHandler {
         }
     }
 
-    public static void sendMutationMenu(Player player) {
+    public static void openMutationGui(ServerPlayer player) {
         int bio = getBiomatter(player);
-        player.sendSystemMessage(Component.literal("§8§m=================================="));
-        player.sendSystemMessage(Component.literal("§2§l  CONTAGION: VIRAL EVOLUTION"));
-        player.sendSystemMessage(Component.literal("§7  Available Biomatter: §a" + bio));
-        player.sendSystemMessage(Component.literal("§8§m=================================="));
+        Map<String, Integer> levels = new HashMap<>();
 
-        MythosContagionConfig.ENABLED_PATHS.keySet().forEach(pathName -> {
-            if (MythosContagionConfig.ENABLED_PATHS.get(pathName).get()) {
-                int currentLvl = getMutationLevel(player, pathName);
-                int maxLvl = MythosContagionConfig.MAX_LEVELS.get(pathName).get();
-                int cost = 1000 + (currentLvl * 500);
+        System.out.println("Contagion Debug: Finding paths for " + player.getName().getString());
 
-                boolean isMaxed = currentLvl >= maxLvl;
-                String color = isMaxed ? "§6" : "§a";
-
-                MutableComponent line = Component.literal(color + " • [EVOLVE " + pathName.toUpperCase() + "] ");
-                line.append(Component.literal("§8[" + currentLvl + "/" + maxLvl + "]"));
-
-                if (!isMaxed) {
-                    line.append(Component.literal(" §7- Cost: §f" + cost));
-                    line.withStyle(style -> style
-                            .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/contagion mutate " + pathName))
-                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("§7Click to evolve §a" + pathName)))
-                    );
-                } else {
-                    line.append(Component.literal(" §e(MAXED)"));
-                }
-
-                player.sendSystemMessage(line);
+        for (String path : MythosContagionConfig.ENABLED_PATHS.keySet()) {
+            if (MythosContagionConfig.ENABLED_PATHS.get(path).get()) {
+                levels.put(path, getMutationLevel(player, path));
             }
-        });
+        }
 
-        player.sendSystemMessage(Component.literal("§8§m=================================="));
+        System.out.println("Contagion Debug: Found " + levels.size() + " enabled paths.");
+
+        if (levels.isEmpty()) {
+            player.sendSystemMessage(Component.literal("§cError: No mutation paths enabled in config!"));
+        }
+
+        MythosNetwork.sendToPlayer(new OpenContagionGuiPacket(bio, levels), player);
     }
 
     public static void applyEnvySteal(Player source, LivingEntity victim, int level) {

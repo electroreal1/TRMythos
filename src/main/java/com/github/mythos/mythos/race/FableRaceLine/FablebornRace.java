@@ -9,8 +9,6 @@ import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
 import com.github.manasmods.tensura.util.JumpPowerHelper;
 import com.github.mythos.mythos.registry.race.MythosRaces;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Player;
 
 import javax.annotation.Nullable;
@@ -22,11 +20,6 @@ public class FablebornRace extends Race {
         super(difficulty);
     }
 
-    @org.jetbrains.annotations.Nullable
-    @Override
-    public MutableComponent getName() {
-        return Component.literal("Fableborn");
-    }
 
     @Override
     public double getBaseHealth() {

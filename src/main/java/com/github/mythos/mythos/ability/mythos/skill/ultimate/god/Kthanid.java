@@ -27,6 +27,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -87,6 +88,11 @@ public class Kthanid extends Skill {
     @Override
     public Component getSkillDescription() {
         return Component.literal("The antithesis to ruin, corruption, sin, and wickedness. Where the world would crumble under the weight of corruption, light breaks through, heralding a new beginning.");
+    }
+
+    @Override
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/ultimate/kthanid.png");
     }
 
     @Override
