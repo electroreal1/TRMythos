@@ -6,8 +6,6 @@ import com.github.manasmods.tensura.race.Race;
 import com.github.manasmods.tensura.registry.skill.ExtraSkills;
 import com.github.manasmods.tensura.util.JumpPowerHelper;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.ArrayList;
@@ -84,11 +82,6 @@ public class GenesisMyth extends Race{
         list.add(VExtraSkills.CONCENTRATOR.get());
         list.add(VExtraSkills.MYSTIC_AURA.get());
         return list;
-    }
-
-    @Override
-    public @org.jetbrains.annotations.Nullable MutableComponent getName() {
-        return Component.literal("Genesis Myth");
     }
 
     @Override

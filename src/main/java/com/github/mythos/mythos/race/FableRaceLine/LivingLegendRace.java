@@ -8,8 +8,6 @@ import com.github.manasmods.tensura.registry.skill.ResistanceSkills;
 import com.github.manasmods.tensura.util.JumpPowerHelper;
 import com.github.mythos.mythos.registry.race.MythosRaces;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Player;
 
 import javax.annotation.Nullable;
@@ -103,12 +101,6 @@ public class LivingLegendRace extends FableweaverRace{
     public @Nullable Race getAwakeningEvolution(Player player) {
         return (TensuraRaces.RACE_REGISTRY.get()).getValue(MythosRaces.AKASHIC_LEGEND);
     }
-
-    @Override
-    public @org.jetbrains.annotations.Nullable MutableComponent getName() {
-        return Component.literal("Living Legend");
-    }
-
 
     @Override
     public boolean isSpiritual() {

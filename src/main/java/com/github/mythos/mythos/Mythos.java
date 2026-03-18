@@ -3,6 +3,7 @@ package com.github.mythos.mythos;
 import com.github.mythos.mythos.client.screen.OrunScreen;
 import com.github.mythos.mythos.command.MythosCommands;
 import com.github.mythos.mythos.config.MythosConfig;
+import com.github.mythos.mythos.config.MythosContagionConfig;
 import com.github.mythos.mythos.config.MythosSkillsConfig;
 import com.github.mythos.mythos.entity.boss.DendrrahEntity;
 import com.github.mythos.mythos.handler.*;
@@ -51,18 +52,9 @@ public class Mythos {
         return true;
     });
 
-    static {
-        try {
-            net.minecraftforge.fml.config.ConfigTracker.INSTANCE.loadDefaultServerConfigs();
-        } catch (Throwable e) {
-            System.out.println("Mythos: Attempted static-phase config load.");
-        }
-    }
-
-
-
     public Mythos() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, MythosConfig.SPEC, getConfigFileName("mythos-common"));
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, MythosContagionConfig.SPEC, "tensura-reincarnated/mythos-common");
 
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         // 1. Common Listeners
@@ -77,6 +69,7 @@ public class Mythos {
         MinecraftForge.EVENT_BUS.register(KhaosHandler.class);
 
         MinecraftForge.EVENT_BUS.register(this);
+
 
         // 3. Safe Client Loading via Proxy
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientOnlyRegistrar::registerClientOnlyEvents);

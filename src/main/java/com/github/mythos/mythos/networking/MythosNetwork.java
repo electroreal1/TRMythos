@@ -58,6 +58,18 @@ public class MythosNetwork {
                 WhiteoutPacket::decode,
                 WhiteoutPacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+
+        registerPacket(MutationPacket.class,
+                MutationPacket::encode,
+                MutationPacket::decode,
+                MutationPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
+
+        registerPacket(OpenContagionGuiPacket.class,
+                OpenContagionGuiPacket::encode,
+                OpenContagionGuiPacket::decode,
+                OpenContagionGuiPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 
     private static <MSG> void registerPacket(Class<MSG> messageType, BiConsumer<MSG, FriendlyByteBuf> encoder, Function<FriendlyByteBuf, MSG> decoder, BiConsumer<MSG, Supplier<NetworkEvent.Context>> messageConsumer, Optional<NetworkDirection> direction) {
