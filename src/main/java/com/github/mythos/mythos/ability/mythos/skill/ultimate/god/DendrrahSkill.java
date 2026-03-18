@@ -88,6 +88,11 @@ public class DendrrahSkill extends Skill implements Transformation {
     }
 
     @Override
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/ultimate/dendrrah.png");
+    }
+
+    @Override
     public double getObtainingEpCost() {
         return 10000000;
     }
