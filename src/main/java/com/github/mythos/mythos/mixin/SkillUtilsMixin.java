@@ -21,6 +21,16 @@ import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import com.github.manasmods.manascore.api.skills.ManasSkill;
+import com.github.manasmods.tensura.ability.SkillUtils;
+import com.github.manasmods.tensura.ability.SkillHelper;
+import com.github.mythos.mythos.registry.skill.Skills;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 import java.util.Optional;
 
@@ -187,6 +197,9 @@ public abstract class SkillUtilsMixin {
             original = true;
         }
         if (isSkillInSlot(entity, Skills.TATARI.get())) {
+            original = true;
+        }
+        if (isSkillInSlot(entity, Skills.SPIRALHEART.get())) {
             original = true;
         }
         if (isSkillInSlot(entity, Skills.CHILD_OF_THE_PLANE.get())) {
