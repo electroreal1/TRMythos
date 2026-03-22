@@ -67,7 +67,7 @@ public class BoreasBarrier extends Entity {
         });
 
         this.level.getEntitiesOfClass(LivingEntity.class, area,
-                entity -> entity != this.owner && !entity.isAlliedTo(this.owner)).forEach(entity -> {
+                entity -> entity != this.owner).forEach(entity -> {
 
             double distance = entity.distanceTo(this.owner);
 

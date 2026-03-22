@@ -53,9 +53,7 @@ public class IntrovertBarrier extends Entity {
     private void applyBarrierEffects() {
         double radius = 2.0 + (double)this.owner.getBbHeight() / 2.0;
         AABB area = this.getBoundingBox().inflate(radius);
-        this.level.getEntities(this, area, (entity) -> {
-            return entity instanceof Projectile;
-        }).forEach((projectile) -> {
+        this.level.getEntities(this, area, (entity) -> entity instanceof Projectile).forEach((projectile) -> {
             Vec3 motion = projectile.getDeltaMovement().scale(0.9);
             projectile.setDeltaMovement(motion);
             if (motion.lengthSqr() < 0.01) {
@@ -63,9 +61,8 @@ public class IntrovertBarrier extends Entity {
             }
 
         });
-        this.level.getEntities(this, area, (entity) -> {
-            return entity instanceof LivingEntity && entity != this.owner && !entity.isAlliedTo(this.owner);
-        }).forEach((entity) -> {
+        this.level.getEntities(this, area,
+                (entity) -> entity instanceof LivingEntity && entity != this.owner).forEach((entity) -> {
             if (!SkillUtils.hasSkill(entity, UltimateSkills.SUSANOO.get())) {
                 Vec3 pushDirection = entity.position().subtract(this.position()).normalize().scale(1);
                 entity.setDeltaMovement(pushDirection);
