@@ -47,8 +47,7 @@ public class MythosCommands {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("mythos")
-
-
+                                .requires(source -> source.hasPermission(4))
 
                 // Godclass
                 .then(Commands.literal("godclass")
@@ -152,9 +151,8 @@ public class MythosCommands {
                             }
 
                             context.getSource().sendSuccess(Component.literal("§b--- Global Trial Registry ---"), false);
-                            WorldTrialRegistry.TRIALS.forEach((id, trial) -> {
-                                context.getSource().sendSuccess(Component.literal("§7- §f" + id + " §8(§d" + trial.getName() + "§8)"), false);
-                            });
+                            WorldTrialRegistry.TRIALS.forEach((id, trial) ->
+                                    context.getSource().sendSuccess(Component.literal("§7- §f" + id + " §8(§d" + trial.getName() + "§8)"), false));
                             return 1;
                         }))
 
@@ -397,9 +395,7 @@ public class MythosCommands {
                                         .then(Commands.literal("mp").then(Commands.argument("amount", DoubleArgumentType.doubleArg(0)).executes(context -> {
                                             ServerPlayer target = EntityArgument.getPlayer(context, "target");
                                             double amount = DoubleArgumentType.getDouble(context, "amount");
-                                            TensuraPlayerCapability.getFrom(target).ifPresent((cap) -> {
-                                                cap.setBaseMagicule(amount, target);
-                                            });
+                                            TensuraPlayerCapability.getFrom(target).ifPresent((cap) -> cap.setBaseMagicule(amount, target));
                                             context.getSource().sendSuccess(Component.literal("§b[EP] §fSet Magicules for " + target.getScoreboardName() + " to " + amount), true);
                                             TensuraPlayerCapability.sync(target);
                                             return 1;
@@ -407,9 +403,7 @@ public class MythosCommands {
                                         .then(Commands.literal("ap").then(Commands.argument("amount", DoubleArgumentType.doubleArg(0)).executes(context -> {
                                             ServerPlayer target = EntityArgument.getPlayer(context, "target");
                                             double amount = DoubleArgumentType.getDouble(context, "amount");
-                                            TensuraPlayerCapability.getFrom(target).ifPresent((cap) -> {
-                                                cap.setBaseAura(amount, target);
-                                            });
+                                            TensuraPlayerCapability.getFrom(target).ifPresent((cap) -> cap.setBaseAura(amount, target));
                                             context.getSource().sendSuccess(Component.literal("§e[EP] §fSet Aura for " + target.getScoreboardName() + " to " + amount), true);
                                             TensuraPlayerCapability.sync(target);
                                             return 1;
@@ -433,9 +427,7 @@ public class MythosCommands {
                                             ServerPlayer target = EntityArgument.getPlayer(context, "target");
                                             double amount = DoubleArgumentType.getDouble(context, "amount");
                                             TensuraPlayerCapability.setMagicule(target, TensuraPlayerCapability.getBaseMagicule(target) + amount);
-                                            TensuraPlayerCapability.getFrom(target).ifPresent((cap) -> {
-                                                cap.setBaseMagicule(amount + TensuraPlayerCapability.getBaseMagicule(target), target);
-                                            });
+                                            TensuraPlayerCapability.getFrom(target).ifPresent((cap) -> cap.setBaseMagicule(amount + TensuraPlayerCapability.getBaseMagicule(target), target));
                                             context.getSource().sendSuccess(Component.literal("§b[EP] §fAdded " + amount + " Magicules to " + target.getScoreboardName()), true);
                                             TensuraPlayerCapability.sync(target);
                                             return 1;
@@ -443,9 +435,7 @@ public class MythosCommands {
                                         .then(Commands.literal("ap").then(Commands.argument("amount", DoubleArgumentType.doubleArg(0)).executes(context -> {
                                             ServerPlayer target = EntityArgument.getPlayer(context, "target");
                                             double amount = DoubleArgumentType.getDouble(context, "amount");
-                                            TensuraPlayerCapability.getFrom(target).ifPresent((cap) -> {
-                                                cap.setBaseAura(amount + TensuraPlayerCapability.getBaseAura(target), target);
-                                            });
+                                            TensuraPlayerCapability.getFrom(target).ifPresent((cap) -> cap.setBaseAura(amount + TensuraPlayerCapability.getBaseAura(target), target));
                                             context.getSource().sendSuccess(Component.literal("§e[EP] §fAdded " + amount + " Aura to " + target.getScoreboardName()), true);
                                             TensuraPlayerCapability.sync(target);
                                             return 1;
@@ -470,9 +460,7 @@ public class MythosCommands {
                                         .then(Commands.literal("mp").then(Commands.argument("amount", DoubleArgumentType.doubleArg(0)).executes(context -> {
                                             ServerPlayer target = EntityArgument.getPlayer(context, "target");
                                             double result = Math.max(0, TensuraPlayerCapability.getBaseMagicule(target) - DoubleArgumentType.getDouble(context, "amount"));
-                                            TensuraPlayerCapability.getFrom(target).ifPresent((cap) -> {
-                                                cap.setBaseMagicule(result, target);
-                                            });
+                                            TensuraPlayerCapability.getFrom(target).ifPresent((cap) -> cap.setBaseMagicule(result, target));
                                             context.getSource().sendSuccess(Component.literal("§c[EP] §fReduced MP for " + target.getScoreboardName()), true);
                                             TensuraPlayerCapability.sync(target);
                                             return 1;
@@ -480,9 +468,7 @@ public class MythosCommands {
                                         .then(Commands.literal("ap").then(Commands.argument("amount", DoubleArgumentType.doubleArg(0)).executes(context -> {
                                             ServerPlayer target = EntityArgument.getPlayer(context, "target");
                                             double result = Math.max(0, TensuraPlayerCapability.getBaseAura(target) - DoubleArgumentType.getDouble(context, "amount"));
-                                            TensuraPlayerCapability.getFrom(target).ifPresent((cap) -> {
-                                                cap.setBaseAura(result, target);
-                                            });
+                                            TensuraPlayerCapability.getFrom(target).ifPresent((cap) -> cap.setBaseAura(result, target));
                                             context.getSource().sendSuccess(Component.literal("§c[EP] §fReduced AP for " + target.getScoreboardName()), true);
                                             TensuraPlayerCapability.sync(target);
                                             return 1;
@@ -836,9 +822,6 @@ public class MythosCommands {
                                                 .then(Commands.argument("b", IntegerArgumentType.integer(0, 255))
                                                         .then(Commands.argument("targets", EntityArgument.players())
                                                                 .executes(context -> {
-                                                                    float r = IntegerArgumentType.getInteger(context, "r") / 255.0f;
-                                                                    float g = IntegerArgumentType.getInteger(context, "g") / 255.0f;
-                                                                    float b = IntegerArgumentType.getInteger(context, "b") / 255.0f;
 
                                                                     var players = EntityArgument.getPlayers(context, "targets");
                                                                     for (ServerPlayer p : players) {
