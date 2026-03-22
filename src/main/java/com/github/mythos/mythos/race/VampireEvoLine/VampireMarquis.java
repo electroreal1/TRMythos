@@ -120,11 +120,11 @@ public class VampireMarquis extends Race implements Transformation {
         list.add(IntrinsicSkills.BLOOD_MIST.get());
         list.add(ExtraSkills.SHADOW_MOTION.get());
         list.add(CommonSkills.COERCION.get());
-        list.add(ExtraSkills.ULTRASPEED_REGENERATION.get());
-        list.add(ExtraSkills.MAGIC_SENSE.get());
+        list.add(ExtraSkills.INFINITE_REGENERATION.get());
+        list.add(ExtraSkills.UNIVERSAL_PERCEPTION.get());
         list.add(ExtraSkills.MAGIC_JAMMING.get());
         list.add(IntrinsicSkills.CHARM.get());
-        list.add(IntrinsicSkills.BEAST_TRANSFORMATION.get());
+        list.add(IntrinsicSkills.POSSESSION.get());
         return list;
     }
 

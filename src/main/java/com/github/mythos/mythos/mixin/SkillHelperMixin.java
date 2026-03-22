@@ -10,6 +10,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
+import static com.github.mythos.mythos.mixin.SkillUtilsMixin.hasSkill;
+
 @Mixin({SkillHelper.class})
 public abstract class SkillHelperMixin {
     public SkillHelperMixin() {
@@ -30,7 +32,9 @@ public abstract class SkillHelperMixin {
             if (SkillUtils.isSkillToggled(player, Skills.DOMINATE.get())) {
                 cost *= 2;
             }
-
+            if (hasSkill(player, Skills.SPIRALHEART.get())) {
+                cost *= 0.7F;
+            }
         }
         return cost;
     }

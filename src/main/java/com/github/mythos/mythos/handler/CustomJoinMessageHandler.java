@@ -26,6 +26,7 @@ public class CustomJoinMessageHandler {
     public static final UUID PRIMORDIAL_ROSE = UUID.fromString("7ee73300-fb30-4ed6-8cac-5d2ee3be2046");
     public static final UUID TERRACHARM = UUID.fromString("3c930a59-4d3d-4e4f-b62b-2f71073e1bbb");
     public static final UUID ARGON = UUID.fromString("0f8fc498-6cc0-4e1f-8769-4ae33cbb4a1f");
+    public static final UUID HALLOW = UUID.fromString("7bd51cab-cb84-4ecf-a14b-38862fcdad21");
 
     @SubscribeEvent
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
@@ -70,6 +71,25 @@ public class CustomJoinMessageHandler {
                 for (ServerPlayer player : server.getPlayerList().getPlayers()) {
                     MythosNetwork.sendToPlayer(new ShaderPacket("none", 1.0f, 1.0f, 1.0f), player);
                     player.sendSystemMessage(Component.literal("§d§oWelcome back to reality."));
+                    player.playNotifySound(SoundEvents.BEACON_ACTIVATE, SoundSource.PLAYERS, 1.0f, 1.0f);
+                    player.playNotifySound(SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.5f, 0.8f);
+                    player.playNotifySound(SoundEvents.ENDER_EYE_DEATH, SoundSource.PLAYERS, 0.7f, 1.2f);
+                }
+            }), 3500, TimeUnit.MILLISECONDS);
+        } else if (joiningPlayer.getUUID().equals(HALLOW)) {
+            for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+                MythosNetwork.sendToPlayer(new ShaderPacket("trmythos:shaders/post/master_sky.json", 0.5f, 0.3f, 2.0f), player);
+                player.sendSystemMessage(Component.literal("&9No recompense,&b no salvation to be had.\n" +
+                        "&5At the world's end, &0a bird sings of tomorrow..."));
+                player.playNotifySound(SoundEvents.GHAST_WARN, SoundSource.PLAYERS, 1.0f, 0.5f);
+                player.playNotifySound(SoundEvents.BLAZE_BURN, SoundSource.PLAYERS, 0.6f, 2.0f);
+                player.playNotifySound(SoundEvents.CONDUIT_ACTIVATE, SoundSource.PLAYERS, 0.4f, 0.1f);
+            }
+
+            scheduler.schedule(() -> server.execute(() -> {
+                for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+                    MythosNetwork.sendToPlayer(new ShaderPacket("none", 1.0f, 1.0f, 1.0f), player);
+                    player.sendSystemMessage(Component.literal("&6This is an act of clemency."));
                     player.playNotifySound(SoundEvents.BEACON_ACTIVATE, SoundSource.PLAYERS, 1.0f, 1.0f);
                     player.playNotifySound(SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.5f, 0.8f);
                     player.playNotifySound(SoundEvents.ENDER_EYE_DEATH, SoundSource.PLAYERS, 0.7f, 1.2f);
