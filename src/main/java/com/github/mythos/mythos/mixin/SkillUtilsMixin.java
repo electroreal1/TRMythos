@@ -231,7 +231,6 @@ public abstract class SkillUtilsMixin {
     }
 
 
-
     @ModifyReturnValue(method = {"getMagiculeGain"}, at = {@At("RETURN")}, remap = false)
     private static float MythosMagiculeGain(float original, Player player, boolean majin) {
         if (hasSkill(player, Skills.NASCENT_DAO.get())) {
@@ -370,6 +369,20 @@ public abstract class SkillUtilsMixin {
         original += BibliomaniaSkill.getBibliomaniaBoost(player, true, majin);
         return original;
     }
+
+    @ModifyReturnValue(
+            method = "haveSeveranceAttack",
+            at = @At("RETURN"),
+            remap = false
+    )
+    private static boolean onHaveSeveranceAttack(boolean original, DamageSource damageSource, LivingEntity target) {
+        if (SkillUtils.hasSkill(target, Skills.BOREAS.get())) {
+            original = false;
+        }
+
+        return original;
+    }
+
 
 }
 

@@ -1,7 +1,10 @@
 package com.github.mythos.mythos.ability.mythos.skill.unique.normal;
 
 import com.github.manasmods.manascore.api.skills.ManasSkillInstance;
+import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.skill.Skill;
+import com.github.manasmods.tensura.registry.skill.UniqueSkills;
+import com.github.manasmods.tensura.util.damage.DamageSourceHelper;
 import com.github.mythos.mythos.entity.IntrovertBarrier;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -10,6 +13,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 
 import java.util.List;
 
@@ -23,12 +27,28 @@ public class IntrovertSkill extends Skill {
         return new ResourceLocation("trmythos", "textures/skill/unique/introvert.png");
     }
 
+    @Override
+    public int getMaxMastery() {
+        return 1000;
+    }
+
     public boolean canTick(ManasSkillInstance instance, LivingEntity entity) {
         return instance.isToggled();
     }
 
     public boolean canBeToggled(ManasSkillInstance instance, LivingEntity entity) {
         return true;
+    }
+
+    @Override
+    public void onBeingDamaged(ManasSkillInstance instance, LivingAttackEvent event) {
+        if (this.isMastered(instance, event.getEntity())) {
+            if (DamageSourceHelper.isSpatialDamage(event.getSource())) {
+                if (!SkillUtils.hasSkill(event.getEntity(), UniqueSkills.SUPPRESSOR.get())) {
+                    SkillUtils.learnSkill(event.getEntity(), UniqueSkills.SUPPRESSOR.get());
+                }
+            }
+        }
     }
 
     @Override
@@ -43,25 +63,23 @@ public class IntrovertSkill extends Skill {
     public void onToggleOff(ManasSkillInstance instance, LivingEntity entity) {
         Level var4 = entity.level;
         if (var4 instanceof ServerLevel serverLevel) {
-            serverLevel.getEntitiesOfClass(IntrovertBarrier.class, entity.getBoundingBox().inflate(50.0)).stream().filter((barrier) -> {
-                return barrier.getOwner() != null && barrier.getOwner().equals(entity);
-            }).forEach(Entity::discard);
+            serverLevel.getEntitiesOfClass(IntrovertBarrier.class, entity.getBoundingBox().inflate(50.0))
+                    .stream().filter((barrier) -> barrier.getOwner() != null && barrier.getOwner()
+                            .equals(entity)).forEach(Entity::discard);
         }
     }
 
     @Override
     public void onPressed(ManasSkillInstance instance, LivingEntity entity) {
         double radius = 10;
-        double knockbackPower = 2.5;
+        double knockbackPower = 10;
         float damage = instance.isMastered(entity) ? 60 : 30;
 
         Level level = entity.getLevel();
 
-        List<LivingEntity> targets = level.getEntitiesOfClass(
-                LivingEntity.class,
+        List<LivingEntity> targets = level.getEntitiesOfClass(LivingEntity.class,
                 entity.getBoundingBox().inflate(radius),
-                e -> e != entity && e.isAlive()
-        );
+                e -> e != entity && e.isAlive());
 
         for (LivingEntity target : targets) {
 
@@ -82,6 +100,7 @@ public class IntrovertSkill extends Skill {
             target.hurtMarked = true;
 
             target.hurt(DamageSource.playerAttack((Player) entity), damage);
+            instance.addMasteryPoint(entity);
         }
     }
 }

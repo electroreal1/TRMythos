@@ -1,0 +1,15 @@
+{
+  "type": "trmythos:sanctuary",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "layers": [
+        { "block": "trmythos:sanctuary_block", "height": 60 }
+      ],
+      "biome": "trmythos:sanctuary",
+      "lakes": false,
+      "features": false,
+      "structure_overrides": []
+    }
+  }
+}

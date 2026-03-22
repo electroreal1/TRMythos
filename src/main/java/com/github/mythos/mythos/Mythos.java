@@ -53,8 +53,8 @@ public class Mythos {
     });
 
     public Mythos() {
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, MythosConfig.SPEC, getConfigFileName("mythos-common"));
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, MythosContagionConfig.SPEC, "tensura-reincarnated/mythos-common");
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, MythosConfig.SPEC, getConfigFileName("tensura-reincarnated/mythos-common.toml"));
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, MythosContagionConfig.SPEC, "tensura-reincarnated/mythos-contagion-common.toml");
 
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         // 1. Common Listeners

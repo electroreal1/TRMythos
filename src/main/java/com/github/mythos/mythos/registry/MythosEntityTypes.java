@@ -1,6 +1,7 @@
 package com.github.mythos.mythos.registry;
 
 import com.github.mythos.mythos.entity.BlackHoleEntity;
+import com.github.mythos.mythos.entity.BoreasBarrier;
 import com.github.mythos.mythos.entity.IntrovertBarrier;
 import com.github.mythos.mythos.entity.ThunderStorm;
 import com.github.mythos.mythos.entity.boss.DendrrahEntity;
@@ -23,6 +24,7 @@ public class MythosEntityTypes {
     public static final RegistryObject<EntityType<ThunderStorm>> THUNDER_STORM;
     public static final RegistryObject<EntityType<VajraBreathProjectile>> VAJRA_BREATH;
     public static final RegistryObject<EntityType<IntrovertBarrier>> INTROVERT_BARRIER;
+    public static final RegistryObject<EntityType<BoreasBarrier>> BOREAS_BARRIER;
     public static final RegistryObject<EntityType<StarFallProjectile>> STARFALL;
     public static final RegistryObject<EntityType<DendrrahEntity>> DENDRAHH;
     public static final RegistryObject<EntityType<BlackHoleEntity>> BLACK_HOLE;
@@ -67,6 +69,13 @@ public class MythosEntityTypes {
                                 .sized(1.0f, 1.0f)
                                 .clientTrackingRange(64)
                                 .build(new ResourceLocation("trmythos", "introvert_barrier").toString()));
+
+        BOREAS_BARRIER = registry.register("boreas_barrier",
+                        () -> EntityType.Builder.<BoreasBarrier>of(
+                                        BoreasBarrier::new, MobCategory.MISC)
+                                .sized(1.0f, 1.0f)
+                                .clientTrackingRange(64)
+                                .build(new ResourceLocation("trmythos", "boreas_barrier").toString()));
 
         DENDRAHH = registry.register("dendrahh",
                 () -> EntityType.Builder.of(DendrrahEntity::new, MobCategory.MISC).sized(1, 2)

@@ -44,6 +44,13 @@
   "trmythos.skill.thunder_rain.rain": "Lightning Rain",
   "trmythos.skill.thunder_rain.coat": "Lightning Coat",
 
+  "trmythos.skill.boreas": "Boreas",
+  "trmythos.skill.boreas.description": "A solitary sanctuary for you and no one else. Few can break through the walls you've created for yourself, and those few are often those you care for most.",
+  "trmythos.skill.boreas.sanctuary": "Sanctuary",
+  "trmythos.skill.boreas.spiritual": "Spiritual Lockdown",
+  "trmythos.skill.boreas.mind": "Mind crush",
+  "trmythos.skill.boreas.beckon": "Beckon",
+
   "trmythos.skill.orunmila": "Orunmila",
   "trmythos.skill.orunmila.description": "Your consciousness has elevated. Your mind has become so advanced, it now acts as a sort of library - a repository for all the world's information, whose knowledge only you are privy to search through as you please.",
 

@@ -32,6 +32,7 @@ public class ClientModEvents {
 
         event.registerEntityRenderer(MythosEntityTypes.THUNDER_STORM.get(), ThunderStormRenderer::new);
         event.registerEntityRenderer(MythosEntityTypes.INTROVERT_BARRIER.get(), IntrovertBarrierRenderer::new);
+        event.registerEntityRenderer(MythosEntityTypes.BOREAS_BARRIER.get(), BoreasBarrierRenderer::new);
 
         event.registerEntityRenderer(MythosEntityTypes.DENDRAHH.get(),context -> new DendrrahRenderer(context, true));
 

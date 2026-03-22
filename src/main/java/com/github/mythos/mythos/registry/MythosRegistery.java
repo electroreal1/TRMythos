@@ -29,6 +29,7 @@ public class MythosRegistery {
         MythosItems.register(modEventBus);
         CatharsisHandler.register();
         MythosNetwork.register();
+        MythosBlocks.register(modEventBus);
         //MythosClient.clientSetup((FMLClientSetupEvent) modEventBus);
         //modEventBus.addListener(MythosClient::clientSetup);
 

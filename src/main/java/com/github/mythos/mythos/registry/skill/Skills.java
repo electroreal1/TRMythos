@@ -52,12 +52,13 @@ public class Skills {
     public static final RegistryObject<MammonSkill> MAMMON;
     public static final RegistryObject<AsclepiusSkill> ASCLEPIUS;
     public static final RegistryObject<SatanSkill> SATAN;
-    public static final RegistryObject<AngraMainyuSkill> ANGRA_MAINYU;
+    public static final RegistryObject<BoreasSkill> BOREAS;
 
     // Prince Class
     public static final RegistryObject<HaliSkill> HALI;
 
     // King Class
+    public static final RegistryObject<AngraMainyuSkill> ANGRA_MAINYU;
 
     // God Class
     public static final RegistryObject<DendrrahSkill> DENDRRAH;
@@ -165,12 +166,13 @@ public class Skills {
         MAMMON = registery.register("mammon", () -> new MammonSkill(Skill.SkillType.ULTIMATE));
         ASCLEPIUS = registery.register("asclepius", () -> new AsclepiusSkill(Skill.SkillType.ULTIMATE));
         SATAN = registery.register("satan", () -> new SatanSkill(Skill.SkillType.ULTIMATE));
-        ANGRA_MAINYU = registery.register("angra_mainyu", () -> new AngraMainyuSkill(Skill.SkillType.ULTIMATE));
+        BOREAS = registery.register("boreas", BoreasSkill::new);
 
         // Prince Class
         HALI = registery.register("hali", () -> new HaliSkill(Skill.SkillType.ULTIMATE));
 
         // King Class
+        ANGRA_MAINYU = registery.register("angra_mainyu", () -> new AngraMainyuSkill(Skill.SkillType.ULTIMATE));
 
         // god Class
         DENDRRAH = registery.register("dendrahh", DendrrahSkill::new);

@@ -1,6 +1,5 @@
 package com.github.mythos.mythos.entity;
 
-import com.github.manasmods.manascore.api.skills.ManasSkill;
 import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.mythos.mythos.registry.MythosEntityTypes;
 import io.github.Memoires.trmysticism.entity.projectile.skill.AntaeusBlueProjectile;
@@ -34,7 +33,7 @@ public class IntrovertBarrier extends Entity {
     }
 
     public IntrovertBarrier(Level level, LivingEntity owner) {
-        this((EntityType) MythosEntityTypes.INTROVERT_BARRIER.get(), level);
+        this(MythosEntityTypes.INTROVERT_BARRIER.get(), level);
         this.setPos(owner.getX(), owner.getY(), owner.getZ());
         this.owner = owner;
     }
@@ -67,7 +66,7 @@ public class IntrovertBarrier extends Entity {
         this.level.getEntities(this, area, (entity) -> {
             return entity instanceof LivingEntity && entity != this.owner && !entity.isAlliedTo(this.owner);
         }).forEach((entity) -> {
-            if (!SkillUtils.hasSkill(entity, (ManasSkill) UltimateSkills.SUSANOO.get())) {
+            if (!SkillUtils.hasSkill(entity, UltimateSkills.SUSANOO.get())) {
                 Vec3 pushDirection = entity.position().subtract(this.position()).normalize().scale(1);
                 entity.setDeltaMovement(pushDirection);
             }
@@ -93,9 +92,9 @@ public class IntrovertBarrier extends Entity {
 
         while(true) {
             while(iterator.hasNext()) {
-                Map.Entry<Projectile, Integer> entry = (Map.Entry)iterator.next();
-                Projectile projectile = (Projectile)entry.getKey();
-                int remainingTime = (Integer)entry.getValue();
+                Map.Entry<Projectile, Integer> entry = iterator.next();
+                Projectile projectile = entry.getKey();
+                int remainingTime = entry.getValue();
                 if (remainingTime > 0 && projectile.isAlive()) {
                     entry.setValue(remainingTime - 4);
                 } else {
