@@ -17,6 +17,7 @@ import com.github.mythos.mythos.voiceoftheworld.VoiceOfTheWorld;
 import io.github.Memoires.trmysticism.registry.effects.MysticismMobEffects;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -51,6 +52,11 @@ public class AsclepiusSkill extends Skill {
                 SkillUtils.isSkillMastered(player, CommonSkills.POISON.get()) &&
                 SkillUtils.isSkillMastered(player, CommonSkills.CORROSION.get()) &&
                 SkillUtils.isSkillMastered(player, CommonSkills.PARALYSIS.get());
+    }
+
+    @Override
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/ultimate/asclepius.png");
     }
 
     @Override
