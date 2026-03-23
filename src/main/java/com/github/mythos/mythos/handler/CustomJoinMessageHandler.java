@@ -33,6 +33,7 @@ public class CustomJoinMessageHandler {
     public static final UUID ARGON = UUID.fromString("0f8fc498-6cc0-4e1f-8769-4ae33cbb4a1f");
     public static final UUID HALLOW = UUID.fromString("7bd51cab-cb84-4ecf-a14b-38862fcdad21");
     public static final UUID SMOKE = UUID.fromString("bdd89345-7679-45ed-a040-27c14d67c504");
+    public static final UUID KATO = UUID.fromString("448961ac-6d1e-4457-9334-b50a3cbe68c9");
 
     @SubscribeEvent
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
@@ -158,6 +159,10 @@ public class CustomJoinMessageHandler {
             scheduler.schedule(() -> p.getServer().execute(() ->
                     broadcastSound(p, SoundEvents.EXPERIENCE_ORB_PICKUP, 0.5f, 0.5f)
             ), 4000, TimeUnit.MILLISECONDS);
+        });
+
+        registerProfile(KATO, (p) -> {
+
         });
     }
 }

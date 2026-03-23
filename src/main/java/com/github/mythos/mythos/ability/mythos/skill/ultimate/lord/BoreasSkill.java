@@ -58,7 +58,7 @@ public class BoreasSkill extends Skill {
 
     @Override
     public ResourceLocation getSkillIcon() {
-        return new ResourceLocation("trmythos", "textures/skill/unique/introvert.png");
+        return new ResourceLocation("trmythos", "textures/skill/ultimate/boreas.png");
     }
 
     public boolean meetEPRequirement(@NotNull Player player, double newEP) {

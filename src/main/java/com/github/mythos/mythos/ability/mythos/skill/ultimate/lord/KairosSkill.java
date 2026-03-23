@@ -5,6 +5,7 @@ import com.github.manasmods.tensura.ability.SkillUtils;
 import com.github.manasmods.tensura.ability.skill.Skill;
 import com.github.manasmods.tensura.capability.ep.TensuraEPCapability;
 import com.github.mythos.mythos.registry.skill.Skills;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -26,6 +27,11 @@ public class KairosSkill extends Skill {
             return false;
         }
         return SkillUtils.isSkillMastered(player, Skills.OPPORTUNIST_SKILL.get());
+    }
+
+    @Override
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/ultimate/kairos.png");
     }
 
     @Override
