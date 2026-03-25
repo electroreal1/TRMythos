@@ -105,23 +105,18 @@ public class VampireEarl extends Race implements Transformation {
         return ManaEvolutionReward();
     }
 
-    private double AuraEvolutionReward() {
-        return 30000;
-    }
-
+    private double AuraEvolutionReward() {return 100000;}
     private double ManaEvolutionReward() {
-        return 38000;
+        return 380000;
     }
 
     @Override
     public List<TensuraSkill> getIntrinsicSkills(Player player) {
         List<TensuraSkill> list = new ArrayList<>();
         list.add(IntrinsicSkills.DRAIN.get());
-        list.add(IntrinsicSkills.BLOOD_MIST.get());
-        list.add(ExtraSkills.SHADOW_MOTION.get());
-        list.add(CommonSkills.COERCION.get());
-        list.add(ExtraSkills.ULTRASPEED_REGENERATION.get());
-        list.add(ExtraSkills.MAGIC_SENSE.get());
+        list.add(IntrinsicSkills.BEAST_TRANSFORMATION.get());
+        list.add(ExtraSkills.INFINITE_REGENERATION.get());
+        list.add(IntrinsicSkills.POSSESSION.get());
         list.add(ExtraSkills.MAGIC_JAMMING.get());
         return list;
     }

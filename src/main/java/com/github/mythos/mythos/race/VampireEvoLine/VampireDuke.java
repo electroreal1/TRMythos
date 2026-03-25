@@ -106,25 +106,17 @@ public class VampireDuke extends Race implements Transformation {
     }
 
     private double AuraEvolutionReward() {
-        return 80000;
+        return 250000;
     }
 
     private double ManaEvolutionReward() {
-        return 80000;
+        return 500000;
     }
 
     @Override
     public List<TensuraSkill> getIntrinsicSkills(Player player) {
         List<TensuraSkill> list = new ArrayList<>();
-        list.add(IntrinsicSkills.DRAIN.get());
-        list.add(IntrinsicSkills.BLOOD_MIST.get());
-        list.add(ExtraSkills.SHADOW_MOTION.get());
-        list.add(CommonSkills.COERCION.get());
-        list.add(ExtraSkills.INFINITE_REGENERATION.get());
-        list.add(ExtraSkills.MAGIC_SENSE.get());
-        list.add(ExtraSkills.MAGIC_JAMMING.get());
-        list.add(IntrinsicSkills.CHARM.get());
-        list.add(IntrinsicSkills.BEAST_TRANSFORMATION.get());
+        list.add(ExtraSkills.HEAVENLY_EYE.get());
         return list;
     }
 
