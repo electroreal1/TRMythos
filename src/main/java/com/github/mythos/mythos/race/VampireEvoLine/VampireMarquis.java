@@ -106,25 +106,21 @@ public class VampireMarquis extends Race implements Transformation {
     }
 
     private double AuraEvolutionReward() {
-        return 40000;
+        return 300000;
     }
 
     private double ManaEvolutionReward() {
-        return 50000;
+        return 400000;
     }
 
     @Override
     public List<TensuraSkill> getIntrinsicSkills(Player player) {
         List<TensuraSkill> list = new ArrayList<>();
         list.add(IntrinsicSkills.DRAIN.get());
-        list.add(IntrinsicSkills.BLOOD_MIST.get());
-        list.add(ExtraSkills.SHADOW_MOTION.get());
-        list.add(CommonSkills.COERCION.get());
+        list.add(ExtraSkills.ULTRA_INSTINCT.get());
         list.add(ExtraSkills.INFINITE_REGENERATION.get());
         list.add(ExtraSkills.UNIVERSAL_PERCEPTION.get());
-        list.add(ExtraSkills.MAGIC_JAMMING.get());
-        list.add(IntrinsicSkills.CHARM.get());
-        list.add(IntrinsicSkills.POSSESSION.get());
+        list.add(ExtraSkills.BLACK_LIGHTNING.get());
         return list;
     }
 

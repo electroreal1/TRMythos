@@ -116,7 +116,7 @@ public class CustomJoinMessageHandler {
 
         registerProfile(HALLOW, (p) -> {
             broadcastShader(p, "trmythos:shaders/post/master_sky.json", 0.5f, 0.3f, 2.0f, 3500);
-            broadcastMessage(p, Component.literal("§9No recompense,§b no salvation to be had.\n§5At the world's end, §0a bird sings of tomorrow..."));
+            broadcastMessage(p, Component.literal("§9No recompense,§b no salvation to be had. §5At the world's end, §0a bird sings of tomorrow..."));
             broadcastSound(p, SoundEvents.GHAST_WARN, 1.0f, 0.5f);
             broadcastSound(p, SoundEvents.BLAZE_BURN, 0.6f, 2.0f);
             broadcastSound(p, SoundEvents.CONDUIT_ACTIVATE, 0.4f, 0.1f);
