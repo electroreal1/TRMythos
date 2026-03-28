@@ -41,6 +41,11 @@ public class NpcLifeSkill extends Skill {
     }
 
     @Override
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/unique/npclife.png");
+    }
+
+    @Override
     public boolean canBeToggled(ManasSkillInstance instance, LivingEntity entity) {
         return true;
     }
