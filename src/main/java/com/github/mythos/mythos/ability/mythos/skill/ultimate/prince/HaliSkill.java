@@ -31,6 +31,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.protocol.game.ClientboundAnimatePacket;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -90,6 +91,11 @@ public class HaliSkill extends Skill {
     @Override
     public MutableComponent getName() {
         return Component.literal("Hali").withStyle(YELLOW).append(", ").withStyle(WHITE).append(Component.literal("Sunken Sun").withStyle(BLACK));
+    }
+
+    @Override
+    public ResourceLocation getSkillIcon() {
+        return new ResourceLocation("trmythos", "textures/skill/unique/hali.png");
     }
 
     @Override
