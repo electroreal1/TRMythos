@@ -18,25 +18,16 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import com.github.manasmods.manascore.api.skills.ManasSkill;
-import com.github.manasmods.tensura.ability.SkillUtils;
-import com.github.manasmods.tensura.ability.SkillHelper;
-import com.github.mythos.mythos.registry.skill.Skills;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 import java.util.Optional;
 
 import static com.github.manasmods.tensura.capability.skill.TensuraSkillCapability.isSkillInSlot;
 
-@Mixin(value = {SkillUtils.class}, priority = 8)
+@Mixin(value = {SkillUtils.class})
 public abstract class SkillUtilsMixin {
 
     public SkillUtilsMixin() {
@@ -57,52 +48,50 @@ public abstract class SkillUtilsMixin {
         return false;
     }
 
-    @ModifyReturnValue(method = {"getEarningLearnPoint"}, at = {@At("RETURN")}, remap = false)
+    @ModifyReturnValue(method = {"getEarningLearnPoint"}, at = {@At("RETURN")})
     private static int trmythos$modifyEarningLearnPoint(int original, ManasSkillInstance instance, LivingEntity entity, boolean isMode) {
-        int point = original;
-
         if (hasSkill(entity, Skills.ORUNMILA.get())) {
-            point = original + 20;
+            original += 20;
         }
         if (hasSkill(entity, Skills.ELTNAM.get())) {
-            point += 6;
+            original += 6;
         }
         if (hasSkill(entity, Skills.ZEPIA.get())) {
-            point += 9;
+            original += 9;
         }
         if (hasSkill(entity, Skills.OMNISCIENT_EYE.get())) {
-            point += 10;
+            original += 10;
         }
         if (hasSkill(entity, Skills.TRUE_DAO.get())) {
-            point += 5;
+            original += 5;
         }
         if (hasSkill(entity, Skills.ORIGIN_DAO.get())) {
-            point += 10;
+            original += 10;
         }
         if (hasSkill(entity, Skills.DEMONOLOGIST.get())) {
-            point += 5;
+            original += 5;
         }
         if (hasSkill(entity, Skills.SAGITTARIUS.get())) {
-            point += 8;
+            original += 8;
         }
         if (hasSkill(entity, ConfluenceUniques.CELESTIAL_CULTIVATION_ORANGE.get()) && instance.getSkill() instanceof Magic) {
-            point += 999;
+            original += 999;
         }
         if (hasSkill(entity, ConfluenceUniques.CELESTIAL_MUTATION_RED.get()) && instance.getSkill() instanceof Battewill) {
-            point += 999;
+            original += 999;
         }
         if (hasSkill(entity, Skills.FALSE_HERO.get())) {
-            point += 15;
+            original += 15;
         }
         if (SkillUtils.hasSkill(entity, Skills.KTHANID.get()) && !(instance.getSkill() instanceof Kthanid)) {
-            point += 9999;
+            original += 9999;
         }
 
 
-        return point;
+        return original;
     }
 
-    @ModifyReturnValue(method = {"getBonusMasteryPoint"}, at = {@At("RETURN")}, remap = false)
+    @ModifyReturnValue(method = {"getBonusMasteryPoint"}, at = {@At("RETURN")})
     private static int trmythos$modifyBonusMasteryPoint(int original, ManasSkillInstance instance, LivingEntity entity) {
         int point = original;
 
@@ -160,15 +149,16 @@ public abstract class SkillUtilsMixin {
     }
 
 
-    @ModifyReturnValue(method = {"canNegateDodge"}, at = {@At("RETURN")}, remap = false)
+    @ModifyReturnValue(method = {"canNegateDodge"}, at = {@At("RETURN")})
     private static boolean trmythos$modifyCanNegateDodge(boolean original, LivingEntity entity, DamageSource source) {
         Entity var4 = source.getEntity();
+        Level level = entity.level;
         if (var4 instanceof LivingEntity attacker) {
             if (isSkillInSlot(attacker, Skills.ORUNMILA.get())) {
                 original = true;
             }
             if (isSkillInSlot(attacker, ConfluenceUniques.FRAGARACH.get())) {
-                if (Math.random() < 0.5) {
+                if (level.random.nextFloat() < 0.5) {
                     original = true;
                 }
             }
@@ -190,7 +180,7 @@ public abstract class SkillUtilsMixin {
         return original;
     }
 
-    @ModifyReturnValue(method = {"reducingResistances"}, at = {@At("RETURN")}, remap = false)
+    @ModifyReturnValue(method = {"reducingResistances"}, at = {@At("RETURN")})
     private static boolean NullToResistAndResistToNothing(boolean original, LivingEntity entity) {
         original = entity.hasEffect(MythosMobEffects.BLOOD_COAT.get());
         if (isSkillInSlot(entity, Skills.ORUNMILA.get())) {
@@ -232,7 +222,7 @@ public abstract class SkillUtilsMixin {
     }
 
 
-    @ModifyReturnValue(method = {"hasWarpShot"}, at = {@At("RETURN")}, remap = false)
+    @ModifyReturnValue(method = {"hasWarpShot"}, at = {@At("RETURN")})
     private static boolean trmythos$hasWarpShot(boolean original, LivingEntity entity) {
         SkillStorage storage = SkillAPI.getSkillsFrom(entity);
         Optional<ManasSkillInstance> sagittarius = storage.getSkill(Skills.SAGITTARIUS.get());
@@ -244,7 +234,7 @@ public abstract class SkillUtilsMixin {
     }
 
 
-    @ModifyReturnValue(method = {"getMagiculeGain"}, at = {@At("RETURN")}, remap = false)
+    @ModifyReturnValue(method = {"getMagiculeGain"}, at = {@At("RETURN")})
     private static float MythosMagiculeGain(float original, Player player, boolean majin) {
         if (hasSkill(player, Skills.NASCENT_DAO.get())) {
             original = 0;
@@ -316,7 +306,7 @@ public abstract class SkillUtilsMixin {
         return original;
     }
 
-    @ModifyReturnValue(method = {"getAuraGain"}, at = {@At("RETURN")}, remap = false)
+    @ModifyReturnValue(method = {"getAuraGain"}, at = {@At("RETURN")})
     private static float MythosAuraGain(float original, Player player, boolean majin) {
         if (hasSkill(player, Skills.NASCENT_DAO.get())) {
             original = 0;
@@ -385,8 +375,7 @@ public abstract class SkillUtilsMixin {
 
     @ModifyReturnValue(
             method = "haveSeveranceAttack",
-            at = @At("RETURN"),
-            remap = false
+            at = @At("RETURN")
     )
     private static boolean onHaveSeveranceAttack(boolean original, DamageSource damageSource, LivingEntity target) {
         if (SkillUtils.hasSkill(target, Skills.BOREAS.get())) {
