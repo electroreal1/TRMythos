@@ -33,7 +33,7 @@ public abstract class SkillHelperMixin {
                 cost *= 2;
             }
             if (hasSkill(player, Skills.SPIRALHEART.get())) {
-                cost *= 0.7F;
+                cost *= 0.7;
             }
         }
         return cost;
